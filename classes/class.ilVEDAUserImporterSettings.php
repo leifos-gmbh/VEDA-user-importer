@@ -91,7 +91,7 @@ class ilVEDAUserImporterSettings
 		$this->restUser = $a_user;
 	}
 
-	public function getRestUser(): string
+	public function getRestUser(): ?string
 	{
 		return $this->restUser;
 	}
@@ -101,7 +101,7 @@ class ilVEDAUserImporterSettings
 		$this->restUrl = $a_rest_url;
 	}
 
-	public function getRestUrl(): string
+	public function getRestUrl(): ?string
 	{
 		return $this->restUrl;
 	}
@@ -111,7 +111,7 @@ class ilVEDAUserImporterSettings
 		$this->restPassword = $a_pass;
 	}
 
-	public function getRestPassword(): string
+	public function getRestPassword(): ?string
 	{
 		return $this->restPassword;
 	}
