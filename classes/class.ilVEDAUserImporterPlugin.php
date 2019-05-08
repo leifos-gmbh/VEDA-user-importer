@@ -1,5 +1,4 @@
 <?php
-include_once("./Services/Cron/classes/class.ilCronHookPlugin.php");
 
 /**
  * VEDA user importer plugin base class

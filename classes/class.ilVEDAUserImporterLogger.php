@@ -1,5 +1,4 @@
 <?php
-include_once './Services/Logging/classes/class.ilLog.php';
 
 /**
  * Logger class
@@ -14,7 +13,6 @@ class ilVEDAUserImporterLogger extends ilLog
 
 	protected function __construct()
 	{
-		include_once './Services/Calendar/classes/class.ilDateTime.php';
 		$now = new ilDateTime(time(), IL_CAL_UNIX);
 
 		parent::__construct(

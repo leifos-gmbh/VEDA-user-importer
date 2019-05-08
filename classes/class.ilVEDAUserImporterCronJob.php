@@ -1,7 +1,5 @@
 <?php
 
-include_once "Services/Cron/classes/class.ilCronJob.php";
-
 /**
  * VEDA user importer plugin cron job class
  * @author Jesus Lopez <lopez@leifos.de>

@@ -1,5 +1,4 @@
 <?php
-include_once './Services/Component/classes/class.ilPluginConfigGUI.php';
 
 /**
  * @author Jesus Lopez <lopez@leifos.com>
@@ -63,8 +62,6 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 	protected function initConfigurationForm()
 	{
 		global $ilCtrl, $lng;
-
-		include_once './Services/Form/classes/class.ilPropertyFormGUI.php';
 
 		$settings = ilVEDAUserImporterSettings::getInstance();
 
@@ -167,8 +164,6 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 	protected function initCredentialsForm()
 	{
 		global $ilCtrl, $lng;
-
-		include_once './Services/Form/classes/class.ilPropertyFormGUI.php';
 
 		$settings = ilVEDAUserImporterSettings::getInstance();
 
