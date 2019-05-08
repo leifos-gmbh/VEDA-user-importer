@@ -8,47 +8,47 @@ class ilVEDAUserImporterCronJob extends ilCronJob
 {
 	protected $plugin; // [ilCronHookPlugin]
 
-	public function getId()
+	public function getId(): int
 	{
 		return ilVEDAUserImporterPlugin::getInstance()->getId();
 	}
 
-	public function getTitle()
+	public function getTitle(): string
 	{
 		return ilVEDAUserImporterPlugin::PNAME;
 	}
 
-	public function getDescription()
+	public function getDescription(): string
 	{
 		return ilVEDAUserImporterPlugin::getInstance()->txt("cron_job_info");
 	}
 
-	public function getDefaultScheduleType()
+	public function getDefaultScheduleType(): int
 	{
 		return self::SCHEDULE_TYPE_IN_MINUTES;
 	}
 
-	public function getDefaultScheduleValue()
+	public function getDefaultScheduleValue(): int
 	{
 		return ilVEDAUserImporterSettings::getInstance()->getCronInterval();
 	}
 
-	public function hasAutoActivation()
+	public function hasAutoActivation(): bool
 	{
 		return false;
 	}
 
-	public function hasFlexibleSchedule()
+	public function hasFlexibleSchedule(): bool
 	{
 		return false;
 	}
 
-	public function hasCustomSettings()
+	public function hasCustomSettings(): bool
 	{
 		return false;
 	}
 
-	public function run()
+	public function run(): ilCronJobResult
 	{
 		$result = new ilCronJobResult();
 
@@ -68,7 +68,7 @@ class ilVEDAUserImporterCronJob extends ilCronJob
 		return $result;
 	}
 
-	public function getPlugin()
+	public function getPlugin(): ilFhoevImportPlugin
 	{
 		return ilFhoevImportPlugin::getInstance();
 	}

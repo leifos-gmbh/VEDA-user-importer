@@ -8,7 +8,7 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 	/**
 	 * Handles all commmands, default is "configure"
 	 */
-	public function performCommand($cmd)
+	public function performCommand($cmd): void
 	{
 		global $ilCtrl;
 		global $ilTabs;
@@ -36,12 +36,10 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 	}
 
 	/**
+	 * @inheritdoc
 	 * Show settings screen
-	 * @param ilPropertyFormGUI $form
-	 * @global $tpl
-	 * @global $ilTabs
 	 */
-	protected function configure(ilPropertyFormGUI $form = null)
+	protected function configure(ilPropertyFormGUI $form = null): void
 	{
 		global $tpl, $ilTabs;
 
@@ -54,12 +52,7 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		$tpl->setContent($form->getHTML());
 	}
 
-	/**
-	 * Init configuration form
-	 * @global $ilCtrl
-	 * @return ilPropertyFormGUI form
-	 */
-	protected function initConfigurationForm()
+	protected function initConfigurationForm(): ilPropertyFormGUI
 	{
 		global $ilCtrl, $lng;
 
@@ -90,10 +83,7 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		return $form;
 	}
 
-	/**
-	 * Save settings
-	 */
-	protected function save()
+	protected function save(): void
 	{
 		global $lng, $ilCtrl;
 
@@ -125,9 +115,6 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 
 	/**
 	 * Show credentials screen
-	 * @param ilPropertyFormGUI $form
-	 * @global $tpl
-	 * @global $ilTabs
 	 */
 	protected function credentials(ilPropertyFormGUI $form = null): void
 	{
@@ -143,12 +130,7 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		$tpl->setContent($form->getHTML());
 	}
 
-	/**
-	 * Init credentials form
-	 * @global $ilCtrl
-	 * @return ilPropertyFormGUI form
-	 */
-	protected function initCredentialsForm()
+	protected function initCredentialsForm(): ilPropertyFormGUI
 	{
 		global $ilCtrl, $lng;
 
@@ -187,7 +169,7 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		return $form;
 	}
 
-	protected function saveCredentials()
+	protected function saveCredentials(): void
 	{
 		global $lng, $ilCtrl;
 

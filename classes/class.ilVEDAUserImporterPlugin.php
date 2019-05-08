@@ -13,17 +13,12 @@ class ilVEDAUserImporterPlugin extends ilCronHookPlugin
 	const CNAME = 'Cron';
 	const CTYPE = 'Services';
 
-	function getPluginName()
+	function getPluginName(): string
 	{
 		return self::PNAME;
 	}
 
-	/**
-	 * Get singelton instance
-	 * @global ilPluginAdmin $ilPluginAdmin
-	 * @return ilVEDAUserImporterPlugin
-	 */
-	public static function getInstance()
+	public static function getInstance(): ilVEDAUserImporterPlugin
 	{
 		if(self::$instance)
 		{
@@ -38,7 +33,7 @@ class ilVEDAUserImporterPlugin extends ilCronHookPlugin
 	}
 
 	//has to return an array with instances of all cron jobs of the plugin
-	function getCronJobInstances()
+	function getCronJobInstances(): array
 	{
 		$job = new ilVEDAUserImporterCronJob();
 
@@ -47,26 +42,19 @@ class ilVEDAUserImporterPlugin extends ilCronHookPlugin
 	}
 
 	//has to return a single instance of the cron job with the given id
-	function getCronJobInstance($a_job_id)
+	function getCronJobInstance($a_job_id): ilVEDAUserImporterCronJob
 	{
 		$job = new ilVEDAUserImporterCronJob();
 
 		return $job;
 	}
 
-	/**
-	 * Init auto load
-	 */
-	protected function init()
+	protected function init(): void
 	{
 		$this->initAutoLoad();
 	}
 
-	/**
-	 * Init auto loader
-	 * @return void
-	 */
-	protected function initAutoLoad()
+	protected function initAutoLoad(): void
 	{
 		spl_autoload_register(
 			array($this,'autoLoad')

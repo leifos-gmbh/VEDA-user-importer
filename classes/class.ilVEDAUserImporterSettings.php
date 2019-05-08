@@ -23,12 +23,7 @@ class ilVEDAUserImporterSettings
 		$this->read();
 	}
 
-	/**
-	 * Get singleton instance
-	 *
-	 * @return ilVEDAUserImporterSettings
-	 */
-	public static function getInstance()
+	public static function getInstance(): ilVEDAUserImporterSettings
 	{
 		if(self::$instance)
 		{
@@ -37,9 +32,10 @@ class ilVEDAUserImporterSettings
 		return self::$instance = new ilVEDAUserImporterSettings();
 	}
 
-	protected function read()
+	protected function read(): void
 	{
 		$this->enableLock($this->getStorage()->get('lock',$this->isLocked()));
+
 		$this->cron_last_execution = $this->getStorage()->get('cron_last_execution',0);
 		$this->cron_interval = $this->getStorage()->get('cron_interval',$this->cron_interval);
 
@@ -48,22 +44,22 @@ class ilVEDAUserImporterSettings
 		$this->setRestPassword($this->getStorage()->get('restpassword', $this->getRestPassword()));
 	}
 
-	public function enableLock($a_lock)
+	public function enableLock(bool $a_lock): void
 	{
 		$this->lock = $a_lock;
 	}
 
-	public function getStorage()
+	public function getStorage(): ilSetting
 	{
 		return $this->storage;
 	}
 
-	public function isLocked()
+	public function isLocked(): bool
 	{
 		return $this->lock;
 	}
 
-	public function save()
+	public function save(): void
 	{
 		//db table settings columns lock, cron_interval
 		$this->getStorage()->set('lock',(int) $this->isLocked());
@@ -75,42 +71,47 @@ class ilVEDAUserImporterSettings
 		$this->getStorage()->set('resturl', $this->getRestUrl());
 	}
 
-	public function setCronInterval($a_int)
+	public function setCronInterval(int $a_int)
 	{
 		$this->cron_interval = $a_int;
 	}
 
-	public function getCronInterval()
+	public function getCronInterval(): int
 	{
 		return $this->cron_interval;
 	}
 
-	public function updateLastCronExecution()
+	public function updateLastCronExecution(): void
 	{
 		$this->getStorage()->set('cron_last_execution',time());
 	}
 
-	public function setRestUser($a_user)
+	public function setRestUser(string $a_user): void
 	{
 		$this->restUser = $a_user;
 	}
-	public function getRestUser()
+
+	public function getRestUser(): string
 	{
 		return $this->restUser;
 	}
-	public function setRestUrl($a_rest_url)
+
+	public function setRestUrl($a_rest_url): void
 	{
 		$this->restUrl = $a_rest_url;
 	}
-	public function getRestUrl()
+
+	public function getRestUrl(): string
 	{
 		return $this->restUrl;
 	}
-	public function setRestPassword($a_pass)
+
+	public function setRestPassword(string $a_pass): void
 	{
 		$this->restPassword = $a_pass;
 	}
-	public function getRestPassword()
+
+	public function getRestPassword(): string
 	{
 		return $this->restPassword;
 	}
