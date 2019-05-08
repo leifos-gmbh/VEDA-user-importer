@@ -86,7 +86,7 @@ class ilVEDAUserImporterSettings
 		$this->getStorage()->set('cron_last_execution',time());
 	}
 
-	public function setRestUser(string $a_user): void
+	public function setRestUser(?string $a_user): void
 	{
 		$this->restUser = $a_user;
 	}
@@ -96,7 +96,7 @@ class ilVEDAUserImporterSettings
 		return $this->restUser;
 	}
 
-	public function setRestUrl($a_rest_url): void
+	public function setRestUrl(?string $a_rest_url): void
 	{
 		$this->restUrl = $a_rest_url;
 	}
@@ -106,7 +106,7 @@ class ilVEDAUserImporterSettings
 		return $this->restUrl;
 	}
 
-	public function setRestPassword(string $a_pass): void
+	public function setRestPassword(?string $a_pass): void
 	{
 		$this->restPassword = $a_pass;
 	}
