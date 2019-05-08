@@ -77,13 +77,6 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		$lock->setChecked($settings->isLocked());
 		$form->addItem($lock);
 
-		/*$backup = new ilTextInputGUI($this->getPluginObject()->txt('tbl_settings_backup'),'backup');
-		$backup->setRequired(true);
-		$backup->setSize(120);
-		$backup->setMaxLength(512);
-		$backup->setValue($settings->getBackupDir());
-		$form->addItem($backup);*/
-
 		// cron interval
 		$cron_i = new ilNumberInputGUI($this->getPluginObject()->txt('cron'),'cron_interval');
 		$cron_i->setMinValue(1);
@@ -107,19 +100,13 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		$form = $this->initConfigurationForm();
 		$settings = ilVEDAUserImporterSettings::getInstance();
 
-		try {
-
+		try
+		{
 			if($form->checkInput())
 			{
 				$settings->enableLock($form->getInput('lock'));
-				//$settings->setImportDir($form->getInput('import'));
-				//todo backup dir
-				$settings->setBackupDir($form->getInput('backup'));
 				$settings->setCronInterval($form->getInput('cron_interval'));
 				$settings->save();
-
-				//todo directories
-				$settings->createDirectories();
 
 				ilUtil::sendSuccess($lng->txt('settings_saved'),true);
 				$ilCtrl->redirect($this,'configure');
@@ -193,7 +180,8 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		$pass->setRetype(false);
 		$pass->setSize(120);
 		$pass->setMaxLength(512);
-		//$pass->setValue($settings->getRestPass());
+		//$pass->setValue($settings->getRestPassword());
+		$pass->setInfo($this->getPluginObject()->txt("credentials_password_info"));
 		$form->addItem($pass);
 
 		return $form;
