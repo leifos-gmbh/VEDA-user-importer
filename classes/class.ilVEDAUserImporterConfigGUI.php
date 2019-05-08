@@ -69,7 +69,7 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		$settings = ilVEDAUserImporterSettings::getInstance();
 
 		$form = new ilPropertyFormGUI();
-		$form->setTitle($this->getPluginObject()->txt('tbl_veda_settings'));
+		$form->setTitle($this->getPluginObject()->txt('tbl_settings'));
 		$form->setFormAction($ilCtrl->getFormAction($this));
 		$form->addCommandButton('save', $lng->txt('save'));
 		$form->setShowTopButtons(false);
@@ -80,12 +80,12 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		$lock->setChecked($settings->isLocked());
 		$form->addItem($lock);
 
-		$backup = new ilTextInputGUI($this->getPluginObject()->txt('tbl_settings_backup'),'backup');
+		/*$backup = new ilTextInputGUI($this->getPluginObject()->txt('tbl_settings_backup'),'backup');
 		$backup->setRequired(true);
 		$backup->setSize(120);
 		$backup->setMaxLength(512);
 		$backup->setValue($settings->getBackupDir());
-		$form->addItem($backup);
+		$form->addItem($backup);*/
 
 		// cron interval
 		$cron_i = new ilNumberInputGUI($this->getPluginObject()->txt('cron'),'cron_interval');
@@ -139,14 +139,13 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		$this->configure($form);
 	}
 
-	/* CREDENTIALS SECTION */
 	/**
 	 * Show credentials screen
 	 * @param ilPropertyFormGUI $form
 	 * @global $tpl
 	 * @global $ilTabs
 	 */
-	protected function credentials(ilPropertyFormGUI $form = null)
+	protected function credentials(ilPropertyFormGUI $form = null): void
 	{
 		global $tpl, $ilTabs;
 
@@ -171,11 +170,10 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 
 		include_once './Services/Form/classes/class.ilPropertyFormGUI.php';
 
-		/** @TODO  WORKING HERE */
-		$settings = ilAfPSettings::getInstance();
+		$settings = ilVEDAUserImporterSettings::getInstance();
 
 		$form = new ilPropertyFormGUI();
-		$form->setTitle($this->getPluginObject()->txt('tbl_afp_settings'));
+		$form->setTitle($this->getPluginObject()->txt('tbl_settings'));
 		$form->setFormAction($ilCtrl->getFormAction($this));
 
 		$form->addCommandButton('saveCredentials', $lng->txt('save'));
@@ -211,7 +209,7 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		global $lng, $ilCtrl;
 
 		$form = $this->initCredentialsForm();
-		$settings = ilAfPSettings::getInstance();
+		$settings = ilVEDAUserImporterSettings::getInstance();
 
 		try
 		{
@@ -230,7 +228,7 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		catch(ilException $e)
 		{
 			$error = $e->getMessage();
-			ilAfPLogger::getLogger()->write("saveCredentials() exception: ".$error);
+			ilVEDAUserImporterLogger::getLogger()->write("saveCredentials() exception: ".$error);
 		}
 		$form->setValuesByPost();
 		ilUtil::sendFailure($error);

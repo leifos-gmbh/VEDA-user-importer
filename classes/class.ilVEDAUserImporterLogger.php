@@ -1,5 +1,4 @@
 <?php
-
 include_once './Services/Logging/classes/class.ilLog.php';
 
 /**
@@ -23,14 +22,9 @@ class ilVEDAUserImporterLogger extends ilLog
 			$now->get(IL_CAL_FKT_DATE, 'Ymd_').'import.log',
 			self::LOG_TAG
 		);
-
-
 	}
-	/**
-	 * Get logger
-	 * @return ilFhoevLogger
-	 */
-	public static function getLogger()
+
+	public static function getLogger(): ilVEDAUserImporterLogger
 	{
 		if(self::$instance != null)
 		{
@@ -39,12 +33,7 @@ class ilVEDAUserImporterLogger extends ilLog
 		return self::$instance = new self();
 	}
 
-
-	/**
-	 * Write message
-	 * @param type $a_message
-	 */
-	public function write($a_message)
+	public function write(string $a_message): void
 	{
 		$this->setLogFormat(date('[Y-m-d H:i:s] '));
 		parent::write($a_message);

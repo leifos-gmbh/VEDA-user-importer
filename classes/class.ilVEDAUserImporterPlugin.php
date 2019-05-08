@@ -38,13 +38,12 @@ class ilVEDAUserImporterPlugin extends ilCronHookPlugin
 		);
 	}
 
-
 	//has to return an array with instances of all cron jobs of the plugin
 	function getCronJobInstances()
 	{
 		$job = new ilVEDAUserImporterCronJob();
 
-		//ilVEDAUserImporterLogger::getLogger()->write("getinstance new job-> ".$job->getId());
+		ilVEDAUserImporterLogger::getLogger()->write("getinstance new job-> ".$job->getId());
 		return array($job);
 	}
 

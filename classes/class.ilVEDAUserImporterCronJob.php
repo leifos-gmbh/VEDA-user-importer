@@ -67,9 +67,6 @@ class ilVEDAUserImporterCronJob extends ilCronJob
 			//ilVEDAUserImporterLogger::getLogger()->write("Cron update failed with message: " . $e->getMessage());
 		}
 
-
-
-
 		return $result;
 	}
 

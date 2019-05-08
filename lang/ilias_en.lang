@@ -1,0 +1,15 @@
+tab_settings#:#Settings
+tab_credentials#:#Webservice Credentials
+tab_programs#:#Program ID Assignment
+tbl_settings#:#Cronjob Settings
+err_import_locked#:#Import is locked. Aborting.
+cron_interval#:#Refresh Interval
+cron_job_info#:#VEDA User Migration to ILIAS
+tbl_settting_lock#:#Lock Cronjob
+cron#:#Refresh per Cron-job
+no_object_assigned#:#Object not assigned
+btn_save_source_selection#:#Save
+credentials_url#:#Web Service Resource URL:
+credentials_user#:#Web Service User:
+credentials_password#:#Web Service User Password:
+name_conflicts_check_log#:#Some users are not migrated because of name conflicts. Please check the log file.
