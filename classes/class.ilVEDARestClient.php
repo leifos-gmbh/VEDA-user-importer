@@ -12,6 +12,7 @@ class ilVEDARestClient
 	function __construct()
 	{
 		$this->rest_base_url = ilVEDAUserImporterSettings::getInstance()->getRestUrl();
+		$this->connect();
 	}
 
 	function getBaseUrl()
@@ -23,7 +24,7 @@ class ilVEDARestClient
 	{
 		try
 		{
-			//$target = $this->rest_base_url."logon?method=crmLogin&response_type=JSON&username=".ilAfPSettings::getInstance()->getRestUser()."&password=".ilAfPSettings::getInstance()->getRestPassword();
+			//$target = $this->rest_base_url."xxxx?xxx=xxx&xss=xxx;
 
 			$response = file_get_contents($target);
 
@@ -36,7 +37,6 @@ class ilVEDARestClient
 		{
 			ilVEDAUserImporterLogger::getLogger()->write("Connection Exception: ".$e->getMessage());
 		}
-
 
 	}
 
