@@ -8,6 +8,7 @@
 class ilVEDAUserImporterLogger extends ilLog
 {
 	const LOG_TAG = 'vedaimp_import';
+	const LOG_DIR = ILIAS_ABSOLUTE_PATH."/Customizing/global/plugins/Services/Cron/CronHook/".ilVEDAUserImporterPlugin::PNAME."/log";
 
 	protected static $instance = null;
 
@@ -16,8 +17,8 @@ class ilVEDAUserImporterLogger extends ilLog
 		$now = new ilDateTime(time(), IL_CAL_UNIX);
 
 		parent::__construct(
-			ilVEDAUserImporterSettings::getInstance()->getBackupDir(),
-			$now->get(IL_CAL_FKT_DATE, 'Ymd_').'import.log',
+			self::LOG_DIR,
+			$now->get(IL_CAL_FKT_DATE,'Ymd_').'import.log',
 			self::LOG_TAG
 		);
 	}
