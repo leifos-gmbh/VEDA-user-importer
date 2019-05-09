@@ -54,7 +54,7 @@ class ilVEDAUserImporterCronJob extends ilCronJob
 
 		try
 		{
-			//Execute the import
+			//Execute the import actions
 			ilVEDAUserImporterSettings::getInstance()->updateLastCronExecution();
 			$result->setStatus(ilCronJobResult::STATUS_OK);
 		}
@@ -68,9 +68,9 @@ class ilVEDAUserImporterCronJob extends ilCronJob
 		return $result;
 	}
 
-	public function getPlugin(): ilFhoevImportPlugin
+	public function getPlugin(): ilVEDAUserImporterPlugin
 	{
-		return ilFhoevImportPlugin::getInstance();
+		return ilVEDAUserImporterPlugin::getInstance();
 	}
 
 }
