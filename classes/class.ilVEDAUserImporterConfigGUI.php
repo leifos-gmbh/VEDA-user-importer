@@ -157,6 +157,13 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		$user->setValue($settings->getRestUser());
 		$form->addItem($user);
 
+		$platform_id = new ilNumberInputGUI($this->getPluginObject()->txt('platform_id'),'restplatformid');
+		$platform_id->setRequired(true);
+		$platform_id->setMaxLength(6);
+		$platform_id->setValue($settings->getPlatformId());
+		$platform_id->setInfo($this->getPluginObject()->txt('platform_id_info'));
+		$form->addItem($platform_id);
+
 		$pass = new ilPasswordInputGUI($this->getPluginObject()->txt('credentials_password'), 'restpassword');
 		$pass->setRequired(true);
 		$pass->setRetype(false);
@@ -183,6 +190,7 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 				$settings->setRestUrl($form->getInput('resturl'));
 				$settings->setRestUser($form->getInput('restuser'));
 				$settings->setRestPassword($form->getInput('restpassword'));
+				$settings->setPlatformId($form->getInput('restplatformid'));
 				$settings->save();
 
 				ilUtil::sendSuccess($lng->txt('settings_saved'),true);

@@ -14,3 +14,5 @@ credentials_user#:#Web Service User:
 credentials_password#:#Web Service User Password:
 credentials_password_info#:#Password not displayed for security reasons.
 name_conflicts_check_log#:#Some users are not migrated because of name conflicts. Please check the log file.
+platform_id#:#Platform ID
+platform_id_info#:#Unique id provided to ILIAS.

@@ -15,6 +15,7 @@ class ilVEDAUserImporterSettings
 	private $restUser;
 	private $restUrl;
 	private $restPassword;
+	private $platform_id;
 
 	public function __construct()
 	{
@@ -42,6 +43,7 @@ class ilVEDAUserImporterSettings
 		$this->setRestUrl($this->getStorage()->get('resturl',$this->getRestUrl()));
 		$this->setRestUser($this->getStorage()->get('restuser',$this->getRestUser()));
 		$this->setRestPassword($this->getStorage()->get('restpassword', $this->getRestPassword()));
+		$this->setPlatformId($this->getStorage()->get('restplatformid', $this->getPlatformId()));
 	}
 
 	public function enableLock(bool $a_lock): void
@@ -69,6 +71,7 @@ class ilVEDAUserImporterSettings
 		$this->getStorage()->set('restpassword',$this->getRestPassword());
 		$this->getStorage()->set('restuser',$this->getRestUser());
 		$this->getStorage()->set('resturl', $this->getRestUrl());
+		$this->getStorage()->set('restplatformid', $this->getPlatformId());
 	}
 
 	public function setCronInterval(int $a_int)
@@ -101,6 +104,7 @@ class ilVEDAUserImporterSettings
 		$this->restUrl = $a_rest_url;
 	}
 
+	//will contain also the version e.g https://veda.net/rest/v1
 	public function getRestUrl(): ?string
 	{
 		return $this->restUrl;
@@ -114,5 +118,14 @@ class ilVEDAUserImporterSettings
 	public function getRestPassword(): ?string
 	{
 		return $this->restPassword;
+	}
+
+	public function setPlatformId(?int $platform_id): void
+	{
+		$this->platform_id = $platform_id;
+	}
+	public function getPlatformId(): ?int
+	{
+		return $this->platform_id;
 	}
 }
