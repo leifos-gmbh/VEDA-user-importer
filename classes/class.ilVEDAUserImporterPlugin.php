@@ -49,7 +49,7 @@ class ilVEDAUserImporterPlugin extends ilCronHookPlugin
 		return $job;
 	}
 
-	protected function init(): void
+	protected function init()
 	{
 		$this->initAutoLoad();
 	}
