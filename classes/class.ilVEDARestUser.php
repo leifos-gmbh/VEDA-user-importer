@@ -20,7 +20,7 @@ class ilVEDARestUser extends ilVEDARestClient
 	 * This interface retrieves all subscribers who have access to the specified eLearning platform.
 	 * THIS INTERFACE IS STILL NOT IMPLEMENTED.
 	 */
-	public function getUsersEndPoint(): string
+	public function getAllUsersEndPoint(): string
 	{
 		$settings = ilVEDAUserImporterSettings::getInstance();
 
@@ -33,15 +33,29 @@ class ilVEDARestUser extends ilVEDARestClient
 	}
 
 	//call the endpoint /v1/elearningplattform/{id}/teilnehmer
-	public function getVEDAUsers(): array
+	public function getUsers(): array
 	{
-		$endpoint = $this->getUsersEndPoint();
+		$endpoint = $this->getAllUsersEndPoint();
 
 		$response = file_get_contents($endpoint);
 
 		$items = json_decode($response, true);
 
 		return $items;
+	}
+
+	public function getFilteredNewUsers(array $users): array
+	{
+		foreach($users as $user)
+		{
+			$user_id_ilias = ilObjUser::getUserIdsByEmail($user['geschaeftlicheEMailAdresse']);
+
+			if(!$user_id_ilias)
+			{
+				//insert user in the database
+			}
+		}
+
 	}
 
 	//check if the user exists in ILIAS and store it if not.
