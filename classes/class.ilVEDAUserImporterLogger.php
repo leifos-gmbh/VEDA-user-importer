@@ -8,7 +8,7 @@
 class ilVEDAUserImporterLogger extends ilLog
 {
 	const LOG_TAG = 'vedaimp_import';
-	const LOG_DIR = ILIAS_ABSOLUTE_PATH."/Customizing/global/plugins/Services/Cron/CronHook/".ilVEDAUserImporterPlugin::PNAME."/log";
+	const LOG_DIR = ilVEDAUserImporterPlugin::PLUGIN_DIR."/log";
 
 	protected static $instance = null;
 

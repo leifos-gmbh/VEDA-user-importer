@@ -8,7 +8,7 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 	/**
 	 * Handles all commmands, default is "configure"
 	 */
-	public function performCommand($cmd): void
+	public function performCommand($cmd)
 	{
 		global $ilCtrl;
 		global $ilTabs;
@@ -169,7 +169,6 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		$pass->setRetype(false);
 		$pass->setSize(120);
 		$pass->setMaxLength(512);
-		//$pass->setValue($settings->getRestPassword());
 		$pass->setInfo($this->getPluginObject()->txt("credentials_password_info"));
 		$form->addItem($pass);
 
@@ -206,6 +205,37 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		$form->setValuesByPost();
 		ilUtil::sendFailure($error);
 		$this->credentials($form);
+	}
+
+	protected function ping()
+	{
+		//TODO implement this method, call the
+		/**
+		 * ..
+		 * ...
+		 * ...
+		 * $selector = new ilOpenTextAuthHeaderSelector();
+
+		$config = new \Swagger\Client\Configuration();
+		$config->setHost($settings->getUri());
+		$config->setUsername($settings->getUsername());
+		$config->setPassword($settings->getPassword());
+
+		$api = new \Swagger\Client\Api\DefaultApi(
+		null,
+		$config,
+		$selector
+		);
+
+		$res = $api->apiV1AuthPostWithHttpInfo(
+		$settings->getUsername(),
+		$settings->getPassword(),
+		$settings->getDomain()
+		);
+		 * ...
+		 * ....
+		 * ...
+		 */
 	}
 
 }

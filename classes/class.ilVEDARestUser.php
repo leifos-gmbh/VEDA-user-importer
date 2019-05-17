@@ -32,48 +32,30 @@ class ilVEDARestUser extends ilVEDARestClient
 			"teilnehmer";
 	}
 
-	//call the endpoint /v1/elearningplattform/{id}/teilnehmer
-	public function getUsers(): array
+	//TODO call a method from ..\lib\Api\ausbildung.php --> call the endpoint /v1/elearningplattform/{id}/teilnehmer
+	public function getUsers()
 	{
-		$endpoint = $this->getAllUsersEndPoint();
+		// TODO delete this line
+		$endpoint = "/Users/xus/Sites/VEDA/ILIAS/Customizing/global/plugins/Services/Cron/CronHook/VEDAUserImporter/test_data/users.json";
+
+		// TODO uncomment this line
+		//$endpoint = $this->getAllUsersEndPoint();
+
+		ilVEDAUserImporterLogger::getLogger()->write("GET users with endpoint => ".$endpoint);
 
 		$response = file_get_contents($endpoint);
 
-		$items = json_decode($response, true);
+		$items = json_decode($response);
 
 		return $items;
 	}
 
-	public function getFilteredNewUsers(array $users): array
+	/**
+	 *
+	 */
+	public function notifyImportSuccess()
 	{
-		foreach($users as $user)
-		{
-			$user_id_ilias = ilObjUser::getUserIdsByEmail($user['geschaeftlicheEMailAdresse']);
-
-			if(!$user_id_ilias)
-			{
-				//insert user in the database
-			}
-		}
-
-	}
-
-	//check if the user exists in ILIAS and store it if not.
-	public function storeNewUsersToDB(): void
-	{
-
-	}
-
-	// add import id to already assigned user. gets a data object.
-	public function updateUserWithImportID()
-	{
-
-	}
-
-	// validate the object data
-	public function isUserObjectValid($user): bool
-	{
-		return false;
+		//post to veda? notification? mail?
 	}
 
 

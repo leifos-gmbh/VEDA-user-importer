@@ -9,7 +9,7 @@ class ilVEDAUserImporterSettings
 
 	private $storage = null;
 	private $lock = false;
-	private $cron_interval = 5;
+	private $cron_interval = 1;
 	private $cron_last_execution = 0;
 
 	private $restUser;

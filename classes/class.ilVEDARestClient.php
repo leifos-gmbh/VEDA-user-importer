@@ -1,6 +1,6 @@
 <?php
 /**
- * VEDA REST API client.
+ * VEDA REST API client adapter
  * @author Jesus Lopez <lopez@leifos.com>
  */
 class ilVEDARestClient
@@ -12,6 +12,8 @@ class ilVEDARestClient
 	function __construct()
 	{
 		$this->rest_base_url = ilVEDAUserImporterSettings::getInstance()->getRestUrl();
+		ilVEDAUserImporterLogger::getLogger()->write("Construct with rest base url > ".$this->rest_base_url);
+
 		$this->connect();
 	}
 
@@ -22,6 +24,8 @@ class ilVEDARestClient
 
 	public function connect()
 	{
+		/**TODO IMPLEMENT **/
+		return;
 		try
 		{
 			//$target = $this->rest_base_url."xxxx?xxx=xxx&xss=xxx;

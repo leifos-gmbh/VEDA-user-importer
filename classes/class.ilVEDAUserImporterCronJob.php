@@ -8,7 +8,7 @@ class ilVEDAUserImporterCronJob extends ilCronJob
 {
 	protected $plugin; // [ilCronHookPlugin]
 
-	public function getId(): int
+	public function getId()
 	{
 		return ilVEDAUserImporterPlugin::getInstance()->getId();
 	}
@@ -25,7 +25,7 @@ class ilVEDAUserImporterCronJob extends ilCronJob
 
 	public function getDefaultScheduleType(): int
 	{
-		return self::SCHEDULE_TYPE_IN_MINUTES;
+		return self::SCHEDULE_TYPE_IN_HOURS;
 	}
 
 	public function getDefaultScheduleValue(): int
@@ -54,7 +54,9 @@ class ilVEDAUserImporterCronJob extends ilCronJob
 
 		try
 		{
-			//Execute the import actions
+			$importer = new ilVEDAUserImporter();
+			$importer->import();
+
 			ilVEDAUserImporterSettings::getInstance()->updateLastCronExecution();
 			$result->setStatus(ilCronJobResult::STATUS_OK);
 		}
@@ -62,7 +64,7 @@ class ilVEDAUserImporterCronJob extends ilCronJob
 		{
 			$result->setStatus(ilCronJobResult::STATUS_CRASHED);
 			$result->setMessage($e->getMessage());
-			//ilVEDAUserImporterLogger::getLogger()->write("Cron update failed with message: " . $e->getMessage());
+			ilVEDAUserImporterLogger::getLogger()->write("Cron update failed with message: " . $e->getMessage());
 		}
 
 		return $result;
