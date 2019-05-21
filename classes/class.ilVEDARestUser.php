@@ -8,38 +8,32 @@ class ilVEDARestUser extends ilVEDARestClient
 	protected $session_id;
 	protected $rest_base_url;
 	protected $last_execution;
+	protected $users_api;
+	protected $elearning_platform_id;
 
 	function __construct()
 	{
 		parent::__construct();
+
+		$this->users_api = new \Swagger\Client\Api\AusbildungApi(null,$this->swagger_configuration,null);
+
+		$this->elearning_platform_id = ilVEDAUserImporterSettings::getInstance()->getPlatformId();
 	}
 
 	/**
-	 * VEDA ENDPOINT: /v1/elearningplattform/{id}/teilnehmer
-	 *
-	 * This interface retrieves all subscribers who have access to the specified eLearning platform.
-	 * THIS INTERFACE IS STILL NOT IMPLEMENTED.
+	 * endpoint /v1/elearningplattform/{id}/teilnehmer
+	 * @return array with \Swagger\Client\Model\TeilnehmerELearningplattform
+	 * @throws \Swagger\Client\ApiException
 	 */
-	public function getAllUsersEndPoint(): string
+	public function getUsers() : array
 	{
-		$settings = ilVEDAUserImporterSettings::getInstance();
-
-		return $this->getBaseUrl().
-			DIRECTORY_SEPARATOR.
-			"elearningplattform".
-			DIRECTORY_SEPARATOR.
-			$settings->getPlatformId().
-			"teilnehmer";
-	}
-
-	//TODO call a method from ..\lib\Api\ausbildung.php --> call the endpoint /v1/elearningplattform/{id}/teilnehmer
-	public function getUsers()
-	{
+		return $this->users_api->getTeilnehmerELearningPlattformUsingGET($this->elearning_platform_id);
+		/*
 		// TODO delete this line
 		$endpoint = "/Users/xus/Sites/VEDA/ILIAS/Customizing/global/plugins/Services/Cron/CronHook/VEDAUserImporter/test_data/users.json";
 
 		// TODO uncomment this line
-		//$endpoint = $this->getAllUsersEndPoint();
+		//$endpoint = $this->getAllUsersAPI();
 
 		ilVEDAUserImporterLogger::getLogger()->write("GET users with endpoint => ".$endpoint);
 
@@ -48,6 +42,7 @@ class ilVEDARestUser extends ilVEDARestClient
 		$items = json_decode($response);
 
 		return $items;
+		*/
 	}
 
 	/**

@@ -6,42 +6,23 @@
 class ilVEDARestClient
 {
 	protected $session_id;
-	protected $rest_base_url;
 	protected $last_execution;
+	protected $swagger_configuration;
 
 	function __construct()
 	{
-		$this->rest_base_url = ilVEDAUserImporterSettings::getInstance()->getRestUrl();
-		ilVEDAUserImporterLogger::getLogger()->write("Construct with rest base url > ".$this->rest_base_url);
-
-		$this->connect();
+		$this->setSwaggerConfiguration();
 	}
 
-	function getBaseUrl()
+	protected function setSwaggerConfiguration()
 	{
-		return $this->rest_base_url;
-	}
 
-	public function connect()
-	{
-		/**TODO IMPLEMENT **/
-		return;
-		try
-		{
-			//$target = $this->rest_base_url."xxxx?xxx=xxx&xss=xxx;
-
-			$response = file_get_contents($target);
-
-			$this->session_id = json_decode($response);
-
-			ilVEDAUserImporterLogger::getLogger()->write("Connection successful session id = ".$this->session_id);
-
-		}
-		catch (Exception $e)
-		{
-			ilVEDAUserImporterLogger::getLogger()->write("Connection Exception: ".$e->getMessage());
-		}
-
+		$settings = ilVEDAUserImporterSettings::getInstance();
+		ilVEDAUserImporterLogger::getLogger()->write("Go to create configuration object");
+		$this->swagger_configuration = new Swagger\Client\Configuration();
+		$this->swagger_configuration->setHost($settings->getRestUrl());
+		$this->swagger_configuration->setUsername($settings->getRestUser());
+		$this->swagger_configuration->setPassword($settings->getRestPassword());
 	}
 
 }

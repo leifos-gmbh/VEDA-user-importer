@@ -30,7 +30,7 @@ class ilVEDAUserImporter
 	}
 
 	/**
-	 * @throws ilException
+	 * @throws Exception
 	 */
 	function import()
 	{
@@ -47,20 +47,19 @@ class ilVEDAUserImporter
 
 			$this->createImportDirectory();
 
-			$users_rest_api = new ilVEDARestUser();
-
-			$users = $users_rest_api->getUsers();
-
-			$this->createImportXMLFile($users->result);
+			$this->createImportXMLFile($this->getFilteredUsersToMigrate());
 
 			// XML verification
-			//TODO Fix the XML Verification error Not well formed (invalid token)
-			//$xml_parser = new ilUserImportParser($this->getXmlFile(),IL_VERIFY);
-			//$xml_parser->setUserMappingMode(IL_USER_MAPPING_ID);
-			//$xml_parser->setXMLContent($this->getXmlFile());
+			//TODO fix this
+			$xml_parser = new ilUserImportParser($this->getXmlFile(),IL_VERIFY);
+			$xml_parser->setUserMappingMode(IL_USER_MAPPING_ID);
+			$xml_parser->setXMLContent($this->getXmlFile());
+			$str = $xml_parser->getXMLContent();
+
+			//ilVEDAUserImporterLogger::getLogger()->write("str= ".$str);
 			//$xml_parser->startParsing();
 
-
+			//TODO Manage the errors in a similar way
 			/*if ($xml_parser->getErrorLevel() != IL_IMPORT_FAILURE)
 			{
 				$return = $xml_parser->getUserMapping();
@@ -86,7 +85,7 @@ class ilVEDAUserImporter
 			$this->releaseCronLock();
 
 		}
-		catch (ilException $e) {
+		catch (Exception $e) {
 			ilVEDAUserImporterLogger::getLogger()->write("import() exception => " . $e->getMessage());
 			$this->releaseCronLock();
 			throw $e;
@@ -143,11 +142,62 @@ class ilVEDAUserImporter
 	 */
 	public function createImportXMLFile($users)
 	{
-		//create XML
 		$xml = new ilVEDAImportXmlWriter();
 		$xml->setMainTag($this->main_tag);
 		$xml->fillData($users);
 		$xml->createXMLFile();
+	}
+
+	/**
+	 *
+	 * @return array with \Swagger\Client\Model\TeilnehmerELearningplattform
+	 * @throws Exception
+	 */
+	protected function getUsersFromVeda(): array
+	{
+		$users_rest_api = new ilVEDARestUser();
+
+		$users = $users_rest_api->getUsers();
+
+		return $users;
+	}
+
+	/**
+	 * Perform all Filters to Feed the XML importer only with the necessary amount of users.
+	 * @return array with filtered users \Swagger\Client\Model\TeilnehmerELearningplattform
+	 * @throws
+	 */
+	public function getFilteredUsersToMigrate()
+	{
+		//TODO: Use this instead of the dummy data.
+		//$users = $this->getUsersFromVeda();
+
+		/**
+		 * TODO: This is only a possible filter to apply.
+		 */
+		foreach($this->getDummyData() as $user)
+		{
+			ilVEDAUserImporterLogger::getLogger()->write("Model data: oid = ".$user->getOid());
+		}
+
+		die("STOP");
+		return $users;
+	}
+
+	//TODO method for test purposes, delete it.
+	public function getDummyData()
+	{
+		$container['oid'] = "bbbbbbbb-0bdf-425d-aa17-f6448f9f8124";
+		$container['aktiv'] = false;
+		$container['geburtsdatum'] = "1977-03-27";
+		$container['geschaeftliche_e_mail_adresse'] = "leo.messi@example.com";
+		$container['geschlecht'] = "M";
+		$container['links'] = [];
+		$container['nachname'] = "Leo";
+		$container['personen_nr'] = "59X";
+		$container['vorname'] = "Messi";
+
+		return [new \Swagger\Client\Model\Teilnehmer($container)];
 	}
 
 }
