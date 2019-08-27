@@ -2,52 +2,79 @@
 
 /**
  * VEDA user importer plugin cron job class
- * @author Jesus Lopez <lopez@leifos.de>
+ * @author Stefan Meyer <smeyer.ilias@gmx.de>
  */
-class ilVEDAUserImporterCronJob extends ilCronJob
+class ilVedaConnectorCronJob extends ilCronJob
 {
 	protected $plugin; // [ilCronHookPlugin]
 
+	/**
+	 * @return string
+	 */
 	public function getId()
 	{
-		return ilVEDAUserImporterPlugin::getInstance()->getId();
+		return \ilVedaConnectorPlugin::getInstance()->getId();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getTitle(): string
 	{
-		return ilVEDAUserImporterPlugin::PNAME;
+		return \ilVedaConnectorPlugin::PNAME;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getDescription(): string
 	{
-		return ilVEDAUserImporterPlugin::getInstance()->txt("cron_job_info");
+		return \ilVedaConnectorPlugin::getInstance()->txt('cron_job_info');
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getDefaultScheduleType(): int
 	{
 		return self::SCHEDULE_TYPE_IN_HOURS;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getDefaultScheduleValue(): int
 	{
 		return ilVEDAUserImporterSettings::getInstance()->getCronInterval();
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function hasAutoActivation(): bool
 	{
 		return false;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function hasFlexibleSchedule(): bool
 	{
 		return false;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function hasCustomSettings(): bool
 	{
 		return false;
 	}
 
+	/**
+	 * @return \ilCronJobResult
+	 */
 	public function run(): ilCronJobResult
 	{
 		$result = new ilCronJobResult();
@@ -70,9 +97,12 @@ class ilVEDAUserImporterCronJob extends ilCronJob
 		return $result;
 	}
 
-	public function getPlugin(): ilVEDAUserImporterPlugin
+	/**
+	 * @return \ilVEDAUserImporterPlugin
+	 */
+	public function getPlugin(): \ilVedaConnectorPlugin
 	{
-		return ilVEDAUserImporterPlugin::getInstance();
+		return \ilVedaConnectorPlugin::getInstance();
 	}
 
 }

@@ -1,31 +1,51 @@
 <?php
 
 /**
- * @author Jesus Lopez <lopez@leifos.com>
+ * @author Stefan Meyer <smeyer.ilias@gmx.de>
  */
-class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
+class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 {
+	const TAB_SETTINGS = 'settings';
+	const TAB_CREDENTIALS = 'credentials';
+
 	/**
-	 * Handles all commmands, default is "configure"
+	 * \ilLogger
+	 */
+	private $logger = null;
+
+
+	/**
+	 * \ilVedaConnectorConfigGUI constructor.
+	 */
+	public function __construct()
+	{
+		global $DIC;
+
+		$this->logger = $DIC->logger()->vedaimp();
+	}
+
+
+	/**
+	 * @inheritdoc
 	 */
 	public function performCommand($cmd)
 	{
-		global $ilCtrl;
-		global $ilTabs;
+		global $DIC;
+
+		$ilCtrl = $DIC->ctrl();
+		$ilTabs = $DIC->tabs();
 
 		$ilTabs->addTab(
-			'settings',
-			ilVEDAUserImporterPlugin::getInstance()->txt('tab_settings'),
-			$GLOBALS['ilCtrl']->getLinkTarget($this,'configure')
+			self::TAB_SETTINGS,
+			\ilVedaConnectorPlugin::getInstance()->txt('tab_settings'),
+			$ilCtrl->getLinkTarget($this, 'configure')
 		);
 
 		$ilTabs->addTab(
-			'credentials',
-			ilVEDAUserImporterPlugin::getInstance()->txt('tab_credentials'),
-			$GLOBALS['ilCtrl']->getLinkTarget($this, 'credentials')
+			self::TAB_CREDENTIALS,
+			\ilVedaConnectorPlugin::getInstance()->txt('tab_credentials'),
+			$ilCtrl->getLinkTarget($this, 'credentials')
 		);
-
-		$ilCtrl->saveParameter($this, "menu_id");
 
 		switch ($cmd)
 		{
@@ -37,13 +57,15 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 
 	/**
 	 * @inheritdoc
-	 * Show settings screen
 	 */
 	protected function configure(ilPropertyFormGUI $form = null): void
 	{
-		global $tpl, $ilTabs;
+		global $DIC;
 
-		$ilTabs->activateTab('settings');
+		$tpl = $DIC->ui()->mainTemplate();
+		$tabs = $DIC->tabs();
+
+		$tabs->activateTab(self::TAB_SETTINGS);
 
 		if(!$form instanceof ilPropertyFormGUI)
 		{
@@ -52,15 +74,21 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		$tpl->setContent($form->getHTML());
 	}
 
+	/**
+	 * @return \ilPropertyFormGUI
+	 */
 	protected function initConfigurationForm(): ilPropertyFormGUI
 	{
-		global $ilCtrl, $lng;
+		global $DIC;
 
-		$settings = ilVEDAUserImporterSettings::getInstance();
+		$lng = $DIC->language();
+		$ctrl = $DIC->ctrl();
 
-		$form = new ilPropertyFormGUI();
+		$settings = \ilVedaConnectorSettings::getInstance();
+
+		$form = new \ilPropertyFormGUI();
 		$form->setTitle($this->getPluginObject()->txt('tbl_settings'));
-		$form->setFormAction($ilCtrl->getFormAction($this));
+		$form->setFormAction($ctrl->getFormAction($this));
 		$form->addCommandButton('save', $lng->txt('save'));
 		$form->setShowTopButtons(false);
 
@@ -83,12 +111,18 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		return $form;
 	}
 
+	/**
+	 * Save settings
+	 */
 	protected function save(): void
 	{
-		global $lng, $ilCtrl;
+		global $DIC;
+
+		$lng = $DIC->language();
+		$ctrl = $DIC->ctrl();
 
 		$form = $this->initConfigurationForm();
-		$settings = ilVEDAUserImporterSettings::getInstance();
+		$settings = ilVedaConnectorSettings::getInstance();
 
 		try
 		{
@@ -99,14 +133,14 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 				$settings->save();
 
 				ilUtil::sendSuccess($lng->txt('settings_saved'),true);
-				$ilCtrl->redirect($this,'configure');
+				$ctrl->redirect($this,'configure');
 			}
 			$error = $lng->txt('err_check_input');
 		}
 		catch(ilException $e)
 		{
 			$error = $e->getMessage();
-			ilVEDAUserImporterLogger::getLogger()->write("save() exception: ".$error);
+			$this->logger->error('Configuration error: ' . $error);
 		}
 		$form->setValuesByPost();
 		ilUtil::sendFailure($error);
@@ -114,13 +148,16 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 	}
 
 	/**
-	 * Show credentials screen
+	 * @param \ilPropertyFormGUI|null $form
 	 */
 	protected function credentials(ilPropertyFormGUI $form = null): void
 	{
-		global $tpl, $ilTabs;
+		global $DIC;
 
-		$ilTabs->activateTab('credentials');
+		$tpl = $DIC->ui()->mainTemplate();
+		$tabs = $DIC->tabs();
+
+		$tabs->activateTab(self::TAB_CREDENTIALS);
 
 		if(!$form instanceof ilPropertyFormGUI)
 		{
@@ -130,15 +167,21 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		$tpl->setContent($form->getHTML());
 	}
 
+	/**
+	 * @return \ilPropertyFormGUI
+	 */
 	protected function initCredentialsForm(): ilPropertyFormGUI
 	{
-		global $ilCtrl, $lng;
+		global $DIC;
 
-		$settings = ilVEDAUserImporterSettings::getInstance();
+		$ctrl = $DIC->ctrl();
+		$lng = $DIC->language();
+
+		$settings = ilVedaConnectorSettings::getInstance();
 
 		$form = new ilPropertyFormGUI();
 		$form->setTitle($this->getPluginObject()->txt('tbl_settings'));
-		$form->setFormAction($ilCtrl->getFormAction($this));
+		$form->setFormAction($ctrl->getFormAction($this));
 
 		$form->addCommandButton('saveCredentials', $lng->txt('save'));
 		$form->setShowTopButtons(false);
@@ -175,12 +218,18 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 		return $form;
 	}
 
+	/**
+	 * Save credentials
+	 */
 	protected function saveCredentials(): void
 	{
-		global $lng, $ilCtrl;
+		global $DIC;
+
+		$ctrl = $DIC->ctrl();
+		$lng = $DIC->language();
 
 		$form = $this->initCredentialsForm();
-		$settings = ilVEDAUserImporterSettings::getInstance();
+		$settings = ilVedaConnectorSettings::getInstance();
 
 		try
 		{
@@ -193,14 +242,14 @@ class ilVEDAUserImporterConfigGUI extends ilPluginConfigGUI
 				$settings->save();
 
 				ilUtil::sendSuccess($lng->txt('settings_saved'),true);
-				$ilCtrl->redirect($this,'credentials');
+				$ctrl->redirect($this,'credentials');
 			}
 			$error = $lng->txt('err_check_input');
 		}
 		catch(ilException $e)
 		{
 			$error = $e->getMessage();
-			ilVEDAUserImporterLogger::getLogger()->write("saveCredentials() exception: ".$error);
+			\ilVedaConnectorPlugin::getInstance()->getLogger()->error('Error saving credentials: ' . $error);
 		}
 		$form->setValuesByPost();
 		ilUtil::sendFailure($error);
