@@ -1,6 +1,6 @@
 <?php
 /**
- * Ausbildungszug
+ * TeilnehmerELearningPlattform
  *
  * PHP version 5
  *
@@ -33,15 +33,15 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * Ausbildungszug Class Doc Comment
+ * TeilnehmerELearningPlattform Class Doc Comment
  *
  * @category Class
- * @description Ein Ausbildungszug mit den relevanten Daten.
+ * @description Teilnehmer einer E-Learning-Plattform mit relevanten Informationen.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class Ausbildungszug implements ModelInterface, ArrayAccess
+class TeilnehmerELearningPlattform implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'Ausbildungszug';
+    protected static $swaggerModelName = 'TeilnehmerELearningPlattform';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,12 +58,12 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'oid' => 'string',
-        'ausbildungsgang_id' => 'string',
-        'ausbildungszugabschnitte' => '\Swagger\Client\Model\Ausbildungszugabschnitt[]',
+        'benutzername' => 'string',
+        'elearning_plattform_id' => 'string',
+        'email' => 'string',
+        'initiales_passwort' => 'string',
         'links' => '\Swagger\Client\Model\Link[]',
-        'name' => 'string',
-        'planungsstatus' => 'string'
+        'teilnehmer' => '\Swagger\Client\Model\Teilnehmer'
     ];
 
     /**
@@ -72,12 +72,12 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'oid' => null,
-        'ausbildungsgang_id' => null,
-        'ausbildungszugabschnitte' => null,
+        'benutzername' => null,
+        'elearning_plattform_id' => null,
+        'email' => null,
+        'initiales_passwort' => null,
         'links' => null,
-        'name' => null,
-        'planungsstatus' => null
+        'teilnehmer' => null
     ];
 
     /**
@@ -107,12 +107,12 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'oid' => 'oid',
-        'ausbildungsgang_id' => 'ausbildungsgangId',
-        'ausbildungszugabschnitte' => 'ausbildungszugabschnitte',
+        'benutzername' => 'benutzername',
+        'elearning_plattform_id' => 'elearningPlattformId',
+        'email' => 'email',
+        'initiales_passwort' => 'initialesPasswort',
         'links' => 'links',
-        'name' => 'name',
-        'planungsstatus' => 'planungsstatus'
+        'teilnehmer' => 'teilnehmer'
     ];
 
     /**
@@ -121,12 +121,12 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'oid' => 'setOid',
-        'ausbildungsgang_id' => 'setAusbildungsgangId',
-        'ausbildungszugabschnitte' => 'setAusbildungszugabschnitte',
+        'benutzername' => 'setBenutzername',
+        'elearning_plattform_id' => 'setElearningPlattformId',
+        'email' => 'setEmail',
+        'initiales_passwort' => 'setInitialesPasswort',
         'links' => 'setLinks',
-        'name' => 'setName',
-        'planungsstatus' => 'setPlanungsstatus'
+        'teilnehmer' => 'setTeilnehmer'
     ];
 
     /**
@@ -135,12 +135,12 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'oid' => 'getOid',
-        'ausbildungsgang_id' => 'getAusbildungsgangId',
-        'ausbildungszugabschnitte' => 'getAusbildungszugabschnitte',
+        'benutzername' => 'getBenutzername',
+        'elearning_plattform_id' => 'getElearningPlattformId',
+        'email' => 'getEmail',
+        'initiales_passwort' => 'getInitialesPasswort',
         'links' => 'getLinks',
-        'name' => 'getName',
-        'planungsstatus' => 'getPlanungsstatus'
+        'teilnehmer' => 'getTeilnehmer'
     ];
 
     /**
@@ -184,23 +184,8 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
         return self::$swaggerModelName;
     }
 
-    const PLANUNGSSTATUS_IN_PLANUNG = 'IN_PLANUNG';
-    const PLANUNGSSTATUS_FREIGEGEBEN = 'FREIGEGEBEN';
     
 
-    
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public function getPlanungsstatusAllowableValues()
-    {
-        return [
-            self::PLANUNGSSTATUS_IN_PLANUNG,
-            self::PLANUNGSSTATUS_FREIGEGEBEN,
-        ];
-    }
     
 
     /**
@@ -218,12 +203,12 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
-        $this->container['ausbildungsgang_id'] = isset($data['ausbildungsgang_id']) ? $data['ausbildungsgang_id'] : null;
-        $this->container['ausbildungszugabschnitte'] = isset($data['ausbildungszugabschnitte']) ? $data['ausbildungszugabschnitte'] : null;
+        $this->container['benutzername'] = isset($data['benutzername']) ? $data['benutzername'] : null;
+        $this->container['elearning_plattform_id'] = isset($data['elearning_plattform_id']) ? $data['elearning_plattform_id'] : null;
+        $this->container['email'] = isset($data['email']) ? $data['email'] : null;
+        $this->container['initiales_passwort'] = isset($data['initiales_passwort']) ? $data['initiales_passwort'] : null;
         $this->container['links'] = isset($data['links']) ? $data['links'] : null;
-        $this->container['name'] = isset($data['name']) ? $data['name'] : null;
-        $this->container['planungsstatus'] = isset($data['planungsstatus']) ? $data['planungsstatus'] : null;
+        $this->container['teilnehmer'] = isset($data['teilnehmer']) ? $data['teilnehmer'] : null;
     }
 
     /**
@@ -235,29 +220,9 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
     {
         $invalidProperties = [];
 
-        if ($this->container['oid'] === null) {
-            $invalidProperties[] = "'oid' can't be null";
+        if ($this->container['teilnehmer'] === null) {
+            $invalidProperties[] = "'teilnehmer' can't be null";
         }
-        if ($this->container['ausbildungsgang_id'] === null) {
-            $invalidProperties[] = "'ausbildungsgang_id' can't be null";
-        }
-        if ($this->container['ausbildungszugabschnitte'] === null) {
-            $invalidProperties[] = "'ausbildungszugabschnitte' can't be null";
-        }
-        if ($this->container['name'] === null) {
-            $invalidProperties[] = "'name' can't be null";
-        }
-        if ($this->container['planungsstatus'] === null) {
-            $invalidProperties[] = "'planungsstatus' can't be null";
-        }
-        $allowedValues = $this->getPlanungsstatusAllowableValues();
-        if (!is_null($this->container['planungsstatus']) && !in_array($this->container['planungsstatus'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value for 'planungsstatus', must be one of '%s'",
-                implode("', '", $allowedValues)
-            );
-        }
-
         return $invalidProperties;
     }
 
@@ -274,73 +239,97 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets oid
+     * Gets benutzername
      *
      * @return string
      */
-    public function getOid()
+    public function getBenutzername()
     {
-        return $this->container['oid'];
+        return $this->container['benutzername'];
     }
 
     /**
-     * Sets oid
+     * Sets benutzername
      *
-     * @param string $oid UUID des Datensatzes
+     * @param string $benutzername Der Benutzername für die E-Learning-Plattform
      *
      * @return $this
      */
-    public function setOid($oid)
+    public function setBenutzername($benutzername)
     {
-        $this->container['oid'] = $oid;
+        $this->container['benutzername'] = $benutzername;
 
         return $this;
     }
 
     /**
-     * Gets ausbildungsgang_id
+     * Gets elearning_plattform_id
      *
      * @return string
      */
-    public function getAusbildungsgangId()
+    public function getElearningPlattformId()
     {
-        return $this->container['ausbildungsgang_id'];
+        return $this->container['elearning_plattform_id'];
     }
 
     /**
-     * Sets ausbildungsgang_id
+     * Sets elearning_plattform_id
      *
-     * @param string $ausbildungsgang_id ID des Ausbildungsgang
+     * @param string $elearning_plattform_id elearning_plattform_id
      *
      * @return $this
      */
-    public function setAusbildungsgangId($ausbildungsgang_id)
+    public function setElearningPlattformId($elearning_plattform_id)
     {
-        $this->container['ausbildungsgang_id'] = $ausbildungsgang_id;
+        $this->container['elearning_plattform_id'] = $elearning_plattform_id;
 
         return $this;
     }
 
     /**
-     * Gets ausbildungszugabschnitte
+     * Gets email
      *
-     * @return \Swagger\Client\Model\Ausbildungszugabschnitt[]
+     * @return string
      */
-    public function getAusbildungszugabschnitte()
+    public function getEmail()
     {
-        return $this->container['ausbildungszugabschnitte'];
+        return $this->container['email'];
     }
 
     /**
-     * Sets ausbildungszugabschnitte
+     * Sets email
      *
-     * @param \Swagger\Client\Model\Ausbildungszugabschnitt[] $ausbildungszugabschnitte Abschnitte des Ausbildungszugs
+     * @param string $email email
      *
      * @return $this
      */
-    public function setAusbildungszugabschnitte($ausbildungszugabschnitte)
+    public function setEmail($email)
     {
-        $this->container['ausbildungszugabschnitte'] = $ausbildungszugabschnitte;
+        $this->container['email'] = $email;
+
+        return $this;
+    }
+
+    /**
+     * Gets initiales_passwort
+     *
+     * @return string
+     */
+    public function getInitialesPasswort()
+    {
+        return $this->container['initiales_passwort'];
+    }
+
+    /**
+     * Sets initiales_passwort
+     *
+     * @param string $initiales_passwort Das initiale Passwort für die E-Learning-Plattform
+     *
+     * @return $this
+     */
+    public function setInitialesPasswort($initiales_passwort)
+    {
+        $this->container['initiales_passwort'] = $initiales_passwort;
 
         return $this;
     }
@@ -370,58 +359,25 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets name
+     * Gets teilnehmer
      *
-     * @return string
+     * @return \Swagger\Client\Model\Teilnehmer
      */
-    public function getName()
+    public function getTeilnehmer()
     {
-        return $this->container['name'];
+        return $this->container['teilnehmer'];
     }
 
     /**
-     * Sets name
+     * Sets teilnehmer
      *
-     * @param string $name Name des Ausbildungszugs
+     * @param \Swagger\Client\Model\Teilnehmer $teilnehmer Teilnehmer der E-Learning-Plattform
      *
      * @return $this
      */
-    public function setName($name)
+    public function setTeilnehmer($teilnehmer)
     {
-        $this->container['name'] = $name;
-
-        return $this;
-    }
-
-    /**
-     * Gets planungsstatus
-     *
-     * @return string
-     */
-    public function getPlanungsstatus()
-    {
-        return $this->container['planungsstatus'];
-    }
-
-    /**
-     * Sets planungsstatus
-     *
-     * @param string $planungsstatus Der Planungsstatus
-     *
-     * @return $this
-     */
-    public function setPlanungsstatus($planungsstatus)
-    {
-        $allowedValues = $this->getPlanungsstatusAllowableValues();
-        if (!in_array($planungsstatus, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value for 'planungsstatus', must be one of '%s'",
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
-        $this->container['planungsstatus'] = $planungsstatus;
+        $this->container['teilnehmer'] = $teilnehmer;
 
         return $this;
     }

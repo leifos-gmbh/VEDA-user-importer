@@ -1,6 +1,6 @@
 <?php
 /**
- * TeilnehmerbuchungApiDto
+ * TeilnehmergruppePreis
  *
  * PHP version 5
  *
@@ -33,14 +33,15 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * TeilnehmerbuchungApiDto Class Doc Comment
+ * TeilnehmergruppePreis Class Doc Comment
  *
  * @category Class
+ * @description Die Preisangabe eines Veranstaltungstermins für eine Teilnehmergruppe.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
+class TeilnehmergruppePreis implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -49,7 +50,7 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'TeilnehmerbuchungApiDto';
+    protected static $swaggerModelName = 'TeilnehmergruppePreis';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -57,8 +58,8 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'oid' => 'string',
-        'links' => '\Swagger\Client\Model\Link[]'
+        'preis' => 'float',
+        'teilnehmergruppe_id' => 'string'
     ];
 
     /**
@@ -67,8 +68,8 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'oid' => null,
-        'links' => null
+        'preis' => null,
+        'teilnehmergruppe_id' => null
     ];
 
     /**
@@ -98,8 +99,8 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'oid' => 'oid',
-        'links' => 'links'
+        'preis' => 'preis',
+        'teilnehmergruppe_id' => 'teilnehmergruppeID'
     ];
 
     /**
@@ -108,8 +109,8 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'oid' => 'setOid',
-        'links' => 'setLinks'
+        'preis' => 'setPreis',
+        'teilnehmergruppe_id' => 'setTeilnehmergruppeId'
     ];
 
     /**
@@ -118,8 +119,8 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'oid' => 'getOid',
-        'links' => 'getLinks'
+        'preis' => 'getPreis',
+        'teilnehmergruppe_id' => 'getTeilnehmergruppeId'
     ];
 
     /**
@@ -182,8 +183,8 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
-        $this->container['links'] = isset($data['links']) ? $data['links'] : null;
+        $this->container['preis'] = isset($data['preis']) ? $data['preis'] : null;
+        $this->container['teilnehmergruppe_id'] = isset($data['teilnehmergruppe_id']) ? $data['teilnehmergruppe_id'] : null;
     }
 
     /**
@@ -195,9 +196,6 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
     {
         $invalidProperties = [];
 
-        if ($this->container['oid'] === null) {
-            $invalidProperties[] = "'oid' can't be null";
-        }
         return $invalidProperties;
     }
 
@@ -214,49 +212,49 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets oid
+     * Gets preis
      *
-     * @return string
+     * @return float
      */
-    public function getOid()
+    public function getPreis()
     {
-        return $this->container['oid'];
+        return $this->container['preis'];
     }
 
     /**
-     * Sets oid
+     * Sets preis
      *
-     * @param string $oid UUID des Datensatzes
+     * @param float $preis Der Preis für den Veranstaltungstermin.
      *
      * @return $this
      */
-    public function setOid($oid)
+    public function setPreis($preis)
     {
-        $this->container['oid'] = $oid;
+        $this->container['preis'] = $preis;
 
         return $this;
     }
 
     /**
-     * Gets links
+     * Gets teilnehmergruppe_id
      *
-     * @return \Swagger\Client\Model\Link[]
+     * @return string
      */
-    public function getLinks()
+    public function getTeilnehmergruppeId()
     {
-        return $this->container['links'];
+        return $this->container['teilnehmergruppe_id'];
     }
 
     /**
-     * Sets links
+     * Sets teilnehmergruppe_id
      *
-     * @param \Swagger\Client\Model\Link[] $links links
+     * @param string $teilnehmergruppe_id Die ID der Teilnehmergruppe, für die der Preis angegeben ist.
      *
      * @return $this
      */
-    public function setLinks($links)
+    public function setTeilnehmergruppeId($teilnehmergruppe_id)
     {
-        $this->container['links'] = $links;
+        $this->container['teilnehmergruppe_id'] = $teilnehmergruppe_id;
 
         return $this;
     }

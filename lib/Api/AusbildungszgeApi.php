@@ -1,6 +1,6 @@
 <?php
 /**
- * TeilnehmerApi
+ * AusbildungszgeApi
  * PHP version 5
  *
  * @category Class
@@ -40,14 +40,14 @@ use Swagger\Client\HeaderSelector;
 use Swagger\Client\ObjectSerializer;
 
 /**
- * TeilnehmerApi Class Doc Comment
+ * AusbildungszgeApi Class Doc Comment
  *
  * @category Class
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class TeilnehmerApi
+class AusbildungszgeApi
 {
     /**
      * @var ClientInterface
@@ -88,37 +88,37 @@ class TeilnehmerApi
     }
 
     /**
-     * Operation createTeilnehmerUsingPOST
+     * Operation getBeteiligteDozentenVonAusbildungszugUsingGET
      *
-     * Legt einen Teilnehmer an
+     * Ruft alle beteiligten Dozenten eines Ausbildungszugs ab
      *
-     * @param  \Swagger\Client\Model\TeilnehmerCreateApiDto $create_teilnehmer_api_dto Definition eines Teilnehmers, der angelegt werden soll. (optional)
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
      *
      * @throws \Swagger\Client\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return \Swagger\Client\Model\Teilnehmer
+     * @return \Swagger\Client\Model\AusbildungszugDozent[]
      */
-    public function createTeilnehmerUsingPOST($create_teilnehmer_api_dto = null)
+    public function getBeteiligteDozentenVonAusbildungszugUsingGET($ausbildungszug_id)
     {
-        list($response) = $this->createTeilnehmerUsingPOSTWithHttpInfo($create_teilnehmer_api_dto);
+        list($response) = $this->getBeteiligteDozentenVonAusbildungszugUsingGETWithHttpInfo($ausbildungszug_id);
         return $response;
     }
 
     /**
-     * Operation createTeilnehmerUsingPOSTWithHttpInfo
+     * Operation getBeteiligteDozentenVonAusbildungszugUsingGETWithHttpInfo
      *
-     * Legt einen Teilnehmer an
+     * Ruft alle beteiligten Dozenten eines Ausbildungszugs ab
      *
-     * @param  \Swagger\Client\Model\TeilnehmerCreateApiDto $create_teilnehmer_api_dto Definition eines Teilnehmers, der angelegt werden soll. (optional)
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
      *
      * @throws \Swagger\Client\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return array of \Swagger\Client\Model\Teilnehmer, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Swagger\Client\Model\AusbildungszugDozent[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function createTeilnehmerUsingPOSTWithHttpInfo($create_teilnehmer_api_dto = null)
+    public function getBeteiligteDozentenVonAusbildungszugUsingGETWithHttpInfo($ausbildungszug_id)
     {
-        $returnType = '\Swagger\Client\Model\Teilnehmer';
-        $request = $this->createTeilnehmerUsingPOSTRequest($create_teilnehmer_api_dto);
+        $returnType = '\Swagger\Client\Model\AusbildungszugDozent[]';
+        $request = $this->getBeteiligteDozentenVonAusbildungszugUsingGETRequest($ausbildungszug_id);
 
         try {
             $options = $this->createHttpClientOption();
@@ -169,7 +169,7 @@ class TeilnehmerApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Swagger\Client\Model\Teilnehmer',
+                        '\Swagger\Client\Model\AusbildungszugDozent[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -180,18 +180,18 @@ class TeilnehmerApi
     }
 
     /**
-     * Operation createTeilnehmerUsingPOSTAsync
+     * Operation getBeteiligteDozentenVonAusbildungszugUsingGETAsync
      *
-     * Legt einen Teilnehmer an
+     * Ruft alle beteiligten Dozenten eines Ausbildungszugs ab
      *
-     * @param  \Swagger\Client\Model\TeilnehmerCreateApiDto $create_teilnehmer_api_dto Definition eines Teilnehmers, der angelegt werden soll. (optional)
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createTeilnehmerUsingPOSTAsync($create_teilnehmer_api_dto = null)
+    public function getBeteiligteDozentenVonAusbildungszugUsingGETAsync($ausbildungszug_id)
     {
-        return $this->createTeilnehmerUsingPOSTAsyncWithHttpInfo($create_teilnehmer_api_dto)
+        return $this->getBeteiligteDozentenVonAusbildungszugUsingGETAsyncWithHttpInfo($ausbildungszug_id)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -200,19 +200,19 @@ class TeilnehmerApi
     }
 
     /**
-     * Operation createTeilnehmerUsingPOSTAsyncWithHttpInfo
+     * Operation getBeteiligteDozentenVonAusbildungszugUsingGETAsyncWithHttpInfo
      *
-     * Legt einen Teilnehmer an
+     * Ruft alle beteiligten Dozenten eines Ausbildungszugs ab
      *
-     * @param  \Swagger\Client\Model\TeilnehmerCreateApiDto $create_teilnehmer_api_dto Definition eines Teilnehmers, der angelegt werden soll. (optional)
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createTeilnehmerUsingPOSTAsyncWithHttpInfo($create_teilnehmer_api_dto = null)
+    public function getBeteiligteDozentenVonAusbildungszugUsingGETAsyncWithHttpInfo($ausbildungszug_id)
     {
-        $returnType = '\Swagger\Client\Model\Teilnehmer';
-        $request = $this->createTeilnehmerUsingPOSTRequest($create_teilnehmer_api_dto);
+        $returnType = '\Swagger\Client\Model\AusbildungszugDozent[]';
+        $request = $this->getBeteiligteDozentenVonAusbildungszugUsingGETRequest($ausbildungszug_id);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -252,17 +252,23 @@ class TeilnehmerApi
     }
 
     /**
-     * Create request for operation 'createTeilnehmerUsingPOST'
+     * Create request for operation 'getBeteiligteDozentenVonAusbildungszugUsingGET'
      *
-     * @param  \Swagger\Client\Model\TeilnehmerCreateApiDto $create_teilnehmer_api_dto Definition eines Teilnehmers, der angelegt werden soll. (optional)
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function createTeilnehmerUsingPOSTRequest($create_teilnehmer_api_dto = null)
+    protected function getBeteiligteDozentenVonAusbildungszugUsingGETRequest($ausbildungszug_id)
     {
+        // verify the required parameter 'ausbildungszug_id' is set
+        if ($ausbildungszug_id === null || (is_array($ausbildungszug_id) && count($ausbildungszug_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $ausbildungszug_id when calling getBeteiligteDozentenVonAusbildungszugUsingGET'
+            );
+        }
 
-        $resourcePath = '/v2/teilnehmer';
+        $resourcePath = '/v2/ausbildungszuege/{ausbildungszugId}/dozenten';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
@@ -270,20 +276,1055 @@ class TeilnehmerApi
         $multipart = false;
 
 
+        // path params
+        if ($ausbildungszug_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'ausbildungszugId' . '}',
+                ObjectSerializer::toPathValue($ausbildungszug_id),
+                $resourcePath
+            );
+        }
 
         // body params
         $_tempBody = null;
-        if (isset($create_teilnehmer_api_dto)) {
-            $_tempBody = $create_teilnehmer_api_dto;
-        }
 
         if ($multipart) {
             $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['*/*']
+                ['application/json']
             );
         } else {
             $headers = $this->headerSelector->selectHeaders(
-                ['*/*'],
+                ['application/json'],
+                ['application/json']
+            );
+        }
+
+        // for model (json/xml)
+        if (isset($_tempBody)) {
+            // $_tempBody is the method argument, if present
+            $httpBody = $_tempBody;
+            // \stdClass has no __toString(), so we should encode it manually
+            if ($httpBody instanceof \stdClass && $headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($httpBody);
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $multipartContents[] = [
+                        'name' => $formParamName,
+                        'contents' => $formParamValue
+                    ];
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif ($headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($formParams);
+
+            } else {
+                // for HTTP post (form)
+                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+            }
+        }
+
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        return new Request(
+            'GET',
+            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET
+     *
+     * Ruft alle Ausbildungszüge eines Ausbildungsgangs ab, die zur E-Learning-Plattform gehören
+     *
+     * @param  string $elearningplattform_id ID der E-Learning-Plattform (required)
+     * @param  string $ausbildungsgang_id ID des Ausbildungsgangs (required)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return \Swagger\Client\Model\Ausbildungszug[]
+     */
+    public function getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET($elearningplattform_id, $ausbildungsgang_id)
+    {
+        list($response) = $this->getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGETWithHttpInfo($elearningplattform_id, $ausbildungsgang_id);
+        return $response;
+    }
+
+    /**
+     * Operation getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGETWithHttpInfo
+     *
+     * Ruft alle Ausbildungszüge eines Ausbildungsgangs ab, die zur E-Learning-Plattform gehören
+     *
+     * @param  string $elearningplattform_id ID der E-Learning-Plattform (required)
+     * @param  string $ausbildungsgang_id ID des Ausbildungsgangs (required)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return array of \Swagger\Client\Model\Ausbildungszug[], HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGETWithHttpInfo($elearningplattform_id, $ausbildungsgang_id)
+    {
+        $returnType = '\Swagger\Client\Model\Ausbildungszug[]';
+        $request = $this->getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGETRequest($elearningplattform_id, $ausbildungsgang_id);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    $response->getBody()
+                );
+            }
+
+            $responseBody = $response->getBody();
+            if ($returnType === '\SplFileObject') {
+                $content = $responseBody; //stream goes to serializer
+            } else {
+                $content = $responseBody->getContents();
+                if ($returnType !== 'string') {
+                    $content = json_decode($content);
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Swagger\Client\Model\Ausbildungszug[]',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGETAsync
+     *
+     * Ruft alle Ausbildungszüge eines Ausbildungsgangs ab, die zur E-Learning-Plattform gehören
+     *
+     * @param  string $elearningplattform_id ID der E-Learning-Plattform (required)
+     * @param  string $ausbildungsgang_id ID des Ausbildungsgangs (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGETAsync($elearningplattform_id, $ausbildungsgang_id)
+    {
+        return $this->getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGETAsyncWithHttpInfo($elearningplattform_id, $ausbildungsgang_id)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGETAsyncWithHttpInfo
+     *
+     * Ruft alle Ausbildungszüge eines Ausbildungsgangs ab, die zur E-Learning-Plattform gehören
+     *
+     * @param  string $elearningplattform_id ID der E-Learning-Plattform (required)
+     * @param  string $ausbildungsgang_id ID des Ausbildungsgangs (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGETAsyncWithHttpInfo($elearningplattform_id, $ausbildungsgang_id)
+    {
+        $returnType = '\Swagger\Client\Model\Ausbildungszug[]';
+        $request = $this->getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGETRequest($elearningplattform_id, $ausbildungsgang_id);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    $responseBody = $response->getBody();
+                    if ($returnType === '\SplFileObject') {
+                        $content = $responseBody; //stream goes to serializer
+                    } else {
+                        $content = $responseBody->getContents();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET'
+     *
+     * @param  string $elearningplattform_id ID der E-Learning-Plattform (required)
+     * @param  string $ausbildungsgang_id ID des Ausbildungsgangs (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    protected function getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGETRequest($elearningplattform_id, $ausbildungsgang_id)
+    {
+        // verify the required parameter 'elearningplattform_id' is set
+        if ($elearningplattform_id === null || (is_array($elearningplattform_id) && count($elearningplattform_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $elearningplattform_id when calling getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET'
+            );
+        }
+        // verify the required parameter 'ausbildungsgang_id' is set
+        if ($ausbildungsgang_id === null || (is_array($ausbildungsgang_id) && count($ausbildungsgang_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $ausbildungsgang_id when calling getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET'
+            );
+        }
+
+        $resourcePath = '/v2/elearningplattformen/{elearningplattformId}/ausbildungsgaenge/{ausbildungsgangId}/ausbildungszuege';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+        // path params
+        if ($elearningplattform_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'elearningplattformId' . '}',
+                ObjectSerializer::toPathValue($elearningplattform_id),
+                $resourcePath
+            );
+        }
+        // path params
+        if ($ausbildungsgang_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'ausbildungsgangId' . '}',
+                ObjectSerializer::toPathValue($ausbildungsgang_id),
+                $resourcePath
+            );
+        }
+
+        // body params
+        $_tempBody = null;
+
+        if ($multipart) {
+            $headers = $this->headerSelector->selectHeadersForMultipart(
+                ['application/json']
+            );
+        } else {
+            $headers = $this->headerSelector->selectHeaders(
+                ['application/json'],
+                ['application/json']
+            );
+        }
+
+        // for model (json/xml)
+        if (isset($_tempBody)) {
+            // $_tempBody is the method argument, if present
+            $httpBody = $_tempBody;
+            // \stdClass has no __toString(), so we should encode it manually
+            if ($httpBody instanceof \stdClass && $headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($httpBody);
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $multipartContents[] = [
+                        'name' => $formParamName,
+                        'contents' => $formParamValue
+                    ];
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif ($headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($formParams);
+
+            } else {
+                // for HTTP post (form)
+                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+            }
+        }
+
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        return new Request(
+            'GET',
+            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getLernbegleiterVonAusbildungszugUsingGET
+     *
+     * Ruft alle zuständigen Lernbegleiter eines Ausbildungszugs ab
+     *
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return \Swagger\Client\Model\AusbildungszugLernbegleiter[]
+     */
+    public function getLernbegleiterVonAusbildungszugUsingGET($ausbildungszug_id)
+    {
+        list($response) = $this->getLernbegleiterVonAusbildungszugUsingGETWithHttpInfo($ausbildungszug_id);
+        return $response;
+    }
+
+    /**
+     * Operation getLernbegleiterVonAusbildungszugUsingGETWithHttpInfo
+     *
+     * Ruft alle zuständigen Lernbegleiter eines Ausbildungszugs ab
+     *
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return array of \Swagger\Client\Model\AusbildungszugLernbegleiter[], HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getLernbegleiterVonAusbildungszugUsingGETWithHttpInfo($ausbildungszug_id)
+    {
+        $returnType = '\Swagger\Client\Model\AusbildungszugLernbegleiter[]';
+        $request = $this->getLernbegleiterVonAusbildungszugUsingGETRequest($ausbildungszug_id);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    $response->getBody()
+                );
+            }
+
+            $responseBody = $response->getBody();
+            if ($returnType === '\SplFileObject') {
+                $content = $responseBody; //stream goes to serializer
+            } else {
+                $content = $responseBody->getContents();
+                if ($returnType !== 'string') {
+                    $content = json_decode($content);
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Swagger\Client\Model\AusbildungszugLernbegleiter[]',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getLernbegleiterVonAusbildungszugUsingGETAsync
+     *
+     * Ruft alle zuständigen Lernbegleiter eines Ausbildungszugs ab
+     *
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getLernbegleiterVonAusbildungszugUsingGETAsync($ausbildungszug_id)
+    {
+        return $this->getLernbegleiterVonAusbildungszugUsingGETAsyncWithHttpInfo($ausbildungszug_id)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getLernbegleiterVonAusbildungszugUsingGETAsyncWithHttpInfo
+     *
+     * Ruft alle zuständigen Lernbegleiter eines Ausbildungszugs ab
+     *
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getLernbegleiterVonAusbildungszugUsingGETAsyncWithHttpInfo($ausbildungszug_id)
+    {
+        $returnType = '\Swagger\Client\Model\AusbildungszugLernbegleiter[]';
+        $request = $this->getLernbegleiterVonAusbildungszugUsingGETRequest($ausbildungszug_id);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    $responseBody = $response->getBody();
+                    if ($returnType === '\SplFileObject') {
+                        $content = $responseBody; //stream goes to serializer
+                    } else {
+                        $content = $responseBody->getContents();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getLernbegleiterVonAusbildungszugUsingGET'
+     *
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    protected function getLernbegleiterVonAusbildungszugUsingGETRequest($ausbildungszug_id)
+    {
+        // verify the required parameter 'ausbildungszug_id' is set
+        if ($ausbildungszug_id === null || (is_array($ausbildungszug_id) && count($ausbildungszug_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $ausbildungszug_id when calling getLernbegleiterVonAusbildungszugUsingGET'
+            );
+        }
+
+        $resourcePath = '/v2/ausbildungszuege/{ausbildungszugId}/lernbegleiter';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+        // path params
+        if ($ausbildungszug_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'ausbildungszugId' . '}',
+                ObjectSerializer::toPathValue($ausbildungszug_id),
+                $resourcePath
+            );
+        }
+
+        // body params
+        $_tempBody = null;
+
+        if ($multipart) {
+            $headers = $this->headerSelector->selectHeadersForMultipart(
+                ['application/json']
+            );
+        } else {
+            $headers = $this->headerSelector->selectHeaders(
+                ['application/json'],
+                ['application/json']
+            );
+        }
+
+        // for model (json/xml)
+        if (isset($_tempBody)) {
+            // $_tempBody is the method argument, if present
+            $httpBody = $_tempBody;
+            // \stdClass has no __toString(), so we should encode it manually
+            if ($httpBody instanceof \stdClass && $headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($httpBody);
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $multipartContents[] = [
+                        'name' => $formParamName,
+                        'contents' => $formParamValue
+                    ];
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif ($headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($formParams);
+
+            } else {
+                // for HTTP post (form)
+                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+            }
+        }
+
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        return new Request(
+            'GET',
+            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getTeilnehmerVonAusbildungszugUsingGET
+     *
+     * Ruft alle Teilnehmer eines Ausbildungszugs ab
+     *
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return \Swagger\Client\Model\AusbildungszugTeilnehmer[]
+     */
+    public function getTeilnehmerVonAusbildungszugUsingGET($ausbildungszug_id)
+    {
+        list($response) = $this->getTeilnehmerVonAusbildungszugUsingGETWithHttpInfo($ausbildungszug_id);
+        return $response;
+    }
+
+    /**
+     * Operation getTeilnehmerVonAusbildungszugUsingGETWithHttpInfo
+     *
+     * Ruft alle Teilnehmer eines Ausbildungszugs ab
+     *
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return array of \Swagger\Client\Model\AusbildungszugTeilnehmer[], HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getTeilnehmerVonAusbildungszugUsingGETWithHttpInfo($ausbildungszug_id)
+    {
+        $returnType = '\Swagger\Client\Model\AusbildungszugTeilnehmer[]';
+        $request = $this->getTeilnehmerVonAusbildungszugUsingGETRequest($ausbildungszug_id);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    $response->getBody()
+                );
+            }
+
+            $responseBody = $response->getBody();
+            if ($returnType === '\SplFileObject') {
+                $content = $responseBody; //stream goes to serializer
+            } else {
+                $content = $responseBody->getContents();
+                if ($returnType !== 'string') {
+                    $content = json_decode($content);
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Swagger\Client\Model\AusbildungszugTeilnehmer[]',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getTeilnehmerVonAusbildungszugUsingGETAsync
+     *
+     * Ruft alle Teilnehmer eines Ausbildungszugs ab
+     *
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getTeilnehmerVonAusbildungszugUsingGETAsync($ausbildungszug_id)
+    {
+        return $this->getTeilnehmerVonAusbildungszugUsingGETAsyncWithHttpInfo($ausbildungszug_id)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getTeilnehmerVonAusbildungszugUsingGETAsyncWithHttpInfo
+     *
+     * Ruft alle Teilnehmer eines Ausbildungszugs ab
+     *
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getTeilnehmerVonAusbildungszugUsingGETAsyncWithHttpInfo($ausbildungszug_id)
+    {
+        $returnType = '\Swagger\Client\Model\AusbildungszugTeilnehmer[]';
+        $request = $this->getTeilnehmerVonAusbildungszugUsingGETRequest($ausbildungszug_id);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    $responseBody = $response->getBody();
+                    if ($returnType === '\SplFileObject') {
+                        $content = $responseBody; //stream goes to serializer
+                    } else {
+                        $content = $responseBody->getContents();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getTeilnehmerVonAusbildungszugUsingGET'
+     *
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    protected function getTeilnehmerVonAusbildungszugUsingGETRequest($ausbildungszug_id)
+    {
+        // verify the required parameter 'ausbildungszug_id' is set
+        if ($ausbildungszug_id === null || (is_array($ausbildungszug_id) && count($ausbildungszug_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $ausbildungszug_id when calling getTeilnehmerVonAusbildungszugUsingGET'
+            );
+        }
+
+        $resourcePath = '/v2/ausbildungszuege/{ausbildungszugId}/teilnehmer';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+        // path params
+        if ($ausbildungszug_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'ausbildungszugId' . '}',
+                ObjectSerializer::toPathValue($ausbildungszug_id),
+                $resourcePath
+            );
+        }
+
+        // body params
+        $_tempBody = null;
+
+        if ($multipart) {
+            $headers = $this->headerSelector->selectHeadersForMultipart(
+                ['application/json']
+            );
+        } else {
+            $headers = $this->headerSelector->selectHeaders(
+                ['application/json'],
+                ['application/json']
+            );
+        }
+
+        // for model (json/xml)
+        if (isset($_tempBody)) {
+            // $_tempBody is the method argument, if present
+            $httpBody = $_tempBody;
+            // \stdClass has no __toString(), so we should encode it manually
+            if ($httpBody instanceof \stdClass && $headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($httpBody);
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $multipartContents[] = [
+                        'name' => $formParamName,
+                        'contents' => $formParamValue
+                    ];
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif ($headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($formParams);
+
+            } else {
+                // for HTTP post (form)
+                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+            }
+        }
+
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        return new Request(
+            'GET',
+            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation meldeAusbildungszugAlsExternExistierendUsingPOST
+     *
+     * Meldet den Ausbildungszug als extern existierend
+     *
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return void
+     */
+    public function meldeAusbildungszugAlsExternExistierendUsingPOST($ausbildungszug_id)
+    {
+        $this->meldeAusbildungszugAlsExternExistierendUsingPOSTWithHttpInfo($ausbildungszug_id);
+    }
+
+    /**
+     * Operation meldeAusbildungszugAlsExternExistierendUsingPOSTWithHttpInfo
+     *
+     * Meldet den Ausbildungszug als extern existierend
+     *
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function meldeAusbildungszugAlsExternExistierendUsingPOSTWithHttpInfo($ausbildungszug_id)
+    {
+        $returnType = '';
+        $request = $this->meldeAusbildungszugAlsExternExistierendUsingPOSTRequest($ausbildungszug_id);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    $response->getBody()
+                );
+            }
+
+            return [null, $statusCode, $response->getHeaders()];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation meldeAusbildungszugAlsExternExistierendUsingPOSTAsync
+     *
+     * Meldet den Ausbildungszug als extern existierend
+     *
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function meldeAusbildungszugAlsExternExistierendUsingPOSTAsync($ausbildungszug_id)
+    {
+        return $this->meldeAusbildungszugAlsExternExistierendUsingPOSTAsyncWithHttpInfo($ausbildungszug_id)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation meldeAusbildungszugAlsExternExistierendUsingPOSTAsyncWithHttpInfo
+     *
+     * Meldet den Ausbildungszug als extern existierend
+     *
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function meldeAusbildungszugAlsExternExistierendUsingPOSTAsyncWithHttpInfo($ausbildungszug_id)
+    {
+        $returnType = '';
+        $request = $this->meldeAusbildungszugAlsExternExistierendUsingPOSTRequest($ausbildungszug_id);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'meldeAusbildungszugAlsExternExistierendUsingPOST'
+     *
+     * @param  string $ausbildungszug_id ID des Ausbildungszugs (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    protected function meldeAusbildungszugAlsExternExistierendUsingPOSTRequest($ausbildungszug_id)
+    {
+        // verify the required parameter 'ausbildungszug_id' is set
+        if ($ausbildungszug_id === null || (is_array($ausbildungszug_id) && count($ausbildungszug_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $ausbildungszug_id when calling meldeAusbildungszugAlsExternExistierendUsingPOST'
+            );
+        }
+
+        $resourcePath = '/v2/ausbildungszuege/{ausbildungszugId}/meldeexternexistierend';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+        // path params
+        if ($ausbildungszug_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'ausbildungszugId' . '}',
+                ObjectSerializer::toPathValue($ausbildungszug_id),
+                $resourcePath
+            );
+        }
+
+        // body params
+        $_tempBody = null;
+
+        if ($multipart) {
+            $headers = $this->headerSelector->selectHeadersForMultipart(
+                ['application/json']
+            );
+        } else {
+            $headers = $this->headerSelector->selectHeaders(
+                ['application/json'],
                 ['application/json']
             );
         }
@@ -332,1024 +1373,6 @@ class TeilnehmerApi
         $query = \GuzzleHttp\Psr7\build_query($queryParams);
         return new Request(
             'POST',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
-            $headers,
-            $httpBody
-        );
-    }
-
-    /**
-     * Operation getAktiveTeilnehmerUsingGET
-     *
-     * Ruft alle aktiven Teilnehmer ab
-     *
-     *
-     * @throws \Swagger\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return \Swagger\Client\Model\Teilnehmer[]
-     */
-    public function getAktiveTeilnehmerUsingGET()
-    {
-        list($response) = $this->getAktiveTeilnehmerUsingGETWithHttpInfo();
-        return $response;
-    }
-
-    /**
-     * Operation getAktiveTeilnehmerUsingGETWithHttpInfo
-     *
-     * Ruft alle aktiven Teilnehmer ab
-     *
-     *
-     * @throws \Swagger\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return array of \Swagger\Client\Model\Teilnehmer[], HTTP status code, HTTP response headers (array of strings)
-     */
-    public function getAktiveTeilnehmerUsingGETWithHttpInfo()
-    {
-        $returnType = '\Swagger\Client\Model\Teilnehmer[]';
-        $request = $this->getAktiveTeilnehmerUsingGETRequest();
-
-        try {
-            $options = $this->createHttpClientOption();
-            try {
-                $response = $this->client->send($request, $options);
-            } catch (RequestException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
-                );
-            }
-
-            $statusCode = $response->getStatusCode();
-
-            if ($statusCode < 200 || $statusCode > 299) {
-                throw new ApiException(
-                    sprintf(
-                        '[%d] Error connecting to the API (%s)',
-                        $statusCode,
-                        $request->getUri()
-                    ),
-                    $statusCode,
-                    $response->getHeaders(),
-                    $response->getBody()
-                );
-            }
-
-            $responseBody = $response->getBody();
-            if ($returnType === '\SplFileObject') {
-                $content = $responseBody; //stream goes to serializer
-            } else {
-                $content = $responseBody->getContents();
-                if ($returnType !== 'string') {
-                    $content = json_decode($content);
-                }
-            }
-
-            return [
-                ObjectSerializer::deserialize($content, $returnType, []),
-                $response->getStatusCode(),
-                $response->getHeaders()
-            ];
-
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Swagger\Client\Model\Teilnehmer[]',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
-            }
-            throw $e;
-        }
-    }
-
-    /**
-     * Operation getAktiveTeilnehmerUsingGETAsync
-     *
-     * Ruft alle aktiven Teilnehmer ab
-     *
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function getAktiveTeilnehmerUsingGETAsync()
-    {
-        return $this->getAktiveTeilnehmerUsingGETAsyncWithHttpInfo()
-            ->then(
-                function ($response) {
-                    return $response[0];
-                }
-            );
-    }
-
-    /**
-     * Operation getAktiveTeilnehmerUsingGETAsyncWithHttpInfo
-     *
-     * Ruft alle aktiven Teilnehmer ab
-     *
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function getAktiveTeilnehmerUsingGETAsyncWithHttpInfo()
-    {
-        $returnType = '\Swagger\Client\Model\Teilnehmer[]';
-        $request = $this->getAktiveTeilnehmerUsingGETRequest();
-
-        return $this->client
-            ->sendAsync($request, $this->createHttpClientOption())
-            ->then(
-                function ($response) use ($returnType) {
-                    $responseBody = $response->getBody();
-                    if ($returnType === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
-                    } else {
-                        $content = $responseBody->getContents();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, $returnType, []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-                },
-                function ($exception) {
-                    $response = $exception->getResponse();
-                    $statusCode = $response->getStatusCode();
-                    throw new ApiException(
-                        sprintf(
-                            '[%d] Error connecting to the API (%s)',
-                            $statusCode,
-                            $exception->getRequest()->getUri()
-                        ),
-                        $statusCode,
-                        $response->getHeaders(),
-                        $response->getBody()
-                    );
-                }
-            );
-    }
-
-    /**
-     * Create request for operation 'getAktiveTeilnehmerUsingGET'
-     *
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    protected function getAktiveTeilnehmerUsingGETRequest()
-    {
-
-        $resourcePath = '/v2/teilnehmer';
-        $formParams = [];
-        $queryParams = [];
-        $headerParams = [];
-        $httpBody = '';
-        $multipart = false;
-
-
-
-        // body params
-        $_tempBody = null;
-
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
-
-        // for model (json/xml)
-        if (isset($_tempBody)) {
-            // $_tempBody is the method argument, if present
-            $httpBody = $_tempBody;
-            // \stdClass has no __toString(), so we should encode it manually
-            if ($httpBody instanceof \stdClass && $headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($httpBody);
-            }
-        } elseif (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $multipartContents[] = [
-                        'name' => $formParamName,
-                        'contents' => $formParamValue
-                    ];
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
-            } else {
-                // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
-            }
-        }
-
-
-        $defaultHeaders = [];
-        if ($this->config->getUserAgent()) {
-            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
-        }
-
-        $headers = array_merge(
-            $defaultHeaders,
-            $headerParams,
-            $headers
-        );
-
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
-        return new Request(
-            'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
-            $headers,
-            $httpBody
-        );
-    }
-
-    /**
-     * Operation getTeilnehmerUsingGET
-     *
-     * Ruft einen Teilnehmer anhand der Personen-Nr. ab
-     *
-     * @param  string $personen_nr PersonenNr. des Teilnehmers (required)
-     *
-     * @throws \Swagger\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return \Swagger\Client\Model\Teilnehmer
-     */
-    public function getTeilnehmerUsingGET($personen_nr)
-    {
-        list($response) = $this->getTeilnehmerUsingGETWithHttpInfo($personen_nr);
-        return $response;
-    }
-
-    /**
-     * Operation getTeilnehmerUsingGETWithHttpInfo
-     *
-     * Ruft einen Teilnehmer anhand der Personen-Nr. ab
-     *
-     * @param  string $personen_nr PersonenNr. des Teilnehmers (required)
-     *
-     * @throws \Swagger\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return array of \Swagger\Client\Model\Teilnehmer, HTTP status code, HTTP response headers (array of strings)
-     */
-    public function getTeilnehmerUsingGETWithHttpInfo($personen_nr)
-    {
-        $returnType = '\Swagger\Client\Model\Teilnehmer';
-        $request = $this->getTeilnehmerUsingGETRequest($personen_nr);
-
-        try {
-            $options = $this->createHttpClientOption();
-            try {
-                $response = $this->client->send($request, $options);
-            } catch (RequestException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
-                );
-            }
-
-            $statusCode = $response->getStatusCode();
-
-            if ($statusCode < 200 || $statusCode > 299) {
-                throw new ApiException(
-                    sprintf(
-                        '[%d] Error connecting to the API (%s)',
-                        $statusCode,
-                        $request->getUri()
-                    ),
-                    $statusCode,
-                    $response->getHeaders(),
-                    $response->getBody()
-                );
-            }
-
-            $responseBody = $response->getBody();
-            if ($returnType === '\SplFileObject') {
-                $content = $responseBody; //stream goes to serializer
-            } else {
-                $content = $responseBody->getContents();
-                if ($returnType !== 'string') {
-                    $content = json_decode($content);
-                }
-            }
-
-            return [
-                ObjectSerializer::deserialize($content, $returnType, []),
-                $response->getStatusCode(),
-                $response->getHeaders()
-            ];
-
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Swagger\Client\Model\Teilnehmer',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
-            }
-            throw $e;
-        }
-    }
-
-    /**
-     * Operation getTeilnehmerUsingGETAsync
-     *
-     * Ruft einen Teilnehmer anhand der Personen-Nr. ab
-     *
-     * @param  string $personen_nr PersonenNr. des Teilnehmers (required)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function getTeilnehmerUsingGETAsync($personen_nr)
-    {
-        return $this->getTeilnehmerUsingGETAsyncWithHttpInfo($personen_nr)
-            ->then(
-                function ($response) {
-                    return $response[0];
-                }
-            );
-    }
-
-    /**
-     * Operation getTeilnehmerUsingGETAsyncWithHttpInfo
-     *
-     * Ruft einen Teilnehmer anhand der Personen-Nr. ab
-     *
-     * @param  string $personen_nr PersonenNr. des Teilnehmers (required)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function getTeilnehmerUsingGETAsyncWithHttpInfo($personen_nr)
-    {
-        $returnType = '\Swagger\Client\Model\Teilnehmer';
-        $request = $this->getTeilnehmerUsingGETRequest($personen_nr);
-
-        return $this->client
-            ->sendAsync($request, $this->createHttpClientOption())
-            ->then(
-                function ($response) use ($returnType) {
-                    $responseBody = $response->getBody();
-                    if ($returnType === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
-                    } else {
-                        $content = $responseBody->getContents();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, $returnType, []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-                },
-                function ($exception) {
-                    $response = $exception->getResponse();
-                    $statusCode = $response->getStatusCode();
-                    throw new ApiException(
-                        sprintf(
-                            '[%d] Error connecting to the API (%s)',
-                            $statusCode,
-                            $exception->getRequest()->getUri()
-                        ),
-                        $statusCode,
-                        $response->getHeaders(),
-                        $response->getBody()
-                    );
-                }
-            );
-    }
-
-    /**
-     * Create request for operation 'getTeilnehmerUsingGET'
-     *
-     * @param  string $personen_nr PersonenNr. des Teilnehmers (required)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    protected function getTeilnehmerUsingGETRequest($personen_nr)
-    {
-        // verify the required parameter 'personen_nr' is set
-        if ($personen_nr === null || (is_array($personen_nr) && count($personen_nr) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $personen_nr when calling getTeilnehmerUsingGET'
-            );
-        }
-
-        $resourcePath = '/v2/teilnehmer/personennr/{personenNr}';
-        $formParams = [];
-        $queryParams = [];
-        $headerParams = [];
-        $httpBody = '';
-        $multipart = false;
-
-
-        // path params
-        if ($personen_nr !== null) {
-            $resourcePath = str_replace(
-                '{' . 'personenNr' . '}',
-                ObjectSerializer::toPathValue($personen_nr),
-                $resourcePath
-            );
-        }
-
-        // body params
-        $_tempBody = null;
-
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
-
-        // for model (json/xml)
-        if (isset($_tempBody)) {
-            // $_tempBody is the method argument, if present
-            $httpBody = $_tempBody;
-            // \stdClass has no __toString(), so we should encode it manually
-            if ($httpBody instanceof \stdClass && $headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($httpBody);
-            }
-        } elseif (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $multipartContents[] = [
-                        'name' => $formParamName,
-                        'contents' => $formParamValue
-                    ];
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
-            } else {
-                // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
-            }
-        }
-
-
-        $defaultHeaders = [];
-        if ($this->config->getUserAgent()) {
-            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
-        }
-
-        $headers = array_merge(
-            $defaultHeaders,
-            $headerParams,
-            $headers
-        );
-
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
-        return new Request(
-            'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
-            $headers,
-            $httpBody
-        );
-    }
-
-    /**
-     * Operation getTeilnehmerUsingGET1
-     *
-     * Ruft einen Teilnehmer ab
-     *
-     * @param  string $id ID des Teilnehmers (required)
-     *
-     * @throws \Swagger\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return \Swagger\Client\Model\Teilnehmer
-     */
-    public function getTeilnehmerUsingGET1($id)
-    {
-        list($response) = $this->getTeilnehmerUsingGET1WithHttpInfo($id);
-        return $response;
-    }
-
-    /**
-     * Operation getTeilnehmerUsingGET1WithHttpInfo
-     *
-     * Ruft einen Teilnehmer ab
-     *
-     * @param  string $id ID des Teilnehmers (required)
-     *
-     * @throws \Swagger\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return array of \Swagger\Client\Model\Teilnehmer, HTTP status code, HTTP response headers (array of strings)
-     */
-    public function getTeilnehmerUsingGET1WithHttpInfo($id)
-    {
-        $returnType = '\Swagger\Client\Model\Teilnehmer';
-        $request = $this->getTeilnehmerUsingGET1Request($id);
-
-        try {
-            $options = $this->createHttpClientOption();
-            try {
-                $response = $this->client->send($request, $options);
-            } catch (RequestException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
-                );
-            }
-
-            $statusCode = $response->getStatusCode();
-
-            if ($statusCode < 200 || $statusCode > 299) {
-                throw new ApiException(
-                    sprintf(
-                        '[%d] Error connecting to the API (%s)',
-                        $statusCode,
-                        $request->getUri()
-                    ),
-                    $statusCode,
-                    $response->getHeaders(),
-                    $response->getBody()
-                );
-            }
-
-            $responseBody = $response->getBody();
-            if ($returnType === '\SplFileObject') {
-                $content = $responseBody; //stream goes to serializer
-            } else {
-                $content = $responseBody->getContents();
-                if ($returnType !== 'string') {
-                    $content = json_decode($content);
-                }
-            }
-
-            return [
-                ObjectSerializer::deserialize($content, $returnType, []),
-                $response->getStatusCode(),
-                $response->getHeaders()
-            ];
-
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Swagger\Client\Model\Teilnehmer',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
-            }
-            throw $e;
-        }
-    }
-
-    /**
-     * Operation getTeilnehmerUsingGET1Async
-     *
-     * Ruft einen Teilnehmer ab
-     *
-     * @param  string $id ID des Teilnehmers (required)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function getTeilnehmerUsingGET1Async($id)
-    {
-        return $this->getTeilnehmerUsingGET1AsyncWithHttpInfo($id)
-            ->then(
-                function ($response) {
-                    return $response[0];
-                }
-            );
-    }
-
-    /**
-     * Operation getTeilnehmerUsingGET1AsyncWithHttpInfo
-     *
-     * Ruft einen Teilnehmer ab
-     *
-     * @param  string $id ID des Teilnehmers (required)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function getTeilnehmerUsingGET1AsyncWithHttpInfo($id)
-    {
-        $returnType = '\Swagger\Client\Model\Teilnehmer';
-        $request = $this->getTeilnehmerUsingGET1Request($id);
-
-        return $this->client
-            ->sendAsync($request, $this->createHttpClientOption())
-            ->then(
-                function ($response) use ($returnType) {
-                    $responseBody = $response->getBody();
-                    if ($returnType === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
-                    } else {
-                        $content = $responseBody->getContents();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, $returnType, []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-                },
-                function ($exception) {
-                    $response = $exception->getResponse();
-                    $statusCode = $response->getStatusCode();
-                    throw new ApiException(
-                        sprintf(
-                            '[%d] Error connecting to the API (%s)',
-                            $statusCode,
-                            $exception->getRequest()->getUri()
-                        ),
-                        $statusCode,
-                        $response->getHeaders(),
-                        $response->getBody()
-                    );
-                }
-            );
-    }
-
-    /**
-     * Create request for operation 'getTeilnehmerUsingGET1'
-     *
-     * @param  string $id ID des Teilnehmers (required)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    protected function getTeilnehmerUsingGET1Request($id)
-    {
-        // verify the required parameter 'id' is set
-        if ($id === null || (is_array($id) && count($id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $id when calling getTeilnehmerUsingGET1'
-            );
-        }
-
-        $resourcePath = '/v2/teilnehmer/{id}';
-        $formParams = [];
-        $queryParams = [];
-        $headerParams = [];
-        $httpBody = '';
-        $multipart = false;
-
-
-        // path params
-        if ($id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'id' . '}',
-                ObjectSerializer::toPathValue($id),
-                $resourcePath
-            );
-        }
-
-        // body params
-        $_tempBody = null;
-
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
-
-        // for model (json/xml)
-        if (isset($_tempBody)) {
-            // $_tempBody is the method argument, if present
-            $httpBody = $_tempBody;
-            // \stdClass has no __toString(), so we should encode it manually
-            if ($httpBody instanceof \stdClass && $headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($httpBody);
-            }
-        } elseif (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $multipartContents[] = [
-                        'name' => $formParamName,
-                        'contents' => $formParamValue
-                    ];
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
-            } else {
-                // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
-            }
-        }
-
-
-        $defaultHeaders = [];
-        if ($this->config->getUserAgent()) {
-            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
-        }
-
-        $headers = array_merge(
-            $defaultHeaders,
-            $headerParams,
-            $headers
-        );
-
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
-        return new Request(
-            'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
-            $headers,
-            $httpBody
-        );
-    }
-
-    /**
-     * Operation updateTeilnehmerUsingPUT
-     *
-     * Modifiziert ein Teilnehmer Datensatz
-     *
-     * @param  \Swagger\Client\Model\Teilnehmer $update_teilnehmer_api_dto Definition eines Teilnehmers, der aktualisiert werden soll. (optional)
-     *
-     * @throws \Swagger\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return \Swagger\Client\Model\Teilnehmer
-     */
-    public function updateTeilnehmerUsingPUT($update_teilnehmer_api_dto = null)
-    {
-        list($response) = $this->updateTeilnehmerUsingPUTWithHttpInfo($update_teilnehmer_api_dto);
-        return $response;
-    }
-
-    /**
-     * Operation updateTeilnehmerUsingPUTWithHttpInfo
-     *
-     * Modifiziert ein Teilnehmer Datensatz
-     *
-     * @param  \Swagger\Client\Model\Teilnehmer $update_teilnehmer_api_dto Definition eines Teilnehmers, der aktualisiert werden soll. (optional)
-     *
-     * @throws \Swagger\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return array of \Swagger\Client\Model\Teilnehmer, HTTP status code, HTTP response headers (array of strings)
-     */
-    public function updateTeilnehmerUsingPUTWithHttpInfo($update_teilnehmer_api_dto = null)
-    {
-        $returnType = '\Swagger\Client\Model\Teilnehmer';
-        $request = $this->updateTeilnehmerUsingPUTRequest($update_teilnehmer_api_dto);
-
-        try {
-            $options = $this->createHttpClientOption();
-            try {
-                $response = $this->client->send($request, $options);
-            } catch (RequestException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
-                );
-            }
-
-            $statusCode = $response->getStatusCode();
-
-            if ($statusCode < 200 || $statusCode > 299) {
-                throw new ApiException(
-                    sprintf(
-                        '[%d] Error connecting to the API (%s)',
-                        $statusCode,
-                        $request->getUri()
-                    ),
-                    $statusCode,
-                    $response->getHeaders(),
-                    $response->getBody()
-                );
-            }
-
-            $responseBody = $response->getBody();
-            if ($returnType === '\SplFileObject') {
-                $content = $responseBody; //stream goes to serializer
-            } else {
-                $content = $responseBody->getContents();
-                if ($returnType !== 'string') {
-                    $content = json_decode($content);
-                }
-            }
-
-            return [
-                ObjectSerializer::deserialize($content, $returnType, []),
-                $response->getStatusCode(),
-                $response->getHeaders()
-            ];
-
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Swagger\Client\Model\Teilnehmer',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
-            }
-            throw $e;
-        }
-    }
-
-    /**
-     * Operation updateTeilnehmerUsingPUTAsync
-     *
-     * Modifiziert ein Teilnehmer Datensatz
-     *
-     * @param  \Swagger\Client\Model\Teilnehmer $update_teilnehmer_api_dto Definition eines Teilnehmers, der aktualisiert werden soll. (optional)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function updateTeilnehmerUsingPUTAsync($update_teilnehmer_api_dto = null)
-    {
-        return $this->updateTeilnehmerUsingPUTAsyncWithHttpInfo($update_teilnehmer_api_dto)
-            ->then(
-                function ($response) {
-                    return $response[0];
-                }
-            );
-    }
-
-    /**
-     * Operation updateTeilnehmerUsingPUTAsyncWithHttpInfo
-     *
-     * Modifiziert ein Teilnehmer Datensatz
-     *
-     * @param  \Swagger\Client\Model\Teilnehmer $update_teilnehmer_api_dto Definition eines Teilnehmers, der aktualisiert werden soll. (optional)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function updateTeilnehmerUsingPUTAsyncWithHttpInfo($update_teilnehmer_api_dto = null)
-    {
-        $returnType = '\Swagger\Client\Model\Teilnehmer';
-        $request = $this->updateTeilnehmerUsingPUTRequest($update_teilnehmer_api_dto);
-
-        return $this->client
-            ->sendAsync($request, $this->createHttpClientOption())
-            ->then(
-                function ($response) use ($returnType) {
-                    $responseBody = $response->getBody();
-                    if ($returnType === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
-                    } else {
-                        $content = $responseBody->getContents();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, $returnType, []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-                },
-                function ($exception) {
-                    $response = $exception->getResponse();
-                    $statusCode = $response->getStatusCode();
-                    throw new ApiException(
-                        sprintf(
-                            '[%d] Error connecting to the API (%s)',
-                            $statusCode,
-                            $exception->getRequest()->getUri()
-                        ),
-                        $statusCode,
-                        $response->getHeaders(),
-                        $response->getBody()
-                    );
-                }
-            );
-    }
-
-    /**
-     * Create request for operation 'updateTeilnehmerUsingPUT'
-     *
-     * @param  \Swagger\Client\Model\Teilnehmer $update_teilnehmer_api_dto Definition eines Teilnehmers, der aktualisiert werden soll. (optional)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    protected function updateTeilnehmerUsingPUTRequest($update_teilnehmer_api_dto = null)
-    {
-
-        $resourcePath = '/v2/teilnehmer';
-        $formParams = [];
-        $queryParams = [];
-        $headerParams = [];
-        $httpBody = '';
-        $multipart = false;
-
-
-
-        // body params
-        $_tempBody = null;
-        if (isset($update_teilnehmer_api_dto)) {
-            $_tempBody = $update_teilnehmer_api_dto;
-        }
-
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['*/*']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['*/*'],
-                ['application/json']
-            );
-        }
-
-        // for model (json/xml)
-        if (isset($_tempBody)) {
-            // $_tempBody is the method argument, if present
-            $httpBody = $_tempBody;
-            // \stdClass has no __toString(), so we should encode it manually
-            if ($httpBody instanceof \stdClass && $headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($httpBody);
-            }
-        } elseif (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $multipartContents[] = [
-                        'name' => $formParamName,
-                        'contents' => $formParamValue
-                    ];
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
-            } else {
-                // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
-            }
-        }
-
-
-        $defaultHeaders = [];
-        if ($this->config->getUserAgent()) {
-            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
-        }
-
-        $headers = array_merge(
-            $defaultHeaders,
-            $headerParams,
-            $headers
-        );
-
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
-        return new Request(
-            'PUT',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody

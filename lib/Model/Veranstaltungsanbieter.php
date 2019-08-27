@@ -1,6 +1,6 @@
 <?php
 /**
- * TeilnehmerbuchungApiDto
+ * Veranstaltungsanbieter
  *
  * PHP version 5
  *
@@ -33,14 +33,15 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * TeilnehmerbuchungApiDto Class Doc Comment
+ * Veranstaltungsanbieter Class Doc Comment
  *
  * @category Class
+ * @description Die Informationen eines Veranstaltungsanbieters eines Veranstaltungstermins.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
+class Veranstaltungsanbieter implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -49,7 +50,7 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'TeilnehmerbuchungApiDto';
+    protected static $swaggerModelName = 'Veranstaltungsanbieter';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -57,8 +58,7 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'oid' => 'string',
-        'links' => '\Swagger\Client\Model\Link[]'
+        'admin_e_mail' => 'string'
     ];
 
     /**
@@ -67,8 +67,7 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'oid' => null,
-        'links' => null
+        'admin_e_mail' => null
     ];
 
     /**
@@ -98,8 +97,7 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'oid' => 'oid',
-        'links' => 'links'
+        'admin_e_mail' => 'adminEMail'
     ];
 
     /**
@@ -108,8 +106,7 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'oid' => 'setOid',
-        'links' => 'setLinks'
+        'admin_e_mail' => 'setAdminEMail'
     ];
 
     /**
@@ -118,8 +115,7 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'oid' => 'getOid',
-        'links' => 'getLinks'
+        'admin_e_mail' => 'getAdminEMail'
     ];
 
     /**
@@ -182,8 +178,7 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
-        $this->container['links'] = isset($data['links']) ? $data['links'] : null;
+        $this->container['admin_e_mail'] = isset($data['admin_e_mail']) ? $data['admin_e_mail'] : null;
     }
 
     /**
@@ -195,9 +190,6 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
     {
         $invalidProperties = [];
 
-        if ($this->container['oid'] === null) {
-            $invalidProperties[] = "'oid' can't be null";
-        }
         return $invalidProperties;
     }
 
@@ -214,49 +206,25 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets oid
+     * Gets admin_e_mail
      *
      * @return string
      */
-    public function getOid()
+    public function getAdminEMail()
     {
-        return $this->container['oid'];
+        return $this->container['admin_e_mail'];
     }
 
     /**
-     * Sets oid
+     * Sets admin_e_mail
      *
-     * @param string $oid UUID des Datensatzes
+     * @param string $admin_e_mail Administrative E-Mail-Adresse des Veranstaltungsanbieters
      *
      * @return $this
      */
-    public function setOid($oid)
+    public function setAdminEMail($admin_e_mail)
     {
-        $this->container['oid'] = $oid;
-
-        return $this;
-    }
-
-    /**
-     * Gets links
-     *
-     * @return \Swagger\Client\Model\Link[]
-     */
-    public function getLinks()
-    {
-        return $this->container['links'];
-    }
-
-    /**
-     * Sets links
-     *
-     * @param \Swagger\Client\Model\Link[] $links links
-     *
-     * @return $this
-     */
-    public function setLinks($links)
-    {
-        $this->container['links'] = $links;
+        $this->container['admin_e_mail'] = $admin_e_mail;
 
         return $this;
     }

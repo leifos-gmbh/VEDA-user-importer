@@ -1,6 +1,6 @@
 <?php
 /**
- * Ausbildungszug
+ * Organisation
  *
  * PHP version 5
  *
@@ -33,15 +33,15 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * Ausbildungszug Class Doc Comment
+ * Organisation Class Doc Comment
  *
  * @category Class
- * @description Ein Ausbildungszug mit den relevanten Daten.
+ * @description Beschreibt eine Organisation
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class Ausbildungszug implements ModelInterface, ArrayAccess
+class Organisation implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'Ausbildungszug';
+    protected static $swaggerModelName = 'Organisation';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -59,11 +59,15 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
       */
     protected static $swaggerTypes = [
         'oid' => 'string',
-        'ausbildungsgang_id' => 'string',
-        'ausbildungszugabschnitte' => '\Swagger\Client\Model\Ausbildungszugabschnitt[]',
+        'aufsichtsperson_e_mail' => 'string',
+        'aufsichtsperson_name' => 'string',
         'links' => '\Swagger\Client\Model\Link[]',
-        'name' => 'string',
-        'planungsstatus' => 'string'
+        'mitgliedsnummer' => 'string',
+        'organisationsart_kurzbezeichnung' => 'string',
+        'organisationsname1' => 'string',
+        'organisationsname2' => 'string',
+        'organisationsname3' => 'string',
+        'organisationsname4' => 'string'
     ];
 
     /**
@@ -73,11 +77,15 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
       */
     protected static $swaggerFormats = [
         'oid' => null,
-        'ausbildungsgang_id' => null,
-        'ausbildungszugabschnitte' => null,
+        'aufsichtsperson_e_mail' => null,
+        'aufsichtsperson_name' => null,
         'links' => null,
-        'name' => null,
-        'planungsstatus' => null
+        'mitgliedsnummer' => null,
+        'organisationsart_kurzbezeichnung' => null,
+        'organisationsname1' => null,
+        'organisationsname2' => null,
+        'organisationsname3' => null,
+        'organisationsname4' => null
     ];
 
     /**
@@ -108,11 +116,15 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
      */
     protected static $attributeMap = [
         'oid' => 'oid',
-        'ausbildungsgang_id' => 'ausbildungsgangId',
-        'ausbildungszugabschnitte' => 'ausbildungszugabschnitte',
+        'aufsichtsperson_e_mail' => 'aufsichtspersonEMail',
+        'aufsichtsperson_name' => 'aufsichtspersonName',
         'links' => 'links',
-        'name' => 'name',
-        'planungsstatus' => 'planungsstatus'
+        'mitgliedsnummer' => 'mitgliedsnummer',
+        'organisationsart_kurzbezeichnung' => 'organisationsartKurzbezeichnung',
+        'organisationsname1' => 'organisationsname1',
+        'organisationsname2' => 'organisationsname2',
+        'organisationsname3' => 'organisationsname3',
+        'organisationsname4' => 'organisationsname4'
     ];
 
     /**
@@ -122,11 +134,15 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
      */
     protected static $setters = [
         'oid' => 'setOid',
-        'ausbildungsgang_id' => 'setAusbildungsgangId',
-        'ausbildungszugabschnitte' => 'setAusbildungszugabschnitte',
+        'aufsichtsperson_e_mail' => 'setAufsichtspersonEMail',
+        'aufsichtsperson_name' => 'setAufsichtspersonName',
         'links' => 'setLinks',
-        'name' => 'setName',
-        'planungsstatus' => 'setPlanungsstatus'
+        'mitgliedsnummer' => 'setMitgliedsnummer',
+        'organisationsart_kurzbezeichnung' => 'setOrganisationsartKurzbezeichnung',
+        'organisationsname1' => 'setOrganisationsname1',
+        'organisationsname2' => 'setOrganisationsname2',
+        'organisationsname3' => 'setOrganisationsname3',
+        'organisationsname4' => 'setOrganisationsname4'
     ];
 
     /**
@@ -136,11 +152,15 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
      */
     protected static $getters = [
         'oid' => 'getOid',
-        'ausbildungsgang_id' => 'getAusbildungsgangId',
-        'ausbildungszugabschnitte' => 'getAusbildungszugabschnitte',
+        'aufsichtsperson_e_mail' => 'getAufsichtspersonEMail',
+        'aufsichtsperson_name' => 'getAufsichtspersonName',
         'links' => 'getLinks',
-        'name' => 'getName',
-        'planungsstatus' => 'getPlanungsstatus'
+        'mitgliedsnummer' => 'getMitgliedsnummer',
+        'organisationsart_kurzbezeichnung' => 'getOrganisationsartKurzbezeichnung',
+        'organisationsname1' => 'getOrganisationsname1',
+        'organisationsname2' => 'getOrganisationsname2',
+        'organisationsname3' => 'getOrganisationsname3',
+        'organisationsname4' => 'getOrganisationsname4'
     ];
 
     /**
@@ -184,23 +204,8 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
         return self::$swaggerModelName;
     }
 
-    const PLANUNGSSTATUS_IN_PLANUNG = 'IN_PLANUNG';
-    const PLANUNGSSTATUS_FREIGEGEBEN = 'FREIGEGEBEN';
     
 
-    
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public function getPlanungsstatusAllowableValues()
-    {
-        return [
-            self::PLANUNGSSTATUS_IN_PLANUNG,
-            self::PLANUNGSSTATUS_FREIGEGEBEN,
-        ];
-    }
     
 
     /**
@@ -219,11 +224,15 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
-        $this->container['ausbildungsgang_id'] = isset($data['ausbildungsgang_id']) ? $data['ausbildungsgang_id'] : null;
-        $this->container['ausbildungszugabschnitte'] = isset($data['ausbildungszugabschnitte']) ? $data['ausbildungszugabschnitte'] : null;
+        $this->container['aufsichtsperson_e_mail'] = isset($data['aufsichtsperson_e_mail']) ? $data['aufsichtsperson_e_mail'] : null;
+        $this->container['aufsichtsperson_name'] = isset($data['aufsichtsperson_name']) ? $data['aufsichtsperson_name'] : null;
         $this->container['links'] = isset($data['links']) ? $data['links'] : null;
-        $this->container['name'] = isset($data['name']) ? $data['name'] : null;
-        $this->container['planungsstatus'] = isset($data['planungsstatus']) ? $data['planungsstatus'] : null;
+        $this->container['mitgliedsnummer'] = isset($data['mitgliedsnummer']) ? $data['mitgliedsnummer'] : null;
+        $this->container['organisationsart_kurzbezeichnung'] = isset($data['organisationsart_kurzbezeichnung']) ? $data['organisationsart_kurzbezeichnung'] : null;
+        $this->container['organisationsname1'] = isset($data['organisationsname1']) ? $data['organisationsname1'] : null;
+        $this->container['organisationsname2'] = isset($data['organisationsname2']) ? $data['organisationsname2'] : null;
+        $this->container['organisationsname3'] = isset($data['organisationsname3']) ? $data['organisationsname3'] : null;
+        $this->container['organisationsname4'] = isset($data['organisationsname4']) ? $data['organisationsname4'] : null;
     }
 
     /**
@@ -238,26 +247,6 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
         if ($this->container['oid'] === null) {
             $invalidProperties[] = "'oid' can't be null";
         }
-        if ($this->container['ausbildungsgang_id'] === null) {
-            $invalidProperties[] = "'ausbildungsgang_id' can't be null";
-        }
-        if ($this->container['ausbildungszugabschnitte'] === null) {
-            $invalidProperties[] = "'ausbildungszugabschnitte' can't be null";
-        }
-        if ($this->container['name'] === null) {
-            $invalidProperties[] = "'name' can't be null";
-        }
-        if ($this->container['planungsstatus'] === null) {
-            $invalidProperties[] = "'planungsstatus' can't be null";
-        }
-        $allowedValues = $this->getPlanungsstatusAllowableValues();
-        if (!is_null($this->container['planungsstatus']) && !in_array($this->container['planungsstatus'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value for 'planungsstatus', must be one of '%s'",
-                implode("', '", $allowedValues)
-            );
-        }
-
         return $invalidProperties;
     }
 
@@ -298,49 +287,49 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets ausbildungsgang_id
+     * Gets aufsichtsperson_e_mail
      *
      * @return string
      */
-    public function getAusbildungsgangId()
+    public function getAufsichtspersonEMail()
     {
-        return $this->container['ausbildungsgang_id'];
+        return $this->container['aufsichtsperson_e_mail'];
     }
 
     /**
-     * Sets ausbildungsgang_id
+     * Sets aufsichtsperson_e_mail
      *
-     * @param string $ausbildungsgang_id ID des Ausbildungsgang
+     * @param string $aufsichtsperson_e_mail E-Mail-Adresse der Aufsichtsperson
      *
      * @return $this
      */
-    public function setAusbildungsgangId($ausbildungsgang_id)
+    public function setAufsichtspersonEMail($aufsichtsperson_e_mail)
     {
-        $this->container['ausbildungsgang_id'] = $ausbildungsgang_id;
+        $this->container['aufsichtsperson_e_mail'] = $aufsichtsperson_e_mail;
 
         return $this;
     }
 
     /**
-     * Gets ausbildungszugabschnitte
+     * Gets aufsichtsperson_name
      *
-     * @return \Swagger\Client\Model\Ausbildungszugabschnitt[]
+     * @return string
      */
-    public function getAusbildungszugabschnitte()
+    public function getAufsichtspersonName()
     {
-        return $this->container['ausbildungszugabschnitte'];
+        return $this->container['aufsichtsperson_name'];
     }
 
     /**
-     * Sets ausbildungszugabschnitte
+     * Sets aufsichtsperson_name
      *
-     * @param \Swagger\Client\Model\Ausbildungszugabschnitt[] $ausbildungszugabschnitte Abschnitte des Ausbildungszugs
+     * @param string $aufsichtsperson_name Name der Aufsichtsperson
      *
      * @return $this
      */
-    public function setAusbildungszugabschnitte($ausbildungszugabschnitte)
+    public function setAufsichtspersonName($aufsichtsperson_name)
     {
-        $this->container['ausbildungszugabschnitte'] = $ausbildungszugabschnitte;
+        $this->container['aufsichtsperson_name'] = $aufsichtsperson_name;
 
         return $this;
     }
@@ -370,58 +359,145 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets name
+     * Gets mitgliedsnummer
      *
      * @return string
      */
-    public function getName()
+    public function getMitgliedsnummer()
     {
-        return $this->container['name'];
+        return $this->container['mitgliedsnummer'];
     }
 
     /**
-     * Sets name
+     * Sets mitgliedsnummer
      *
-     * @param string $name Name des Ausbildungszugs
+     * @param string $mitgliedsnummer Die Mitgliedsnummer
      *
      * @return $this
      */
-    public function setName($name)
+    public function setMitgliedsnummer($mitgliedsnummer)
     {
-        $this->container['name'] = $name;
+        $this->container['mitgliedsnummer'] = $mitgliedsnummer;
 
         return $this;
     }
 
     /**
-     * Gets planungsstatus
+     * Gets organisationsart_kurzbezeichnung
      *
      * @return string
      */
-    public function getPlanungsstatus()
+    public function getOrganisationsartKurzbezeichnung()
     {
-        return $this->container['planungsstatus'];
+        return $this->container['organisationsart_kurzbezeichnung'];
     }
 
     /**
-     * Sets planungsstatus
+     * Sets organisationsart_kurzbezeichnung
      *
-     * @param string $planungsstatus Der Planungsstatus
+     * @param string $organisationsart_kurzbezeichnung Kürzel für die Art der Organisation
      *
      * @return $this
      */
-    public function setPlanungsstatus($planungsstatus)
+    public function setOrganisationsartKurzbezeichnung($organisationsart_kurzbezeichnung)
     {
-        $allowedValues = $this->getPlanungsstatusAllowableValues();
-        if (!in_array($planungsstatus, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value for 'planungsstatus', must be one of '%s'",
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
-        $this->container['planungsstatus'] = $planungsstatus;
+        $this->container['organisationsart_kurzbezeichnung'] = $organisationsart_kurzbezeichnung;
+
+        return $this;
+    }
+
+    /**
+     * Gets organisationsname1
+     *
+     * @return string
+     */
+    public function getOrganisationsname1()
+    {
+        return $this->container['organisationsname1'];
+    }
+
+    /**
+     * Sets organisationsname1
+     *
+     * @param string $organisationsname1 Name 1 der Organisation
+     *
+     * @return $this
+     */
+    public function setOrganisationsname1($organisationsname1)
+    {
+        $this->container['organisationsname1'] = $organisationsname1;
+
+        return $this;
+    }
+
+    /**
+     * Gets organisationsname2
+     *
+     * @return string
+     */
+    public function getOrganisationsname2()
+    {
+        return $this->container['organisationsname2'];
+    }
+
+    /**
+     * Sets organisationsname2
+     *
+     * @param string $organisationsname2 Name 2 der Organisation (weiterführend)
+     *
+     * @return $this
+     */
+    public function setOrganisationsname2($organisationsname2)
+    {
+        $this->container['organisationsname2'] = $organisationsname2;
+
+        return $this;
+    }
+
+    /**
+     * Gets organisationsname3
+     *
+     * @return string
+     */
+    public function getOrganisationsname3()
+    {
+        return $this->container['organisationsname3'];
+    }
+
+    /**
+     * Sets organisationsname3
+     *
+     * @param string $organisationsname3 Name 3 der Organisation (weiterführend)
+     *
+     * @return $this
+     */
+    public function setOrganisationsname3($organisationsname3)
+    {
+        $this->container['organisationsname3'] = $organisationsname3;
+
+        return $this;
+    }
+
+    /**
+     * Gets organisationsname4
+     *
+     * @return string
+     */
+    public function getOrganisationsname4()
+    {
+        return $this->container['organisationsname4'];
+    }
+
+    /**
+     * Sets organisationsname4
+     *
+     * @param string $organisationsname4 Name 4 der Organisation (weiterführend)
+     *
+     * @return $this
+     */
+    public function setOrganisationsname4($organisationsname4)
+    {
+        $this->container['organisationsname4'] = $organisationsname4;
 
         return $this;
     }

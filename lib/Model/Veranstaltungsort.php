@@ -1,6 +1,6 @@
 <?php
 /**
- * Ausbildungszug
+ * Veranstaltungsort
  *
  * PHP version 5
  *
@@ -33,15 +33,15 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * Ausbildungszug Class Doc Comment
+ * Veranstaltungsort Class Doc Comment
  *
  * @category Class
- * @description Ein Ausbildungszug mit den relevanten Daten.
+ * @description Die Informationen zu einem Veranstaltungsort.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class Ausbildungszug implements ModelInterface, ArrayAccess
+class Veranstaltungsort implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'Ausbildungszug';
+    protected static $swaggerModelName = 'Veranstaltungsort';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,12 +58,13 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'oid' => 'string',
-        'ausbildungsgang_id' => 'string',
-        'ausbildungszugabschnitte' => '\Swagger\Client\Model\Ausbildungszugabschnitt[]',
-        'links' => '\Swagger\Client\Model\Link[]',
+        'hausnr' => 'string',
+        'homepage' => 'string',
         'name' => 'string',
-        'planungsstatus' => 'string'
+        'ort' => 'string',
+        'plz' => 'string',
+        'strasse' => 'string',
+        'telefon1' => 'string'
     ];
 
     /**
@@ -72,12 +73,13 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'oid' => null,
-        'ausbildungsgang_id' => null,
-        'ausbildungszugabschnitte' => null,
-        'links' => null,
+        'hausnr' => null,
+        'homepage' => null,
         'name' => null,
-        'planungsstatus' => null
+        'ort' => null,
+        'plz' => null,
+        'strasse' => null,
+        'telefon1' => null
     ];
 
     /**
@@ -107,12 +109,13 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'oid' => 'oid',
-        'ausbildungsgang_id' => 'ausbildungsgangId',
-        'ausbildungszugabschnitte' => 'ausbildungszugabschnitte',
-        'links' => 'links',
+        'hausnr' => 'hausnr',
+        'homepage' => 'homepage',
         'name' => 'name',
-        'planungsstatus' => 'planungsstatus'
+        'ort' => 'ort',
+        'plz' => 'plz',
+        'strasse' => 'strasse',
+        'telefon1' => 'telefon1'
     ];
 
     /**
@@ -121,12 +124,13 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'oid' => 'setOid',
-        'ausbildungsgang_id' => 'setAusbildungsgangId',
-        'ausbildungszugabschnitte' => 'setAusbildungszugabschnitte',
-        'links' => 'setLinks',
+        'hausnr' => 'setHausnr',
+        'homepage' => 'setHomepage',
         'name' => 'setName',
-        'planungsstatus' => 'setPlanungsstatus'
+        'ort' => 'setOrt',
+        'plz' => 'setPlz',
+        'strasse' => 'setStrasse',
+        'telefon1' => 'setTelefon1'
     ];
 
     /**
@@ -135,12 +139,13 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'oid' => 'getOid',
-        'ausbildungsgang_id' => 'getAusbildungsgangId',
-        'ausbildungszugabschnitte' => 'getAusbildungszugabschnitte',
-        'links' => 'getLinks',
+        'hausnr' => 'getHausnr',
+        'homepage' => 'getHomepage',
         'name' => 'getName',
-        'planungsstatus' => 'getPlanungsstatus'
+        'ort' => 'getOrt',
+        'plz' => 'getPlz',
+        'strasse' => 'getStrasse',
+        'telefon1' => 'getTelefon1'
     ];
 
     /**
@@ -184,23 +189,8 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
         return self::$swaggerModelName;
     }
 
-    const PLANUNGSSTATUS_IN_PLANUNG = 'IN_PLANUNG';
-    const PLANUNGSSTATUS_FREIGEGEBEN = 'FREIGEGEBEN';
     
 
-    
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public function getPlanungsstatusAllowableValues()
-    {
-        return [
-            self::PLANUNGSSTATUS_IN_PLANUNG,
-            self::PLANUNGSSTATUS_FREIGEGEBEN,
-        ];
-    }
     
 
     /**
@@ -218,12 +208,13 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
-        $this->container['ausbildungsgang_id'] = isset($data['ausbildungsgang_id']) ? $data['ausbildungsgang_id'] : null;
-        $this->container['ausbildungszugabschnitte'] = isset($data['ausbildungszugabschnitte']) ? $data['ausbildungszugabschnitte'] : null;
-        $this->container['links'] = isset($data['links']) ? $data['links'] : null;
+        $this->container['hausnr'] = isset($data['hausnr']) ? $data['hausnr'] : null;
+        $this->container['homepage'] = isset($data['homepage']) ? $data['homepage'] : null;
         $this->container['name'] = isset($data['name']) ? $data['name'] : null;
-        $this->container['planungsstatus'] = isset($data['planungsstatus']) ? $data['planungsstatus'] : null;
+        $this->container['ort'] = isset($data['ort']) ? $data['ort'] : null;
+        $this->container['plz'] = isset($data['plz']) ? $data['plz'] : null;
+        $this->container['strasse'] = isset($data['strasse']) ? $data['strasse'] : null;
+        $this->container['telefon1'] = isset($data['telefon1']) ? $data['telefon1'] : null;
     }
 
     /**
@@ -234,29 +225,6 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
     public function listInvalidProperties()
     {
         $invalidProperties = [];
-
-        if ($this->container['oid'] === null) {
-            $invalidProperties[] = "'oid' can't be null";
-        }
-        if ($this->container['ausbildungsgang_id'] === null) {
-            $invalidProperties[] = "'ausbildungsgang_id' can't be null";
-        }
-        if ($this->container['ausbildungszugabschnitte'] === null) {
-            $invalidProperties[] = "'ausbildungszugabschnitte' can't be null";
-        }
-        if ($this->container['name'] === null) {
-            $invalidProperties[] = "'name' can't be null";
-        }
-        if ($this->container['planungsstatus'] === null) {
-            $invalidProperties[] = "'planungsstatus' can't be null";
-        }
-        $allowedValues = $this->getPlanungsstatusAllowableValues();
-        if (!is_null($this->container['planungsstatus']) && !in_array($this->container['planungsstatus'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value for 'planungsstatus', must be one of '%s'",
-                implode("', '", $allowedValues)
-            );
-        }
 
         return $invalidProperties;
     }
@@ -274,97 +242,49 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets oid
+     * Gets hausnr
      *
      * @return string
      */
-    public function getOid()
+    public function getHausnr()
     {
-        return $this->container['oid'];
+        return $this->container['hausnr'];
     }
 
     /**
-     * Sets oid
+     * Sets hausnr
      *
-     * @param string $oid UUID des Datensatzes
+     * @param string $hausnr Hausnummer der Anschrift des Veranstaltungsorts
      *
      * @return $this
      */
-    public function setOid($oid)
+    public function setHausnr($hausnr)
     {
-        $this->container['oid'] = $oid;
+        $this->container['hausnr'] = $hausnr;
 
         return $this;
     }
 
     /**
-     * Gets ausbildungsgang_id
+     * Gets homepage
      *
      * @return string
      */
-    public function getAusbildungsgangId()
+    public function getHomepage()
     {
-        return $this->container['ausbildungsgang_id'];
+        return $this->container['homepage'];
     }
 
     /**
-     * Sets ausbildungsgang_id
+     * Sets homepage
      *
-     * @param string $ausbildungsgang_id ID des Ausbildungsgang
+     * @param string $homepage Homepage des Veranstaltungsorts
      *
      * @return $this
      */
-    public function setAusbildungsgangId($ausbildungsgang_id)
+    public function setHomepage($homepage)
     {
-        $this->container['ausbildungsgang_id'] = $ausbildungsgang_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets ausbildungszugabschnitte
-     *
-     * @return \Swagger\Client\Model\Ausbildungszugabschnitt[]
-     */
-    public function getAusbildungszugabschnitte()
-    {
-        return $this->container['ausbildungszugabschnitte'];
-    }
-
-    /**
-     * Sets ausbildungszugabschnitte
-     *
-     * @param \Swagger\Client\Model\Ausbildungszugabschnitt[] $ausbildungszugabschnitte Abschnitte des Ausbildungszugs
-     *
-     * @return $this
-     */
-    public function setAusbildungszugabschnitte($ausbildungszugabschnitte)
-    {
-        $this->container['ausbildungszugabschnitte'] = $ausbildungszugabschnitte;
-
-        return $this;
-    }
-
-    /**
-     * Gets links
-     *
-     * @return \Swagger\Client\Model\Link[]
-     */
-    public function getLinks()
-    {
-        return $this->container['links'];
-    }
-
-    /**
-     * Sets links
-     *
-     * @param \Swagger\Client\Model\Link[] $links links
-     *
-     * @return $this
-     */
-    public function setLinks($links)
-    {
-        $this->container['links'] = $links;
+        $this->container['homepage'] = $homepage;
 
         return $this;
     }
@@ -382,7 +302,7 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
     /**
      * Sets name
      *
-     * @param string $name Name des Ausbildungszugs
+     * @param string $name Name des Veranstaltungsorts
      *
      * @return $this
      */
@@ -394,34 +314,97 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets planungsstatus
+     * Gets ort
      *
      * @return string
      */
-    public function getPlanungsstatus()
+    public function getOrt()
     {
-        return $this->container['planungsstatus'];
+        return $this->container['ort'];
     }
 
     /**
-     * Sets planungsstatus
+     * Sets ort
      *
-     * @param string $planungsstatus Der Planungsstatus
+     * @param string $ort Ort der Anschrift des Veranstaltungsorts
      *
      * @return $this
      */
-    public function setPlanungsstatus($planungsstatus)
+    public function setOrt($ort)
     {
-        $allowedValues = $this->getPlanungsstatusAllowableValues();
-        if (!in_array($planungsstatus, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value for 'planungsstatus', must be one of '%s'",
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
-        $this->container['planungsstatus'] = $planungsstatus;
+        $this->container['ort'] = $ort;
+
+        return $this;
+    }
+
+    /**
+     * Gets plz
+     *
+     * @return string
+     */
+    public function getPlz()
+    {
+        return $this->container['plz'];
+    }
+
+    /**
+     * Sets plz
+     *
+     * @param string $plz PLZ der Anschrift des Veranstaltungsorts
+     *
+     * @return $this
+     */
+    public function setPlz($plz)
+    {
+        $this->container['plz'] = $plz;
+
+        return $this;
+    }
+
+    /**
+     * Gets strasse
+     *
+     * @return string
+     */
+    public function getStrasse()
+    {
+        return $this->container['strasse'];
+    }
+
+    /**
+     * Sets strasse
+     *
+     * @param string $strasse Straße der Anschrift des Veranstaltungsorts
+     *
+     * @return $this
+     */
+    public function setStrasse($strasse)
+    {
+        $this->container['strasse'] = $strasse;
+
+        return $this;
+    }
+
+    /**
+     * Gets telefon1
+     *
+     * @return string
+     */
+    public function getTelefon1()
+    {
+        return $this->container['telefon1'];
+    }
+
+    /**
+     * Sets telefon1
+     *
+     * @param string $telefon1 Telefonnummer des Veranstaltungsorts
+     *
+     * @return $this
+     */
+    public function setTelefon1($telefon1)
+    {
+        $this->container['telefon1'] = $telefon1;
 
         return $this;
     }

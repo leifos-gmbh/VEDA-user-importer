@@ -1,6 +1,6 @@
 <?php
 /**
- * Ausbildungszug
+ * Ausbildungsgangabschnitt
  *
  * PHP version 5
  *
@@ -33,15 +33,15 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * Ausbildungszug Class Doc Comment
+ * Ausbildungsgangabschnitt Class Doc Comment
  *
  * @category Class
- * @description Ein Ausbildungszug mit den relevanten Daten.
+ * @description Ausbildungsgangabschnitt mit Details wie Reihenfolge und Art.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class Ausbildungszug implements ModelInterface, ArrayAccess
+class Ausbildungsgangabschnitt implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'Ausbildungszug';
+    protected static $swaggerModelName = 'Ausbildungsgangabschnitt';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -59,11 +59,11 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
       */
     protected static $swaggerTypes = [
         'oid' => 'string',
-        'ausbildungsgang_id' => 'string',
-        'ausbildungszugabschnitte' => '\Swagger\Client\Model\Ausbildungszugabschnitt[]',
+        'ausbildungsgangabschnittsart' => 'string',
+        'bezeichnung' => 'string',
+        'kurz_bezeichnung' => 'string',
         'links' => '\Swagger\Client\Model\Link[]',
-        'name' => 'string',
-        'planungsstatus' => 'string'
+        'reihenfolge' => 'int'
     ];
 
     /**
@@ -73,11 +73,11 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
       */
     protected static $swaggerFormats = [
         'oid' => null,
-        'ausbildungsgang_id' => null,
-        'ausbildungszugabschnitte' => null,
+        'ausbildungsgangabschnittsart' => null,
+        'bezeichnung' => null,
+        'kurz_bezeichnung' => null,
         'links' => null,
-        'name' => null,
-        'planungsstatus' => null
+        'reihenfolge' => 'int32'
     ];
 
     /**
@@ -108,11 +108,11 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
      */
     protected static $attributeMap = [
         'oid' => 'oid',
-        'ausbildungsgang_id' => 'ausbildungsgangId',
-        'ausbildungszugabschnitte' => 'ausbildungszugabschnitte',
+        'ausbildungsgangabschnittsart' => 'ausbildungsgangabschnittsart',
+        'bezeichnung' => 'bezeichnung',
+        'kurz_bezeichnung' => 'kurzBezeichnung',
         'links' => 'links',
-        'name' => 'name',
-        'planungsstatus' => 'planungsstatus'
+        'reihenfolge' => 'reihenfolge'
     ];
 
     /**
@@ -122,11 +122,11 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
      */
     protected static $setters = [
         'oid' => 'setOid',
-        'ausbildungsgang_id' => 'setAusbildungsgangId',
-        'ausbildungszugabschnitte' => 'setAusbildungszugabschnitte',
+        'ausbildungsgangabschnittsart' => 'setAusbildungsgangabschnittsart',
+        'bezeichnung' => 'setBezeichnung',
+        'kurz_bezeichnung' => 'setKurzBezeichnung',
         'links' => 'setLinks',
-        'name' => 'setName',
-        'planungsstatus' => 'setPlanungsstatus'
+        'reihenfolge' => 'setReihenfolge'
     ];
 
     /**
@@ -136,11 +136,11 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
      */
     protected static $getters = [
         'oid' => 'getOid',
-        'ausbildungsgang_id' => 'getAusbildungsgangId',
-        'ausbildungszugabschnitte' => 'getAusbildungszugabschnitte',
+        'ausbildungsgangabschnittsart' => 'getAusbildungsgangabschnittsart',
+        'bezeichnung' => 'getBezeichnung',
+        'kurz_bezeichnung' => 'getKurzBezeichnung',
         'links' => 'getLinks',
-        'name' => 'getName',
-        'planungsstatus' => 'getPlanungsstatus'
+        'reihenfolge' => 'getReihenfolge'
     ];
 
     /**
@@ -184,23 +184,8 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
         return self::$swaggerModelName;
     }
 
-    const PLANUNGSSTATUS_IN_PLANUNG = 'IN_PLANUNG';
-    const PLANUNGSSTATUS_FREIGEGEBEN = 'FREIGEGEBEN';
     
 
-    
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public function getPlanungsstatusAllowableValues()
-    {
-        return [
-            self::PLANUNGSSTATUS_IN_PLANUNG,
-            self::PLANUNGSSTATUS_FREIGEGEBEN,
-        ];
-    }
     
 
     /**
@@ -219,11 +204,11 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
-        $this->container['ausbildungsgang_id'] = isset($data['ausbildungsgang_id']) ? $data['ausbildungsgang_id'] : null;
-        $this->container['ausbildungszugabschnitte'] = isset($data['ausbildungszugabschnitte']) ? $data['ausbildungszugabschnitte'] : null;
+        $this->container['ausbildungsgangabschnittsart'] = isset($data['ausbildungsgangabschnittsart']) ? $data['ausbildungsgangabschnittsart'] : null;
+        $this->container['bezeichnung'] = isset($data['bezeichnung']) ? $data['bezeichnung'] : null;
+        $this->container['kurz_bezeichnung'] = isset($data['kurz_bezeichnung']) ? $data['kurz_bezeichnung'] : null;
         $this->container['links'] = isset($data['links']) ? $data['links'] : null;
-        $this->container['name'] = isset($data['name']) ? $data['name'] : null;
-        $this->container['planungsstatus'] = isset($data['planungsstatus']) ? $data['planungsstatus'] : null;
+        $this->container['reihenfolge'] = isset($data['reihenfolge']) ? $data['reihenfolge'] : null;
     }
 
     /**
@@ -238,26 +223,18 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
         if ($this->container['oid'] === null) {
             $invalidProperties[] = "'oid' can't be null";
         }
-        if ($this->container['ausbildungsgang_id'] === null) {
-            $invalidProperties[] = "'ausbildungsgang_id' can't be null";
+        if ($this->container['ausbildungsgangabschnittsart'] === null) {
+            $invalidProperties[] = "'ausbildungsgangabschnittsart' can't be null";
         }
-        if ($this->container['ausbildungszugabschnitte'] === null) {
-            $invalidProperties[] = "'ausbildungszugabschnitte' can't be null";
+        if ($this->container['bezeichnung'] === null) {
+            $invalidProperties[] = "'bezeichnung' can't be null";
         }
-        if ($this->container['name'] === null) {
-            $invalidProperties[] = "'name' can't be null";
+        if ($this->container['kurz_bezeichnung'] === null) {
+            $invalidProperties[] = "'kurz_bezeichnung' can't be null";
         }
-        if ($this->container['planungsstatus'] === null) {
-            $invalidProperties[] = "'planungsstatus' can't be null";
+        if ($this->container['reihenfolge'] === null) {
+            $invalidProperties[] = "'reihenfolge' can't be null";
         }
-        $allowedValues = $this->getPlanungsstatusAllowableValues();
-        if (!is_null($this->container['planungsstatus']) && !in_array($this->container['planungsstatus'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value for 'planungsstatus', must be one of '%s'",
-                implode("', '", $allowedValues)
-            );
-        }
-
         return $invalidProperties;
     }
 
@@ -298,49 +275,73 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets ausbildungsgang_id
+     * Gets ausbildungsgangabschnittsart
      *
      * @return string
      */
-    public function getAusbildungsgangId()
+    public function getAusbildungsgangabschnittsart()
     {
-        return $this->container['ausbildungsgang_id'];
+        return $this->container['ausbildungsgangabschnittsart'];
     }
 
     /**
-     * Sets ausbildungsgang_id
+     * Sets ausbildungsgangabschnittsart
      *
-     * @param string $ausbildungsgang_id ID des Ausbildungsgang
+     * @param string $ausbildungsgangabschnittsart Art des Ausbildungsgangabschnitts
      *
      * @return $this
      */
-    public function setAusbildungsgangId($ausbildungsgang_id)
+    public function setAusbildungsgangabschnittsart($ausbildungsgangabschnittsart)
     {
-        $this->container['ausbildungsgang_id'] = $ausbildungsgang_id;
+        $this->container['ausbildungsgangabschnittsart'] = $ausbildungsgangabschnittsart;
 
         return $this;
     }
 
     /**
-     * Gets ausbildungszugabschnitte
+     * Gets bezeichnung
      *
-     * @return \Swagger\Client\Model\Ausbildungszugabschnitt[]
+     * @return string
      */
-    public function getAusbildungszugabschnitte()
+    public function getBezeichnung()
     {
-        return $this->container['ausbildungszugabschnitte'];
+        return $this->container['bezeichnung'];
     }
 
     /**
-     * Sets ausbildungszugabschnitte
+     * Sets bezeichnung
      *
-     * @param \Swagger\Client\Model\Ausbildungszugabschnitt[] $ausbildungszugabschnitte Abschnitte des Ausbildungszugs
+     * @param string $bezeichnung Bezeichnung des Ausbildungsgangabschnitt
      *
      * @return $this
      */
-    public function setAusbildungszugabschnitte($ausbildungszugabschnitte)
+    public function setBezeichnung($bezeichnung)
     {
-        $this->container['ausbildungszugabschnitte'] = $ausbildungszugabschnitte;
+        $this->container['bezeichnung'] = $bezeichnung;
+
+        return $this;
+    }
+
+    /**
+     * Gets kurz_bezeichnung
+     *
+     * @return string
+     */
+    public function getKurzBezeichnung()
+    {
+        return $this->container['kurz_bezeichnung'];
+    }
+
+    /**
+     * Sets kurz_bezeichnung
+     *
+     * @param string $kurz_bezeichnung Kurzbezeichnung des Ausbildungsgangabschnitt
+     *
+     * @return $this
+     */
+    public function setKurzBezeichnung($kurz_bezeichnung)
+    {
+        $this->container['kurz_bezeichnung'] = $kurz_bezeichnung;
 
         return $this;
     }
@@ -370,58 +371,25 @@ class Ausbildungszug implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets name
+     * Gets reihenfolge
      *
-     * @return string
+     * @return int
      */
-    public function getName()
+    public function getReihenfolge()
     {
-        return $this->container['name'];
+        return $this->container['reihenfolge'];
     }
 
     /**
-     * Sets name
+     * Sets reihenfolge
      *
-     * @param string $name Name des Ausbildungszugs
+     * @param int $reihenfolge Nummer zur Bestimmung der Reihenfolge
      *
      * @return $this
      */
-    public function setName($name)
+    public function setReihenfolge($reihenfolge)
     {
-        $this->container['name'] = $name;
-
-        return $this;
-    }
-
-    /**
-     * Gets planungsstatus
-     *
-     * @return string
-     */
-    public function getPlanungsstatus()
-    {
-        return $this->container['planungsstatus'];
-    }
-
-    /**
-     * Sets planungsstatus
-     *
-     * @param string $planungsstatus Der Planungsstatus
-     *
-     * @return $this
-     */
-    public function setPlanungsstatus($planungsstatus)
-    {
-        $allowedValues = $this->getPlanungsstatusAllowableValues();
-        if (!in_array($planungsstatus, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value for 'planungsstatus', must be one of '%s'",
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
-        $this->container['planungsstatus'] = $planungsstatus;
+        $this->container['reihenfolge'] = $reihenfolge;
 
         return $this;
     }
