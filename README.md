@@ -1,9 +1,9 @@
-# VEDAUserImporter
+# VedaConnector
 
 ILIAS cron job plugin to import users from VEDA (https://www.veda.net)
 
 **Minimum ILIAS Version:**
-5.4.1
+5.4.4   
 
 **Maximum ILIAS Version:**
 5.4.99
@@ -19,6 +19,6 @@ German
     
 - Clone the plugin repository as follows:
      
-      git clone https://github.com/leifos-gmbh/VedaUserImporter.git
+      git clone https://github.com/leifos-gmbh/VedaConnector.git
 
 - Install and Activate it in the ILIAS Administration - Plugins.
