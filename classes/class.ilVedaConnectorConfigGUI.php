@@ -156,8 +156,20 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 
 		$tpl = $DIC->ui()->mainTemplate();
 		$tabs = $DIC->tabs();
+		$ctrl = $DIC->ctrl();
 
 		$tabs->activateTab(self::TAB_CREDENTIALS);
+
+		if(\ilVedaConnectorSettings::getInstance()->hasSettingsForConnectionTest()) {
+
+			$button = ilLinkButton::getInstance();
+			$button->setCaption($this->getPluginObject()->txt('connection_test'), false);
+			$button->setUrl($ctrl->getLinkTarget($this, 'ping'));
+
+			$toolbar = $DIC->toolbar();
+			$toolbar->addButtonInstance($button);
+		}
+
 
 		if(!$form instanceof ilPropertyFormGUI)
 		{
@@ -193,27 +205,17 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		$url->setValue($settings->getRestUrl());
 		$form->addItem($url);
 
-		$user = new ilTextInputGUI($this->getPluginObject()->txt('credentials_user'),'restuser');
-		$user->setRequired(true);
-		$user->setSize(120);
-		$user->setMaxLength(512);
-		$user->setValue($settings->getRestUser());
-		$form->addItem($user);
+		$authentication_id = new ilTextInputGUI($this->getPluginObject()->txt('authentication_id'),'authentication_id');
+		$authentication_id->setRequired(true);
+		$authentication_id->setValue($settings->getAuthenticationToken());
+		$authentication_id->setInfo($this->getPluginObject()->txt('authentication_id_info'));
+		$form->addItem($authentication_id);
 
-		$platform_id = new ilNumberInputGUI($this->getPluginObject()->txt('platform_id'),'restplatformid');
+		$platform_id = new ilTextInputGUI($this->getPluginObject()->txt('platform_id'),'platform_id');
 		$platform_id->setRequired(true);
-		$platform_id->setMaxLength(6);
 		$platform_id->setValue($settings->getPlatformId());
 		$platform_id->setInfo($this->getPluginObject()->txt('platform_id_info'));
 		$form->addItem($platform_id);
-
-		$pass = new ilPasswordInputGUI($this->getPluginObject()->txt('credentials_password'), 'restpassword');
-		$pass->setRequired(true);
-		$pass->setRetype(false);
-		$pass->setSize(120);
-		$pass->setMaxLength(512);
-		$pass->setInfo($this->getPluginObject()->txt("credentials_password_info"));
-		$form->addItem($pass);
 
 		return $form;
 	}
@@ -238,7 +240,8 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 				$settings->setRestUrl($form->getInput('resturl'));
 				$settings->setRestUser($form->getInput('restuser'));
 				$settings->setRestPassword($form->getInput('restpassword'));
-				$settings->setPlatformId($form->getInput('restplatformid'));
+				$settings->setAuthenticationToken($form->getInput('authentication_id'));
+				$settings->setPlatformId($form->getInput('platform_id'));
 				$settings->save();
 
 				ilUtil::sendSuccess($lng->txt('settings_saved'),true);
@@ -256,35 +259,21 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		$this->credentials($form);
 	}
 
+	/**
+	 * Test connection
+	 */
 	protected function ping()
 	{
-		//TODO implement this method, call the
-		/**
-		 * ..
-		 * ...
-		 * ...
-		 * $selector = new ilOpenTextAuthHeaderSelector();
-
-		$config = new \Swagger\Client\Configuration();
-		$config->setHost($settings->getUri());
-		$config->setUsername($settings->getUsername());
-		$config->setPassword($settings->getPassword());
-
-		$api = new \Swagger\Client\Api\DefaultApi(
-		null,
-		$config,
-		$selector
-		);
-
-		$res = $api->apiV1AuthPostWithHttpInfo(
-		$settings->getUsername(),
-		$settings->getPassword(),
-		$settings->getDomain()
-		);
-		 * ...
-		 * ....
-		 * ...
-		 */
+		try {
+			$connection = \ilVedaConnector::getInstance();
+			$response = $connection->getParticipants();
+			ilUtil::sendSuccess($this->getPluginObject()->txt('success_api_connect'));
+		}
+		catch(\Exception $e) {
+			$this->logger->warning('Connection test failed with message: ' . $e->getMessage());
+			ilUtil::sendFailure($e->getMessage());
+		}
+		$this->credentials();
 	}
 
 }

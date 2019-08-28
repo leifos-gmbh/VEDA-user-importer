@@ -1,7 +1,7 @@
 tab_settings#:#Settings
 tab_credentials#:#Webservice Credentials
 tab_programs#:#Program ID Assignment
-tbl_settings#:#Cronjob Settings
+tbl_settings#:#Connection Settings
 err_import_locked#:#Import is locked. Aborting.
 cron_interval#:#Refresh Interval in Hours.
 cron_job_info#:#VEDA Connector
@@ -9,10 +9,11 @@ tbl_settting_lock#:#Lock Cronjob
 cron#:#Refresh per Cron-job
 no_object_assigned#:#Object not assigned
 btn_save_source_selection#:#Save
-credentials_url#:#Web Service Resource URL:
-credentials_user#:#Web Service User:
-credentials_password#:#Web Service User Password:
-credentials_password_info#:#Password not displayed for security reasons.
+credentials_url#:#Webservice URL:
 name_conflicts_check_log#:#Some users are not migrated because of name conflicts. Please check the log file.
-platform_id#:#Platform ID
-platform_id_info#:#Unique id provided to ILIAS.
+platform_id#:#Plattform ID
+platform_id_info#:#Token zur Authentifizierung gegenüber dem Webservice
+authentication_id#:#Authentication ID
+authentication_id_info#:#ID der E-Learning-Plattform
+success_api_connect#:#Die Verbindung zum Webservice konnte erfolgreich hergestellt werden.
+connection_test#:#Verbindungstest

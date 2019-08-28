@@ -112,5 +112,18 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin
 		{
 			return;
 		}
+		$exception_file = $this->getExceptionDirectory().'/class.'.$a_classname.'.php';
+		if(@include_once($exception_file))
+		{
+			return;
+		}
+	}
+
+	/**
+	 * @return string
+	 */
+	private function getExceptionDirectory() : string
+	{
+		return $this->getDirectory().'/exceptions';
 	}
 }

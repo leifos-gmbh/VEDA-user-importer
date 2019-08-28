@@ -5,6 +5,8 @@
  */
 class ilVedaConnectorSettings
 {
+	public const HEADER_TOKEN = 'x-jwp-apiaccesstoken';
+
 	private static $instance = null;
 
 	private $storage = null;
@@ -15,7 +17,16 @@ class ilVedaConnectorSettings
 	private $restUser;
 	private $restUrl;
 	private $restPassword;
-	private $platform_id;
+
+	/**
+	 * @var string
+	 */
+	private $authentication_token = '';
+
+	/**
+	 * @var string
+	 */
+	private $platform_id = '';
 
 	/**
 	 * ilVedaConnectorSettings constructor.
@@ -40,6 +51,17 @@ class ilVedaConnectorSettings
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function hasSettingsForConnectionTest()
+	{
+		return
+			strlen($this->getRestUrl()) &&
+			strlen($this->getAuthenticationToken()) &&
+			strlen($this->getPlatformId());
+	}
+
+	/**
 	 * Read settings
 	 */
 	protected function read(): void
@@ -52,7 +74,8 @@ class ilVedaConnectorSettings
 		$this->setRestUrl($this->getStorage()->get('resturl',$this->getRestUrl()));
 		$this->setRestUser($this->getStorage()->get('restuser',$this->getRestUser()));
 		$this->setRestPassword($this->getStorage()->get('restpassword', $this->getRestPassword()));
-		$this->setPlatformId($this->getStorage()->get('restplatformid', $this->getPlatformId()));
+		$this->setAuthenticationToken($this->getStorage()->get('resttoken', $this->getAuthenticationToken()));
+		$this->setPlatformId($this->getStorage()->get('platform_id', $this->getPlatformId()));
 	}
 
 	/**
@@ -84,14 +107,14 @@ class ilVedaConnectorSettings
 	 */
 	public function save(): void
 	{
-		//db table settings columns lock, cron_interval
 		$this->getStorage()->set('lock',(int) $this->isLocked());
 		$this->getStorage()->set('cron_interval',$this->getCronInterval());
 
 		$this->getStorage()->set('restpassword',$this->getRestPassword());
 		$this->getStorage()->set('restuser',$this->getRestUser());
 		$this->getStorage()->set('resturl', $this->getRestUrl());
-		$this->getStorage()->set('restplatformid', $this->getPlatformId());
+		$this->getStorage()->set('resttoken', $this->getAuthenticationToken());
+		$this->getStorage()->set('platform_id', $this->getPlatformId());
 	}
 
 	/**
@@ -167,17 +190,34 @@ class ilVedaConnectorSettings
 	}
 
 	/**
-	 * @param int|null $platform_id
+	 * @param string|null $token
 	 */
-	public function setPlatformId(?int $platform_id): void
+	public function setAuthenticationToken(?string $token)
 	{
-		$this->platform_id = $platform_id;
+		$this->authentication_token = $token;
+	}
+
+
+	/**
+	 * @return string|null
+	 */
+	public function getAuthenticationToken() : ?string
+	{
+		return $this->authentication_token;
 	}
 
 	/**
-	 * @return int|null
+	 * @param string|null $id
 	 */
-	public function getPlatformId(): ?int
+	public function setPlatformId(?string $id)
+	{
+		$this->platform_id = $id;
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function getPlatformId() : ?string
 	{
 		return $this->platform_id;
 	}
