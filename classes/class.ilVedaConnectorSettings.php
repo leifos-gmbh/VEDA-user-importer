@@ -19,6 +19,21 @@ class ilVedaConnectorSettings
 	private $restPassword;
 
 	/**
+	 * @var bool
+	 */
+	private $active = false;
+
+	/**
+	 * @var int
+	 */
+	private $loglevel = \ilLogLevel::OFF;
+
+	/**
+	 * @var string
+	 */
+	private $logfile = '';
+
+	/**
 	 * @var string
 	 */
 	private $authentication_token = '';
@@ -27,6 +42,12 @@ class ilVedaConnectorSettings
 	 * @var string
 	 */
 	private $platform_id = '';
+
+
+	/**
+	 * @var int
+	 */
+	private $participant_role = 0;
 
 	/**
 	 * ilVedaConnectorSettings constructor.
@@ -76,6 +97,11 @@ class ilVedaConnectorSettings
 		$this->setRestPassword($this->getStorage()->get('restpassword', $this->getRestPassword()));
 		$this->setAuthenticationToken($this->getStorage()->get('resttoken', $this->getAuthenticationToken()));
 		$this->setPlatformId($this->getStorage()->get('platform_id', $this->getPlatformId()));
+
+		$this->setActive((bool) $this->getStorage()->get('active', $this->isActive()));
+		$this->setLogLevel($this->getStorage()->get('loglevel', $this->getLogLevel()));
+		$this->setLogFile($this->getStorage()->get('logfile', $this->getLogFile()));
+		$this->setParticipantRole($this->getStorage()->get('part_role', $this->getParticipantRole()));
 	}
 
 	/**
@@ -115,6 +141,11 @@ class ilVedaConnectorSettings
 		$this->getStorage()->set('resturl', $this->getRestUrl());
 		$this->getStorage()->set('resttoken', $this->getAuthenticationToken());
 		$this->getStorage()->set('platform_id', $this->getPlatformId());
+
+		$this->getStorage()->set('active', (int) $this->isActive());
+		$this->getStorage()->set('loglevel', $this->getLogLevel());
+		$this->getStorage()->set('logfile', $this->getLogFile());
+		$this->getStorage()->set('part_role', $this->getParticipantRole());
 	}
 
 	/**
@@ -220,5 +251,69 @@ class ilVedaConnectorSettings
 	public function getPlatformId() : ?string
 	{
 		return $this->platform_id;
+	}
+
+	/**
+	 * @param bool $active
+	 */
+	public function setActive(bool $active)
+	{
+		$this->active = $active;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isActive() : bool
+	{
+		return $this->active;
+	}
+
+	/**
+	 * @param int $loglevel
+	 */
+	public function setLogLevel(int $loglevel)
+	{
+		$this->loglevel = $loglevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getLogLevel() : int
+	{
+		return $this->loglevel;
+	}
+
+	/**
+	 * @param string $file
+	 */
+	public function setLogFile(string $file)
+	{
+		$this->logfile = $file;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getLogFile() : string
+	{
+		return $this->logfile;
+	}
+
+	/**
+	 * @param int $role
+	 */
+	public function setParticipantRole(int $role)
+	{
+		$this->participant_role = $role;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getParticipantRole() : int
+	{
+		return $this->participant_role;
 	}
 }

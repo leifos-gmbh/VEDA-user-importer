@@ -1,5 +1,7 @@
 <?php
 
+use Monolog\Handler\StreamHandler;
+
 /**
  * VEDA connector plugin base class
  *
@@ -87,6 +89,28 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin
 		require($this->getDirectory().'/vendor/autoload.php');
 		$this->initAutoLoad();
 
+		$settings = \ilVedaConnectorSettings::getInstance();
+		$this->logger->debug('Set log level to: ' . $settings->getLogLevel());
+
+		if(
+			$settings->getLogLevel() != \ilLogLevel::OFF &&
+			$settings->getLogFile() != ''
+		)
+		{
+			$stream_handler = new StreamHandler(
+				$settings->getLogFile(),
+				$settings->getLogLevel(),
+				true
+			);
+			$line_formatter = new ilLineFormatter(\ilLoggerFactory::DEFAULT_FORMAT, 'Y-m-d H:i:s.u',TRUE,TRUE);
+			$stream_handler->setFormatter($line_formatter);
+			$this->logger->getLogger()->pushHandler($stream_handler);
+		}
+
+		// format lines
+		foreach($this->logger->getLogger()->getHandlers() as $handler) {
+			$handler->setLevel($settings->getLogLevel());
+		}
 	}
 
 

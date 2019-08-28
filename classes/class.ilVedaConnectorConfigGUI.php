@@ -5,8 +5,10 @@
  */
 class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 {
-	const TAB_SETTINGS = 'settings';
-	const TAB_CREDENTIALS = 'credentials';
+	protected const TAB_SETTINGS = 'settings';
+	protected const TAB_CREDENTIALS = 'credentials';
+	protected const TAB_IMPORT = 'import';
+
 
 	/**
 	 * \ilLogger
@@ -46,6 +48,13 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 			\ilVedaConnectorPlugin::getInstance()->txt('tab_credentials'),
 			$ilCtrl->getLinkTarget($this, 'credentials')
 		);
+
+		$ilTabs->addTab(
+			self::TAB_IMPORT,
+			\ilVedaConnectorPlugin::getInstance()->txt('tab_import'),
+			$ilCtrl->getLinkTarget($this,'import')
+		);
+
 
 		switch ($cmd)
 		{
@@ -92,11 +101,31 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		$form->addCommandButton('save', $lng->txt('save'));
 		$form->setShowTopButtons(false);
 
+		$lock = new \ilCheckboxInputGUI($this->getPluginObject()->txt('tbl_veda_settings_active'),'active');
+		$lock->setValue(1);
+		$lock->setChecked($settings->isActive());
+		$form->addItem($lock);
+
+		$lng->loadLanguageModule('log');
+		$level = new ilSelectInputGUI($this->getPluginObject()->txt('tbl_veda_settings_loglevel'),'log_level');
+		$level->setHideSubForm($settings->getLogLevel() == \ilLogLevel::OFF,'< 1000');
+		$level->setOptions(\ilLogLevel::getLevelOptions());
+		$level->setValue($settings->getLogLevel());
+		$form->addItem($level);
+
+		$log_file = new \ilTextInputGUI($this->getPluginObject()->txt('tbl_veda_settings_logfile'),'log_file');
+		$log_file->setValue($settings->getLogFile());
+		$log_file->setInfo($this->getPluginObject()->txt('tbl_veda_settings_logfile_info'));
+		$level->addSubItem($log_file);
+
+
+
+
 		$lock = new ilCheckboxInputGUI($this->getPluginObject()->txt('tbl_settting_lock'),'lock');
 		$lock->setValue(1);
 		$lock->setDisabled(!$settings->isLocked());
 		$lock->setChecked($settings->isLocked());
-		$form->addItem($lock);
+		#$form->addItem($lock);
 
 		// cron interval
 		$cron_i = new ilNumberInputGUI($this->getPluginObject()->txt('cron'),'cron_interval');
@@ -106,7 +135,24 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		$cron_i->setRequired(true);
 		$cron_i->setValue($settings->getCronInterval());
 		$cron_i->setInfo($this->getPluginObject()->txt('cron_interval'));
-		$form->addItem($cron_i);
+		#$form->addItem($cron_i);
+
+		$user_sync = new \ilFormSectionHeaderGUI();
+		$user_sync->setTitle($this->getPluginObject()->txt('tbl_settings_section_user_sync'));
+		$form->addItem($user_sync);
+
+		$roles = new ilSelectInputGUI(
+			$this->getPluginObject()->txt('tbl_settings_participant_role'),
+			'participant_role'
+		);
+		$roles->setValue($settings->getParticipantRole());
+		$roles->setInfo($this->getPluginObject()->txt('tbl_settings_participant_role_info'));
+		$roles->setOptions($this->prepareRoleSelection());
+		$roles->setRequired(true);
+		$form->addItem($roles);
+
+
+		$hotspot = new \ilQTIRenderFib();
 
 		return $form;
 	}
@@ -128,8 +174,10 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		{
 			if($form->checkInput())
 			{
-				$settings->enableLock($form->getInput('lock'));
-				$settings->setCronInterval($form->getInput('cron_interval'));
+				$settings->setActive($form->getInput('active'));
+				$settings->setLogLevel($form->getInput('log_level'));
+				$settings->setLogFile($form->getInput('log_file'));
+				$settings->setParticipantRole($form->getInput('participant_role'));
 				$settings->save();
 
 				ilUtil::sendSuccess($lng->txt('settings_saved'),true);
@@ -260,6 +308,112 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 	}
 
 	/**
+	 * @param \ilPropertyFormGUI|null $form
+	 */
+	protected function import(\ilPropertyFormGUI $form = null)
+	{
+		global $DIC;
+
+		$tpl = $DIC->ui()->mainTemplate();
+		$tabs = $DIC->tabs();
+
+		$tabs->activateTab(self::TAB_IMPORT);
+
+		if(!$form instanceof ilPropertyFormGUI)
+		{
+			$form = $this->initImportForm();
+		}
+		$tpl->setContent($form->getHTML());
+	}
+
+	/**
+	 * @return \ilPropertyFormGUI
+	 */
+	protected function initImportForm()
+	{
+		global $DIC;
+
+		$ilCtrl = $DIC->ctrl();
+		$lng = $DIC->language();
+
+		$form = new ilPropertyFormGUI();
+		$form->setTitle($this->getPluginObject()->txt('tbl_import'));
+		$form->setFormAction($ilCtrl->getFormAction($this));
+		$form->addCommandButton('doImport', $this->getPluginObject()->txt('btn_import'));
+
+		// selection all or single elements
+		$imp_type = new ilRadioGroupInputGUI($this->getPluginObject()->txt('import_selection'),'selection');
+		$imp_type->setValue(\ilVedaImporter::IMPORT_SELECTED);
+		$imp_type->setRequired(true);
+		$form->addItem($imp_type);
+
+		$all = new ilRadioOption($this->getPluginObject()->txt('import_selection_all'),\ilVedaImporter::IMPORT_ALL);
+		$imp_type->addOption($all);
+
+		$sel = new ilRadioOption($this->getPluginObject()->txt('import_selection_selected'), \ilVedaImporter::IMPORT_SELECTED);
+		$imp_type->addOption($sel);
+
+		$usr = new ilCheckboxInputGUI($lng->txt('obj_usr'),'usr');
+		$usr->setValue(\ilVedaImporter::IMPORT_USR);
+		$sel->addSubItem($usr);
+
+
+		$crs = new ilCheckboxInputGUI($lng->txt('objs_crs'),'crs');
+		$crs->setValue(\ilVedaImporter::IMPORT_CRS);
+		$sel->addSubItem($crs);
+
+		$mem = new ilCheckboxInputGUI($this->getPluginObject()->txt('type_membership'),'mem');
+		$mem->setValue(\ilVedaImporter::IMPORT_MEM);
+		$sel->addSubItem($mem);
+
+		$form->setShowTopButtons(false);
+
+		return $form;
+
+	}
+
+	/**
+	 *
+	 */
+	protected function doImport()
+	{
+		global $DIC;
+
+		$lng = $DIC->language();
+
+		$form = $this->initImportForm();
+		if(!$form->checkInput()) {
+			ilUtil::sendFailure($lng->txt('err_check_input'));
+			return $this->import($form);
+		}
+
+		try{
+			$importer = \ilVedaImporter::getInstance();
+			if($form->getInput('selection') == \ilVedaImporter::IMPORT_ALL) {
+				$importer->setImportMode(true);
+			}
+			else {
+				$modes = [];
+				foreach(['usr', 'crs', 'mem'] as $mode) {
+					if($form->getInput($mode)) {
+						$modes[] = $mode;
+					}
+				}
+				$importer->setImportMode(false, $modes);
+			}
+
+			$importer->import();
+		}
+		catch(Exception $e) {
+			ilUtil::sendFailure('Import failed with message: ' . $e->getMessage());
+			$this->import($form);
+		}
+
+		ilUtil::sendSuccess($this->getPluginObject()->txt('success_import'));
+		$this->import($form);
+	}
+
+	/**
 	 * Test connection
 	 */
 	protected function ping()
@@ -275,5 +429,40 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		}
 		$this->credentials();
 	}
+
+	/**
+	 * @param bool $a_with_select_option
+	 * @return mixed
+	 */
+	protected function prepareRoleSelection($a_with_select_option = true) : array
+	{
+		global $DIC;
+
+		$lng = $DIC->language();
+		$review = $DIC->rbac()->review();
+
+		$global_roles = ilUtil::_sortIds(
+			$review->getGlobalRoles(),
+			'object_data',
+			'title',
+			'obj_id'
+		);
+
+		$select = [];
+		if($a_with_select_option)
+		{
+			$select[0] = $lng->txt('links_select_one');
+		}
+		foreach($global_roles as $role_id)
+		{
+			if($role_id == ANONYMOUS_ROLE_ID)
+			{
+				continue;
+			}
+			$select[$role_id] = ilObject::_lookupTitle($role_id);
+		}
+		return $select;
+	}
+
 
 }

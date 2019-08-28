@@ -68,6 +68,7 @@ class ilVedaConnector
 
 	/**
 	 * @return \Swagger\Client\Model\TeilnehmerELearningPlattform[]
+	 * @throws \ilVedaConnectionException
 	 */
 	public function getParticipants()
 	{
@@ -87,6 +88,7 @@ class ilVedaConnector
 
 		try {
 			$response = $this->api_elearning->getTeilnehmerELearningPlattformUsingGET($this->settings->getPlatformId());
+			$this->logger->dump($response, \ilLogLevel::DEBUG);
 			return $response;
 		}
 		catch(ApiException $e) {
