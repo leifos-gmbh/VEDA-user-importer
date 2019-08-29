@@ -24,3 +24,6 @@ import_selection_all#:#Alles importieren
 import_selection_selected#:#Nur ausgewählte Objekte importieren
 type_membership#:#Mitgliedschaften
 success_import#:#Die ausgewählten Objekte wurde importiert.
+error_import_locked#:#Der Import konnte nicht durchgeführt werden, da ein anderer Importvorgang läuft oder nicht erfolgreich ausgeführt werden konnte.
+tbl_veda_settings_lock#:#Import-Lock
+tbl_veda_settings_lock_info#:#Wenn aktiviert, läuft aktuell ein Import-Vorgang oder ein Import-Vorgang konnte nicht fehlerfrei durchgeführt werden. Deaktivieren Sie die Sperre nur dann, wenn Sie sicher sind, daß kein Inmport-Vorgang ausgeführt wird.

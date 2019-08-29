@@ -38,15 +38,15 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		$ilTabs = $DIC->tabs();
 
 		$ilTabs->addTab(
-			self::TAB_SETTINGS,
-			\ilVedaConnectorPlugin::getInstance()->txt('tab_settings'),
-			$ilCtrl->getLinkTarget($this, 'configure')
-		);
-
-		$ilTabs->addTab(
 			self::TAB_CREDENTIALS,
 			\ilVedaConnectorPlugin::getInstance()->txt('tab_credentials'),
 			$ilCtrl->getLinkTarget($this, 'credentials')
+		);
+
+		$ilTabs->addTab(
+			self::TAB_SETTINGS,
+			\ilVedaConnectorPlugin::getInstance()->txt('tab_settings'),
+			$ilCtrl->getLinkTarget($this, 'configure')
 		);
 
 		$ilTabs->addTab(
@@ -106,6 +106,15 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		$lock->setChecked($settings->isActive());
 		$form->addItem($lock);
 
+
+
+		$lock = new ilCheckboxInputGUI($this->getPluginObject()->txt('tbl_veda_settings_lock'),'lock');
+		$lock->setValue(1);
+		$lock->setDisabled(!$settings->isLocked());
+		$lock->setChecked($settings->isLocked());
+		$lock->setInfo($this->getPluginObject()->txt('tbl_veda_settings_lock_info'));
+		$form->addItem($lock);
+
 		$lng->loadLanguageModule('log');
 		$level = new ilSelectInputGUI($this->getPluginObject()->txt('tbl_veda_settings_loglevel'),'log_level');
 		$level->setHideSubForm($settings->getLogLevel() == \ilLogLevel::OFF,'< 1000');
@@ -119,13 +128,6 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		$level->addSubItem($log_file);
 
 
-
-
-		$lock = new ilCheckboxInputGUI($this->getPluginObject()->txt('tbl_settting_lock'),'lock');
-		$lock->setValue(1);
-		$lock->setDisabled(!$settings->isLocked());
-		$lock->setChecked($settings->isLocked());
-		#$form->addItem($lock);
 
 		// cron interval
 		$cron_i = new ilNumberInputGUI($this->getPluginObject()->txt('cron'),'cron_interval');
@@ -151,9 +153,6 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		$roles->setRequired(true);
 		$form->addItem($roles);
 
-
-		$hotspot = new \ilQTIRenderFib();
-
 		return $form;
 	}
 
@@ -178,6 +177,7 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 				$settings->setLogLevel($form->getInput('log_level'));
 				$settings->setLogFile($form->getInput('log_file'));
 				$settings->setParticipantRole($form->getInput('participant_role'));
+				$settings->enableLock($form->getInput('lock'));
 				$settings->save();
 
 				ilUtil::sendSuccess($lng->txt('settings_saved'),true);

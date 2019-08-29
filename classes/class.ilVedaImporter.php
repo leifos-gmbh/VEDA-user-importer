@@ -24,6 +24,9 @@ class ilVedaImporter
 	 */
 	private $settings = null;
 
+
+	private $plugin = null;
+
 	/**
 	 * @var string[]
 	 */
@@ -38,6 +41,7 @@ class ilVedaImporter
 
 		$this->logger = $DIC->logger()->vedaimp();
 		$this->settings = \ilVedaConnectorSettings::getInstance();
+		$this->plugin = \ilVedaConnectorPlugin::getInstance();
 	}
 
 	/**
@@ -87,7 +91,9 @@ class ilVedaImporter
 	public function import()
 	{
 		if($this->settings->isLocked()) {
-			throw new \ilVedaImporterLockedException();
+			throw new \ilVedaImporterLockedException(
+				$this->plugin->txt('error_import_locked')
+			);
 		}
 
 		$this->logger->info('Settings import lock');
@@ -118,11 +124,15 @@ class ilVedaImporter
 		try {
 			$connector = \ilVedaConnector::getInstance();
 			$participants = $connector->getParticipants();
-
 			$this->logger->dump($participants, \ilLogLevel::DEBUG);
+
+			$importer = new \ilVedaUserImportAdapter($participants);
+			$importer->import();
 
 		}
 		catch (ilVedaConnectionException $e) {
+			throw $e;
+		} catch (ilVedaUserImporterException $e) {
 			throw $e;
 		}
 	}
