@@ -65,6 +65,7 @@ class ilVedaUserImportAdapter
 	{
 		$this->transformParticipantsToXml();
 		$this->importXml();
+		$this->updateCreationFeedback();
 	}
 
 
@@ -80,6 +81,12 @@ class ilVedaUserImportAdapter
 		foreach($this->getParticipants() as $participant_container)
 		{
 			$usr_id = $this->fetchUserId($participant_container);
+
+			if(!$this->validateParticipant($usr_id, $participant_container))
+			{
+				continue;
+			}
+
 			if($usr_id) {
 				$this->writer->xmlStartTag(
 					'User',
@@ -155,13 +162,15 @@ class ilVedaUserImportAdapter
 			$this->writer->xmlElement('Lastname',[], $participant_container->getTeilnehmer()->getNachname());
 
 			$this->writer->xmlEndTag('User');
+
+			$this->storeUserStatusSuccess($participant_container, $usr_id);
 		}
 
 		$this->writer->xmlEndTag('Users');
 	}
 
 	/**
-	 *
+	 * import user xml
 	 */
 	protected function importXml()
 	{
@@ -184,6 +193,28 @@ class ilVedaUserImportAdapter
 	}
 
 	/**
+	 * udate creation feedback
+	 */
+	protected function updateCreationFeedback()
+	{
+		$pending_participants = \ilVedaUserStatus::getUsersWithPendingCreationStatus();
+		foreach($pending_participants as $participant_status) {
+
+			try {
+				$this->logger->info('Marked user with oid ' . $participant_status->getOid() . ' as imported.');
+				$connector = \ilVedaConnector::getInstance();
+				$connector->sendCreationMessage($participant_status->getOid());
+
+				$participant_status->setCreationStatus(\ilVedaUserStatus::STATUS_SYNCHRONIZED);
+				$participant_status->save();
+			}
+			catch(\ilVedaConnectionException $e) {
+
+			}
+		}
+	}
+
+	/**
 	 * Fetch user id of already created user account
 	 * @param \Swagger\Client\Model\TeilnehmerELearningPlattform $participant
 	 * @return int
@@ -203,6 +234,51 @@ class ilVedaUserImportAdapter
 			throw new \ilVedaUserImporterException('Invalid db structure. Check log file. Aborting');
 		}
 		return $user->getId();
+	}
+
+	/**
+	 * @param int $usr_id
+	 * @param \Swagger\Client\Model\TeilnehmerELearningPlattform $participant
+	 * @return bool
+	 */
+	protected function validateParticipant(int $usr_id, TeilnehmerELearningPlattform $participant) : bool
+	{
+		if($usr_id) {
+			$this->logger->debug('Existing usr_account with id: ' . $usr_id . ' is valid');
+			return true;
+		}
+		// no usr_id given => usr is valid if login doed not exist
+		$login = $participant->getBenutzername();
+		$generated_login = \ilAuthUtils::_generateLogin($login);
+
+		if(strcmp($generated_login, $login) !== 0) {
+			$this->logger->warning('User with login: ' . $login . ' already exists.');
+
+			$user_status = new \ilVedaUserStatus($participant->getTeilnehmer()->getOid());
+			$user_status->setLogin($participant->getBenutzername());
+			$user_status->setCreationStatus(\ilVedaUserStatus::STATUS_NONE);
+			$user_status->setPasswordStatus(\ilVedaUserStatus::STATUS_NONE);
+			$user_status->setImportFailure(true);
+			$user_status->save();
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * @param \Swagger\Client\Model\TeilnehmerELearningPlattform $participant
+	 */
+	protected function storeUserStatusSuccess(TeilnehmerELearningPlattform $participant, int $usr_id)
+	{
+		$user_status = new \ilVedaUserStatus($participant->getTeilnehmer()->getOid());
+		$user_status->setLogin($participant->getBenutzername());
+
+		if(!$usr_id) {
+			$user_status->setCreationStatus(\ilVedaUserStatus::STATUS_PENDING);
+			$user_status->setPasswordStatus(\ilVedaUserStatus::STATUS_PENDING);
+		}
+		$user_status->setImportFailure(false);
+		$user_status->save();
 	}
 
 

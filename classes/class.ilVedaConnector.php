@@ -108,6 +108,47 @@ class ilVedaConnector
 	}
 
 	/**
+	 * @param string $participant_id
+	 * @throws \ilVedaConnectionException
+	 */
+	public function sendCreationMessage(string $participant_id)
+	{
+		if(!$this->api_elearning instanceof ELearningApi)
+		{
+			list(
+				$client,
+				$config,
+				$header
+				) = $this->initApiParameters();
+			$this->api_elearning = new ELearningApi(
+				$client,
+				$config,
+				$header
+			);
+		}
+		try {
+			$response = $this->api_elearning->meldeElearningaccountAlsExternExistierendUsingPOST(
+				$this->settings->getPlatformId(),
+				$participant_id
+			);
+			return true;
+		}
+		catch(ApiException $e) {
+
+			$this->logger->warning('meldeTeilnehmerExistierend failed with message: ' . $e->getMessage());
+			$this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+			$this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+			$this->logger->warning($e->getResponseBody());
+
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+		catch(Exception $e) {
+			$this->logger->warning('meldeTEilnehmerExistierend failed with message: ' . $e->getMessage());
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+	}
+
+	/**
 	 *
 	 */
 	protected function initApiParameters()
