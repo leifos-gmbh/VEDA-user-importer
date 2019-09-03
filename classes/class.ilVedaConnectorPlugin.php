@@ -7,8 +7,12 @@ use Monolog\Handler\StreamHandler;
  *
  * @author Stefan Meyer <smeyer.ilias@gmx.de>
  */
-class ilVedaConnectorPlugin extends ilCronHookPlugin
+class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListener
 {
+	protected const USER_SERVICE = 'Services/User';
+	protected const EVENT_UPDATE_PASSWORD = 'passwordChanged';
+
+
 	/**
 	 * @var null | \ilVedaConnectorPlugin
 	 */
@@ -149,5 +153,23 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin
 	private function getExceptionDirectory() : string
 	{
 		return $this->getDirectory().'/exceptions';
+	}
+
+	/**
+	 * Handle an event in a listener.
+	 *
+	 * @param    string $a_component component, e.g. "Modules/Forum" or "Services/User"
+	 * @param    string $a_event event e.g. "createUser", "updateUser", "deleteUser", ...
+	 * @param    array $a_parameter parameter array (assoc), array("name" => ..., "phone_office" => ...)
+	 */
+	public static function handleEvent($a_component, $a_event, $a_parameter)
+	{
+		if(
+			$a_component == self::USER_SERVICE &&
+			$a_event == self::EVENT_UPDATE_PASSWORD
+		)
+		{
+			\ilVedaConnector::getInstance()->handlePasswordChange($a_parameter['usr_id']);
+		}
 	}
 }

@@ -149,6 +149,62 @@ class ilVedaConnector
 	}
 
 	/**
+	 * send password notification, if required.
+	 */
+	public function handlePasswordChange(int $usr_id)
+	{
+		$import_id = \ilObjUser::_lookupImportId($usr_id);
+
+		if(!$import_id) {
+			$this->logger->debug('No import id for user ' . $usr_id);
+			return false;
+		}
+		$user_status = new \ilVedaUserStatus($import_id);
+
+		if(
+			$user_status->isImportFailure() ||
+			$user_status->getPasswordStatus() != \ilVedaUserStatus::STATUS_PENDING
+		)
+		{
+			$this->logger->debug('No password notification required.');
+		}
+
+		if(!$this->api_elearning instanceof ELearningApi)
+		{
+			list(
+				$client,
+				$config,
+				$header
+				) = $this->initApiParameters();
+			$this->api_elearning = new ELearningApi(
+				$client,
+				$config,
+				$header
+			);
+		}
+		try {
+			$response = $this->api_elearning->meldeErstmaligErfolgreichEingeloggtUsingPOST(
+				$this->settings->getPlatformId(),
+				$user_status->getOid()
+			);
+			$user_status->setPasswordStatus(\ilVedaUserStatus::STATUS_SYNCHRONIZED);
+			$user_status->save();
+			$this->logger->info('Password notification sent.');
+			return true;
+		}
+		catch(ApiException $e) {
+
+			$this->logger->warning('meldeErstmaligErfolgreichEingeloggt failed with message: ' . $e->getMessage());
+			$this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+			$this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+			$this->logger->warning($e->getResponseBody());
+		}
+		catch(Exception $e) {
+			$this->logger->warning('meldeErstmaligErfolgreichEingeloggt failed with message: ' . $e->getMessage());
+		}
+	}
+
+	/**
 	 *
 	 */
 	protected function initApiParameters()
