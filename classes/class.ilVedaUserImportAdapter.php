@@ -237,6 +237,12 @@ class ilVedaUserImportAdapter
 		{
 			return 0;
 		}
+
+		if(!ilObjUser::_exists($obj_id)) {
+			$this->logger->error('Found invalid obj_data entry for import_id: ' . $import_id);
+			throw new \ilVedaUserImporterException('Invalid db structure. Check log file. Aborting');
+		}
+
 		$user = \ilObjectFactory::getInstanceByObjId($obj_id, false);
 		if(!$user instanceof \ilObjUser) {
 			$this->logger->error('Found invalid obj_data entry for import_id: ' . $import_id);

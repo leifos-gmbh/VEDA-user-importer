@@ -92,6 +92,26 @@ class ilVedaUserStatus
 	}
 
 	/**
+	 * @param int $usr_id
+	 */
+	public static function handleDeleteAccount(int $usr_id)
+	{
+		global $DIC;
+
+		$logger = $DIC->logger()->vedaimp();
+
+		$logger->debug('Handle delete account.');
+
+		$import_id = \ilObjUser::_lookupImportId($usr_id);
+		if(!$import_id) {
+			$logger->debug('No veda user. Event ignored');
+			return;
+		}
+		$status = new \ilVedaUserStatus($import_id);
+		$status->delete();
+	}
+
+	/**
 	 * Get all users
 	 * @return \ilVedaUserStatus[]
 	 * @throws \ilDatabaseException
@@ -227,6 +247,16 @@ class ilVedaUserStatus
 			'where oid = ' . $this->db->quote($this->getOid(),'text');
 		$this->db->manipulate($query);
 	}
+
+	/**
+	 * Delete entry
+	 */
+	public function delete()
+	{
+		$query = 'delete from ' . self::TABLE_NAME . ' ' .
+			'where oid = ' . $this->db->quote($this->getOid(),'text');
+		$this->db->manipulate($query);
+ 	}
 
 	/**
 	 * Read form db

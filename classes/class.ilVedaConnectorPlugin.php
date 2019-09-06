@@ -11,6 +11,7 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListe
 {
 	protected const USER_SERVICE = 'Services/User';
 	protected const EVENT_UPDATE_PASSWORD = 'passwordChanged';
+	protected const EVENT_DELETE_USER = 'deleteUser';
 
 
 	/**
@@ -170,6 +171,13 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListe
 		)
 		{
 			\ilVedaConnector::getInstance()->handlePasswordChange($a_parameter['usr_id']);
+		}
+		if(
+			$a_component == self::USER_SERVICE &&
+			$a_event == self::EVENT_DELETE_USER
+		)
+		{
+			\ilVedaUserStatus::handleDeleteAccount($a_parameter['usr_id']);
 		}
 	}
 }
