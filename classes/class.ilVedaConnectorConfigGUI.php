@@ -9,6 +9,9 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 	protected const TAB_CREDENTIALS = 'credentials';
 	protected const TAB_IMPORT = 'import';
 
+	protected const SUBTAB_IMPORT = 'import';
+	protected const SUBTAB_IMPORT_USR = 'import_usr';
+
 
 	/**
 	 * \ilLogger
@@ -317,7 +320,9 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		$tpl = $DIC->ui()->mainTemplate();
 		$tabs = $DIC->tabs();
 
+		$this->setSubTabs();
 		$tabs->activateTab(self::TAB_IMPORT);
+		$tabs->activateSubTab(self::SUBTAB_IMPORT);
 
 		if(!$form instanceof ilPropertyFormGUI)
 		{
@@ -411,6 +416,52 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 
 		ilUtil::sendSuccess($this->getPluginObject()->txt('success_import'));
 		$this->import($form);
+	}
+
+	/**
+	 * show user import result
+	 */
+	protected function importResultUser()
+	{
+		global $DIC;
+
+		$tabs = $DIC->tabs();
+		$tpl = $DIC->ui()->mainTemplate();
+
+		$this->setSubTabs();
+		$tabs->activateTab(self::TAB_IMPORT);
+		$tabs->activateSubTab(self::SUBTAB_IMPORT_USR);
+
+		$table = new ilVedaUserImportResultTableGUI($this, __FUNCTION__);
+		$table->init();
+		$table->parse();
+
+		$tpl->setContent($table->getHTML());
+	}
+
+
+	/**
+	 * Set subtabs
+	 */
+	protected function setSubTabs()
+	{
+		global $DIC;
+
+		$ctrl = $DIC->ctrl();
+		$tabs = $DIC->tabs();
+
+		$tabs->addSubTab(
+			self::SUBTAB_IMPORT,
+			$this->getPluginObject()->txt('subtab_import'),
+			$ctrl->getLinkTarget($this, 'import')
+		);
+
+		$tabs->addSubTab(
+			self::SUBTAB_IMPORT_USR,
+			$this->getPluginObject()->txt('subtab_import_usr'),
+			$ctrl->getLinkTarget($this, 'importResultUser')
+		);
+
 	}
 
 	/**

@@ -92,6 +92,26 @@ class ilVedaUserStatus
 	}
 
 	/**
+	 * Get all users
+	 * @return \ilVedaUserStatus[]
+	 * @throws \ilDatabaseException
+	 */
+	public static function getAllUsers()
+	{
+		global $DIC;
+
+		$db = $DIC->database();
+		$query = 'select oid from ' . self::TABLE_NAME;
+		$res = $db->query($query);
+
+		$all_users = [];
+		while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
+			$all_users[] = new \ilVedaUserStatus($row->oid);
+		}
+		return $all_users;
+	}
+
+	/**
 	 * @param string $oid
 	 */
 	public function setOid(string $oid)
@@ -200,11 +220,11 @@ class ilVedaUserStatus
 	{
 		$query = 'update ' . self::TABLE_NAME . ' '.
 			'set ' .
-			'oid = ' . $this->db->quote($this->getOid(),'text') . ',  ' .
 			'login = ' . $this->db->quote($this->getLogin(),'text') . ', ' .
 			'status_pwd = ' . $this->db->quote($this->getPasswordStatus(),'integer') . ', ' .
 			'status_created = ' . $this->db->quote($this->getCreationStatus(),'integer') . ', ' .
-			'import_failure = ' . $this->db->quote($this->isImportFailure(), 'integer');
+			'import_failure = ' . $this->db->quote($this->isImportFailure(), 'integer') . ' ' .
+			'where oid = ' . $this->db->quote($this->getOid(),'text');
 		$this->db->manipulate($query);
 	}
 
