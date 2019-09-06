@@ -126,6 +126,8 @@ class ilVedaImporter
 			$participants = $connector->getParticipants();
 			$this->logger->dump($participants, \ilLogLevel::DEBUG);
 
+			\ilVedaUserStatus::deleteDeprecated($participants);
+
 			$importer = new \ilVedaUserImportAdapter($participants);
 			$importer->import();
 

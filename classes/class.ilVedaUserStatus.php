@@ -148,6 +148,25 @@ class ilVedaUserStatus
 	}
 
 	/**
+	 * @param \Swagger\Client\Model\TeilnehmerELearningPlattform[]
+	 * @throws \ilDatabaseException
+	 */
+	public static function deleteDeprecated(array $participants)
+	{
+		foreach(self::getAllUsers() as $user) {
+			$found_remote = false;
+			foreach($participants as $participant) {
+				if($user->getOid() == $participant->getTeilnehmer()->getOid()) {
+					$found_remote = true;
+				}
+			}
+			if(!$found_remote) {
+				$user->delete();
+			}
+		}
+	}
+
+	/**
 	 * @param string $login
 	 */
 	public function setLogin(string $login)
