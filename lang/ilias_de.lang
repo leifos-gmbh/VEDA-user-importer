@@ -4,9 +4,9 @@ tbl_settings#:#Allgemeine Einstellungen
 cron_job_info#:#VEDA Connector
 credentials_url#:#Webservice URL:
 platform_id#:#Plattform ID
-platform_id_info#:#Token zur Authentifizierung gegenüber dem Webservice
+platform_id_info#:#ID der E-Learning-Plattform
 authentication_id#:#Authentication ID
-authentication_id_info#:#ID der E-Learning-Plattform
+authentication_id_info#:#Token zur Authentifizierung gegenüber dem Webservice
 success_api_connect#:#Die Verbindung zum Webservice konnte erfolgreich hergestellt werden.
 connection_test#:#Verbindungstest
 tbl_veda_settings_active#:#Aktiviert
