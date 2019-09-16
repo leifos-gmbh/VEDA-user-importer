@@ -128,13 +128,15 @@ class ilVedaUserImportAdapter
 				strtolower($participant_container->getTeilnehmer()->getGeschlecht())
 			);
 
-			$date_string = $participant_container->getTeilnehmer()->getGeburtsdatum()->format('Y-m-d');
-			if($date_string) {
-				$this->writer->xmlElement(
-					'Birthday',
-					[],
-					$date_string
-				);
+			if($participant_container->getTeilnehmer()->getGeburtsdatum() instanceof DateTime) {
+				$date_string = $participant_container->getTeilnehmer()->getGeburtsdatum()->format('Y-m-d');
+				if($date_string) {
+					$this->writer->xmlElement(
+						'Birthday',
+						[],
+						$date_string
+					);
+				}
 			}
 
 			$this->writer->xmlElement(
