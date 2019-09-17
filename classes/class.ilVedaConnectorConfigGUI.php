@@ -412,6 +412,7 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		catch(Exception $e) {
 			ilUtil::sendFailure('Import failed with message: ' . $e->getMessage());
 			$this->import($form);
+			return true;
 		}
 
 		ilUtil::sendSuccess($this->getPluginObject()->txt('success_import'));
