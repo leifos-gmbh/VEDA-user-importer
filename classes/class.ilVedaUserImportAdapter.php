@@ -212,11 +212,12 @@ class ilVedaUserImportAdapter
 		foreach($pending_participants as $participant_status) {
 
 			try {
-				$this->logger->info('Marked user with oid ' . $participant_status->getOid() . ' as imported.');
+				$this->logger->debug('Marked user with oid ' . $participant_status->getOid() . ' as imported.');
 				$connector = \ilVedaConnector::getInstance();
 				$connector->sendCreationMessage($participant_status->getOid());
 
 				$participant_status->setCreationStatus(\ilVedaUserStatus::STATUS_SYNCHRONIZED);
+				$this->logger->info('Update creation status');
 				$participant_status->save();
 			}
 			catch(\ilVedaConnectionException $e) {

@@ -64,7 +64,7 @@ class ilVedaUserStatus
 		$this->oid = $oid;
 
 		$this->db = $DIC->database();
-		$this->logger = $DIC->logger();
+		$this->logger = $DIC->logger()->vedaimp();
 
 		$this->read();
 	}
@@ -77,11 +77,13 @@ class ilVedaUserStatus
 		global $DIC;
 
 		$db = $DIC->database();
+		$logger = $DIC->logger()->vedaimp();
 
 		$query = 'select oid from ' . self::TABLE_NAME . ' ' .
-			'where status_pwd = ' . $db->quote(self::STATUS_PENDING, 'integer') . ' ' .
+			'where status_created = ' . $db->quote(self::STATUS_PENDING, 'integer') . ' ' .
 			'and import_failure = ' . $db->quote(0 , 'integer');
 		$res = $db->query($query);
+		$logger->dump($query);
 
 		$pending_participants = [];
 		while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
@@ -249,6 +251,7 @@ class ilVedaUserStatus
 			$this->db->quote($this->getCreationStatus(), 'integer') . ', ' .
 			$this->db->quote($this->isImportFailure(), 'integer') . ' ) ';
 		$this->db->manipulate($query);
+		$this->logger->debug($query);
 		$this->is_persistent = true;
 	}
 
@@ -264,6 +267,7 @@ class ilVedaUserStatus
 			'status_created = ' . $this->db->quote($this->getCreationStatus(),'integer') . ', ' .
 			'import_failure = ' . $this->db->quote($this->isImportFailure(), 'integer') . ' ' .
 			'where oid = ' . $this->db->quote($this->getOid(),'text');
+		$this->logger->debug($query);
 		$this->db->manipulate($query);
 	}
 
