@@ -16,3 +16,4 @@ credentials_password_info#:#Password not displayed for security reasons.
 name_conflicts_check_log#:#Some users are not migrated because of name conflicts. Please check the log file.
 platform_id#:#Platform ID
 platform_id_info#:#Unique id provided to ILIAS.
+err_claiming_missing#:#Der Import kann nicht durchgeführt werden, da das "VedaMDClaiming-Plugin" nicht vorhanden oder nicht aktiviert ist.

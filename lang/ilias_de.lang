@@ -34,3 +34,4 @@ tbl_usr_result_created#:#ILIAS-Benutzerkonto erstellt
 tbl_usr_result_pwd_changed#:#Passwort geändert
 tbl_usr_result_import_failure#:#Fehlermeldungen
 err_import_usr_duplicate#:#Duplikat: ein ILIAS-Benutzerkonto kann nicht erstellt werden.
+err_claiming_missing#:#Der Import kann nicht durchgeführt werden, da das "VedaMDClaiming-Plugin" nicht vorhanden oder nicht aktiviert ist.

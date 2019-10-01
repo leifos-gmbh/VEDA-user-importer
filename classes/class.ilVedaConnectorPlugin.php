@@ -15,6 +15,12 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListe
 
 
 	/**
+	 * @var null | \ilAdvancedMDClaimingPlugin
+	 */
+	private $claiming = null;
+
+
+	/**
 	 * @var null | \ilVedaConnectorPlugin
 	 */
 	private static $instance = null;
@@ -25,10 +31,21 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListe
 	 */
 	private $logger = null;
 
+	/**
+	 * Veda plugin
+	 */
 	const PNAME = 'VedaConnector';
 	const CTYPE = 'Services';
 	const CNAME = 'Cron';
 	const SLOT_ID = 'crnhk';
+
+	/**
+	 * Claiming plugin
+	 */
+	const CLAIMING_CTYPE = 'Services';
+	const CLAIMING_CNAME = 'AdvancedMetaData';
+	const CLAIMING_SLOT_ID = 'amdc';
+	const CLAIMING_NAME = 'VedaClaiming';
 
 
 	/**
@@ -116,8 +133,31 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListe
 		foreach($this->logger->getLogger()->getHandlers() as $handler) {
 			$handler->setLevel($settings->getLogLevel());
 		}
+
+		// init claiming plugin
+		$this->claiming = \ilPluginAdmin::getPluginObject(
+			self::CLAIMING_CTYPE,
+			self::CLAIMING_CNAME,
+			self::CLAIMING_SLOT_ID,
+			self::CLAIMING_NAME
+		);
 	}
 
+	/**
+	 * @return \ilAdvancedMDClaimingPlugin|null
+	 */
+	public function getClaimingPlugin()
+	{
+		return $this->claiming;
+	}
+
+	/**
+	 * Check if claiming plugin is available and active
+	 */
+	public function isClaimingPluginAvailable()
+	{
+		return $this->claiming instanceof \ilVedaClaimingPlugin;
+	}
 
 	/**
 	 * Add autoloading

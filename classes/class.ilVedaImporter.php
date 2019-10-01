@@ -101,8 +101,12 @@ class ilVedaImporter
 		$this->settings->save();
 
 		try {
+			$this->ensureClaimingPluginConfigured();
 			if($this->isImportModeEnabled(self::IMPORT_USR)) {
-					$this->importUsers();
+				$this->importUsers();
+			}
+			if($this->isImportModeEnabled(self::IMPORT_CRS)) {
+				$this->importCourses();
 			}
 		}
 		catch (ilVedaConnectionException $e) {
@@ -138,4 +142,24 @@ class ilVedaImporter
 			throw $e;
 		}
 	}
+
+	/**
+	 * @return bool
+	 */
+	protected function importCourses()
+	{
+		return true;
+	}
+
+
+	/**
+	 * @throws \ilVedaClaimingMissingException
+	 */
+	protected function ensureClaimingPluginConfigured()
+	{
+		if(!$this->plugin->isClaimingPluginAvailable()) {
+			throw new \ilVedaClaimingMissingException('', \ilVedaClaimingMissingException::ERR_MISSING);
+		}
+	}
+
 }
