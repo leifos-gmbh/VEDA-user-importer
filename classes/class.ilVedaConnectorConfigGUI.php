@@ -312,12 +312,6 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		$platform_id->setInfo($this->getPluginObject()->txt('platform_id_info'));
 		$form->addItem($platform_id);
 
-		$training_course = new \ilTextInputGUI($this->getPluginObject()->txt('training_course'), 'training_course');
-		$training_course->setRequired(true);
-		$training_course->setInfo($this->getPluginObject()->txt('training_course_info'));
-		$training_course->setValue($settings->getTrainingCourse());
-		$form->addItem($training_course);
-
 		return $form;
 	}
 
@@ -343,7 +337,6 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 				$settings->setRestPassword($form->getInput('restpassword'));
 				$settings->setAuthenticationToken($form->getInput('authentication_id'));
 				$settings->setPlatformId($form->getInput('platform_id'));
-				$settings->setTrainingCourse($form->getInput('training_course'));
 				$settings->save();
 
 				ilUtil::sendSuccess($lng->txt('settings_saved'),true);
