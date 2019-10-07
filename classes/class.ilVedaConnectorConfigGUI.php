@@ -2,6 +2,7 @@
 
 /**
  * @author Stefan Meyer <smeyer.ilias@gmx.de>
+ * @ilCtrl_Calls ilVedaConnectorConfigGUI: ilPropertyFormGUI
  */
 class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 {
@@ -27,6 +28,27 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		global $DIC;
 
 		$this->logger = $DIC->logger()->vedaimp();
+	}
+
+	/**
+	 * Forward to property form gui
+	 */
+	public function executeCommand()
+	{
+		global $DIC;
+
+		$ctrl = $DIC->ctrl();
+		$next_class = $ctrl->getNextClass();
+		$this->logger->info($next_class);
+
+		switch($next_class) {
+			case strtolower(\ilPropertyFormGUI::class):
+				$form = $this->initConfigurationForm();
+				$ctrl->forwardCommand($form);
+				break;
+		}
+
+		return parent::executeCommand();
 	}
 
 
@@ -95,6 +117,7 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 
 		$lng = $DIC->language();
 		$ctrl = $DIC->ctrl();
+		$definition = $DIC['objDefinition'];
 
 		$settings = \ilVedaConnectorSettings::getInstance();
 
@@ -156,6 +179,24 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		$roles->setRequired(true);
 		$form->addItem($roles);
 
+		$course_sync = new \ilFormSectionHeaderGUI();
+		$course_sync->setTitle($this->getPluginObject()->txt('tbl_settings_section_course_sync'));
+		$form->addItem($course_sync);
+
+		$import_dir = new \ilRepositorySelector2InputGUI(
+			$this->getPluginObject()->txt('tbl_settings_course_import'),
+			'crs_import',
+			true
+		);
+		$import_dir->setRequired(true);
+		$import_dir->setInfo($this->getPluginObject()->txt('tbl_settings_course_import_info'));
+		$white_list[] = 'cat';
+		$import_dir->getExplorerGUI()->setTypeWhiteList($white_list);
+		$import_dir->setValue($settings->getImportDirectory());
+
+		$form->addItem($import_dir);
+
+
 		return $form;
 	}
 
@@ -181,6 +222,9 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 				$settings->setLogFile($form->getInput('log_file'));
 				$settings->setParticipantRole($form->getInput('participant_role'));
 				$settings->enableLock($form->getInput('lock'));
+
+				$category_ref_ids = $form->getInput('crs_import');
+				$settings->setImportDirectory((int) end($category_ref_ids));
 				$settings->save();
 
 				ilUtil::sendSuccess($lng->txt('settings_saved'),true);
@@ -374,7 +418,6 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		$form->setShowTopButtons(false);
 
 		return $form;
-
 	}
 
 	/**

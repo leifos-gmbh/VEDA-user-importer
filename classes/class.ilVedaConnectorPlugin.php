@@ -45,7 +45,7 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListe
 	const CLAIMING_CTYPE = 'Services';
 	const CLAIMING_CNAME = 'AdvancedMetaData';
 	const CLAIMING_SLOT_ID = 'amdc';
-	const CLAIMING_NAME = 'VedaClaiming';
+	const CLAIMING_NAME = 'VedaMDClaiming';
 
 
 	/**
@@ -156,7 +156,7 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListe
 	 */
 	public function isClaimingPluginAvailable()
 	{
-		return $this->claiming instanceof \ilVedaClaimingPlugin;
+		return $this->claiming instanceof \ilVedaMDClaimingPlugin;
 	}
 
 	/**

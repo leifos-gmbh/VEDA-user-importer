@@ -49,6 +49,12 @@ class ilVedaConnectorSettings
 	 */
 	private $participant_role = 0;
 
+
+	/**
+	 * @var int
+	 */
+	private $import_ref_id = 0;
+
 	/**
 	 * ilVedaConnectorSettings constructor.
 	 */
@@ -102,6 +108,7 @@ class ilVedaConnectorSettings
 		$this->setLogLevel($this->getStorage()->get('loglevel', $this->getLogLevel()));
 		$this->setLogFile($this->getStorage()->get('logfile', $this->getLogFile()));
 		$this->setParticipantRole($this->getStorage()->get('part_role', $this->getParticipantRole()));
+		$this->setImportDirectory($this->getStorage()->get('import_ref_id', $this->getImportDirectory()));
 	}
 
 	/**
@@ -146,6 +153,7 @@ class ilVedaConnectorSettings
 		$this->getStorage()->set('loglevel', $this->getLogLevel());
 		$this->getStorage()->set('logfile', $this->getLogFile());
 		$this->getStorage()->set('part_role', $this->getParticipantRole());
+		$this->getStorage()->set('import_ref_id', $this->getImportDirectory());
 	}
 
 	/**
@@ -315,5 +323,21 @@ class ilVedaConnectorSettings
 	public function getParticipantRole() : int
 	{
 		return $this->participant_role;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getImportDirectory() : int
+	{
+		return $this->import_ref_id;
+	}
+
+	/**
+	 * @param int $ref_id
+	 */
+	public function setImportDirectory(int $ref_id)
+	{
+		$this->import_ref_id = $ref_id;
 	}
 }

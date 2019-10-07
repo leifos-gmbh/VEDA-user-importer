@@ -39,3 +39,9 @@ if(!$ilDB->tableExists('cron_crnhk_vedaimp_us'))
 	$ilDB->addPrimaryKey('cron_crnhk_vedaimp_us',['oid']);
 }
 ?>
+<#2>
+<?php
+// do nothing
+?>
+
+
