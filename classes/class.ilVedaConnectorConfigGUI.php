@@ -521,9 +521,17 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 	protected function ping()
 	{
 		try {
+			$settings = \ilVedaConnectorSettings::getInstance();
 			$connection = \ilVedaConnector::getInstance();
 			$response = $connection->getParticipants();
-			$second_response = $connection->getTrainingCourses();
+
+			$helper = \ilVedaMDHelper::getInstance();
+			$id = $helper->findTrainingCourseId(70);
+
+			$this->logger->notice($id . ' is the training course id');
+
+
+
 			ilUtil::sendSuccess($this->getPluginObject()->txt('success_api_connect'));
 		}
 		catch(\Exception $e) {

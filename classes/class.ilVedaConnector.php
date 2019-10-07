@@ -3,11 +3,9 @@
 
 use GuzzleHttp\Client;
 use Swagger\Client\Api\AusbildungsgngeApi;
-use Swagger\Client\Api\ELearningApi;
 use Swagger\Client\ApiException;
 use Swagger\Client\Configuration;
-use Swagger\Client\Model\TeilnehmerELearningPlattform;
-
+use Swagger\Client\Api\ELearningPlattformenApi;
 
 /**
  * Connector for all rest api calls.
@@ -38,7 +36,7 @@ class ilVedaConnector
 	private $initialized = false;
 
 	/**
-	 * @var null | ELearningApi
+	 * @var null | \Swagger\Client\Api\ELearningPlattformenApi
 	 */
 	private $api_elearning = null;
 
@@ -73,13 +71,58 @@ class ilVedaConnector
 		return self::$instance;
 	}
 
-	public function getTrainingCourseTrains()
+	/**
+	 * @param string $training_course_id
+	 * @return mixed
+	 * @throws \ilVedaConnectionException
+	 */
+	public function getTrainingCourseTrains(string $training_course_id)
+	{
+		if(!$this->api_elearning instanceof ELearningPlattformenApi)
+		{
+			list(
+				$client,
+				$config,
+				$header
+				) = $this->initApiParameters();
+			$this->api_elearning = new ELearningPlattformenApi(
+				$client,
+				$config,
+				$header
+			);
+		}
+
+		try {
+			$response = $this->api_elearning->getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET(
+				$this->settings->getPlatformId(),
+				$training_course_id
+			);
+			$this->logger->dump($response, \ilLogLevel::DEBUG);
+			return $response;
+		}
+		catch(ApiException $e) {
+
+			$this->logger->warning(\ilVedaConnectorSettings::HEADER_TOKEN . ': ' . $this->settings->getAuthenticationToken());
+			$this->logger->warning('getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET failed with message: ' . $e->getMessage());
+			$this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+			$this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+			$this->logger->warning($e->getResponseBody());
+
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+		catch(Exception $e) {
+			$this->logger->warning('getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET failed with message: ' . $e->getMessage());
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+
+
+	}
 
 
 	/**
 	 * Get training courses for ausbildungsgang
 	 */
-	public function getTrainingCourses(string $training_course_id)
+	public function getTrainingCourseSegments(string $training_course_id)
 	{
 		if(!$this->api_training_course instanceof AusbildungsgngeApi) {
 			list(
@@ -122,14 +165,14 @@ class ilVedaConnector
 	 */
 	public function getParticipants()
 	{
-		if(!$this->api_elearning instanceof ELearningApi)
+		if(!$this->api_elearning instanceof ELearningPlattformenApi)
 		{
 			list(
 				$client,
 				$config,
 				$header
 				) = $this->initApiParameters();
-			$this->api_elearning = new ELearningApi(
+			$this->api_elearning = new ELearningPlattformenApi(
 				$client,
 				$config,
 				$header
@@ -163,14 +206,14 @@ class ilVedaConnector
 	 */
 	public function sendCreationMessage(string $participant_id)
 	{
-		if(!$this->api_elearning instanceof ELearningApi)
+		if(!$this->api_elearning instanceof ELearningPlattformenApi)
 		{
 			list(
 				$client,
 				$config,
 				$header
 				) = $this->initApiParameters();
-			$this->api_elearning = new ELearningApi(
+			$this->api_elearning = new ELearningPlattformenApi(
 				$client,
 				$config,
 				$header
@@ -219,14 +262,14 @@ class ilVedaConnector
 			$this->logger->debug('No password notification required.');
 		}
 
-		if(!$this->api_elearning instanceof ELearningApi)
+		if(!$this->api_elearning instanceof ELearningPlattformenApi)
 		{
 			list(
 				$client,
 				$config,
 				$header
 				) = $this->initApiParameters();
-			$this->api_elearning = new ELearningApi(
+			$this->api_elearning = new ELearningPlattformenApi(
 				$client,
 				$config,
 				$header
