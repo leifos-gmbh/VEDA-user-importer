@@ -135,12 +135,23 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListe
 		}
 
 		// init claiming plugin
-		$this->claiming = \ilPluginAdmin::getPluginObject(
+		$admin = $DIC['ilPluginAdmin'];
+		foreach($admin->getActivePluginsForSlot(
 			self::CLAIMING_CTYPE,
 			self::CLAIMING_CNAME,
-			self::CLAIMING_SLOT_ID,
-			self::CLAIMING_NAME
-		);
+			self::CLAIMING_SLOT_ID
+		) as $plugin_name) {
+
+			if($plugin_name == self::CLAIMING_NAME) {
+				$this->claiming = \ilPluginAdmin::getPluginObject(
+					self::CLAIMING_CTYPE,
+					self::CLAIMING_CNAME,
+					self::CLAIMING_SLOT_ID,
+					self::CLAIMING_NAME
+				);
+			}
+		}
+
 	}
 
 	/**
