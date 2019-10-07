@@ -46,3 +46,4 @@ err_val_sess_remote_info#:#Die folgenden ILIAS-Sitzungen sind in diesem Ausbildu
 err_val_sess_local_info#:#Die folgenden Präsenzveranstaltungen sind als "Ausbildungsgangabschnitt" vorgesehen, es existieren jedoch keine entsprechenden ILIAS-Sitzungen.
 err_val_exc_remote_info#:#Die folgenden ILIAS-Übungen sind in diesem Ausbildungsgang nicht als "Ausbildungsgangabschnitt" vorgesehen.
 err_val_exc_local_info#:#Die folgenden Selbstlernabschnitte sind als "Ausbildungsgangabschnitt" vorgesehen, es existieren jedoch keine entsprechenden ILIAS-Übungen.
+success_validation#:#Die Zuordnung der "Ausbildungsgang-ID" und der "Ausbildungsgangabschnitt-IDs" wurde überprüft. Es wurden keine Fehler festgestellt.

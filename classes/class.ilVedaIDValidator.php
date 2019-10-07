@@ -364,6 +364,11 @@ class ilVedaIDValidator
 		return $this->err_template->get();
 	}
 
+	public function getSuccessMessage()
+	{
+		return $this->plugin->txt('success_validation');
+	}
+
 	/**
 	 * @return bool
 	 */
