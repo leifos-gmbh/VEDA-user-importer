@@ -38,3 +38,5 @@ err_claiming_missing#:#Der Import kann nicht durchgeführt werden, da das "VedaM
 tbl_settings_section_course_sync#:#Einstellungen zur Kurssynchronisierung
 tbl_settings_course_import#:#Importverzeichnis
 tbl_settings_course_import_info#:#Bitte wählen Sie die Kategorie aus, in der neue Ausbildungszüge erstellt werden sollen.
+training_course#:#Ausbildungsgang ID
+training_course_info#:#ID des Ausbildungsgang

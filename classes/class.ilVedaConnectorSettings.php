@@ -45,6 +45,12 @@ class ilVedaConnectorSettings
 
 
 	/**
+	 * @var string
+	 */
+	private $training_course = '';
+
+
+	/**
 	 * @var int
 	 */
 	private $participant_role = 0;
@@ -103,6 +109,7 @@ class ilVedaConnectorSettings
 		$this->setRestPassword($this->getStorage()->get('restpassword', $this->getRestPassword()));
 		$this->setAuthenticationToken($this->getStorage()->get('resttoken', $this->getAuthenticationToken()));
 		$this->setPlatformId($this->getStorage()->get('platform_id', $this->getPlatformId()));
+		$this->setTrainingCourse($this->getStorage()->get('training_course', $this->getTrainingCourse()));
 
 		$this->setActive((bool) $this->getStorage()->get('active', $this->isActive()));
 		$this->setLogLevel($this->getStorage()->get('loglevel', $this->getLogLevel()));
@@ -148,6 +155,7 @@ class ilVedaConnectorSettings
 		$this->getStorage()->set('resturl', $this->getRestUrl());
 		$this->getStorage()->set('resttoken', $this->getAuthenticationToken());
 		$this->getStorage()->set('platform_id', $this->getPlatformId());
+		$this->getStorage()->set('training_course', $this->getTrainingCourse());
 
 		$this->getStorage()->set('active', (int) $this->isActive());
 		$this->getStorage()->set('loglevel', $this->getLogLevel());
@@ -339,5 +347,21 @@ class ilVedaConnectorSettings
 	public function setImportDirectory(int $ref_id)
 	{
 		$this->import_ref_id = $ref_id;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTrainingCourse(): string
+	{
+		return $this->training_course;
+	}
+
+	/**
+	 * @param string $training_course
+	 */
+	public function setTrainingCourse(string $training_course): void
+	{
+		$this->training_course = $training_course;
 	}
 }

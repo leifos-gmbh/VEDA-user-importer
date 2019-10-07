@@ -59,7 +59,8 @@ class LernerfolgMeldenApiDto implements ModelInterface, ArrayAccess
     protected static $swaggerTypes = [
         'lernerfolg' => 'bool',
         'lernerfolg_gemeldet_am' => '\DateTime',
-        'links' => '\Swagger\Client\Model\Link[]'
+        'links' => '\Swagger\Client\Model\Link[]',
+        'praktikumsbericht_eingang_am' => '\DateTime'
     ];
 
     /**
@@ -70,7 +71,8 @@ class LernerfolgMeldenApiDto implements ModelInterface, ArrayAccess
     protected static $swaggerFormats = [
         'lernerfolg' => null,
         'lernerfolg_gemeldet_am' => 'date',
-        'links' => null
+        'links' => null,
+        'praktikumsbericht_eingang_am' => 'date'
     ];
 
     /**
@@ -102,7 +104,8 @@ class LernerfolgMeldenApiDto implements ModelInterface, ArrayAccess
     protected static $attributeMap = [
         'lernerfolg' => 'lernerfolg',
         'lernerfolg_gemeldet_am' => 'lernerfolgGemeldetAm',
-        'links' => 'links'
+        'links' => 'links',
+        'praktikumsbericht_eingang_am' => 'praktikumsberichtEingangAm'
     ];
 
     /**
@@ -113,7 +116,8 @@ class LernerfolgMeldenApiDto implements ModelInterface, ArrayAccess
     protected static $setters = [
         'lernerfolg' => 'setLernerfolg',
         'lernerfolg_gemeldet_am' => 'setLernerfolgGemeldetAm',
-        'links' => 'setLinks'
+        'links' => 'setLinks',
+        'praktikumsbericht_eingang_am' => 'setPraktikumsberichtEingangAm'
     ];
 
     /**
@@ -124,7 +128,8 @@ class LernerfolgMeldenApiDto implements ModelInterface, ArrayAccess
     protected static $getters = [
         'lernerfolg' => 'getLernerfolg',
         'lernerfolg_gemeldet_am' => 'getLernerfolgGemeldetAm',
-        'links' => 'getLinks'
+        'links' => 'getLinks',
+        'praktikumsbericht_eingang_am' => 'getPraktikumsberichtEingangAm'
     ];
 
     /**
@@ -190,6 +195,7 @@ class LernerfolgMeldenApiDto implements ModelInterface, ArrayAccess
         $this->container['lernerfolg'] = isset($data['lernerfolg']) ? $data['lernerfolg'] : null;
         $this->container['lernerfolg_gemeldet_am'] = isset($data['lernerfolg_gemeldet_am']) ? $data['lernerfolg_gemeldet_am'] : null;
         $this->container['links'] = isset($data['links']) ? $data['links'] : null;
+        $this->container['praktikumsbericht_eingang_am'] = isset($data['praktikumsbericht_eingang_am']) ? $data['praktikumsbericht_eingang_am'] : null;
     }
 
     /**
@@ -201,6 +207,9 @@ class LernerfolgMeldenApiDto implements ModelInterface, ArrayAccess
     {
         $invalidProperties = [];
 
+        if ($this->container['lernerfolg'] === null) {
+            $invalidProperties[] = "'lernerfolg' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -284,6 +293,30 @@ class LernerfolgMeldenApiDto implements ModelInterface, ArrayAccess
     public function setLinks($links)
     {
         $this->container['links'] = $links;
+
+        return $this;
+    }
+
+    /**
+     * Gets praktikumsbericht_eingang_am
+     *
+     * @return \DateTime
+     */
+    public function getPraktikumsberichtEingangAm()
+    {
+        return $this->container['praktikumsbericht_eingang_am'];
+    }
+
+    /**
+     * Sets praktikumsbericht_eingang_am
+     *
+     * @param \DateTime $praktikumsbericht_eingang_am Für Praktika das Datum, wann der Praktikumsbericht eingegangen ist. Ansonsten null.
+     *
+     * @return $this
+     */
+    public function setPraktikumsberichtEingangAm($praktikumsbericht_eingang_am)
+    {
+        $this->container['praktikumsbericht_eingang_am'] = $praktikumsbericht_eingang_am;
 
         return $this;
     }

@@ -2,6 +2,7 @@
 /* Copyright (c) 1998-2009 ILIAS open source, Extended GPL, see docs/LICENSE */
 
 use GuzzleHttp\Client;
+use Swagger\Client\Api\AusbildungsgngeApi;
 use Swagger\Client\Api\ELearningApi;
 use Swagger\Client\ApiException;
 use Swagger\Client\Configuration;
@@ -37,9 +38,16 @@ class ilVedaConnector
 	private $initialized = false;
 
 	/**
-	 * @var ELearningApi
+	 * @var null | ELearningApi
 	 */
 	private $api_elearning = null;
+
+
+	/**
+	 * @var null | AusbildungsgngeApi
+	 */
+	private $api_training_course = null;
+
 
 
 
@@ -63,6 +71,48 @@ class ilVedaConnector
 			self::$instance  = new self();
 		}
 		return self::$instance;
+	}
+
+	public function getTrainingCourseTrains()
+
+
+	/**
+	 * Get training courses for ausbildungsgang
+	 */
+	public function getTrainingCourses(string $training_course_id)
+	{
+		if(!$this->api_training_course instanceof AusbildungsgngeApi) {
+			list(
+				$client,
+				$config,
+				$header
+				) = $this->initApiParameters();
+			$this->api_training_course = new AusbildungsgngeApi(
+				$client,
+				$config,
+				$header
+			);
+		}
+
+		try {
+			$response = $this->api_training_course->getAusbildungsgangUsingGET($training_course_id);
+			$this->logger->dump($response, \ilLogLevel::DEBUG);
+			return $response;
+		}
+		catch(ApiException $e) {
+			$this->logger->warning(\ilVedaConnectorSettings::HEADER_TOKEN . ': ' . $this->settings->getAuthenticationToken());
+			$this->logger->warning('GetAusbildungsgang failed with message: ' . $e->getMessage());
+			$this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+			$this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+			$this->logger->warning($e->getResponseBody());
+
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+		catch(Exception $e) {
+			$this->logger->warning('GetAusbildungsgang failed with message: ' . $e->getMessage());
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+
 	}
 
 
