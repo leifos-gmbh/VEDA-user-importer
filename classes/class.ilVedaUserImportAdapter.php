@@ -1,5 +1,6 @@
 <?php
 
+use Swagger\Client\Model\Organisation;
 use Swagger\Client\Model\TeilnehmerELearningPlattform;
 
 /**
@@ -26,6 +27,12 @@ class ilVedaUserImportAdapter
 	 * @var \Swagger\Client\Model\TeilnehmerELearningPlattform[]
 	 */
 	private $participants = [];
+
+
+	/**
+	 * @var array of organisations
+	 */
+	private $organisations = [];
 
 	/**
 	 * @var \ilXmlWriter|null
@@ -81,9 +88,6 @@ class ilVedaUserImportAdapter
 		foreach($this->getParticipants() as $participant_container)
 		{
 			$usr_id = $this->fetchUserId($participant_container);
-
-
-
 
 			if(!$this->validateParticipant($usr_id, $participant_container))
 			{
@@ -214,6 +218,8 @@ class ilVedaUserImportAdapter
 
 			$this->writer->xmlElement('Firstname', [], $participant_container->getTeilnehmer()->getVorname());
 			$this->writer->xmlElement('Lastname',[], $participant_container->getTeilnehmer()->getNachname());
+
+			$this->parseOrganisationInfo($participant_container->getTeilnehmer()->getGeschaeftlichOrganisationId());
 
 			$this->writer->xmlEndTag('User');
 
@@ -398,6 +404,55 @@ class ilVedaUserImportAdapter
 		}
 		$user_status->setImportFailure(false);
 		$user_status->save();
+	}
+
+	/**
+	 * @param string|null $orgoid
+	 */
+	protected function parseOrganisationInfo(?string $orgoid)
+	{
+		if(!$orgoid)
+		{
+			return;
+		}
+
+		if(isset($this->organisations[$orgoid])) {
+
+			$this->writeOrganisationInfo($this->organisations[$orgoid]);
+			return true;
+		}
+
+		$connector = \ilVedaConnector::getInstance();
+		try {
+			$org = $connector->getOrganisation($orgoid);
+			$this->organisations[$orgoid] = $org;
+			$this->writeOrganisationInfo($this->organisations[$orgoid]);
+		}
+		catch(\ilVedaConnectionException $e) {
+			$this->logger->warning('Cannot read organisation info for org oid: ' . $orgoid);
+		}
+	}
+
+	/**
+	 * @param $orgoid
+	 */
+	protected function writeOrganisationInfo(Organisation $org)
+	{
+		$org_parts = [];
+		if(strlen(trim($org->getOrganisationsname1()))) {
+			$org_parts[] = $org->getOrganisationsname1();
+		}
+		if(strlen(trim($org->getOrganisationsname2()))) {
+			$org_parts[] = $org->getOrganisationsname2();
+		}
+		if(strlen(trim($org->getOrganisationsname3()))) {
+			$org_parts[] = $org->getOrganisationsname3();
+		}
+
+		if(count($org_parts))
+		{
+			$this->writer->xmlElement('Institution', [] , implode(' ' , $org_parts));
+		}
 	}
 
 

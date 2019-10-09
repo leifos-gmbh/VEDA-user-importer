@@ -6,6 +6,7 @@ use Swagger\Client\Api\AusbildungsgngeApi;
 use Swagger\Client\ApiException;
 use Swagger\Client\Configuration;
 use Swagger\Client\Api\ELearningPlattformenApi;
+use Swagger\Client\Api\OrganisationenApi;
 
 /**
  * Connector for all rest api calls.
@@ -45,6 +46,12 @@ class ilVedaConnector
 	 * @var null | AusbildungsgngeApi
 	 */
 	private $api_training_course = null;
+
+
+	/**
+	 * @var null | OrganisationenApi
+	 */
+	private $api_organisation = null;
 
 
 
@@ -116,6 +123,46 @@ class ilVedaConnector
 		}
 
 
+	}
+
+	/**
+	 * @param string $orgr_oid
+	 * @return \Swagger\Client\Model\Organisation
+	 * @throws \ilVedaConnectionException
+	 */
+	public function getOrganisation(string $orgr_oid)
+	{
+		if(!$this->api_organisation instanceof OrganisationenApi) {
+			list(
+				$client,
+				$config,
+				$header
+				) = $this->initApiParameters();
+			$this->api_organisation = new OrganisationenApi(
+				$client,
+				$config,
+				$header
+			);
+		}
+
+		try {
+			$response = $this->api_organisation->getOrganisationUsingGET($orgr_oid);
+			$this->logger->dump($response, \ilLogLevel::DEBUG);
+			return $response;
+		}
+		catch(ApiException $e) {
+			$this->logger->warning(\ilVedaConnectorSettings::HEADER_TOKEN . ': ' . $this->settings->getAuthenticationToken());
+			$this->logger->warning('getOrganisationAPI failed with message: ' . $e->getMessage());
+			$this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+			$this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+			$this->logger->warning($e->getResponseBody());
+
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+		catch(Exception $e) {
+			$this->logger->warning('GetOrganisationAPI failed with message: ' . $e->getMessage());
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
 	}
 
 
