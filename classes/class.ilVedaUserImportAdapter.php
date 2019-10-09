@@ -88,6 +88,12 @@ class ilVedaUserImportAdapter
 			}
 
 			if($usr_id) {
+				
+				$new_login = '';
+				if(!$this->updateLogin($usr_id, $participant_container, $new_login)) {
+					continue;
+				}
+
 				$this->writer->xmlStartTag(
 					'User',
 					[
@@ -95,7 +101,12 @@ class ilVedaUserImportAdapter
 						'Action' => 'Update',
 						'ImportId' => $participant_container->getTeilnehmer()->getOid()
 					]);
-				// @todo no login name update supported
+
+				$this->writer->xmlElement(
+					'Login',
+					[],
+					$participant_container->getBenutzername()
+				);
 			}
 			else {
 				$this->writer->xmlStartTag('User',
@@ -265,7 +276,7 @@ class ilVedaUserImportAdapter
 			$this->logger->debug('Existing usr_account with id: ' . $usr_id . ' is valid');
 			return true;
 		}
-		// no usr_id given => usr is valid if login doed not exist
+		// no usr_id given => usr is valid if login does not exist
 		$login = $participant->getBenutzername();
 		$generated_login = \ilAuthUtils::_generateLogin($login);
 
@@ -280,6 +291,45 @@ class ilVedaUserImportAdapter
 			$user_status->save();
 			return false;
 		}
+		return true;
+	}
+
+	/**
+	 * @param int $usr_id
+	 * @param \Swagger\Client\Model\TeilnehmerELearningPlattform $participant
+	 * @param string $new_login
+	 * @return bool
+	 * @throws \ilDatabaseException
+	 * @throws \ilObjectNotFoundException
+	 */
+	protected function updateLogin(int $usr_id, TeilnehmerELearningPlattform $participant, string &$new_login)
+	{
+		$user = \ilObjectFactory::getInstanceByObjId($usr_id, false);
+		if(!$user instanceof \ilObjUser) {
+			$this->logger->warning('Cannot find existing user with id: ' . $usr_id);
+			return false;
+		}
+
+		$login = $participant->getBenutzername();
+		if(strcmp($login,$user->getLogin()) === 0) {
+			$this->logger->debug('User login name unchanged.');
+			$new_login = $login;
+			return true;
+		}
+
+		$generated_login = \ilAuthUtils::_generateLogin($login);
+		if(strcmp($generated_login, $login) !== 0) {
+
+			$this->logger->warning('User with login: ' . $login . ' already exists.');
+
+			$user_status = new \ilVedaUserStatus($participant->getTeilnehmer()->getOid());
+			$user_status->setLogin($participant->getBenutzername());
+			$user_status->setImportFailure(true);
+			$user_status->save();
+			return false;
+		}
+
+		$new_login = $generated_login;
 		return true;
 	}
 

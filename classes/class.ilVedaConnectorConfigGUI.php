@@ -507,7 +507,6 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		);
 
 	}
-
 	/**
 	 * Test connection
 	 */
