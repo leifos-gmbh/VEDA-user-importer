@@ -82,13 +82,24 @@ class ilVedaUserImportAdapter
 		{
 			$usr_id = $this->fetchUserId($participant_container);
 
+
+
+
 			if(!$this->validateParticipant($usr_id, $participant_container))
 			{
 				continue;
 			}
 
 			if($usr_id) {
-				
+
+				try {
+					$user = \ilObjectFactory::getInstanceByObjId($usr_id);
+				}
+				catch(\ilObjectNotFoundException $e) {
+					$this->logger->warning('Cannot create user instance for: ' . $usr_id);
+					continue;
+				}
+
 				$new_login = '';
 				if(!$this->updateLogin($usr_id, $participant_container, $new_login)) {
 					continue;
@@ -107,6 +118,26 @@ class ilVedaUserImportAdapter
 					[],
 					$participant_container->getBenutzername()
 				);
+
+				if(!$this->hasPasswordChanged($user)) {
+					$this->writer->xmlElement(
+						'Password',
+						[
+							'Type' => 'PLAIN'
+						],
+						$participant_container->getInitialesPasswort()
+					);
+				}
+				if($this->isGenderEmpty($user))
+				{
+					$this->writer->xmlElement(
+						'Gender',
+						[],
+						strtolower($participant_container->getTeilnehmer()->getGeschlecht())
+					);
+				}
+
+
 			}
 			else {
 				$this->writer->xmlStartTag('User',
@@ -127,17 +158,18 @@ class ilVedaUserImportAdapter
 					],
 					$participant_container->getInitialesPasswort()
 				);
+				$this->writer->xmlElement(
+					'Gender',
+					[],
+					strtolower($participant_container->getTeilnehmer()->getGeschlecht())
+				);
 			}
 			$this->writer->xmlElement(
 				'Email',
 				[],
 				$participant_container->getEmail()
 			);
-			$this->writer->xmlElement(
-				'Gender',
-				[],
-				strtolower($participant_container->getTeilnehmer()->getGeschlecht())
-			);
+
 
 			if($participant_container->getTeilnehmer()->getGeburtsdatum() instanceof DateTime) {
 				$date_string = $participant_container->getTeilnehmer()->getGeburtsdatum()->format('Y-m-d');
@@ -331,6 +363,25 @@ class ilVedaUserImportAdapter
 
 		$new_login = $generated_login;
 		return true;
+	}
+
+	/**
+	 * @param \ilObjUser $user
+	 * @return bool
+	 */
+	protected function hasPasswordChanged(\ilObjUser $user)
+	{
+		$last_change = $user->getLastPasswordChangeTS();
+		return $last_change > 0;
+	}
+
+	/**
+	 * @param \ilObjUser $user
+	 * @return bool
+	 */
+	protected function isGenderEmpty(\ilObjUser $user)
+	{
+		return $user->getGender() == '';
 	}
 
 	/**
