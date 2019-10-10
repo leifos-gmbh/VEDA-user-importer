@@ -453,6 +453,47 @@ class ilVedaUserImportAdapter
 		{
 			$this->writer->xmlElement('Institution', [] , implode(' ' , $org_parts));
 		}
+
+		$plugin = \ilVedaConnectorPlugin::getInstance();
+		if(!$plugin->isUDFClaimingPluginAvailable()) {
+			$this->logger->warning('Import of organisation information failed: no udf plugin found');
+			return;
+		}
+		$udfclaiming = $plugin->getUDFClaimingPlugin();
+		foreach($udfclaiming->getFields() as $field_name => $field_id) {
+
+			$value = '';
+			switch($field_name) {
+
+				case \ilVedaUDFClaimingPlugin::FIELD_SUPERVISOR:
+
+					$value = $org->getAufsichtspersonName();
+					break;
+
+				case \ilVedaUDFClaimingPlugin::FIELD_SUPERVISOR_EMAIL:
+					$value = $org->getAufsichtspersonEMail();
+					break;
+
+				case \ilVedaUDFClaimingPlugin::FIELD_MEMBER_ID:
+					$value = $org->getMitgliedsnummer();
+					break;
+
+				default:
+					$this->logger->error('Unknown field id given: ' . $field_id);
+					break;
+			}
+
+			$this->writer->xmlElement(
+				'UserDefinedField',
+				[
+					'Id' => 'il_' . IL_INST_ID . '_udf_' . $field_id,
+				],
+				$value
+			);
+		}
+
+
+
 	}
 
 
