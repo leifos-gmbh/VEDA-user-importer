@@ -21,6 +21,12 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListe
 
 
 	/**
+	 * @var null | \ilVedaUDFClaimingPlugin
+	 */
+	private $udfclaiming = null;
+
+
+	/**
 	 * @var null | \ilVedaConnectorPlugin
 	 */
 	private static $instance = null;
@@ -47,6 +53,13 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListe
 	const CLAIMING_SLOT_ID = 'amdc';
 	const CLAIMING_NAME = 'VedaMDClaiming';
 
+	/**
+	 * Claiming plugin
+	 */
+	const CLAIMING_UDF_CTYPE = 'Services';
+	const CLAIMING_UDF_CNAME = 'User';
+	const CLAIMING_UDF_SLOT_ID = 'udfc';
+	const CLAIMING_UDF_NAME = 'VedaUDFClaiming';
 
 	/**
 	 * @return \ilVedaConnectorPlugin
@@ -134,6 +147,8 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListe
 			$handler->setLevel($settings->getLogLevel());
 		}
 
+		$this->logger->info('Init claiming plugin');
+
 		// init claiming plugin
 		$admin = $DIC['ilPluginAdmin'];
 		foreach($admin->getActivePluginsForSlot(
@@ -152,6 +167,28 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListe
 			}
 		}
 
+		$this->logger->info('Init udf plugin');
+
+		// init udf claiming plugin
+		$admin = $DIC['ilPluginAdmin'];
+		foreach($admin->getActivePluginsForSlot(
+			self::CLAIMING_UDF_CTYPE,
+			self::CLAIMING_UDF_CNAME,
+			self::CLAIMING_UDF_SLOT_ID
+		) as $plugin_name) {
+
+			$this->logger->info($plugin_name);
+
+			if($plugin_name == self::CLAIMING_UDF_NAME) {
+				$this->udfclaiming = \ilPluginAdmin::getPluginObject(
+					self::CLAIMING_UDF_CTYPE,
+					self::CLAIMING_UDF_CNAME,
+					self::CLAIMING_UDF_SLOT_ID,
+					self::CLAIMING_UDF_NAME
+				);
+			}
+		}
+
 	}
 
 	/**
@@ -163,11 +200,27 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListe
 	}
 
 	/**
+	 * @return \ilVedaUDFClaimingPlugin|null
+	 */
+	public function getUDFClaimingPlugin()
+	{
+		return $this->udfclaiming;
+	}
+
+	/**
 	 * Check if claiming plugin is available and active
 	 */
 	public function isClaimingPluginAvailable()
 	{
 		return $this->claiming instanceof \ilVedaMDClaimingPlugin;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isUDFClaimingPluginAvailable()
+	{
+		return $this->udfclaiming instanceof \ilVedaUDFClaimingPlugin;
 	}
 
 	/**

@@ -35,6 +35,7 @@ tbl_usr_result_pwd_changed#:#Passwort geändert
 tbl_usr_result_import_failure#:#Fehlermeldungen
 err_import_usr_duplicate#:#Duplikat: ein ILIAS-Benutzerkonto mit dem selben Benutzernamen existiert bereits.
 err_claiming_missing#:#Der Import kann nicht durchgeführt werden, da das "VedaMDClaiming-Plugin" nicht vorhanden oder nicht aktiviert ist.
+err_udf_claiming_missing#:#Der Import kann nicht durchgeführt werden, da das "VedaUDFClaiming-Plugin" nicht vorhanden oder nicht aktiviert ist.
 tbl_settings_section_course_sync#:#Einstellungen zur Kurssynchronisierung
 tbl_settings_course_import#:#Importverzeichnis
 tbl_settings_course_import_info#:#Bitte wählen Sie die Kategorie aus, in der neue Ausbildungszüge erstellt werden sollen.

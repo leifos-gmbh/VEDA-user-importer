@@ -160,6 +160,9 @@ class ilVedaImporter
 		if(!$this->plugin->isClaimingPluginAvailable()) {
 			throw new \ilVedaClaimingMissingException('', \ilVedaClaimingMissingException::ERR_MISSING);
 		}
+		if(!$this->plugin->isUDFClaimingPluginAvailable()) {
+			throw new \ilVedaClaimingMissingException('', \ilVedaClaimingMissingException::ERR_MISSING_UDF);
+		}
 	}
 
 }

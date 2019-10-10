@@ -12,9 +12,11 @@
 class ilVedaClaimingMissingException extends ilException
 {
 	public const ERR_MISSING = 1;
+	public const ERR_MISSING_UDF = 2;
 
 	private static $code_messages = [
-		self::ERR_MISSING => 'err_claiming_missing'
+		self::ERR_MISSING => 'err_claiming_missing',
+		self::ERR_MISSING_UDF => 'err_udf_claiming_missing'
 	];
 
 	/**
