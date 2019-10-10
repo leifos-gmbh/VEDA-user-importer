@@ -188,6 +188,7 @@ class ilVedaIDValidator
 
 				if($segment->getAusbildungsgangabschnittsart() != self::REMOTE_SESSION_TYPE) {
 					$this->logger->debug('Ignoring type: ' . $segment->getAusbildungsgangabschnittsart());
+					continue;
 				}
 
 
@@ -238,10 +239,11 @@ class ilVedaIDValidator
 			$found_remote = false;
 			foreach($this->training_course->getAusbildungsgangabschnitte() as $segment) {
 
+				/**
 				if($segment->getAusbildungsgangabschnittsart() != self::REMOTE_EXERCISE_TYPE) {
 					$this->logger->debug('Ignoring type: ' . $segment->getAusbildungsgangabschnittsart());
 				}
-
+				 **/
 
 				$remote_id = $segment->getOid();
 				if(strcmp($local_id, $remote_id) === 0) {
@@ -322,7 +324,7 @@ class ilVedaIDValidator
 		$missing = [];
 		foreach($this->training_course->getAusbildungsgangabschnitte() as $segment) {
 
-			if($segment->getAusbildungsgangabschnittsart() != self::REMOTE_EXERCISE_TYPE) {
+			if($segment->getAusbildungsgangabschnittsart() == self::REMOTE_SESSION_TYPE) {
 				$this->logger->debug('Ignoring segment of type: ' . $segment->getAusbildungsgangabschnittsart());
 				continue;
 			}
