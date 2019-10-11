@@ -7,11 +7,13 @@ use Monolog\Handler\StreamHandler;
  *
  * @author Stefan Meyer <smeyer.ilias@gmx.de>
  */
-class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListener
+class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventListener
 {
 	protected const USER_SERVICE = 'Services/User';
+	protected const OBJECT_SERVICE = 'Services/Object';
 	protected const EVENT_UPDATE_PASSWORD = 'passwordChanged';
 	protected const EVENT_DELETE_USER = 'deleteUser';
+	protected const EVENT_AFTER_CLONING = 'afterCloning';
 
 
 	/**
@@ -147,8 +149,6 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListe
 			$handler->setLevel($settings->getLogLevel());
 		}
 
-		$this->logger->info('Init claiming plugin');
-
 		// init claiming plugin
 		$admin = $DIC['ilPluginAdmin'];
 		foreach($admin->getActivePluginsForSlot(
@@ -166,8 +166,6 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListe
 				);
 			}
 		}
-
-		$this->logger->info('Init udf plugin');
 
 		// init udf claiming plugin
 		$admin = $DIC['ilPluginAdmin'];
@@ -269,6 +267,11 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListe
 	 */
 	public static function handleEvent($a_component, $a_event, $a_parameter)
 	{
+		$plugin = self::getInstance();
+		$logger = $plugin->getLogger();
+
+		$logger->info('Handling event : ' . $a_event . ' from ' . $a_component);
+
 		if(
 			$a_component == self::USER_SERVICE &&
 			$a_event == self::EVENT_UPDATE_PASSWORD
@@ -282,6 +285,18 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin implements \ilAppEventListe
 		)
 		{
 			\ilVedaUserStatus::handleDeleteAccount($a_parameter['usr_id']);
+		}
+		if(
+			$a_component == self::OBJECT_SERVICE &&
+			$a_event == self::EVENT_AFTER_CLONING
+		)
+		{
+			$course_importer = new \ilVedaCourseImportAdapter();
+			$course_importer->handleAfterCloningEvent(
+				$a_parameter['source_id'],
+				$a_parameter['target_id'],
+				$a_parameter['copy_id']
+			);
 		}
 	}
 }

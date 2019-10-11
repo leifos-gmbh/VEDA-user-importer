@@ -203,7 +203,6 @@ class ilVedaIDValidator
 			}
 		}
 
-		$this->logger->dump($missing);
 
 		if(count($missing)) {
 
@@ -217,7 +216,6 @@ class ilVedaIDValidator
 			$this->err_template->setCurrentBlock('sess_remote');
 			$this->err_template->setVariable('SESS_INFO_REMOTE', $this->plugin->txt('err_val_sess_remote_info'));
 			$this->err_template->parseCurrentBlock();
-			$this->logger->dump($missing);
 			return false;
 		}
 		return true;
@@ -268,7 +266,6 @@ class ilVedaIDValidator
 			$this->err_template->setCurrentBlock('exc_remote');
 			$this->err_template->setVariable('EXC_INFO_REMOTE', $this->plugin->txt('err_val_exc_remote_info'));
 			$this->err_template->parseCurrentBlock();
-			$this->logger->dump($missing);
 			return false;
 		}
 		return true;
@@ -311,7 +308,6 @@ class ilVedaIDValidator
 			$this->err_template->setCurrentBlock('sess_local');
 			$this->err_template->setVariable('SESS_INFO_LOCAL', $this->plugin->txt('err_val_sess_local_info'));
 			$this->err_template->parseCurrentBlock();
-			$this->logger->dump($missing);
 			return false;
 		}
 	}
@@ -353,7 +349,6 @@ class ilVedaIDValidator
 			$this->err_template->setCurrentBlock('exc_local');
 			$this->err_template->setVariable('EXC_INFO_LOCAL', $this->plugin->txt('err_val_exc_local_info'));
 			$this->err_template->parseCurrentBlock();
-			$this->logger->dump($missing);
 			return false;
 		}
 	}
@@ -385,7 +380,6 @@ class ilVedaIDValidator
 		$connector = \ilVedaConnector::getInstance();
 		try {
 			$this->training_course = $connector->getTrainingCourseSegments($this->training_course_id);
-			$this->logger->dump($this->training_course);
 		}
 		catch(\ilVedaConnectionException $e) {
 			$this->err_template->setVariable('SIMPLE_FAILURE', $this->plugin->txt('err_val_wrong_tc'));

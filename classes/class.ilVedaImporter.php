@@ -138,7 +138,8 @@ class ilVedaImporter
 		}
 		catch (ilVedaConnectionException $e) {
 			throw $e;
-		} catch (ilVedaUserImporterException $e) {
+		}
+		catch (ilVedaUserImporterException $e) {
 			throw $e;
 		}
 	}
@@ -148,6 +149,18 @@ class ilVedaImporter
 	 */
 	protected function importCourses()
 	{
+		try {
+
+			$importer = new \ilVedaCourseImportAdapter();
+			$importer->import();
+		}
+		catch(\ilVedaConnectionException $e) {
+			throw $e;
+		}
+		catch(\ilVedaCourseImporterException $e) {
+			throw $e;
+		}
+
 		return true;
 	}
 

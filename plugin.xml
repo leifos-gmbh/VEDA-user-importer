@@ -2,5 +2,6 @@
 <plugin id="vedaimp">
    <events>
       <event type="listen" id="Services/User" />
+      <event type="listen" id="Services/Object" />
    </events>
 </plugin>

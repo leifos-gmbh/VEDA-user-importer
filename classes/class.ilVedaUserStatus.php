@@ -83,8 +83,6 @@ class ilVedaUserStatus
 			'where status_created = ' . $db->quote(self::STATUS_PENDING, 'integer') . ' ' .
 			'and import_failure = ' . $db->quote(0 , 'integer');
 		$res = $db->query($query);
-		$logger->dump($query);
-
 		$pending_participants = [];
 		while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
 

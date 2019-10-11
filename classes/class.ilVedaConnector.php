@@ -7,6 +7,7 @@ use Swagger\Client\ApiException;
 use Swagger\Client\Configuration;
 use Swagger\Client\Api\ELearningPlattformenApi;
 use Swagger\Client\Api\OrganisationenApi;
+use Swagger\Client\Model\Ausbildungszug;
 
 /**
  * Connector for all rest api calls.
@@ -80,10 +81,10 @@ class ilVedaConnector
 
 	/**
 	 * @param string $training_course_id
-	 * @return mixed
+	 * @return Ausbildungszug[]
 	 * @throws \ilVedaConnectionException
 	 */
-	public function getTrainingCourseTrains(string $training_course_id)
+	public function getTrainingCourseTrains(string $training_course_id) : array
 	{
 		if(!$this->api_elearning instanceof ELearningPlattformenApi)
 		{
@@ -104,7 +105,6 @@ class ilVedaConnector
 				$this->settings->getPlatformId(),
 				$training_course_id
 			);
-			$this->logger->dump($response, \ilLogLevel::DEBUG);
 			return $response;
 		}
 		catch(ApiException $e) {
@@ -147,7 +147,6 @@ class ilVedaConnector
 
 		try {
 			$response = $this->api_organisation->getOrganisationUsingGET($orgr_oid);
-			$this->logger->dump($response, \ilLogLevel::DEBUG);
 			return $response;
 		}
 		catch(ApiException $e) {
@@ -186,7 +185,6 @@ class ilVedaConnector
 
 		try {
 			$response = $this->api_training_course->getAusbildungsgangUsingGET($training_course_id);
-			$this->logger->dump($response, \ilLogLevel::DEBUG);
 			return $response;
 		}
 		catch(ApiException $e) {
@@ -228,7 +226,6 @@ class ilVedaConnector
 
 		try {
 			$response = $this->api_elearning->getTeilnehmerELearningPlattformUsingGET($this->settings->getPlatformId());
-			$this->logger->dump($response, \ilLogLevel::DEBUG);
 			return $response;
 		}
 		catch(ApiException $e) {
