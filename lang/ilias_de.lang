@@ -48,3 +48,7 @@ err_val_sess_local_info#:#Die folgenden Präsenzveranstaltungen sind als "Ausbil
 err_val_exc_remote_info#:#Die folgenden ILIAS-Übungen sind in diesem Ausbildungsgang nicht als "Ausbildungsgangabschnitt" vorgesehen.
 err_val_exc_local_info#:#Die folgenden Selbstlernabschnitte sind als "Ausbildungsgangabschnitt" vorgesehen, es existieren jedoch keine entsprechenden ILIAS-Übungen.
 success_validation#:#Die Zuordnung der "Ausbildungsgang-ID" und der "Ausbildungsgangabschnitt-IDs" wurde überprüft. Es wurden keine Fehler festgestellt.
+tbl_settings_switch_permanent_role#:#Rollenvorlage "Wechsler"
+tbl_settings_switch_permanent_role_info#:#Bitte geben Sie die ID einer Rollenvorlage für Teilnehmer mit Status "Wechsler" an.
+tbl_settings_switch_temp_role#:#Rollenvorlage "Temporärer Wechsler"
+tbl_settings_switch_temp_role_info#:#Bitte geben Sie die ID einer Rollenvorlage für Teilnehmer mit Status "Temporärer Wechsler" an.

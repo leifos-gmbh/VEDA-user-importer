@@ -62,6 +62,16 @@ class ilVedaConnectorSettings
 	private $import_ref_id = 0;
 
 	/**
+	 * @var int
+	 */
+	private $switch_permanent_role = 0;
+
+	/**
+	 * @var int
+	 */
+	private $switch_temporary_role = 0;
+
+	/**
 	 * ilVedaConnectorSettings constructor.
 	 */
 	public function __construct()
@@ -116,6 +126,40 @@ class ilVedaConnectorSettings
 		$this->setLogFile($this->getStorage()->get('logfile', $this->getLogFile()));
 		$this->setParticipantRole($this->getStorage()->get('part_role', $this->getParticipantRole()));
 		$this->setImportDirectory($this->getStorage()->get('import_ref_id', $this->getImportDirectory()));
+		$this->setTemporarySwitchRole($this->getStorage()->get('switch_temporary_role', $this->getTemporarySwitchRole()));
+		$this->setPermanentSwitchRole($this->getStorage()->get('switch_permanent_role', $this->getPermanentSwitchRole()));
+	}
+
+	/**
+	 * @param int $role_id
+	 */
+	public function setPermanentSwitchRole(int $role_id)
+	{
+		$this->switch_permanent_role = $role_id;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPermanentSwitchRole() : int
+	{
+		return $this->switch_permanent_role;
+	}
+
+	/**
+	 * @param int $role_id
+	 */
+	public function setTemporarySwitchRole(int $role_id)
+	{
+		$this->switch_temporary_role = $role_id;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getTemporarySwitchRole() : int
+	{
+		return $this->switch_temporary_role;
 	}
 
 	/**
@@ -162,6 +206,8 @@ class ilVedaConnectorSettings
 		$this->getStorage()->set('logfile', $this->getLogFile());
 		$this->getStorage()->set('part_role', $this->getParticipantRole());
 		$this->getStorage()->set('import_ref_id', $this->getImportDirectory());
+		$this->getStorage()->set('switch_temporary_role', $this->getTemporarySwitchRole());
+		$this->getStorage()->set('switch_permanent_role', $this->getPermanentSwitchRole());
 	}
 
 	/**

@@ -95,9 +95,12 @@ class ilVedaCourseImportAdapter
 
 			$target = \ilObjectFactory::getInstanceByRefId($a_target_id, false);
 			if($target instanceof \ilObjCourse) {
+				$this->logger->debug('Update title');
 				$target->setTitle($tc[self::CP_INFO_NAME]);
 				$target->setOfflineStatus(false);
 				$target->update();
+				$this->createDefaultCourseRole($target, $this->settings->getPermanentSwitchRole());
+				$this->createDefaultCourseRole($target, $this->settings->getTemporarySwitchRole());
 			}
 		}
 		if($source instanceof \ilObject) {
@@ -109,6 +112,45 @@ class ilVedaCourseImportAdapter
 		if($source instanceof \ilObjExercise) {
 			$this->migrateExerciseAppointments($a_target_id, $train);
 		}
+	}
+
+	/**
+	 * @param \ilObjCourse $course
+	 * @param int $rolt_id
+	 * @return \ilObjRole
+	 */
+	protected function createDefaultCourseRole(\ilObjCourse $course, int $rolt_id)
+	{
+		global $DIC;
+
+		$admin = $DIC->rbac()->admin();
+		$review = $DIC->rbac()->review();
+
+		$role = new \ilObjRole();
+		$role->setTitle(\ilObject::_lookupTitle($rolt_id));
+		$role->create();
+
+		$this->logger->debug('Created new local role');
+
+		$admin->assignRoleToFolder($role->getId(),$course->getRefId(),'y');
+		$admin->copyRoleTemplatePermissions(
+			$rolt_id,
+			ROLE_FOLDER_ID,
+			$course->getRefId(),
+			$role->getId()
+		);
+
+		$ops = $review->getOperationsOfRole(
+			$role->getId(),
+			ilObject::_lookupType($course->getRefId(), true),
+			$course->getRefId()
+		);
+		$admin->grantPermission(
+			$role->getId(),
+			$ops,
+			$course->getRefId()
+		);
+		return $role;
 	}
 
 	/**

@@ -196,6 +196,29 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 
 		$form->addItem($import_dir);
 
+		$switch = new \ilNumberInputGUI(
+			$this->getPluginObject()->txt('tbl_settings_switch_permanent_role'),
+			'switch_permanent'
+		);
+		$switch->setRequired(true);
+		if($settings->getPermanentSwitchRole()) {
+			$switch->setValue($settings->getPermanentSwitchRole());
+			$switch->setSuffix(\ilObject::_lookupTitle($settings->getPermanentSwitchRole()));
+		}
+		$switch->setInfo($this->getPluginObject()->txt('tbl_settings_switch_permanent_role_info'));
+		$form->addItem($switch);
+
+		$switcht = new \ilNumberInputGUI(
+			$this->getPluginObject()->txt('tbl_settings_switch_temp_role'),
+			'switch_temp'
+		);
+		$switcht->setRequired(true);
+		if($settings->getTemporarySwitchRole()) {
+			$switcht->setValue($settings->getTemporarySwitchRole());
+			$switcht->setSuffix(\ilObject::_lookupTitle($settings->getTemporarySwitchRole()));
+		}
+		$switcht->setInfo($this->getPluginObject()->txt('tbl_settings_switch_temp_role_info'));
+		$form->addItem($switcht);
 
 		return $form;
 	}
@@ -225,6 +248,8 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 
 				$category_ref_ids = $form->getInput('crs_import');
 				$settings->setImportDirectory((int) end($category_ref_ids));
+				$settings->setPermanentSwitchRole($form->getInput('switch_permanent'));
+				$settings->setTemporarySwitchRole($form->getInput('switch_temp'));
 				$settings->save();
 
 				ilUtil::sendSuccess($lng->txt('settings_saved'),true);
