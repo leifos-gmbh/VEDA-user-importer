@@ -103,7 +103,105 @@ class ilVedaCourseImportAdapter
 		if($source instanceof \ilObject) {
 			$this->mdhelper->migrateTrainingCourseSegmentToTrain($a_source_id, $a_target_id, $train);
 		}
+		if($source instanceof \ilObjSession) {
+			$this->migrateSessionAppointments($a_target_id, $train);
+		}
+		if($source instanceof \ilObjExercise) {
+			$this->migrateExerciseAppointments($a_target_id, $train);
+		}
 	}
+
+	/**
+	 * @param int $target_id
+	 * @param \Swagger\Client\Model\Ausbildungszug $train
+	 */
+	protected function migrateSessionAppointments(int $target_id, Ausbildungszug $train)
+	{
+		$session = \ilObjectFactory::getInstanceByRefId($target_id, false);
+		if(!$session instanceof \ilObjSession) {
+			$this->logger->error('Cannot initiate session with id: ' . $target_id);
+			return;
+		}
+		$app = $session->getFirstAppointment();
+
+		$segment_id = $this->mdhelper->findTrainSegmentId($session->getRefId());
+
+		if(!$segment_id)
+		{
+			$this->logger->debug('No md mapping found for target_id: ' . $target_id);
+			return;
+		}
+
+		foreach($train->getAusbildungszugabschnitte() as $train_segment) {
+
+			$segment_begin  = null;
+			$segment_end = null;
+			if($train_segment->getOid() == $segment_id) {
+
+				$segment_begin = $train_segment->getBeginn();
+				$segment_end = $train_segment->getEnde();
+			}
+			if($segment_begin instanceof DateTime) {
+				$this->logger->debug('Update starting time of session');
+				$app->setStart(new ilDateTime($segment_begin->getTimestamp(), IL_CAL_UNIX));
+			}
+			if($segment_end instanceof DateTime) {
+				$this->logger->debug('Update ending time of session');
+				$app->setEnd(new ilDateTime($segment_end->getTimestamp(),IL_CAL_UNIX));
+			}
+			$app->update();
+		}
+	}
+
+	/**
+	 * @param int $target_id
+	 * @param \Swagger\Client\Model\Ausbildungszug $train
+	 */
+	protected function migrateExerciseAppointments(int $target_id, Ausbildungszug $train)
+	{
+		$exercise = \ilObjectFactory::getInstanceByRefId($target_id, false);
+		if(!$exercise instanceof \ilObjExercise) {
+			$this->logger->error('Cannot initiate exercise with id: ' . $target_id);
+			return;
+		}
+
+		$segment_id = $this->mdhelper->findTrainSegmentId($exercise->getRefId());
+
+		if(!$segment_id)
+		{
+			$this->logger->debug('No md mapping found for target_id: ' . $target_id);
+			return;
+		}
+
+
+		$segment_start = $segment_end = null;
+		foreach($train->getAusbildungszugabschnitte() as $train_segment) {
+
+			$segment_start = $segment_end = null;
+			if($train_segment->getOid() == $segment_id) {
+
+				$segment_start = $train_segment->getBeginn();
+				$segment_end = $train_segment->getEnde();
+			}
+			if($segment_start instanceof DateTime) {
+				$this->logger->debug('Update starting time of exercise');
+				foreach(\ilExAssignment::getInstancesByExercise($exercise->getId()) as $assignment) {
+					$assignment->setStartTime($segment_start->getTimestamp());
+					$assignment->update();
+				}
+
+			}
+			if($segment_end instanceof DateTime) {
+				$this->logger->debug('Update deadline  of exercise');
+				foreach(\ilExAssignment::getInstancesByExercise($exercise->getId()) as $assignment) {
+					$assignment->setDeadlineMode(\ilExAssignment::DEADLINE_ABSOLUTE);
+					$assignment->setDeadline($segment_end->getTimestamp());
+					$assignment->update();
+				}
+			}
+		}
+	}
+
 
 	/**
 	 * @param array $info

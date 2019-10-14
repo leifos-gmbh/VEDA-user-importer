@@ -331,5 +331,29 @@ class ilVedaMDHelper
 
 	}
 
+	/**
+	 * @param int $ref_id
+	 * @return string
+	 */
+	public function findTrainSegmentId(int $ref_id) : string
+	{
+		$obj_id = \ilObject::_lookupObjId($ref_id);
+		$fields = $this->claiming->getFields();
+
+		$query = 'select value from adv_md_values_text ' .
+			'where field_id = ' . $this->db->quote(
+				$fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSZUGABSCHNITT],
+				\ilDBConstants::T_INTEGER) . ' '.
+			'and obj_id = ' . $this->db->quote(
+				$obj_id ,
+				\ilDBConstants::T_INTEGER);
+		$res = $this->db->query($query);
+		while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
+			return $row->value;
+		}
+		return '';
+
+	}
+
 
 }
