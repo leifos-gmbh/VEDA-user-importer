@@ -3,12 +3,8 @@
 use Swagger\Client\Model\Ausbildungszug;
 
 /**
- * Created by PhpStorm.
- * User: stefan
- * Date: 10.10.19
- * Time: 15:30
+ * Course import adapater
  */
-
 class ilVedaCourseImportAdapter
 {
 	protected const CP_INFO_AUSBILDUNGSGANG = 1;

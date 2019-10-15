@@ -108,6 +108,9 @@ class ilVedaImporter
 			if($this->isImportModeEnabled(self::IMPORT_CRS)) {
 				$this->importCourses();
 			}
+			if($this->isImportModeEnabled(self::IMPORT_MEM)) {
+				$this->importMembers();
+			}
 		}
 		catch (ilVedaConnectionException $e) {
 			throw $e;
@@ -175,6 +178,20 @@ class ilVedaImporter
 		}
 		if(!$this->plugin->isUDFClaimingPluginAvailable()) {
 			throw new \ilVedaClaimingMissingException('', \ilVedaClaimingMissingException::ERR_MISSING_UDF);
+		}
+	}
+
+	/**
+	 * Import membership assignments
+	 */
+	protected function importMembers()
+	{
+		try {
+			$importer = new ilVedaMemberImportAdapter();
+			$importer->import();
+		}
+		catch(\ilVedaConnectionException $e) {
+			throw $e;
 		}
 	}
 

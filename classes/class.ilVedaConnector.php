@@ -9,6 +9,7 @@ use Swagger\Client\Configuration;
 use Swagger\Client\Api\ELearningPlattformenApi;
 use Swagger\Client\Api\OrganisationenApi;
 use Swagger\Client\Model\Ausbildungszug;
+use Swagger\Client\Model\AusbildungszugTeilnehmer;
 
 /**
  * Connector for all rest api calls.
@@ -83,6 +84,46 @@ class ilVedaConnector
 			self::$instance  = new self();
 		}
 		return self::$instance;
+	}
+
+
+	/**
+	 * @param string|null $oid
+	 * @return AusbildungszugTeilnehmer[]
+	 * @throws \ilVedaConnectionException
+	 */
+	public function readTrainingCourseTrainMembers(?string $oid)
+	{
+		if(!$this->api_training_course_train instanceof AusbildungszgeApi)
+		{
+			list(
+				$client,
+				$config,
+				$header
+				) = $this->initApiParameters();
+			$this->api_training_course_train = new AusbildungszgeApi(
+				$client,
+				$config,
+				$header
+			);
+		}
+
+		try {
+			$response =  $this->api_training_course_train->getTeilnehmerVonAusbildungszugUsingGET($oid);
+			return $response;
+		}
+		catch(ApiException $e) {
+			$this->logger->error('getTeilnehmerVonAusbildungszugUsingGET failed with message: ' . $e->getMessage());
+			$this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+			$this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+			$this->logger->warning($e->getResponseBody());
+
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+		catch(Exception $e) {
+			$this->logger->warning('getTeilnehmerVonAusbildungszugUsingGET failed with message: ' . $e->getMessage());
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
 	}
 
 	/**

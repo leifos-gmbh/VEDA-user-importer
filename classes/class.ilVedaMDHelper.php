@@ -238,6 +238,28 @@ class ilVedaMDHelper
 	}
 
 	/**
+	 * Get all "Ausbildungszüge"
+	 * @return string[]
+	 */
+	public function findTrainingCourseTrains()
+	{
+		$fields = $this->claiming->getFields();
+
+		$query = 'select value from adv_md_values_text ' .
+			'where field_id = ' . $this->db->quote(
+				$fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSZUG],
+				\ilDBConstants::T_INTEGER);
+		$res = $this->db->query($query);
+
+		$oids = [];
+		while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
+
+			$oids[] = $row->value;
+		}
+		return $oids;
+	}
+
+	/**
 	 * @param int $oid
 	 * @return int
 	 * @throws \ilDatabaseException
