@@ -57,3 +57,5 @@ tbl_settings_switch_temp_role_info#:#Bitte geben Sie die ID einer Rollenvorlage 
 tbl_crs_result_created#:#Erstellt
 tbl_crs_result_pswitch#:#"Wechsler-Rolle"
 tbl_crs_result_tswitch#:#"Temporäre Wechsler-Rolle"
+role_available#:#Vorhanden
+role_unavailable#:#Nicht vorhanden

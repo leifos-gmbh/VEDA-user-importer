@@ -1,14 +1,22 @@
 <tr class="{CSS_ROW}">
 	<td class="std">
-		{TXT_TITLE}
+		<!-- BEGIN with_title -->
+		<a href="{TITLE_LINK}">{TXT_TITLE}</a>
+		<!-- END with_title -->
+		<!-- BEGIN is_deleted -->
+		<span class="ilAlert">{TXT_DELETED}</span>
+		<!-- END is_deleted -->
 		<div>
 			{OID}
 		</div>
 	</td>
 	<td class="std">
+		<img src="{CREATED_IMG}" />
 	</td>
 	<td class="std">
+		{TXT_PAVAILABLE}
 	</td>
 	<td class="std" >
+		{TXT_TAVAILABLE}
 	</td>
 </tr>

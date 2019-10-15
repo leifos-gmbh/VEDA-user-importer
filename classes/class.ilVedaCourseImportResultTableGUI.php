@@ -61,24 +61,23 @@ class ilVedaCourseImportResultTableGUI extends \ilTable2GUI
 	 */
 	public function parse()
 	{
+		global $DIC;
+
+		$tree = $DIC->repositoryTree();
+
 		$courses = \ilVedaCourseStatus::getAllCourses();
 
 		$rows = [];
 		foreach($courses as $course) {
 
 			$row = [];
+
 			$row['obj_id'] = $course->getObjId();
 			$row['title'] = \ilObject::_lookupTitle($course->getObjId());
 			$row['oid'] = $course->getOid();
 			$row['created'] = $course->getCreationStatus();
-			$row['pswitch'] = '';
-			if($course->getPermanentSwitchRole()) {
-				$row['pswitch'] = \ilObject::_lookupTitle($course->getPermanentSwitchRole());
-			}
-			$row['tswitch'] = '';
-			if($course->getTemporarySwitchRole()) {
-				$row['tswitch'] = \ilObject::_lookupTitle($course->getTemporarySwitchRole());
-			}
+			$row['pswitch'] = $course->getPermanentSwitchRole();
+			$row['tswitch'] = $course->getTemporarySwitchRole();
 			$rows[] = $row;
 		}
 		$this->setData($rows);
@@ -91,7 +90,47 @@ class ilVedaCourseImportResultTableGUI extends \ilTable2GUI
 	{
 		global $DIC;
 
-		$this->tpl->setVariable('TXT_TITLE', $row['title']);
+		$tree = $DIC->repositoryTree();
+
+		$obj_id = $row['obj_id'];
+		$refs = \ilObject::_getAllReferences($obj_id);
+		$ref = end($refs);
+		if(!$obj_id || $tree->isDeleted($ref)) {
+			$this->tpl->setCurrentBlock('is_deleted');
+			$this->tpl->setVariable('TXT_DELETED', $this->lng->txt('deleted'));
+			$this->tpl->parseCurrentBlock();
+		}
+		else {
+			$link = \ilLink::_getLink($ref);
+			$this->tpl->setCurrentBlock('with_title');
+			$this->tpl->setVariable('TITLE_LINK',$link);
+			$this->tpl->setVariable('TXT_TITLE', \ilObject::_lookupTitle($obj_id));
+			$this->tpl->parseCurrentBlock();
+		}
+
+		$this->tpl->setVariable('CREATED_IMG',
+			$row['created']  == \ilVedaCourseStatus::STATUS_SYNCHRONIZED ?
+				ilUtil::getImagePath('icon_ok.svg') :
+				ilUtil::getImagePath('icon_not_ok.svg')
+		);
+
+		if(\ilObject::_exists($row['tswitch'])) {
+			$this->tpl->setVariable('TXT_TAVAILABLE', $this->plugin->txt('role_available'));
+		}
+		else {
+			$this->tpl->setVariable('TXT_TAVAILABLE', $this->plugin->txt('role_unavailable'));
+
+		}
+		if(\ilObject::_exists($row['pswitch'])) {
+			$this->tpl->setVariable('TXT_PAVAILABLE', $this->plugin->txt('role_available'));
+		}
+		else {
+			$this->tpl->setVariable('TXT_PAVAILABLE', $this->plugin->txt('role_unavailable'));
+
+		}
+
+
+
 		$this->tpl->setVariable('OID', $row['oid']);
 	}
 }
