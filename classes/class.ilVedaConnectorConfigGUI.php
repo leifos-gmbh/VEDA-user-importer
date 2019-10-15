@@ -12,6 +12,7 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 
 	protected const SUBTAB_IMPORT = 'import';
 	protected const SUBTAB_IMPORT_USR = 'import_usr';
+	protected const SUBTAB_IMPORT_CRS = 'import_crs';
 
 
 	/**
@@ -508,6 +509,28 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		$tpl->setContent($table->getHTML());
 	}
 
+	/**
+	 * @throws \ilDatabaseException
+	 */
+	protected function importResultCourse()
+	{
+		global $DIC;
+
+		$tabs = $DIC->tabs();
+		$tpl = $DIC->ui()->mainTemplate();
+
+		$this->setSubTabs();
+		$tabs->activateTab(self::TAB_IMPORT);
+		$tabs->activateSubTab(self::SUBTAB_IMPORT_CRS);
+
+		$table = new ilVedaCourseImportResultTableGUI($this, __FUNCTION__);
+		$table->init();
+		$table->parse();
+
+		$tpl->setContent($table->getHTML());
+
+	}
+
 
 	/**
 	 * Set subtabs
@@ -529,6 +552,12 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 			self::SUBTAB_IMPORT_USR,
 			$this->getPluginObject()->txt('subtab_import_usr'),
 			$ctrl->getLinkTarget($this, 'importResultUser')
+		);
+
+		$tabs->addSubTab(
+			self::SUBTAB_IMPORT_CRS,
+			$this->getPluginObject()->txt('subtab_import_crs'),
+			$ctrl->getLinkTarget($this, 'importResultCourse')
 		);
 
 	}

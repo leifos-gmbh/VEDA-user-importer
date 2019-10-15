@@ -80,6 +80,21 @@ if(!$ilDB->tableExists('cron_crnhk_vedaimp_crs'))
 	$ilDB->addPrimaryKey('cron_crnhk_vedaimp_crs',['oid']);
 }
 ?>
-
+<#4>
+<?php
+if (!$ilDB->tableColumnExists('cron_crnhk_vedaimp_crs', 'obj_id'))
+{
+	$ilDB->addTableColumn(
+			'cron_crnhk_vedaimp_crs',
+			'obj_id',
+			[
+				"type" => "integer",
+				"notnull" => true,
+				"length" => 4,
+				"default" => 0
+			]
+	);
+}
+?>
 
 

@@ -156,6 +156,12 @@ class ilVedaCourseImportAdapter
 
 			$target = \ilObjectFactory::getInstanceByRefId($a_target_id, false);
 			if($target instanceof \ilObjCourse) {
+
+				$course_status = new \ilVedaCourseStatus($train->getOid());
+				$course_status->setObjId($target->getId());
+				$course_status->setCreationStatus(\ilVedaCourseStatus::STATUS_PENDING);
+				$course_status->save();
+
 				$this->logger->debug('Update title');
 				$target->setTitle($tc[self::CP_INFO_NAME]);
 				$target->setOfflineStatus(false);

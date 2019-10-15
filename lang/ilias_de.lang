@@ -29,7 +29,9 @@ tbl_veda_settings_lock#:#Import-Lock
 tbl_veda_settings_lock_info#:#Wenn aktiviert, läuft aktuell ein Import-Vorgang oder ein Import-Vorgang konnte nicht fehlerfrei durchgeführt werden. Deaktivieren Sie die Sperre nur dann, wenn Sie sicher sind, daß kein Inmport-Vorgang ausgeführt wird.
 subtab_import#:#Import
 subtab_import_usr#:#Benutzerimport
+subtab_import_crs#:#Kursimport
 tbl_import_result_usr#:#Benutzerimport-Status
+tbl_import_result_crs#:#Kursimport-Status
 tbl_usr_result_created#:#ILIAS-Benutzerkonto erstellt
 tbl_usr_result_pwd_changed#:#Passwort geändert
 tbl_usr_result_import_failure#:#Fehlermeldungen
@@ -52,3 +54,6 @@ tbl_settings_switch_permanent_role#:#Rollenvorlage "Wechsler"
 tbl_settings_switch_permanent_role_info#:#Bitte geben Sie die ID einer Rollenvorlage für Teilnehmer mit Status "Wechsler" an.
 tbl_settings_switch_temp_role#:#Rollenvorlage "Temporärer Wechsler"
 tbl_settings_switch_temp_role_info#:#Bitte geben Sie die ID einer Rollenvorlage für Teilnehmer mit Status "Temporärer Wechsler" an.
+tbl_crs_result_created#:#Erstellt
+tbl_crs_result_pswitch#:#"Wechsler-Rolle"
+tbl_crs_result_tswitch#:#"Temporäre Wechsler-Rolle"

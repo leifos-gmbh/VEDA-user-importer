@@ -16,6 +16,11 @@ class ilVedaCourseStatus
 	 */
 	private $oid = '';
 
+	/**
+	 * @var int
+	 */
+	private $obj_id = 0;
+
 
 	/**
 	 * @var int
@@ -63,6 +68,26 @@ class ilVedaCourseStatus
 		$this->logger = $DIC->logger()->vedaimp();
 
 		$this->read();
+	}
+
+	/**
+	 * @return ilVedaCourseStatus[]
+	 * @throws \ilDatabaseException
+	 */
+	public static function getAllCourses()
+	{
+		global $DIC;
+
+		$db = $DIC->database();
+
+		$query = 'select oid from ' . self::TABLE_NAME;
+		$res = $db->query($query);
+
+		$courses = [];
+		while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
+			$courses[] = new \ilVedaCourseStatus($row->oid);
+		}
+		return $courses;
 	}
 
 	/**
@@ -140,9 +165,10 @@ class ilVedaCourseStatus
 		}
 
 		$query = 'insert into ' . self::TABLE_NAME . ' ' .
-			'(oid, switchp, switcht, status_created) ' .
+			'(oid, obj_id, switchp, switcht, status_created) ' .
 			'values ( '.
 			$this->db->quote($this->getOid(),'text') . ', '.
+			$this->db->quote($this->getObjId(),'integer') . ', '.
 			$this->db->quote($this->getPermanentSwitchRole(),'integer'). ', '.
 			$this->db->quote($this->getTemporarySwitchRole(),'integer'). ', '.
 			$this->db->quote($this->getCreationStatus(), 'integer') . ' ) ';
@@ -157,6 +183,7 @@ class ilVedaCourseStatus
 	{
 		$query = 'update ' . self::TABLE_NAME . ' '.
 			'set ' .
+			'obj_id = ' . $this->db->quote($this->getObjId(),'integer') . ', ' .
 			'switchp = ' . $this->db->quote($this->getPermanentSwitchRole(),'integer') . ', ' .
 			'switcht = ' . $this->db->quote($this->getTemporarySwitchRole(),'integer') . ', ' .
 			'status_created = ' . $this->db->quote($this->getCreationStatus(),'integer') . ' ' .
@@ -195,6 +222,23 @@ class ilVedaCourseStatus
 			$this->setPermanentSwitchRole((int) $row->switchp);
 			$this->setTemporarySwitchRole((int) $row->switcht);
 			$this->setCreationStatus((int) $row->status_created);
+			$this->setObjId((int) $row->obj_id);
 		}
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getObjId(): int
+	{
+		return $this->obj_id;
+	}
+
+	/**
+	 * @param int $obj_id
+	 */
+	public function setObjId(int $obj_id): void
+	{
+		$this->obj_id = $obj_id;
 	}
 }
