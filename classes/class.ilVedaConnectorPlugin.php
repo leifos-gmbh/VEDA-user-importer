@@ -14,6 +14,7 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
 	protected const EVENT_UPDATE_PASSWORD = 'passwordChanged';
 	protected const EVENT_DELETE_USER = 'deleteUser';
 	protected const EVENT_AFTER_CLONING = 'afterCloning';
+	protected const EVENT_AFTER_CLONING_DEPENDENCIES = 'afterCloningDependencies';
 
 
 	/**
@@ -297,6 +298,18 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
 				$a_parameter['target_id'],
 				$a_parameter['copy_id']
 			);
+		}
+		if(
+			$a_component == self::OBJECT_SERVICE &&
+			$a_event == self::EVENT_AFTER_CLONING_DEPENDENCIES
+		) {
+			$course_importer = new \ilVedaCourseImportAdapter();
+			$course_importer->handleAfterCloningDependenciesEvent(
+				$a_parameter['source_id'],
+				$a_parameter['target_id'],
+				$a_parameter['copy_id']
+			);
+
 		}
 	}
 }

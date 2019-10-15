@@ -61,6 +61,67 @@ class ilVedaCourseImportAdapter
 	}
 
 	/**
+	 * @param int $source_id
+	 * @param int $target_id
+	 * @param int $copy_id
+	 */
+	public function handleAfterCloningDependenciesEvent(int $source_id, int $target_id, int $copy_id)
+	{
+		$this->logger->debug(
+			'Handling afterCloning event for for source_id: ' . $source_id .
+			' of type: ' . \ilObject::_lookupType($source_id, true)
+		);
+
+		$options = \ilCopyWizardOptions::_getInstance($copy_id);
+		$tc = $options->getTrainingCourseInfo();
+
+		if(!is_array($tc) || !count($tc)) {
+			$this->logger->debug('Ignoring non training course copy');
+			return;
+		}
+
+		$train = $this->readTrainingCourseTrainFromCopyInfo($tc);
+		if(!$train instanceof Ausbildungszug) {
+			$this->logger->notice('Reading remote info failed.');
+			$this->logger->dump($train, \ilLogLevel::NOTICE);
+			return;
+		}
+
+		$source = \ilObjectFactory::getInstanceByRefId($source_id, false);
+		if($source instanceof \ilObjCourse) {
+
+			$target = \ilObjectFactory::getInstanceByRefId($target_id, false);
+			if($target instanceof \ilObjCourse) {
+				$this->updateCourseCreatedStatus($train->getOid());
+			}
+			else {
+				$this->logger->notice('Target should be course type: ' . $target_id);
+			}
+		}
+		else {
+			$this->logger->debug('Nothing todo for non-course copy.');
+		}
+	}
+
+	/**
+	 * @param string $oid
+	 */
+	protected function updateCourseCreatedStatus(string $oid)
+	{
+		$connector = \ilVedaConnector::getInstance();
+		try {
+			$connector->sendTrainingCourseTrainCreated($oid);
+
+			$course_status = new \ilVedaCourseStatus($oid);
+			$course_status->setCreationStatus(\ilVedaCourseStatus::STATUS_SYNCHRONIZED);
+			$course_status->save();
+		}
+		catch(\ilVedaConnectionException $e) {
+			$this->logger->error('Cannot send course creation status');
+		}
+	}
+
+	/**
 	 * @param int $a_source_id
 	 * @param int $a_target_id
 	 * @param int $a_copy_id
@@ -99,8 +160,8 @@ class ilVedaCourseImportAdapter
 				$target->setTitle($tc[self::CP_INFO_NAME]);
 				$target->setOfflineStatus(false);
 				$target->update();
-				$this->createDefaultCourseRole($target, $this->settings->getPermanentSwitchRole());
-				$this->createDefaultCourseRole($target, $this->settings->getTemporarySwitchRole());
+				$this->createDefaultCourseRole($target, $this->settings->getPermanentSwitchRole(),$train);
+				$this->createDefaultCourseRole($target, $this->settings->getTemporarySwitchRole(),$train);
 			}
 		}
 		if($source instanceof \ilObject) {
@@ -117,9 +178,10 @@ class ilVedaCourseImportAdapter
 	/**
 	 * @param \ilObjCourse $course
 	 * @param int $rolt_id
+	 * @param \Swagger\Client\Model\Ausbildungszug $train
 	 * @return \ilObjRole
 	 */
-	protected function createDefaultCourseRole(\ilObjCourse $course, int $rolt_id)
+	protected function createDefaultCourseRole(\ilObjCourse $course, int $rolt_id, Ausbildungszug $train)
 	{
 		global $DIC;
 
@@ -150,6 +212,24 @@ class ilVedaCourseImportAdapter
 			$ops,
 			$course->getRefId()
 		);
+
+		switch($rolt_id) {
+			case $this->settings->getTemporarySwitchRole():
+				$course_status = new ilVedaCourseStatus($train->getOid());
+				$course_status->setTemporarySwitchRole($role->getId());
+				$course_status->setCreationStatus(\ilVedaCourseStatus::STATUS_PENDING);
+				$course_status->save();
+				break;
+			case $this->settings->getPermanentSwitchRole():
+				$course_status = new ilVedaCourseStatus($train->getOid());
+				$course_status->setPermanentSwitchRole($role->getId());
+				$course_status->setCreationStatus(\ilVedaCourseStatus::STATUS_PENDING);
+				$course_status->save();
+				break;
+
+			default:
+				$this->logger->error('Invalid role id given: ' . $rolt_id);
+		}
 		return $role;
 	}
 

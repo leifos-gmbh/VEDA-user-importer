@@ -3,6 +3,7 @@
 
 use GuzzleHttp\Client;
 use Swagger\Client\Api\AusbildungsgngeApi;
+use Swagger\Client\Api\AusbildungszgeApi;
 use Swagger\Client\ApiException;
 use Swagger\Client\Configuration;
 use Swagger\Client\Api\ELearningPlattformenApi;
@@ -48,6 +49,11 @@ class ilVedaConnector
 	 */
 	private $api_training_course = null;
 
+	/**
+	 * @var null | \Swagger\Client\Api\AusbildungszgeApi
+	 */
+	private $api_training_course_train = null;
+
 
 	/**
 	 * @var null | OrganisationenApi
@@ -77,6 +83,43 @@ class ilVedaConnector
 			self::$instance  = new self();
 		}
 		return self::$instance;
+	}
+
+	/**
+	 * @param string $oid
+	 * @throws \ilVedaConnectionException
+	 */
+	public function sendTrainingCourseTrainCreated(string $oid)
+	{
+		if(!$this->api_training_course_train instanceof AusbildungszgeApi)
+		{
+			list(
+				$client,
+				$config,
+				$header
+				) = $this->initApiParameters();
+			$this->api_training_course_train = new AusbildungszgeApi(
+				$client,
+				$config,
+				$header
+			);
+		}
+
+		try {
+			$response =  $this->api_training_course_train->meldeAusbildungszugAlsExternExistierendUsingPOST($oid);
+		}
+		catch(ApiException $e) {
+			$this->logger->error('meldeAusbildungszugAlsExternExistierendUsingPOST failed with message: ' . $e->getMessage());
+			$this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+			$this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+			$this->logger->warning($e->getResponseBody());
+
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+		catch(Exception $e) {
+			$this->logger->warning('meldeAusbildungszugAlsExternExistierendUsingPOST failed with message: ' . $e->getMessage());
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
 	}
 
 	/**

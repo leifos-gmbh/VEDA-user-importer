@@ -43,5 +43,43 @@ if(!$ilDB->tableExists('cron_crnhk_vedaimp_us'))
 <?php
 // do nothing
 ?>
+<#3>
+<?php
+if(!$ilDB->tableExists('cron_crnhk_vedaimp_crs'))
+{
+	$ilDB->createTable('cron_crnhk_vedaimp_crs',
+		array(
+			'oid'	=>
+				array(
+					'type'		=> 'text',
+					'length'	=> 64,
+					'notnull'	=> false
+				),
+			'switchp'	=>
+				array(
+					'type'		=> 'integer',
+					'length'	=> 4,
+					'notnull'	=> true,
+					'default'   => 0
+				),
+			'switcht'	=>
+				array(
+					'type'		=> 'integer',
+					'length'	=> 4,
+					'notnull'	=> true,
+					'default'   => 0
+				),
+			'status_created'	=>
+				array(
+					'type'		=> 'integer',
+					'length'	=> 2,
+					'notnull'	=> true
+				)
+		)
+	);
+	$ilDB->addPrimaryKey('cron_crnhk_vedaimp_crs',['oid']);
+}
+?>
+
 
 
