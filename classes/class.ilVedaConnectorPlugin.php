@@ -11,10 +11,12 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
 {
 	protected const USER_SERVICE = 'Services/User';
 	protected const OBJECT_SERVICE = 'Services/Object';
+	protected const TRACKING_SERVICE = 'Services/Tracking';
 	protected const EVENT_UPDATE_PASSWORD = 'passwordChanged';
 	protected const EVENT_DELETE_USER = 'deleteUser';
 	protected const EVENT_AFTER_CLONING = 'afterCloning';
 	protected const EVENT_AFTER_CLONING_DEPENDENCIES = 'afterCloningDependencies';
+	protected const EVENT_UPDATE_STATUS = 'updateStatus';
 
 
 	/**
@@ -310,6 +312,16 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
 				$a_parameter['copy_id']
 			);
 
+		}
+		if(
+			$a_component == self::TRACKING_SERVICE && $a_event == self::EVENT_UPDATE_STATUS
+		) {
+			$member_importer = new \ilVedaMemberImportAdapter();
+			$member_importer->handleTrackingEvent(
+				$a_parameter['obj_id'],
+				$a_parameter['usr_id'],
+				$a_parameter['status']
+			);
 		}
 	}
 }

@@ -3,5 +3,6 @@
    <events>
       <event type="listen" id="Services/User" />
       <event type="listen" id="Services/Object" />
+      <event type="listen" id="Services/Tracking" />
    </events>
 </plugin>

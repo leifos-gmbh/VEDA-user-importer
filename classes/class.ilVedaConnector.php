@@ -4,12 +4,14 @@
 use GuzzleHttp\Client;
 use Swagger\Client\Api\AusbildungsgngeApi;
 use Swagger\Client\Api\AusbildungszgeApi;
+use Swagger\Client\Api\AusbildungszugabschnitteApi;
 use Swagger\Client\ApiException;
 use Swagger\Client\Configuration;
 use Swagger\Client\Api\ELearningPlattformenApi;
 use Swagger\Client\Api\OrganisationenApi;
 use Swagger\Client\Model\Ausbildungszug;
 use Swagger\Client\Model\AusbildungszugTeilnehmer;
+use Swagger\Client\Model\LernerfolgMeldenApiDto;
 
 /**
  * Connector for all rest api calls.
@@ -55,6 +57,12 @@ class ilVedaConnector
 	 */
 	private $api_training_course_train = null;
 
+	/**
+	 * @var null | \Swagger\Client\Api\AusbildungszugabschnitteApi
+	 */
+	private $api_training_course_train_segment = null;
+
+
 
 	/**
 	 * @var null | OrganisationenApi
@@ -84,6 +92,51 @@ class ilVedaConnector
 			self::$instance  = new self();
 		}
 		return self::$instance;
+	}
+
+	/**
+	 * @param string $segment_id
+	 * @param string $participant_id
+	 * @throws \ilVedaConnectionException
+	 */
+	public function sendExerciseSuccess(string $segment_id, string $participant_id)
+	{
+		if(!$this->api_training_course_train_segment instanceof AusbildungszugabschnitteApi)
+		{
+			list(
+				$client,
+				$config,
+				$header
+				) = $this->initApiParameters();
+			$this->api_training_course_train_segment = new AusbildungszugabschnitteApi(
+				$client,
+				$config,
+				$header
+			);
+		}
+
+		try {
+			$result = new LernerfolgMeldenApiDto();
+			$response =  $this->api_training_course_train_segment->lernerfolgMeldenUsingPUT(
+				$segment_id,
+				$participant_id
+			);
+			$this->logger->dump($response);
+			return $response;
+		}
+		catch(ApiException $e) {
+			$this->logger->error('lernerfolgMeldenUsingPUT failed with message: ' . $e->getMessage());
+			$this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+			$this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+			$this->logger->warning($e->getResponseBody());
+
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+		catch(Exception $e) {
+			$this->logger->warning('lernerfolgMeldenUsingPUT failed with message: ' . $e->getMessage());
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+
 	}
 
 

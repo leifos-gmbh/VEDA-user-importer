@@ -57,6 +57,48 @@ class ilVedaMemberImportAdapter
 	}
 
 	/**
+	 * @param int $obj_id
+	 * @param int $usr_id
+	 * @param int $status
+	 */
+	public function handleTrackingEvent(int $obj_id, int $usr_id, int $status)
+	{
+		if($status != ilLPStatus::LP_STATUS_COMPLETED_NUM) {
+			$this->logger->debug('Ignoring non completed event.');
+			return false;
+		}
+		$usr_oid = \ilObjUser::_lookupImportId($usr_id);
+		if(!$usr_oid) {
+			$this->logger->debug('Not imported user.');
+			return false;
+		}
+		if(\ilObject::_lookupType($obj_id) != 'exc') {
+			$this->logger->debug('Ignoring non session event');
+			return false;
+		}
+
+
+		$refs = ilObject::_getAllReferences($obj_id);
+		$ref = end($refs);
+
+		$segment_id = $this->mdhelper->findTrainSegmentId($ref);
+
+		if(!$segment_id) {
+			$this->logger->debug('Not ausbildungszugabschnitt');
+			return false;
+		}
+
+		try {
+			$connector = \ilVedaConnector::getInstance();
+			$connector->sendExerciseSuccess($segment_id, $usr_oid);
+		}
+		catch(\ilVedaConnectionException $e) {
+			$this->logger->warning('Update exercise success failed.');
+		}
+
+	}
+
+	/**
 	 * @param string|null $oid
 	 * @throws \ilVedaConnectionException
 	 */
