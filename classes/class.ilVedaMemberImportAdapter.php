@@ -123,13 +123,15 @@ class ilVedaMemberImportAdapter
 
 		$status = new \ilVedaCourseStatus($oid);
 
-		$this->removeInvalidRegularMembers($course, $participants, $members, $status);
-		$this->removeInvalidPermanentSwitchMembers($course, $participants, $members, $status);
-		$this->removeInvalidTemporarySwitchMembers($course, $participants, $members, $status);
+		$currently_assigned = $participants->getParticipants();
 
-		$this->addRegularMembers($course, $participants, $members, $status);
-		$this->addPermanentSwitchMembers($course, $participants, $members, $status);
-		$this->addTemporarySwitchMembers($course, $participants, $members, $status);
+		$this->removeInvalidRegularMembers($course, $participants, $members, $status, $currently_assigned);
+		$this->removeInvalidPermanentSwitchMembers($course, $participants, $members, $status, $currently_assigned);
+		$this->removeInvalidTemporarySwitchMembers($course, $participants, $members, $status, $currently_assigned);
+
+		$this->addRegularMembers($course, $participants, $members, $status, $currently_assigned);
+		$this->addPermanentSwitchMembers($course, $participants, $members, $status, $currently_assigned);
+		$this->addTemporarySwitchMembers($course, $participants, $members, $status, $currently_assigned);
 	}
 
 	/**
@@ -137,8 +139,14 @@ class ilVedaMemberImportAdapter
 	 * @param \ilCourseParticipants $part
 	 * @param array $members
 	 * @param \ilVedaCourseStatus $status
+	 * @param int[] $assigned
 	 */
-	protected function removeInvalidRegularMembers(\ilObjCourse $course, \ilCourseParticipants $part, array $members, \ilVedaCourseStatus $status)
+	protected function removeInvalidRegularMembers(
+		\ilObjCourse $course,
+		\ilCourseParticipants $part,
+		array $members,
+		\ilVedaCourseStatus $status,
+		array $assigned)
 	{
 		global $DIC;
 
@@ -179,8 +187,14 @@ class ilVedaMemberImportAdapter
 	 * @param \ilCourseParticipants $part
 	 * @param array $members
 	 * @param \ilVedaCourseStatus $status
+	 * @param int[] $assigned
 	 */
-	protected function removeInvalidPermanentSwitchMembers(\ilObjCourse $course, \ilCourseParticipants $part, array $members, \ilVedaCourseStatus $status)
+	protected function removeInvalidPermanentSwitchMembers(
+		\ilObjCourse $course,
+		\ilCourseParticipants $part,
+		array $members,
+		\ilVedaCourseStatus $status,
+		array $assigned)
 	{
 		global $DIC;
 
@@ -226,8 +240,14 @@ class ilVedaMemberImportAdapter
 	 * @param \ilCourseParticipants $part
 	 * @param array $members
 	 * @param \ilVedaCourseStatus $status
+	 * @param int[] $assigned
 	 */
-	protected function removeInvalidTemporarySwitchMembers(\ilObjCourse $course, \ilCourseParticipants $part, array $members, \ilVedaCourseStatus $status)
+	protected function removeInvalidTemporarySwitchMembers(
+		\ilObjCourse $course,
+		\ilCourseParticipants $part,
+		array $members,
+		\ilVedaCourseStatus $status,
+		array $assigned)
 	{
 		global $DIC;
 
@@ -268,8 +288,14 @@ class ilVedaMemberImportAdapter
 	 * @param \ilCourseParticipants $part
 	 * @param array $members
 	 * @param \ilVedaCourseStatus $status
+	 * @param int[] $assigned
 	 */
-	protected function addRegularMembers(\ilObjCourse $course, \ilCourseParticipants $part, array $members, \ilVedaCourseStatus $status)
+	protected function addRegularMembers(
+		\ilObjCourse $course,
+		\ilCourseParticipants $part,
+		array $members,
+		\ilVedaCourseStatus $status,
+		array $assigned)
 	{
 		/** @var $members AusbildungszugTeilnehmer[] **/
 		foreach($members as $member) {
@@ -291,7 +317,13 @@ class ilVedaMemberImportAdapter
 
 			if($uid) {
 				$this->logger->info('Assigning user: ' . $uid . ' with oid '. $member->getTeilnehmerId() .' to course: ' . $course->getTitle());
-				$part->add($uid, \ilCourseConstants::CRS_MEMBER);
+				$this->assignUserToRole(
+					$course->getDefaultMemberRole(),
+					$uid,
+					$assigned,
+					$part,
+					$course
+				);
 			}
 		}
 	}
@@ -301,8 +333,14 @@ class ilVedaMemberImportAdapter
 	 * @param \ilCourseParticipants $part
 	 * @param array $members
 	 * @param \ilVedaCourseStatus $status
+	 * @param int[] $assigned
 	 */
-	protected function addPermanentSwitchMembers(\ilObjCourse $course, \ilCourseParticipants $part, array $members, \ilVedaCourseStatus $status)
+	protected function addPermanentSwitchMembers(
+		\ilObjCourse $course,
+		\ilCourseParticipants $part,
+		array $members,
+		\ilVedaCourseStatus $status,
+		array $assigned)
 	{
 		global $DIC;
 
@@ -328,7 +366,13 @@ class ilVedaMemberImportAdapter
 
 			if($uid) {
 				$this->logger->info('Assigning user: ' . $uid . ' with oid '. $member->getTeilnehmerId() .' to course: ' . $course->getTitle());
-				$admin->assignUser($status->getPermanentSwitchRole(), $uid);
+				$this->assignUserToRole(
+					$status->getPermanentSwitchRole(),
+					$uid,
+					$assigned,
+					$part,
+					$course
+				);
 			}
 		}
 	}
@@ -338,8 +382,14 @@ class ilVedaMemberImportAdapter
 	 * @param \ilCourseParticipants $part
 	 * @param array $members
 	 * @param \ilVedaCourseStatus $status
+	 * @param int[] $assigned
 	 */
-	protected function addTemporarySwitchMembers(\ilObjCourse $course, \ilCourseParticipants $part, array $members, \ilVedaCourseStatus $status)
+	protected function addTemporarySwitchMembers(
+		\ilObjCourse $course,
+		\ilCourseParticipants $part,
+		array $members,
+		\ilVedaCourseStatus $status,
+		array $assigned)
 	{
 		global $DIC;
 
@@ -361,8 +411,36 @@ class ilVedaMemberImportAdapter
 
 			if($uid) {
 				$this->logger->info('Assigning user: ' . $uid . ' with oid '. $member->getTeilnehmerId() .' to course: ' . $course->getTitle());
-				$admin->assignUser($status->getTemporarySwitchRole(), $uid);
+				$this->assignUserToRole(
+					$status->getTemporarySwitchRole(),
+					$uid,
+					$assigned,
+					$part,
+					$course
+				);
 			}
+		}
+	}
+
+	/**
+	 * @param int $role
+	 * @param int $user
+	 * @param array $assigned
+	 * @param \ilCourseParticipants $part
+	 */
+	protected function assignUserToRole(int $role, int $user, array &$assigned, \ilCourseParticipants $part, \ilObjCourse $course)
+	{
+		global $DIC;
+
+		$admin = $DIC->rbac()->admin();
+		$admin->assignUser($role, $user);
+
+		if(!in_array($user, $assigned)) {
+
+			$this->logger->debug('Adding new user sending mail notification...');
+			$part->sendNotification($part->NOTIFY_ACCEPT_USER, $user);
+			\ilObjUser::_addDesktopItem($user, $course->getId(), 'crs');
+			$assigned[] = $user;
 		}
 	}
 

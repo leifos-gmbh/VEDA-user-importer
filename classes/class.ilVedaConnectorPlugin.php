@@ -177,7 +177,7 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
 			self::CLAIMING_UDF_CNAME,
 			self::CLAIMING_UDF_SLOT_ID
 		) as $plugin_name) {
-			
+
 			if($plugin_name == self::CLAIMING_UDF_NAME) {
 				$this->udfclaiming = \ilPluginAdmin::getPluginObject(
 					self::CLAIMING_UDF_CTYPE,
