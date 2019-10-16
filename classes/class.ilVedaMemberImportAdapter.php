@@ -107,7 +107,6 @@ class ilVedaMemberImportAdapter
 		// read member info
 		$connector = \ilVedaConnector::getInstance();
 		$members = $connector->readTrainingCourseTrainMembers($oid);
-		$this->logger->dump($members);
 
 		$course_ref_id = $this->mdhelper->findTrainingCourseTrain($oid);
 		$course = \ilObjectFactory::getInstanceByRefId($course_ref_id);
@@ -119,8 +118,10 @@ class ilVedaMemberImportAdapter
 			throw new \ilVedaMemberImportException('Cannot find course participants for oid: ' . $oid);
 		}
 
-		$status = new \ilVedaCourseStatus($oid);
+		$this->logger->debug('Handling course: ' . $course->getTitle());
+		$this->logger->dump($members, \ilLogLevel::DEBUG);
 
+		$status = new \ilVedaCourseStatus($oid);
 
 		$this->removeInvalidRegularMembers($course, $participants, $members, $status);
 		$this->removeInvalidPermanentSwitchMembers($course, $participants, $members, $status);
@@ -142,8 +143,9 @@ class ilVedaMemberImportAdapter
 		global $DIC;
 
 		$admin = $DIC->rbac()->admin();
+		$review = $DIC->rbac()->review();
 
-		foreach($part->getMembers() as $participant) {
+		foreach($review->assignedUsers($course->getDefaultMemberRole()) as $participant) {
 
 			$oid = \ilObjUser::_lookupImportId($participant);
 			if(!$oid) {
@@ -189,6 +191,7 @@ class ilVedaMemberImportAdapter
 
 			$oid = \ilObjUser::_lookupImportId($participant);
 			if(!$oid) {
+				$this->logger->debug('Ignoring non imported user.');
 				continue;
 			}
 
@@ -198,7 +201,11 @@ class ilVedaMemberImportAdapter
 				if($member->getTeilnehmerId() != $oid) {
 					continue;
 				}
-				if($member->getMitgliedschaftsart() == self::REGULAR && $member->getWechsel()) {
+				if(
+					$member->getMitgliedschaftsart() == self::REGULAR &&
+					$member->getWechsel() &&
+					$this->isValidDate($member->getBeginn(), $member->getEnde())
+				) {
 					$found = true;
 					break;
 				}
