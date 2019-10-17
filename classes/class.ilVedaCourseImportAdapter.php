@@ -310,8 +310,8 @@ class ilVedaCourseImportAdapter
 			if($segment_start instanceof DateTime) {
 				$this->logger->debug('Update starting time of exercise');
 				foreach(\ilExAssignment::getInstancesByExercise($exercise->getId()) as $assignment) {
-					$assignment->setStartTime($segment_start->getTimestamp());
-					$assignment->update();
+					//$assignment->setStartTime($segment_start->getTimestamp());
+					//$assignment->update();
 				}
 
 			}
