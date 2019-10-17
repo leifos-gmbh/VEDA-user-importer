@@ -439,7 +439,7 @@ class ilVedaMemberImportAdapter
 
 			$this->logger->debug('Adding new user sending mail notification...');
 			$part->sendNotification($part->NOTIFY_ACCEPT_USER, $user);
-			\ilObjUser::_addDesktopItem($user, $course->getId(), 'crs');
+			\ilObjUser::_addDesktopItem($user, $course->getRefId(), 'crs');
 			$assigned[] = $user;
 		}
 	}
