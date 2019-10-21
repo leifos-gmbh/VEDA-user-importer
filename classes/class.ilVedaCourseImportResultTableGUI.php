@@ -95,7 +95,7 @@ class ilVedaCourseImportResultTableGUI extends \ilTable2GUI
 		$obj_id = $row['obj_id'];
 		$refs = \ilObject::_getAllReferences($obj_id);
 		$ref = end($refs);
-		if(!$obj_id || $tree->isDeleted($ref)) {
+		if(!$ref || $tree->isDeleted($ref)) {
 			$this->tpl->setCurrentBlock('is_deleted');
 			$this->tpl->setVariable('TXT_DELETED', $this->lng->txt('deleted'));
 			$this->tpl->parseCurrentBlock();
