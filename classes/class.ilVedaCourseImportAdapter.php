@@ -164,6 +164,16 @@ class ilVedaCourseImportAdapter
 				$target->update();
 				$this->createDefaultCourseRole($target, $this->settings->getPermanentSwitchRole(),$train);
 				$this->createDefaultCourseRole($target, $this->settings->getTemporarySwitchRole(),$train);
+
+				// delete connection user from administrator role
+				$this->deleteAdministratorAssignments($target);
+			}
+		}
+		if($source instanceof \ilObjGroup) {
+			$target = \ilObjectFactory::getInstanceByRefId($a_target_id, false);
+			if($target instanceof \ilObjGroup) {
+				// delete connection user from administrator role
+				$this->deleteAdministratorAssignments($target);
 			}
 		}
 		if($source instanceof \ilObject) {
@@ -174,6 +184,18 @@ class ilVedaCourseImportAdapter
 		}
 		if($source instanceof \ilObjExercise) {
 			$this->migrateExerciseAppointments($a_target_id, $train);
+		}
+
+	}
+
+	/**
+	 * @param \ilObject $target
+	 */
+	protected function deleteAdministratorAssignments(\ilObject $target)
+	{
+		$participants = \ilParticipants::getInstance($target->getRefId());
+		foreach($participants->getAdmins() as $admin_id) {
+			$participants->delete($admin_id);
 		}
 	}
 
