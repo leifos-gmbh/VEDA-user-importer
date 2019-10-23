@@ -116,10 +116,18 @@ class ilVedaConnector
 		}
 
 		try {
-			$result = new LernerfolgMeldenApiDto();
+			$info = new LernerfolgMeldenApiDto();
+			$info->setLernerfolg(true);
+			$info->setLernerfolgGemeldetAm(new DateTime('now'));
+			$info->setPraktikumsberichtEingangAm(new DateTime('now'));
+
+			$this->logger->debug('Api lernerfolgmelden json');
+			$this->logger->debug($info);
+
 			$response =  $this->api_training_course_train_segment->lernerfolgMeldenUsingPUT(
 				$segment_id,
-				$participant_id
+				$participant_id,
+				$info
 			);
 			$this->logger->dump($response);
 			return $response;
@@ -139,6 +147,84 @@ class ilVedaConnector
 
 	}
 
+
+	/**
+	 * @param string|null $oid
+	 * @return \Swagger\Client\Model\AusbildungszugDozent[]
+	 * @throws \ilVedaConnectionException
+	 */
+	public function readTrainingCourseTrainTutors(?string $oid)
+	{
+		if(!$this->api_training_course_train instanceof AusbildungszgeApi)
+		{
+			list(
+				$client,
+				$config,
+				$header
+				) = $this->initApiParameters();
+			$this->api_training_course_train = new AusbildungszgeApi(
+				$client,
+				$config,
+				$header
+			);
+		}
+
+		try {
+			$response =  $this->api_training_course_train->getBeteiligteDozentenVonAusbildungszugUsingGET($oid);
+			return $response;
+		}
+		catch(ApiException $e) {
+			$this->logger->error('getBeteiligteDozentenVonAusbildungszugUsingGET failed with message: ' . $e->getMessage());
+			$this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+			$this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+			$this->logger->warning($e->getResponseBody());
+
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+		catch(Exception $e) {
+			$this->logger->warning('getBeteiligteDozentenVonAusbildungszugUsingGET failed with message: ' . $e->getMessage());
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+	}
+
+	/**
+	 * @param string|null $oid
+	 * @return \Swagger\Client\Model\AusbildungszugLernbegleiter[]
+	 * @throws \ilVedaConnectionException
+	 */
+	public function readTrainingCourseTrainCompanions(?string $oid)
+	{
+		if(!$this->api_training_course_train instanceof AusbildungszgeApi)
+		{
+			list(
+				$client,
+				$config,
+				$header
+				) = $this->initApiParameters();
+			$this->api_training_course_train = new AusbildungszgeApi(
+				$client,
+				$config,
+				$header
+			);
+		}
+
+		try {
+			$response =  $this->api_training_course_train->getLernbegleiterVonAusbildungszugUsingGET($oid);
+			return $response;
+		}
+		catch(ApiException $e) {
+			$this->logger->error('getLernbegleiterVonAusbildungszugUsingGET failed with message: ' . $e->getMessage());
+			$this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+			$this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+			$this->logger->warning($e->getResponseBody());
+
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+		catch(Exception $e) {
+			$this->logger->warning('getLernbegleiterVonAusbildungszugUsingGET failed with message: ' . $e->getMessage());
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+	}
 
 	/**
 	 * @param string|null $oid
@@ -284,6 +370,7 @@ class ilVedaConnector
 
 		try {
 			$response = $this->api_organisation->getOrganisationUsingGET($orgr_oid);
+			$this->logger->dump($response);
 			return $response;
 		}
 		catch(ApiException $e) {

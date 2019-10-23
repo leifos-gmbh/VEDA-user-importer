@@ -132,6 +132,113 @@ class ilVedaMemberImportAdapter
 		$this->addRegularMembers($course, $participants, $members, $status, $currently_assigned);
 		$this->addPermanentSwitchMembers($course, $participants, $members, $status, $currently_assigned);
 		$this->addTemporarySwitchMembers($course, $participants, $members, $status, $currently_assigned);
+
+		$this->handleTutorAssignments($course, $participants, $oid);
+	}
+
+	/**
+	 * @param \ilObjCourse $course
+	 * @param \ilCourseParticipants $participants
+	 */
+	protected function handleTutorAssignments(\ilObjCourse $course, \ilCourseParticipants $participants, ?string $oid)
+	{
+		global $DIC;
+
+		$admin = $DIC->rbac()->admin();
+
+		$udfplugin = $this->plugin->getUDFClaimingPlugin();
+		$udffields = $udfplugin->getFields();
+
+		try {
+			$connector = \ilVedaConnector::getInstance();
+			$remote_tutors = $connector->readTrainingCourseTrainTutors($oid);
+			$remote_companions = $connector->readTrainingCourseTrainCompanions($oid);
+			$this->logger->dump($remote_tutors, \ilLogLevel::DEBUG);
+			$this->logger->dump($remote_companions, \ilLogLevel::DEBUG);
+		}
+		catch(\ilVedaConnectionException $e) {
+			$this->logger->warning('Reading assigned tutors failed. Aborting tutor update');
+			return false;
+		}
+		// deassign deprecated tutors
+		foreach($participants->getTutors() as $tutor_id) {
+
+			$tutor = \ilObjectFactory::getInstanceByObjId($tutor_id,false);
+			if(!$tutor instanceof \ilObjUser) {
+				$this->logger->warning('Found invalid tutor: ' . $tutor_id);
+				continue;
+			}
+			$udf_data = $tutor->getUserDefinedData();
+			$tutor_oid = '';
+			if(isset($udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_TUTOR_ID]])) {
+				$tutor_oid = $udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_TUTOR_ID]];
+			}
+			$companion_oid = '';
+			if(isset($udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_COMPANION_ID]])) {
+				$companion_oid = $udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_COMPANION_ID]];
+			}
+			if(!$tutor_oid && !$companion_oid) {
+				$this->logger->debug('Ignoring tutor without tutor_oid: ' . $tutor->getLogin());
+				break;
+			}
+
+			$found = false;
+			foreach($remote_tutors as $remote_tutor) {
+				if($remote_tutor->getDozentId() == $tutor_oid) {
+					$found = true;
+					break;
+				}
+			}
+			foreach($remote_companions as $remote_companion) {
+
+				if(!$this->isValidDate($remote_companion->getZustaendigAb(), $remote_companion->getZustaendigBis())) {
+					$this->logger->debug('Ignoring companion outside time frame: ' . $remote_companion->getLernbegleiterId());
+					continue;
+				}
+
+				if($remote_companion->getLernbegleiterId() == $companion_oid) {
+					$found = true;
+					break;
+				}
+			}
+			if(!$found) {
+				$this->logger->info('Deassigning deprecated tutor from course: ' . $tutor->getLogin());
+				$admin->deassignUser($course->getDefaultTutorRole(), $tutor_id);
+			}
+		}
+		// assign missing tutors
+		foreach($remote_tutors as $remote_tutor) {
+
+			$tutor_oid = $remote_tutor->getDozentId();
+			$this->logger->debug('Remote tutor oid is: ' . $tutor_oid);
+			$this->logger->dump($udfplugin->getUsersForTutorId($tutor_oid));
+
+			foreach($udfplugin->getUsersForTutorId($tutor_oid) as $uid) {
+				if(!in_array($uid, $participants->getTutors())) {
+					$admin->assignUser($course->getDefaultTutorRole(), $uid);
+					$participants->addDesktopItem($uid);
+				}
+			}
+		}
+		// assign companions
+		foreach($remote_companions as $remote_companion)
+		{
+			$companion_id = $remote_companion->getLernbegleiterId();
+			$this->logger->debug('Remote companion oid is: ' . $companion_id);
+			$this->logger->dump($udfplugin->getUsersForCompanionId($companion_id));
+
+			if(!$this->isValidDate($remote_companion->getZustaendigAb(), $remote_companion->getZustaendigBis())) {
+				$this->logger->info('Outside time frame: Ignoring companion with id: ' . $companion_id);
+				break;
+			}
+			foreach($udfplugin->getUsersForCompanionId($companion_id) as $uid) {
+				if(!in_array($uid, $participants->getTutors())) {
+					$this->logger->info('Assigning new course tutor with id: ' . $companion_id . ' ILIAS id: ' . $uid);
+					$admin->assignUser($course->getDefaultTutorRole(), $uid);
+					$participants->addDesktopItem($uid);
+				}
+			}
+		}
 	}
 
 	/**
@@ -453,11 +560,20 @@ class ilVedaMemberImportAdapter
 		if($start == null) {
 			return true;
 		}
-		if($end == null) {
-			return true;
-		}
 		$now = new \ilDate(time(), IL_CAL_UNIX);
 		$ilstart = new \ilDate($start->format('Y-m-d'),IL_CAL_DATE);
+
+		if($end == null) {
+
+			// check starting time <= now
+			if(\ilDateTime::_before($ilstart, $now , IL_CAL_DAY)) {
+				$this->logger->debug('Starting date is valid');
+				return true;
+			}
+			$this->logger->debug('Starting date is invalid');
+			return false;
+		}
+
 		$ilend = new \ilDate($end->format('Y-m-d'), IL_CAL_DATE);
 
 		if(
