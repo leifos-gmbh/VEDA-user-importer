@@ -177,7 +177,7 @@ class ilVedaCourseImportAdapter
 			}
 		}
 		if($source instanceof \ilObject) {
-			$this->mdhelper->migrateTrainingCourseSegmentToTrain($a_source_id, $a_target_id, $train);
+			$this->mdhelper->migrateTrainingCourseSegmentToTrain($a_source_id, $a_target_id, $train, $tc[self::CP_INFO_AUSBILDUNGSGANG]);
 		}
 		if($source instanceof \ilObjSession) {
 			$this->migrateSessionAppointments($a_target_id, $train);

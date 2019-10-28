@@ -9,9 +9,12 @@ use Swagger\Client\ApiException;
 use Swagger\Client\Configuration;
 use Swagger\Client\Api\ELearningPlattformenApi;
 use Swagger\Client\Api\OrganisationenApi;
+use Swagger\Client\Model\Ausbildungsgang;
 use Swagger\Client\Model\Ausbildungszug;
 use Swagger\Client\Model\AusbildungszugTeilnehmer;
+use Swagger\Client\Model\KorrigierterPraktikumsberichtApiDto;
 use Swagger\Client\Model\LernerfolgMeldenApiDto;
+use Swagger\Client\Model\PraktikumsberichtEingegangenApiDto;
 
 /**
  * Connector for all rest api calls.
@@ -97,9 +100,121 @@ class ilVedaConnector
 	/**
 	 * @param string $segment_id
 	 * @param string $participant_id
+	 * @param \DateTime|null $confirmed
 	 * @throws \ilVedaConnectionException
 	 */
-	public function sendExerciseSuccess(string $segment_id, string $participant_id)
+	public function sendExerciseSubmissionConfirmed(string $segment_id, string $participant_id, DateTime $confirmed = null)
+	{
+		if(!$this->api_training_course_train_segment instanceof AusbildungszugabschnitteApi)
+		{
+			list(
+				$client,
+				$config,
+				$header
+				) = $this->initApiParameters();
+			$this->api_training_course_train_segment = new AusbildungszugabschnitteApi(
+				$client,
+				$config,
+				$header
+			);
+		}
+
+		try {
+
+			$info = new KorrigierterPraktikumsberichtApiDto();
+			if($confirmed) {
+				$info->setPraktikumsberichtKorrigiert(true);
+				$info->setPraktikumsberichtKorrigiertAm($confirmed);
+			}
+			else {
+				$info->setPraktikumsberichtKorrigiert(false);
+			}
+
+
+			$this->logger->dump($info);
+
+			$response = $this->api_training_course_train_segment->meldeKorrigierterPraktikumsberichtUsingPUT(
+				$segment_id,
+				$participant_id,
+				$info
+			);
+			return $response;
+		}
+		catch(ApiException $e) {
+			$this->logger->error('meldeKorrigierterPraktikumsberichtUsingPUT failed with message: ' . $e->getMessage());
+			$this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+			$this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+			$this->logger->warning($e->getResponseBody());
+
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+		catch(Exception $e) {
+			$this->logger->warning('meldeKorrigierterPraktikumsberichtUsingPUT failed with message: ' . $e->getMessage());
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+	}
+
+	/**
+	 * @param string $segment_id
+	 * @param string $participant_id
+	 * @param \DateTime|null $subdate
+	 * @throws \ilVedaConnectionException
+	 */
+	public function sendExerciseSubmissionDate(string $segment_id, string $participant_id, DateTime $subdate = null)
+	{
+		if(!$this->api_training_course_train_segment instanceof AusbildungszugabschnitteApi)
+		{
+			list(
+				$client,
+				$config,
+				$header
+				) = $this->initApiParameters();
+			$this->api_training_course_train_segment = new AusbildungszugabschnitteApi(
+				$client,
+				$config,
+				$header
+			);
+		}
+
+		try {
+			$info = new PraktikumsberichtEingegangenApiDto();
+			if($subdate) {
+				$info->setPraktikumsberichtEingegangen(true);
+				$info->setPraktikumsberichtEingegangenAm($subdate);
+			}
+			else {
+				$info->setPraktikumsberichtEingegangen(false);
+			}
+
+			$this->logger->dump($info);
+
+			$response =  $this->api_training_course_train_segment->meldePraktikumsberichtEingegangenUsingPUT(
+				$segment_id,
+				$participant_id,
+				$info
+			);
+			return $response;
+		}
+		catch(ApiException $e) {
+			$this->logger->error('meldePraktikumsberichtEingegangenUsingPUT failed with message: ' . $e->getMessage());
+			$this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+			$this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+			$this->logger->warning($e->getResponseBody());
+
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+		catch(Exception $e) {
+			$this->logger->warning('meldePraktikumsberichtEingegangenUsingPUT failed with message: ' . $e->getMessage());
+			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+		}
+	}
+
+	/**
+	 * @param string $segment_id
+	 * @param string $participant_id
+	 * @throws \ilVedaConnectionException
+	 */
+	public function sendExerciseSuccess(string $segment_id, string $participant_id, \DateTime $dt)
 	{
 		if(!$this->api_training_course_train_segment instanceof AusbildungszugabschnitteApi)
 		{
@@ -118,19 +233,15 @@ class ilVedaConnector
 		try {
 			$info = new LernerfolgMeldenApiDto();
 			$info->setLernerfolg(true);
-			$info->setLernerfolgGemeldetAm(new DateTime('now'));
-			$info->setPraktikumsberichtEingangAm(new DateTime('now'));
+			$info->setLernerfolgGemeldetAm($dt);
 
-			$this->logger->debug('Api lernerfolgmelden json');
-			$this->logger->debug($info);
+			$this->logger->dump($info);
 
-			$response =  $this->api_training_course_train_segment->lernerfolgMeldenUsingPUT(
+			$response = $this->api_training_course_train_segment->lernerfolgMeldenUsingPUT(
 				$segment_id,
 				$participant_id,
 				$info
 			);
-			$this->logger->dump($response);
-			return $response;
 		}
 		catch(ApiException $e) {
 			$this->logger->error('lernerfolgMeldenUsingPUT failed with message: ' . $e->getMessage());
@@ -178,7 +289,6 @@ class ilVedaConnector
 			$this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
 			$this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
 			$this->logger->warning($e->getResponseBody());
-
 			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
 		}
 		catch(Exception $e) {
@@ -391,6 +501,9 @@ class ilVedaConnector
 
 	/**
 	 * Get training courses for ausbildungsgang
+	 * @param string $training_course_id
+	 * @return \Swagger\Client\Model\Ausbildungsgang
+	 * @throws \ilVedaConnectionException
 	 */
 	public function getTrainingCourseSegments(string $training_course_id)
 	{

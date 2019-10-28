@@ -3,7 +3,7 @@
 $id = "vedaimp";
 
 // code version; must be changed for all code changes
-$version = "5.4.4.8";
+$version = "5.4.4.10";
 
 // ilias min and max version; must always reflect the versions that should run with the plugin
 $ilias_min_version = "5.4.1";

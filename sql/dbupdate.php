@@ -97,4 +97,31 @@ if (!$ilDB->tableColumnExists('cron_crnhk_vedaimp_crs', 'obj_id'))
 }
 ?>
 
-
+<#5>
+<?php
+// nothing
+?>
+?>
+<#6>
+<?php
+if(!$ilDB->tableExists('cron_crnhk_vedaimp_seg')) {
+	$ilDB->createTable(
+		'cron_crnhk_vedaimp_seg',
+		[
+			'oid' =>
+				[
+					'type' => 'text',
+					'length' => 64,
+					'notnull' => false
+				],
+			'type' =>
+				[
+					'type' => 'text',
+					'length' => 64,
+					'notnull' => false
+				]
+		]
+	);
+	$ilDB->addPrimaryKey('cron_crnhk_vedaimp_seg',['oid','type']);
+}
+?>

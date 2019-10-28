@@ -98,18 +98,35 @@ class ilVedaMDHelper
 	 * @param int $target_id
 	 * @param \Swagger\Client\Model\Ausbildungszug $train
 	 */
-	public function migrateTrainingCourseSegmentToTrain(int $source_id, int $target_id , Ausbildungszug $train)
+	public function migrateTrainingCourseSegmentToTrain(int $source_id, int $target_id , Ausbildungszug $train, ?string $training_course_id)
 	{
 		$this->deleteTrainingCourseSegmentId($target_id);
 		$this->deleteTrainingCourseSegmentTrainId($target_id);
 
 		$course_segment_id = $this->findSegmentId($source_id);
+		$segment_train_id = '';
 		foreach($train->getAusbildungszugabschnitte() as $abschnitt) {
 
 			if($abschnitt->getAusbildungsgangabschnittId() == $course_segment_id) {
+				$segment_train_id = $abschnitt->getOid();
 				$this->writeTrainingCourseSegmentTrainId($target_id, $abschnitt->getOid());
 				break;
 			}
+		}
+
+		try {
+			$connector = \ilVedaConnector::getInstance();
+			$training_course = $connector->getTrainingCourseSegments($training_course_id);
+			foreach($training_course->getAusbildungsgangabschnitte() as $training_course_segment) {
+				if($training_course_segment->getOid() == $course_segment_id) {
+
+					$segment_info = new \ilVedaSegmentInfo($segment_train_id, $training_course_segment->getAusbildungsgangabschnittsart());
+					$segment_info->update();
+				}
+			}
+		}
+		catch(Exception $e) {
+			$this->logger->error('Update of getAusbildungsgangabschnittsart failed with message: ' . $e->getMessage());
 		}
 	}
 

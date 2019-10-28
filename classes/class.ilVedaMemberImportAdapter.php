@@ -87,15 +87,68 @@ class ilVedaMemberImportAdapter
 			$this->logger->debug('Not ausbildungszugabschnitt');
 			return false;
 		}
+		$this->sendExerciseSuccessInformation($obj_id, $usr_id, $usr_oid, $segment_id);
+	}
 
+	/**
+	 * @param int $obj_id
+	 * @param int $usr_id
+	 */
+	protected function sendExerciseSuccessInformation(int $obj_id, int $usr_id, string $usr_oid, string $segment_id)
+	{
+		global $DIC;
+
+		$tree = $DIC->repositoryTree();
+
+		// find parent courses
+		$exercise = \ilObjectFactory::getInstanceByObjId($obj_id, false);
+		if(!$exercise instanceof \ilObjExercise) {
+			$this->logger->warning('Cannot create exercise instance');
+			return;
+		}
+
+
+		// find ref_ids for exercise
+		$refs = \ilObject::_getAllReferences($exercise->getId());
+
+		$is_practical_training = false;
+		$submission_date_str = '';
+		foreach($refs as $tmp => $ref_id) {
+
+			$segment_id = $this->mdhelper->findTrainSegmentId($ref_id);
+			if(ilVedaSegmentInfo::isPracticalTraining($segment_id)) {
+				$this->logger->info('Exercise of type "practical training"');
+				$is_practical_training = true;
+			}
+			else {
+				$this->logger->info('No practical trainign type');
+				break;
+			}
+			$assignments = \ilExAssignment::getInstancesByExercise($ref_id);
+			foreach($assignments as $assignment) {
+
+				$submission = new \ilExSubmission($assignment, $usr_id);
+				$submission_date_str = $submission->getLastSubmission();
+				$this->logger->info('Last submission is: ' . $submission_date_str);
+			}
+			break;
+		}
 		try {
 			$connector = \ilVedaConnector::getInstance();
-			$connector->sendExerciseSuccess($segment_id, $usr_oid);
+			if($is_practical_training) {
+
+				$submission_date = null;
+				if(strlen($submission_date_str)) {
+					$submission_date = new DateTime($submission_date_str);
+				}
+				$connector->sendExerciseSubmissionDate($segment_id, $usr_oid, $submission_date);
+				$connector->sendExerciseSubmissionConfirmed($segment_id, $usr_oid, new \DateTime());
+			}
+			$connector->sendExerciseSuccess($segment_id, $usr_oid, new \DateTime());
 		}
 		catch(\ilVedaConnectionException $e) {
-			$this->logger->warning('Update exercise success failed.');
+			$this->logger->warning('Send exercise success failed with message: ' . $e->getMessage());
 		}
-
 	}
 
 	/**
