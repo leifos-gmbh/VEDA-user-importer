@@ -1,6 +1,6 @@
 <?php
 /**
- * AusbildungszugDozent
+ * PraktikumsberichtEingegangenApiDto
  *
  * PHP version 5
  *
@@ -33,15 +33,14 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * AusbildungszugDozent Class Doc Comment
+ * PraktikumsberichtEingegangenApiDto Class Doc Comment
  *
  * @category Class
- * @description An einem Ausbildungszug beteiligte Dozenten.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class AusbildungszugDozent implements ModelInterface, ArrayAccess
+class PraktikumsberichtEingegangenApiDto implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +49,7 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'AusbildungszugDozent';
+    protected static $swaggerModelName = 'PraktikumsberichtEingegangenApiDto';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,8 +57,9 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'dozent_id' => 'string',
-        'links' => '\Swagger\Client\Model\Link[]'
+        'links' => '\Swagger\Client\Model\Link[]',
+        'praktikumsbericht_eingegangen' => 'bool',
+        'praktikumsbericht_eingegangen_am' => '\DateTime'
     ];
 
     /**
@@ -68,8 +68,9 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'dozent_id' => null,
-        'links' => null
+        'links' => null,
+        'praktikumsbericht_eingegangen' => null,
+        'praktikumsbericht_eingegangen_am' => 'date'
     ];
 
     /**
@@ -99,8 +100,9 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'dozent_id' => 'dozentId',
-        'links' => 'links'
+        'links' => 'links',
+        'praktikumsbericht_eingegangen' => 'praktikumsberichtEingegangen',
+        'praktikumsbericht_eingegangen_am' => 'praktikumsberichtEingegangenAm'
     ];
 
     /**
@@ -109,8 +111,9 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'dozent_id' => 'setDozentId',
-        'links' => 'setLinks'
+        'links' => 'setLinks',
+        'praktikumsbericht_eingegangen' => 'setPraktikumsberichtEingegangen',
+        'praktikumsbericht_eingegangen_am' => 'setPraktikumsberichtEingegangenAm'
     ];
 
     /**
@@ -119,8 +122,9 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'dozent_id' => 'getDozentId',
-        'links' => 'getLinks'
+        'links' => 'getLinks',
+        'praktikumsbericht_eingegangen' => 'getPraktikumsberichtEingegangen',
+        'praktikumsbericht_eingegangen_am' => 'getPraktikumsberichtEingegangenAm'
     ];
 
     /**
@@ -183,8 +187,9 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['dozent_id'] = isset($data['dozent_id']) ? $data['dozent_id'] : null;
         $this->container['links'] = isset($data['links']) ? $data['links'] : null;
+        $this->container['praktikumsbericht_eingegangen'] = isset($data['praktikumsbericht_eingegangen']) ? $data['praktikumsbericht_eingegangen'] : null;
+        $this->container['praktikumsbericht_eingegangen_am'] = isset($data['praktikumsbericht_eingegangen_am']) ? $data['praktikumsbericht_eingegangen_am'] : null;
     }
 
     /**
@@ -196,8 +201,8 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
     {
         $invalidProperties = [];
 
-        if ($this->container['dozent_id'] === null) {
-            $invalidProperties[] = "'dozent_id' can't be null";
+        if ($this->container['praktikumsbericht_eingegangen'] === null) {
+            $invalidProperties[] = "'praktikumsbericht_eingegangen' can't be null";
         }
         return $invalidProperties;
     }
@@ -213,30 +218,6 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
         return count($this->listInvalidProperties()) === 0;
     }
 
-
-    /**
-     * Gets dozent_id
-     *
-     * @return string
-     */
-    public function getDozentId()
-    {
-        return $this->container['dozent_id'];
-    }
-
-    /**
-     * Sets dozent_id
-     *
-     * @param string $dozent_id Der Dozent, der an dem Ausbildungszug beteiligt ist
-     *
-     * @return $this
-     */
-    public function setDozentId($dozent_id)
-    {
-        $this->container['dozent_id'] = $dozent_id;
-
-        return $this;
-    }
 
     /**
      * Gets links
@@ -258,6 +239,54 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
     public function setLinks($links)
     {
         $this->container['links'] = $links;
+
+        return $this;
+    }
+
+    /**
+     * Gets praktikumsbericht_eingegangen
+     *
+     * @return bool
+     */
+    public function getPraktikumsberichtEingegangen()
+    {
+        return $this->container['praktikumsbericht_eingegangen'];
+    }
+
+    /**
+     * Sets praktikumsbericht_eingegangen
+     *
+     * @param bool $praktikumsbericht_eingegangen Gibt an, ob der Praktikumsbericht eingegangen ist oder nicht
+     *
+     * @return $this
+     */
+    public function setPraktikumsberichtEingegangen($praktikumsbericht_eingegangen)
+    {
+        $this->container['praktikumsbericht_eingegangen'] = $praktikumsbericht_eingegangen;
+
+        return $this;
+    }
+
+    /**
+     * Gets praktikumsbericht_eingegangen_am
+     *
+     * @return \DateTime
+     */
+    public function getPraktikumsberichtEingegangenAm()
+    {
+        return $this->container['praktikumsbericht_eingegangen_am'];
+    }
+
+    /**
+     * Sets praktikumsbericht_eingegangen_am
+     *
+     * @param \DateTime $praktikumsbericht_eingegangen_am Optionales Datum, wann der Praktikumsbericht eingegangen ist.
+     *
+     * @return $this
+     */
+    public function setPraktikumsberichtEingegangenAm($praktikumsbericht_eingegangen_am)
+    {
+        $this->container['praktikumsbericht_eingegangen_am'] = $praktikumsbericht_eingegangen_am;
 
         return $this;
     }

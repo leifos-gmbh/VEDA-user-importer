@@ -1,6 +1,6 @@
 <?php
 /**
- * AusbildungszugDozent
+ * KorrigierterPraktikumsberichtApiDto
  *
  * PHP version 5
  *
@@ -33,15 +33,14 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * AusbildungszugDozent Class Doc Comment
+ * KorrigierterPraktikumsberichtApiDto Class Doc Comment
  *
  * @category Class
- * @description An einem Ausbildungszug beteiligte Dozenten.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class AusbildungszugDozent implements ModelInterface, ArrayAccess
+class KorrigierterPraktikumsberichtApiDto implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +49,7 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'AusbildungszugDozent';
+    protected static $swaggerModelName = 'KorrigierterPraktikumsberichtApiDto';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,8 +57,8 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'dozent_id' => 'string',
-        'links' => '\Swagger\Client\Model\Link[]'
+        'praktikumsbericht_korrigiert' => 'bool',
+        'praktikumsbericht_korrigiert_am' => '\DateTime'
     ];
 
     /**
@@ -68,8 +67,8 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'dozent_id' => null,
-        'links' => null
+        'praktikumsbericht_korrigiert' => null,
+        'praktikumsbericht_korrigiert_am' => 'date'
     ];
 
     /**
@@ -99,8 +98,8 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'dozent_id' => 'dozentId',
-        'links' => 'links'
+        'praktikumsbericht_korrigiert' => 'praktikumsberichtKorrigiert',
+        'praktikumsbericht_korrigiert_am' => 'praktikumsberichtKorrigiertAm'
     ];
 
     /**
@@ -109,8 +108,8 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'dozent_id' => 'setDozentId',
-        'links' => 'setLinks'
+        'praktikumsbericht_korrigiert' => 'setPraktikumsberichtKorrigiert',
+        'praktikumsbericht_korrigiert_am' => 'setPraktikumsberichtKorrigiertAm'
     ];
 
     /**
@@ -119,8 +118,8 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'dozent_id' => 'getDozentId',
-        'links' => 'getLinks'
+        'praktikumsbericht_korrigiert' => 'getPraktikumsberichtKorrigiert',
+        'praktikumsbericht_korrigiert_am' => 'getPraktikumsberichtKorrigiertAm'
     ];
 
     /**
@@ -183,8 +182,8 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['dozent_id'] = isset($data['dozent_id']) ? $data['dozent_id'] : null;
-        $this->container['links'] = isset($data['links']) ? $data['links'] : null;
+        $this->container['praktikumsbericht_korrigiert'] = isset($data['praktikumsbericht_korrigiert']) ? $data['praktikumsbericht_korrigiert'] : null;
+        $this->container['praktikumsbericht_korrigiert_am'] = isset($data['praktikumsbericht_korrigiert_am']) ? $data['praktikumsbericht_korrigiert_am'] : null;
     }
 
     /**
@@ -196,8 +195,8 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
     {
         $invalidProperties = [];
 
-        if ($this->container['dozent_id'] === null) {
-            $invalidProperties[] = "'dozent_id' can't be null";
+        if ($this->container['praktikumsbericht_korrigiert'] === null) {
+            $invalidProperties[] = "'praktikumsbericht_korrigiert' can't be null";
         }
         return $invalidProperties;
     }
@@ -215,49 +214,49 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets dozent_id
+     * Gets praktikumsbericht_korrigiert
      *
-     * @return string
+     * @return bool
      */
-    public function getDozentId()
+    public function getPraktikumsberichtKorrigiert()
     {
-        return $this->container['dozent_id'];
+        return $this->container['praktikumsbericht_korrigiert'];
     }
 
     /**
-     * Sets dozent_id
+     * Sets praktikumsbericht_korrigiert
      *
-     * @param string $dozent_id Der Dozent, der an dem Ausbildungszug beteiligt ist
+     * @param bool $praktikumsbericht_korrigiert Gibt an, ob der Praktikumsbericht geprüft ist oder nicht
      *
      * @return $this
      */
-    public function setDozentId($dozent_id)
+    public function setPraktikumsberichtKorrigiert($praktikumsbericht_korrigiert)
     {
-        $this->container['dozent_id'] = $dozent_id;
+        $this->container['praktikumsbericht_korrigiert'] = $praktikumsbericht_korrigiert;
 
         return $this;
     }
 
     /**
-     * Gets links
+     * Gets praktikumsbericht_korrigiert_am
      *
-     * @return \Swagger\Client\Model\Link[]
+     * @return \DateTime
      */
-    public function getLinks()
+    public function getPraktikumsberichtKorrigiertAm()
     {
-        return $this->container['links'];
+        return $this->container['praktikumsbericht_korrigiert_am'];
     }
 
     /**
-     * Sets links
+     * Sets praktikumsbericht_korrigiert_am
      *
-     * @param \Swagger\Client\Model\Link[] $links links
+     * @param \DateTime $praktikumsbericht_korrigiert_am Optionales Datum, wann der Praktikumsbericht geprüft worden ist.
      *
      * @return $this
      */
-    public function setLinks($links)
+    public function setPraktikumsberichtKorrigiertAm($praktikumsbericht_korrigiert_am)
     {
-        $this->container['links'] = $links;
+        $this->container['praktikumsbericht_korrigiert_am'] = $praktikumsbericht_korrigiert_am;
 
         return $this;
     }
