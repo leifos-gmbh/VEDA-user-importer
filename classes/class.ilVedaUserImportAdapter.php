@@ -463,18 +463,21 @@ class ilVedaUserImportAdapter
 		foreach($udfclaiming->getFields() as $field_name => $field_id) {
 
 			$value = '';
+			$field_update_required = false;
 			switch($field_name) {
 
 				case \ilVedaUDFClaimingPlugin::FIELD_SUPERVISOR:
-
+					$field_update_required = true;
 					$value = $org->getAufsichtspersonName();
 					break;
 
 				case \ilVedaUDFClaimingPlugin::FIELD_SUPERVISOR_EMAIL:
+					$field_update_required = true;
 					$value = $org->getAufsichtspersonEMail();
 					break;
 
 				case \ilVedaUDFClaimingPlugin::FIELD_MEMBER_ID:
+					$field_update_required = true;
 					$value = $org->getMitgliedsnummer();
 					break;
 
@@ -482,19 +485,15 @@ class ilVedaUserImportAdapter
 					$this->logger->error('Unknown field id given: ' . $field_id);
 					break;
 			}
-
-			$this->writer->xmlElement(
-				'UserDefinedField',
-				[
-					'Id' => 'il_' . IL_INST_ID . '_udf_' . $field_id,
-				],
-				$value
-			);
+			if($field_update_required) {
+				$this->writer->xmlElement(
+					'UserDefinedField',
+					[
+						'Id' => 'il_' . IL_INST_ID . '_udf_' . $field_id,
+					],
+					$value
+				);
+			}
 		}
-
-
-
 	}
-
-
 }
