@@ -75,7 +75,7 @@ class ilVedaMemberImportAdapter
 			$this->logger->debug('Not imported user.');
 			return false;
 		}
-		if(!$us->getCreationStatus() != \ilVedaUserStatus::STATUS_SYNCHRONIZED) {
+		if($us->getCreationStatus() != \ilVedaUserStatus::STATUS_SYNCHRONIZED) {
 			$this->logger->info('Ignoring not synchronized user account: ' . $usr_oid);
 			return false;
 		}
