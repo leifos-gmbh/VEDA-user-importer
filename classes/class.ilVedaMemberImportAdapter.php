@@ -184,7 +184,7 @@ class ilVedaMemberImportAdapter
 
 			$found = false;
 			foreach($remote_tutors as $remote_tutor) {
-				if($remote_tutor->getDozentId() == $tutor_oid) {
+				if(strtolower($remote_tutor->getDozentId()) == strtolower($tutor_oid)) {
 					$found = true;
 					break;
 				}
@@ -196,7 +196,7 @@ class ilVedaMemberImportAdapter
 					continue;
 				}
 
-				if($remote_companion->getLernbegleiterId() == $companion_oid) {
+				if(strtolower($remote_companion->getLernbegleiterId()) == strtolower($companion_oid)) {
 					$found = true;
 					break;
 				}
@@ -270,7 +270,7 @@ class ilVedaMemberImportAdapter
 			$found = false;
 			/** @var $members AusbildungszugTeilnehmer[] **/
 			foreach($members as $member) {
-				if($member->getTeilnehmerId() != $oid) {
+				if(strtolower($member->getTeilnehmerId()) != strtolower($oid)) {
 					continue;
 				}
 				if($member->getMitgliedschaftsart() == self::REGULAR && !$member->getWechsel()) {
@@ -319,7 +319,7 @@ class ilVedaMemberImportAdapter
 			$found = false;
 			/** @var $members AusbildungszugTeilnehmer[] **/
 			foreach($members as $member) {
-				if($member->getTeilnehmerId() != $oid) {
+				if(strtolower($member->getTeilnehmerId()) != strtolower($oid)) {
 					continue;
 				}
 				if(
@@ -371,7 +371,7 @@ class ilVedaMemberImportAdapter
 			$found = false;
 			/** @var $members AusbildungszugTeilnehmer[] **/
 			foreach($members as $member) {
-				if($member->getTeilnehmerId() != $oid) {
+				if(strtolower($member->getTeilnehmerId()) != strtolower($oid)) {
 					continue;
 				}
 				if($member->getMitgliedschaftsart() == self::REGULAR && $member->getWechsel()) {
