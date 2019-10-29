@@ -380,6 +380,7 @@ class ilVedaIDValidator
 		$connector = \ilVedaConnector::getInstance();
 		try {
 			$this->training_course = $connector->getTrainingCourseSegments($this->training_course_id);
+			$this->logger->dump($this->training_course);
 		}
 		catch(\ilVedaConnectionException $e) {
 			$this->err_template->setVariable('SIMPLE_FAILURE', $this->plugin->txt('err_val_wrong_tc'));
