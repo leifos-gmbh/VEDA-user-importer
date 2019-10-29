@@ -160,7 +160,7 @@ class ilVedaCourseImportAdapter
 
 				$this->logger->debug('Update title');
 				$target->setTitle($tc[self::CP_INFO_NAME]);
-				$target->setOfflineStatus(false);
+				$target->setOfflineStatus(true);
 				$target->update();
 				$this->createDefaultCourseRole($target, $this->settings->getPermanentSwitchRole(),$train);
 				$this->createDefaultCourseRole($target, $this->settings->getTemporarySwitchRole(),$train);
