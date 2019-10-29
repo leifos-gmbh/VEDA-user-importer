@@ -148,6 +148,7 @@ class ilVedaMemberImportAdapter
 				if(strlen($submission_date_str)) {
 					$submission_date = new DateTime($submission_date_str);
 				}
+				$submission_date = new DateTime('now');
 				$connector->sendExerciseSubmissionDate($segment_id, $usr_oid, $submission_date);
 				$connector->sendExerciseSubmissionConfirmed($segment_id, $usr_oid, new \DateTime());
 			}
