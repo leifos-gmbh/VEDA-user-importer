@@ -327,7 +327,10 @@ class ilVedaCourseImportAdapter
 			if($train_segment->getOid() == $segment_id) {
 
 				$segment_start = $train_segment->getBeginn();
-				$segment_end = $train_segment->getEnde();
+				$segment_end = $train_segment->getBearbeitungsende();
+				if(!$segment_end instanceof DateTime) {
+					$segment_end = $train_segment->getEnde();
+				}
 			}
 			if($segment_start instanceof DateTime) {
 				$this->logger->debug('Update starting time of exercise');
@@ -340,7 +343,6 @@ class ilVedaCourseImportAdapter
 			if($segment_end instanceof DateTime) {
 				$this->logger->debug('Update deadline  of exercise');
 				foreach(\ilExAssignment::getInstancesByExercise($exercise->getId()) as $assignment) {
-					$assignment->setDeadlineMode(\ilExAssignment::DEADLINE_ABSOLUTE);
 					$assignment->setDeadline($segment_end->getTimestamp());
 					$assignment->update();
 				}
