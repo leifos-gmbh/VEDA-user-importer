@@ -265,6 +265,7 @@ class ilVedaMemberImportAdapter
 			if(!$found) {
 				$this->logger->info('Deassigning deprecated tutor from course: ' . $tutor->getLogin());
 				$admin->deassignUser($course->getDefaultTutorRole(), $tutor_id);
+				$participants->updateContact($tutor_id, false);
 			}
 		}
 		// assign missing tutors
@@ -278,6 +279,7 @@ class ilVedaMemberImportAdapter
 				if(!in_array($uid, $participants->getTutors())) {
 					$admin->assignUser($course->getDefaultTutorRole(), $uid);
 					$participants->addDesktopItem($uid);
+					$participants->updateContact($uid, true);
 				}
 			}
 		}
@@ -297,6 +299,7 @@ class ilVedaMemberImportAdapter
 					$this->logger->info('Assigning new course tutor with id: ' . $companion_id . ' ILIAS id: ' . $uid);
 					$admin->assignUser($course->getDefaultTutorRole(), $uid);
 					$participants->addDesktopItem($uid);
+					$participants->updateContact($uid, true);
 				}
 			}
 		}
