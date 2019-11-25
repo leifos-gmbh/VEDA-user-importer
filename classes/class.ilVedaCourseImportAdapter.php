@@ -89,6 +89,7 @@ class ilVedaCourseImportAdapter
 			$target = \ilObjectFactory::getInstanceByRefId($target_id, false);
 			if($target instanceof \ilObjCourse) {
 				$this->updateCourseCreatedStatus($train->getOid());
+				$this->updateCourseAdministrators($source,$target);
 			}
 			else {
 				$this->logger->notice('Target should be course type: ' . $target_id);
@@ -96,6 +97,30 @@ class ilVedaCourseImportAdapter
 		}
 		else {
 			$this->logger->debug('Nothing todo for non-course copy.');
+		}
+	}
+
+	/**
+	 * Copy admins from source to target
+	 *
+	 * @param \ilObjCourse $source
+	 * @param \ilObjCourse $target
+	 */
+	protected function updateCourseAdministrators(\ilObjCourse $source, \ilObjCourse $target)
+	{
+		$source_part = \ilParticipants::getInstance($source->getRefId());
+		$target_part = \ilParticipants::getInstance($target->getRefId());
+
+		if(
+			(!$target_part instanceof \ilCourseParticipants) ||
+			(!$source_part instanceof \ilCourseParticipants)
+		) {
+			$this->logger->warning('cannot instantiate participants for course: ' . $source->getRefId() . ' ' . $target->getRefId());
+			return false;
+		}
+
+		foreach($source_part->getAdmins() as $admin_id) {
+			$target_part->add($admin_id, ilCourseConstants::CRS_ADMIN);
 		}
 	}
 
