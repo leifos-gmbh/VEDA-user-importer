@@ -292,7 +292,7 @@ class ilVedaMemberImportAdapter
 
 			if(!$this->isValidDate($remote_companion->getZustaendigAb(), $remote_companion->getZustaendigBis())) {
 				$this->logger->info('Outside time frame: Ignoring companion with id: ' . $companion_id);
-				break;
+				continue;
 			}
 			foreach($udfplugin->getUsersForCompanionId($companion_id) as $uid) {
 				if(!in_array($uid, $participants->getTutors())) {
