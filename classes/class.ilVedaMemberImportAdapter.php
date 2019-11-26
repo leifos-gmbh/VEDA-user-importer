@@ -240,7 +240,7 @@ class ilVedaMemberImportAdapter
 			}
 			if(!$tutor_oid && !$companion_oid) {
 				$this->logger->debug('Ignoring tutor without tutor_oid: ' . $tutor->getLogin());
-				break;
+				continue;
 			}
 
 			$found = false;
