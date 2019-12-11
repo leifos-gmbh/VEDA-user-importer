@@ -324,6 +324,7 @@ class ilVedaIDValidator
 			$this->err_template->parseCurrentBlock();
 			return false;
 		}
+		return true;
 	}
 
 	/**
@@ -370,6 +371,7 @@ class ilVedaIDValidator
 			$this->err_template->parseCurrentBlock();
 			return false;
 		}
+		return true;
 	}
 
 	/**
