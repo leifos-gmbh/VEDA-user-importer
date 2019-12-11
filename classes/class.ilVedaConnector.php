@@ -13,7 +13,7 @@ use Swagger\Client\Model\Ausbildungsgang;
 use Swagger\Client\Model\Ausbildungszug;
 use Swagger\Client\Model\AusbildungszugTeilnehmer;
 use Swagger\Client\Model\KorrigierterPraktikumsberichtApiDto;
-use Swagger\Client\Model\LernerfolgMeldenApiDto;
+use Swagger\Client\Model\MeldeLernerfolgApiDto;
 use Swagger\Client\Model\PraktikumsberichtEingegangenApiDto;
 
 /**
@@ -231,7 +231,7 @@ class ilVedaConnector
 		}
 
 		try {
-			$info = new LernerfolgMeldenApiDto();
+			$info = new MeldeLernerfolgApiDto();
 			$info->setLernerfolg(true);
 			$info->setLernerfolgGemeldetAm($dt);
 

@@ -43,13 +43,13 @@ tbl_settings_course_import#:#Importverzeichnis
 tbl_settings_course_import_info#:#Bitte wählen Sie die Kategorie aus, in der neue Ausbildungszüge erstellt werden sollen.
 training_course#:#Ausbildungsgang ID
 training_course_info#:#ID des Ausbildungsgang
+success_validation#:#Die Validierung des Kurses ist erfolgreich abgeschlossen worden. Das Mapping ist somit vollständig und verwendet nur Ausbildungsgangabschnitt-IDs, welche Bestandteil des hinterlegten Ausbildungsgangs sind.
 err_val_no_tc_id#:#Diesem Kurs ist keine Ausbildungsgang-ID zugeordnet.
 err_val_wrong_tc#:#Es wurden keine Ausbildungsabschnitte gefunden, die der eingetragenen Ausbildungsgang-ID zugeordnet sind. Bitte überprüfen die "Ausbildungsgang-ID".
 err_val_sess_remote_info#:#Die folgenden ILIAS-Sitzungen sind in diesem Ausbildungsgang nicht als "Ausbildungsgangabschnitt" vorgesehen.
 err_val_sess_local_info#:#Die folgenden Präsenzveranstaltungen sind als "Ausbildungsgangabschnitt" vorgesehen, es existieren jedoch keine entsprechenden ILIAS-Sitzungen.
 err_val_exc_remote_info#:#Die folgenden ILIAS-Übungen sind in diesem Ausbildungsgang nicht als "Ausbildungsgangabschnitt" vorgesehen.
 err_val_exc_local_info#:#Die folgenden Selbstlernabschnitte sind als "Ausbildungsgangabschnitt" vorgesehen, es existieren jedoch keine entsprechenden ILIAS-Übungen.
-success_validation#:#Die Zuordnung der "Ausbildungsgang-ID" und der "Ausbildungsgangabschnitt-IDs" wurde überprüft. Es wurden keine Fehler festgestellt.
 tbl_settings_switch_permanent_role#:#Rollenvorlage "Wechsler"
 tbl_settings_switch_permanent_role_info#:#Bitte geben Sie die ID einer Rollenvorlage für Teilnehmer mit Status "Wechsler" an.
 tbl_settings_switch_temp_role#:#Rollenvorlage "Temporärer Wechsler"

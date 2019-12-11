@@ -438,6 +438,8 @@ class ilVedaUserImportAdapter
 	 */
 	protected function writeOrganisationInfo(Organisation $org)
 	{
+		$this->logger->dump($org);
+
 		$org_parts = [];
 		if(strlen(trim($org->getOrganisationsname1()))) {
 			$org_parts[] = $org->getOrganisationsname1();

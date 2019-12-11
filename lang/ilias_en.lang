@@ -17,3 +17,4 @@ name_conflicts_check_log#:#Some users are not migrated because of name conflicts
 platform_id#:#Platform ID
 platform_id_info#:#Unique id provided to ILIAS.
 err_claiming_missing#:#Der Import kann nicht durchgeführt werden, da das "VedaMDClaiming-Plugin" nicht vorhanden oder nicht aktiviert ist.
+success_validation#:#Die Validierung des Kurses ist erfolgreich abgeschlossen worden. Das Mapping ist somit vollständig und verwendet nur Ausbildungsgangabschnitt-IDs, welche Bestandteil des hinterlegten Ausbildungsgangs sind.
