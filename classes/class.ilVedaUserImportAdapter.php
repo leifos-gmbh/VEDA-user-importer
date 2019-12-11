@@ -95,6 +95,7 @@ class ilVedaUserImportAdapter
 				continue;
 			}
 
+			$user = null;
 			if($usr_id) {
 
 				try {
@@ -200,10 +201,8 @@ class ilVedaUserImportAdapter
 				$participant_container->getTeilnehmer()->getAktiv() ? 'true' : 'false'
 				);
 
-			$this->writer->xmlElement('TimeLimitOwner',[],USER_FOLDER_ID);
-			$this->writer->xmlElement('TimeLimitUnlimited',[],1);
-			$this->writer->xmlElement('TimeLimitFrom',[],time());
-			$this->writer->xmlElement('TimeLimitUntil',[],time());
+			$this->updateTimeLimit($participant_container, $user);
+
 
 			// Role assignment
 			$long_role_id = ('il_' . IL_INST_ID . '_role_'.$this->settings->getParticipantRole());
@@ -228,6 +227,35 @@ class ilVedaUserImportAdapter
 		}
 
 		$this->writer->xmlEndTag('Users');
+	}
+
+	/**
+	 * @param \Swagger\Client\Model\TeilnehmerELearningPlattform $participant
+	 * @param \ilObjUser|null $user
+	 */
+	protected function updateTimeLimit(TeilnehmerELearningPlattform $participant, ilObjUser $user = null)
+	{
+		if($participant->getGueltigAb() instanceof DateTime) {
+			$start = $participant->getGueltigAb()->getTimestamp();
+		}
+		if($participant->getGueltigBis() instanceof DateTime) {
+			$end = $participant->getGueltigBis()->getTimestamp();
+		}
+
+		$this->writer->xmlElement('TimeLimitOwner',[],USER_FOLDER_ID);
+		$this->writer->xmlElement('TimeLimitUnlimited',[], $start && $end);
+		if($start) {
+			$this->writer->xmlElement('TimeLimitFrom',[],$start);
+		}
+		else {
+			$this->writer->xmlElement('TimeLimitFrom',[],0);
+		}
+		if($end) {
+			$this->writer->xmlElement('TimeLimitUntil',[],$end);
+		}
+		else {
+			$this->writer->xmlElement('TimeLimitUntil',[],0);
+		}
 	}
 
 	/**
@@ -315,6 +343,16 @@ class ilVedaUserImportAdapter
 			$this->logger->debug('Existing usr_account with id: ' . $usr_id . ' is valid');
 			return true;
 		}
+
+
+		if(!$this->isValidDate(
+			$participant->getGueltigAb(),
+			$participant->getGueltigBis()
+		)) {
+			$this->logger->info('Ignoring participant outside valid time.');
+			return false;
+		}
+
 		// no usr_id given => usr is valid if login does not exist
 		$login = $participant->getBenutzername();
 		$generated_login = \ilAuthUtils::_generateLogin($login);
@@ -505,4 +543,43 @@ class ilVedaUserImportAdapter
 			}
 		}
 	}
+
+	/**
+	 * @param \DateTime|null $start
+	 * @param \DateTime|null $end
+	 */
+	public function isValidDate(?DateTime $start, ?DateTime $end)
+	{
+		if($start == null) {
+			return true;
+		}
+		$now = new \ilDate(time(), IL_CAL_UNIX);
+		$ilstart = new \ilDate($start->format('Y-m-d'),IL_CAL_DATE);
+
+		if($end == null) {
+
+			// check starting time <= now
+			if(\ilDateTime::_before($ilstart, $now , IL_CAL_DAY)) {
+				$this->logger->debug('Starting date is valid');
+				return true;
+			}
+			$this->logger->debug('Starting date is invalid');
+			return false;
+		}
+
+		$ilend = new \ilDate($end->format('Y-m-d'), IL_CAL_DATE);
+
+		if(
+		\ilDateTime::_within(
+			$now,
+			$ilstart,
+			$ilend,
+			IL_CAL_DAY
+		)
+		) {
+			return true;
+		}
+		return false;
+	}
+
 }
