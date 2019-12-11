@@ -2,6 +2,7 @@
 
 use Swagger\Client\Model\Organisation;
 use Swagger\Client\Model\TeilnehmerELearningPlattform;
+use Swagger\Client\Model\Adresse;
 
 /**
  * Class ilVedaUserImportAdapter
@@ -456,6 +457,12 @@ class ilVedaUserImportAdapter
 			$this->writer->xmlElement('Institution', [] , implode(' ' , $org_parts));
 		}
 
+		if($org->getAdresse() instanceof Swagger\Client\Model\Adresse) {
+			$city = $org->getAdresse()->getOrt();
+			if(strlen($city)) {
+				$this->writer->xmlElement('City', null, $city);
+			}
+		}
 		$plugin = \ilVedaConnectorPlugin::getInstance();
 		if(!$plugin->isUDFClaimingPluginAvailable()) {
 			$this->logger->warning('Import of organisation information failed: no udf plugin found');

@@ -59,6 +59,7 @@ class Organisation implements ModelInterface, ArrayAccess
       */
     protected static $swaggerTypes = [
         'oid' => 'string',
+        'adresse' => '\Swagger\Client\Model\Adresse',
         'aufsichtsperson_e_mail' => 'string',
         'aufsichtsperson_name' => 'string',
         'links' => '\Swagger\Client\Model\Link[]',
@@ -77,6 +78,7 @@ class Organisation implements ModelInterface, ArrayAccess
       */
     protected static $swaggerFormats = [
         'oid' => null,
+        'adresse' => null,
         'aufsichtsperson_e_mail' => null,
         'aufsichtsperson_name' => null,
         'links' => null,
@@ -116,6 +118,7 @@ class Organisation implements ModelInterface, ArrayAccess
      */
     protected static $attributeMap = [
         'oid' => 'oid',
+        'adresse' => 'adresse',
         'aufsichtsperson_e_mail' => 'aufsichtspersonEMail',
         'aufsichtsperson_name' => 'aufsichtspersonName',
         'links' => 'links',
@@ -134,6 +137,7 @@ class Organisation implements ModelInterface, ArrayAccess
      */
     protected static $setters = [
         'oid' => 'setOid',
+        'adresse' => 'setAdresse',
         'aufsichtsperson_e_mail' => 'setAufsichtspersonEMail',
         'aufsichtsperson_name' => 'setAufsichtspersonName',
         'links' => 'setLinks',
@@ -152,6 +156,7 @@ class Organisation implements ModelInterface, ArrayAccess
      */
     protected static $getters = [
         'oid' => 'getOid',
+        'adresse' => 'getAdresse',
         'aufsichtsperson_e_mail' => 'getAufsichtspersonEMail',
         'aufsichtsperson_name' => 'getAufsichtspersonName',
         'links' => 'getLinks',
@@ -224,6 +229,7 @@ class Organisation implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
+        $this->container['adresse'] = isset($data['adresse']) ? $data['adresse'] : null;
         $this->container['aufsichtsperson_e_mail'] = isset($data['aufsichtsperson_e_mail']) ? $data['aufsichtsperson_e_mail'] : null;
         $this->container['aufsichtsperson_name'] = isset($data['aufsichtsperson_name']) ? $data['aufsichtsperson_name'] : null;
         $this->container['links'] = isset($data['links']) ? $data['links'] : null;
@@ -282,6 +288,30 @@ class Organisation implements ModelInterface, ArrayAccess
     public function setOid($oid)
     {
         $this->container['oid'] = $oid;
+
+        return $this;
+    }
+
+    /**
+     * Gets adresse
+     *
+     * @return \Swagger\Client\Model\Adresse
+     */
+    public function getAdresse()
+    {
+        return $this->container['adresse'];
+    }
+
+    /**
+     * Sets adresse
+     *
+     * @param \Swagger\Client\Model\Adresse $adresse Adresse der Organisation
+     *
+     * @return $this
+     */
+    public function setAdresse($adresse)
+    {
+        $this->container['adresse'] = $adresse;
 
         return $this;
     }
