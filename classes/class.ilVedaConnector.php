@@ -237,14 +237,14 @@ class ilVedaConnector
 
 			$this->logger->dump($info);
 
-			$response = $this->api_training_course_train_segment->lernerfolgMeldenUsingPUT(
+			$response = $this->api_training_course_train_segment->meldeLernerfolgUsingPUT(
 				$segment_id,
 				$participant_id,
 				$info
 			);
 		}
 		catch(ApiException $e) {
-			$this->logger->error('lernerfolgMeldenUsingPUT failed with message: ' . $e->getMessage());
+			$this->logger->error('meldeLernerfolgUsingPUT failed with message: ' . $e->getMessage());
 			$this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
 			$this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
 			$this->logger->warning($e->getResponseBody());
@@ -252,7 +252,7 @@ class ilVedaConnector
 			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
 		}
 		catch(Exception $e) {
-			$this->logger->warning('lernerfolgMeldenUsingPUT failed with message: ' . $e->getMessage());
+			$this->logger->warning('meldeLernerfolgUsingPUT failed with message: ' . $e->getMessage());
 			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
 		}
 
