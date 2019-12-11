@@ -392,7 +392,7 @@ class ilVedaIDValidator
 	{
 		$this->training_course_id = $this->mdhelper->findTrainingCourseId($this->ref_id);
 		if(!$this->training_course_id) {
-			$this->err_template->setVariable('SIMPLE_FAILURE', $this->plugin->txt('err_cal_no_tc_id'));
+			$this->err_template->setVariable('SIMPLE_FAILURE', $this->plugin->txt('err_val_no_tc_id'));
 			return false;
 		}
 
