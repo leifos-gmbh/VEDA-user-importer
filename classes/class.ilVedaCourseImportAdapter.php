@@ -368,8 +368,15 @@ class ilVedaCourseImportAdapter
 			if($segment_end instanceof DateTime) {
 				$this->logger->debug('Update deadline  of exercise');
 				foreach(\ilExAssignment::getInstancesByExercise($exercise->getId()) as $assignment) {
-					$assignment->setDeadline($segment_end->getTimestamp());
-					$assignment->update();
+
+				    if ($assignment->getDeadlineMode() == \ilExAssignment::DEADLINE_RELATIVE) {
+				        $assignment->setRelDeadlineLastSubmission($segment_end->getTimestamp());
+				        $assignment->update();
+                    }
+				    else {
+                        $assignment->setDeadline($segment_end->getTimestamp());
+                        $assignment->update();
+                    }
 				}
 			}
 		}
