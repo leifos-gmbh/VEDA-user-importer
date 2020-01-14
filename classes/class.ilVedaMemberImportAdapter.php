@@ -630,7 +630,10 @@ class ilVedaMemberImportAdapter
 		if($end == null) {
 
 			// check starting time <= now
-			if(\ilDateTime::_before($ilstart, $now , IL_CAL_DAY)) {
+			if(
+			    \ilDateTime::_before($ilstart, $now , IL_CAL_DAY) ||
+                \ilDateTime::_equals($ilstart, $now, IL_CAL_DAY)
+            ) {
 				$this->logger->debug('Starting date is valid');
 				return true;
 			}
@@ -646,7 +649,12 @@ class ilVedaMemberImportAdapter
 				$ilstart,
 				$ilend,
 				IL_CAL_DAY
-			)
+			) ||
+            \ilDateTime::_equals(
+                $now,
+                $ilend,
+                \ilDateTime::DAY
+            )
 		) {
 			return true;
 		}
