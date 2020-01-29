@@ -127,6 +127,7 @@ class ilVedaMemberImportAdapter
 		foreach($refs as $tmp => $ref_id) {
 
 			$segment_id = $this->mdhelper->findTrainSegmentId($ref_id);
+			$this->logger->debug('Current ref_id: ' . $ref_id . ' has segment_id: ' . $segment_id);
 			if(ilVedaSegmentInfo::isPracticalTraining($segment_id)) {
 				$this->logger->info('Exercise of type "practical training"');
 				$is_practical_training = true;

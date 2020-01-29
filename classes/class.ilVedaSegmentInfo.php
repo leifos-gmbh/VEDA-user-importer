@@ -78,6 +78,11 @@ class ilVedaSegmentInfo
 		$this->db->manipulate($query);
 	}
 
+    /**
+     * @param string|null $oid
+     * @return bool
+     * @throws ilDatabaseException
+     */
 	public static function isSelfLearning(?string $oid) : bool
     {
         global $DIC;
