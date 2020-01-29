@@ -83,25 +83,21 @@ class ilVedaSegmentInfo
      * @return bool
      * @throws ilDatabaseException
      */
-	public static function isSelfLearning(?string $oid) : bool
+	public static function isPracticalTraining(?string $oid) : bool
     {
         global $DIC;
 
         $db = $DIC->database();
-        $logger = $DIC->logger()->vedaimp();
 
         $query = 'select type from ' . self::TABLE_NAME . ' '.
             'where oid = ' . $db->quote($oid, \ilDBConstants::T_TEXT);
         $res = $db->query($query);
-        $logger->info($query);
         while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
             if($row->type == self::TYPE_PRAKTIKUM) {
                 return true;
             }
         }
         return false;
-
-
     }
 
 	/**
@@ -109,7 +105,7 @@ class ilVedaSegmentInfo
 	 * @return bool
 	 * @throws \ilDatabaseException
 	 */
-	public static function isPracticalTraining(?string $oid)
+	public static function isSelfLearning(?string $oid) : bool
 	{
 		global $DIC;
 
