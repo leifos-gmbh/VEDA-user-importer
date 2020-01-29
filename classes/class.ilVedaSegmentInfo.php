@@ -9,8 +9,19 @@
  */
 class ilVedaSegmentInfo
 {
+    /**
+     * @var string
+     */
 	public const TYPE_PRAKTIKUM = 'Praktikum';
 
+    /**
+     * @var string
+     */
+	public const TYPE_SELF_LEARNING = 'Selbstlernen';
+
+    /**
+     * @var string
+     */
 	private const TABLE_NAME = 'cron_crnhk_vedaimp_seg';
 
 	/**
@@ -67,6 +78,24 @@ class ilVedaSegmentInfo
 		$this->db->manipulate($query);
 	}
 
+	public static function isSelfLearning(?string $oid) : bool
+    {
+        global $DIC;
+
+        $db = $DIC->database();
+        $query = 'select type from ' . self::TABLE_NAME . ' '.
+            'where oid = ' . $db->quote($oid, \ilDBConstants::T_TEXT);
+        $res = $db->query($query);
+        while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
+            if($row->type == self::TYPE_PRAKTIKUM) {
+                return true;
+            }
+        }
+        return false;
+
+
+    }
+
 	/**
 	 * @param string|null $oid
 	 * @return bool
@@ -82,7 +111,7 @@ class ilVedaSegmentInfo
 			'where oid = ' . $db->quote($oid, \ilDBConstants::T_TEXT);
 		$res = $db->query($query);
 		while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
-			if($row->type == self::TYPE_PRAKTIKUM) {
+			if($row->type == self::TYPE_SELF_LEARNING) {
 				return true;
 			}
 		}
