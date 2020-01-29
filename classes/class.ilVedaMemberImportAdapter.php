@@ -97,10 +97,13 @@ class ilVedaMemberImportAdapter
 		$this->sendExerciseSuccessInformation($obj_id, $usr_id, $usr_oid, $segment_id);
 	}
 
-	/**
-	 * @param int $obj_id
-	 * @param int $usr_id
-	 */
+    /**
+     * @param int    $obj_id
+     * @param int    $usr_id
+     * @param string $usr_oid
+     * @param string $segment_id
+     * @throws ilDatabaseException
+     */
 	protected function sendExerciseSuccessInformation(int $obj_id, int $usr_id, string $usr_oid, string $segment_id)
 	{
 		global $DIC;
@@ -119,6 +122,7 @@ class ilVedaMemberImportAdapter
 		$refs = \ilObject::_getAllReferences($exercise->getId());
 
 		$is_practical_training = false;
+		$is_self_learning = false;
 		$submission_date_str = '';
 		foreach($refs as $tmp => $ref_id) {
 
@@ -127,36 +131,51 @@ class ilVedaMemberImportAdapter
 				$this->logger->info('Exercise of type "practical training"');
 				$is_practical_training = true;
 			}
+			elseif (\ilVedaSegmentInfo::isSelfLearning($segment_id)) {
+			    $this->logger->info('Exercise of type "self learning"');
+			    $is_self_learning = true;
+            }
 			else {
-				$this->logger->info('No practical trainign type');
+				$this->logger->info('No practical training type, no self learning type');
 				break;
 			}
-			$assignments = \ilExAssignment::getInstancesByExercise($ref_id);
+			$assignments = \ilExAssignment::getInstancesByExercise($exercise->getId());
 			foreach($assignments as $assignment) {
 
 				$submission = new \ilExSubmission($assignment, $usr_id);
 				$submission_date_str = $submission->getLastSubmission();
-				$this->logger->info('Last submission is: ' . $submission_date_str);
+				$this->logger->notice('Last submission is: ' . $submission_date_str);
 			}
 			break;
 		}
-		try {
-			$connector = \ilVedaConnector::getInstance();
-			if($is_practical_training) {
 
-				$submission_date = null;
-				if(strlen($submission_date_str)) {
-					$submission_date = new DateTime($submission_date_str);
-				}
-				$submission_date = new DateTime('now');
-				$connector->sendExerciseSubmissionDate($segment_id, $usr_oid, $submission_date);
-				$connector->sendExerciseSubmissionConfirmed($segment_id, $usr_oid, new \DateTime());
-			}
-			$connector->sendExerciseSuccess($segment_id, $usr_oid, new \DateTime());
-		}
-		catch(\ilVedaConnectionException $e) {
-			$this->logger->warning('Send exercise success failed with message: ' . $e->getMessage());
-		}
+		if ($is_practical_training && $submission_date_str) {
+		    try {
+                $connector = \ilVedaConnector::getInstance();
+                $submission_date = new DateTime($submission_date_str);
+                $connector->sendExerciseSubmissionDate($segment_id, $usr_oid, $submission_date);
+                $connector->sendExerciseSubmissionConfirmed($segment_id, $usr_oid, new \DateTime());
+                $connector->sendExerciseSuccess($segment_id, $usr_oid, new \DateTime());
+            }
+            catch (\ilVedaConnectionException $e) {
+		        $this->logger->error('Send exercise success failed with message: ' . $e->getMessage());
+            }
+        }
+		elseif ($is_practical_training) {
+		    $this->logger->notice('Did not send exercise success messages for user without submission. ');
+		    $this->logger->notice('User id: ' . $usr_id);
+		    $this->logger->notice('Exercise ref_id: ' . $ref_id);
+        }
+		if ($is_self_learning) {
+		    try {
+		        $connector = \ilVedaConnector::getInstance();
+		        $connector->sendExerciseSuccess($segment_id, $usr_oid, new \DateTime());
+            }
+            catch (\ilVedaConnectionException $e) {
+		        $this->logger->error('Send exercise success for type "self training" failed with message: ' . $e->getMessage());
+            }
+        }
+		return;
 	}
 
 	/**

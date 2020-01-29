@@ -12,9 +12,9 @@ use Swagger\Client\Api\OrganisationenApi;
 use Swagger\Client\Model\Ausbildungsgang;
 use Swagger\Client\Model\Ausbildungszug;
 use Swagger\Client\Model\AusbildungszugTeilnehmer;
-use Swagger\Client\Model\KorrigierterPraktikumsberichtApiDto;
 use Swagger\Client\Model\MeldeLernerfolgApiDto;
 use Swagger\Client\Model\PraktikumsberichtEingegangenApiDto;
+use Swagger\Client\Model\PraktikumsberichtKorrigiertApiDto;
 
 /**
  * Connector for all rest api calls.
@@ -121,27 +121,25 @@ class ilVedaConnector
 
 		try {
 
-			$info = new KorrigierterPraktikumsberichtApiDto();
-			if($confirmed) {
-				$info->setPraktikumsberichtKorrigiert(true);
-				$info->setPraktikumsberichtKorrigiertAm($confirmed);
-			}
-			else {
-				$info->setPraktikumsberichtKorrigiert(false);
-			}
-
-
+		    $info = new PraktikumsberichtKorrigiertApiDto();
+		    if($confirmed) {
+		        $info->setPraktikumsberichtKorrigiert(true);
+		        $info->setPraktikumsberichtKorrigiertAm($confirmed);
+            }
+		    else {
+		        $info->setPraktikumsberichtKorrigiert(false);
+            }
 			$this->logger->dump($info);
 
-			$response = $this->api_training_course_train_segment->meldeKorrigierterPraktikumsberichtUsingPUT(
-				$segment_id,
-				$participant_id,
-				$info
-			);
+		    $response = $this->api_training_course_train_segment->meldePraktikumsberichtKorrigiertUsingPUT(
+		        $segment_id,
+                $participant_id,
+                $info
+            );
 			return $response;
 		}
 		catch(ApiException $e) {
-			$this->logger->error('meldeKorrigierterPraktikumsberichtUsingPUT failed with message: ' . $e->getMessage());
+			$this->logger->error('meldePraktikumsberichtKorrigiertUsingPUT failed with message: ' . $e->getMessage());
 			$this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
 			$this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
 			$this->logger->warning($e->getResponseBody());
@@ -149,7 +147,7 @@ class ilVedaConnector
 			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
 		}
 		catch(Exception $e) {
-			$this->logger->warning('meldeKorrigierterPraktikumsberichtUsingPUT failed with message: ' . $e->getMessage());
+			$this->logger->warning('meldePraktikumsberichtKorrigiertUsingPUT failed with message: ' . $e->getMessage());
 			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
 		}
 	}
