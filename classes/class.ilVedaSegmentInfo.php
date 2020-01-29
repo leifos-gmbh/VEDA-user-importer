@@ -88,9 +88,12 @@ class ilVedaSegmentInfo
         global $DIC;
 
         $db = $DIC->database();
+        $logger = $DIC->logger()->vedaimp();
+
         $query = 'select type from ' . self::TABLE_NAME . ' '.
             'where oid = ' . $db->quote($oid, \ilDBConstants::T_TEXT);
         $res = $db->query($query);
+        $logger->info($query);
         while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
             if($row->type == self::TYPE_PRAKTIKUM) {
                 return true;
