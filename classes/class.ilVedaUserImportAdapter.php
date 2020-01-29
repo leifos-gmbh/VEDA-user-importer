@@ -529,7 +529,7 @@ class ilVedaUserImportAdapter
 					break;
 
 				default:
-					$this->logger->error('Unknown field id given: ' . $field_id);
+					$this->logger->error('Unknown field name given: ' . $field_name);
 					break;
 			}
 			if($field_update_required) {
