@@ -478,6 +478,13 @@ class ilVedaCourseImportAdapter
 		$node_data = $GLOBALS['DIC']->repositoryTree()->getNodeData($ref_id);
 		foreach($GLOBALS['DIC']->repositoryTree()->getSubTree($node_data,false) as $node)
 		{
+		    $objDefinition = $DIC['objDefinition'];
+		    if (!$objDefinition->allowCopy($node['type'])) {
+		        $this->logger->notice('Copying is not supported for object type: ' . $node['type']);
+		        continue;
+            }
+
+
 			$copy_writer->xmlElement(
 				'Option',
 				array(
