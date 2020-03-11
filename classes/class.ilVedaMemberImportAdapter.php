@@ -357,7 +357,11 @@ class ilVedaMemberImportAdapter
 				if(strtolower($member->getTeilnehmerId()) != strtolower($oid)) {
 					continue;
 				}
-				if($member->getMitgliedschaftsart() == self::REGULAR && !$member->getWechsel()) {
+				if(
+				    $member->getMitgliedschaftsart() == self::REGULAR &&
+                    !$member->getWechsel() &&
+                    $this->isValidDate($member->getBeginn(), $member->getEnde())
+                ) {
 					$found = true;
 					break;
 				}
