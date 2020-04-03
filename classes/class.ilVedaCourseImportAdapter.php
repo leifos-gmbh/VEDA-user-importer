@@ -131,7 +131,6 @@ class ilVedaCourseImportAdapter
                 $this->logger->notice('Copying is not supported for object type: ' . $node_info['type']);
                 $this->logger->notice('Changing action to "LINK"');
                 $default_action = self::COPY_ACTION_LINK;
-                continue;
             }
 
             switch ($node_info['type']) {
