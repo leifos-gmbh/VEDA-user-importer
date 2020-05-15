@@ -156,7 +156,7 @@ class ilVedaUserStatus
 		foreach(self::getAllUsers() as $user) {
 			$found_remote = false;
 			foreach($participants as $participant) {
-				if($user->getOid() == $participant->getTeilnehmer()->getOid()) {
+			    if (\ilVedaUtils::compareOidsEqual($user->getOid(),$participant->getTeilnehmer()->getOid())) {
 					$found_remote = true;
 				}
 			}

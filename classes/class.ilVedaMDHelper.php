@@ -107,7 +107,7 @@ class ilVedaMDHelper
 		$segment_train_id = '';
 		foreach($train->getAusbildungszugabschnitte() as $abschnitt) {
 
-			if($abschnitt->getAusbildungsgangabschnittId() == $course_segment_id) {
+		    if (\ilVedaUtils::compareOidsEqual($abschnitt->getAusbildungsgangabschnittId(), $course_segment_id)) {
 				$segment_train_id = $abschnitt->getOid();
 				$this->writeTrainingCourseSegmentTrainId($target_id, $abschnitt->getOid());
 				break;
@@ -118,8 +118,7 @@ class ilVedaMDHelper
 			$connector = \ilVedaConnector::getInstance();
 			$training_course = $connector->getTrainingCourseSegments($training_course_id);
 			foreach($training_course->getAusbildungsgangabschnitte() as $training_course_segment) {
-				if($training_course_segment->getOid() == $course_segment_id) {
-
+			    if (\ilVedaUtils::compareOidsEqual($training_course_segment->getOid(),$course_segment_id)) {
 					$segment_info = new \ilVedaSegmentInfo($segment_train_id, $training_course_segment->getAusbildungsgangabschnittsart());
 					$segment_info->update();
 				}

@@ -170,6 +170,7 @@ class ilVedaIDValidator
 	}
 
 
+
 	/**
 	 * @param array $sessions
 	 * @return bool
@@ -198,10 +199,10 @@ class ilVedaIDValidator
 
 
 				$remote_id = $segment->getOid();
-				if(strcmp($local_id, $remote_id) === 0) {
-					$found_remote = true;
-					break;
-				}
+				if (\ilVedaUtils::compareOidsEqual($local_id, $remote_id)) {
+				    $found_remote = true;
+				    break;
+                }
 			}
 			if(!$found_remote) {
 				$missing[] = $node;
@@ -253,10 +254,10 @@ class ilVedaIDValidator
 				 **/
 
 				$remote_id = $segment->getOid();
-				if(strcmp($local_id, $remote_id) === 0) {
-					$found_remote = true;
-					break;
-				}
+				if (\ilVedaUtils::compareOidsEqual($local_id, $remote_id)) {
+				    $found_remote = true;
+				    break;
+                }
 			}
 			if(!$found_remote) {
 				$missing[] = $node;
@@ -301,10 +302,10 @@ class ilVedaIDValidator
 			foreach($sessions as $index => $node) {
 				$local_id = $node['vedaid'];
 				$remote_id = $segment->getOid();
-				if(strcmp($local_id, $remote_id) === 0) {
-					$found_local = true;
-					break;
-				}
+				if (\ilVedaUtils::compareOidsEqual($local_id, $remote_id)) {
+				    $found_local = true;
+				    break;
+                }
 			}
 			if(!$found_local) {
 				$missing[$segment->getOid()] = $segment->getBezeichnung();
@@ -348,10 +349,10 @@ class ilVedaIDValidator
 			foreach($exercises as $index => $node) {
 				$local_id = $node['vedaid'];
 				$remote_id = $segment->getOid();
-				if(strcmp($local_id, $remote_id) === 0) {
-					$found_local = true;
-					break;
-				}
+				if (\ilVedaUtils::compareOidsEqual($local_id, $remote_id)) {
+				    $found_local = true;
+				    break;
+                }
 			}
 			if(!$found_local) {
 				$missing[$segment->getOid()] = $segment->getBezeichnung();

@@ -265,7 +265,7 @@ class ilVedaMemberImportAdapter
 
 			$found = false;
 			foreach($remote_tutors as $remote_tutor) {
-				if(strtolower($remote_tutor->getDozentId()) == strtolower($tutor_oid)) {
+			    if (\ilVedaUtils::compareOidsEqual($remote_tutor->getDozentId(),$tutor_oid)) {
 					$found = true;
 					break;
 				}
@@ -277,7 +277,7 @@ class ilVedaMemberImportAdapter
 					continue;
 				}
 
-				if(strtolower($remote_companion->getLernbegleiterId()) == strtolower($companion_oid)) {
+				if (\ilVedaUtils::compareOidsEqual($remote_companion->getLernbegleiterId(),$companion_oid)) {
 					$found = true;
 					break;
 				}

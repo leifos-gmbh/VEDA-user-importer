@@ -258,7 +258,7 @@ class ilVedaCourseImportAdapter
         try {
             $trains = $connector->getTrainingCourseTrains($info[self::CP_INFO_AUSBILDUNGSGANG]);
             foreach ($trains as $train) {
-                if ($train->getOid() == $info[self::CP_INFO_AUSBILDUNGSZUG]) {
+                if (\ilVedaUtils::compareOidsEqual($train->getOid(), $info[self::CP_INFO_AUSBILDUNGSZUG])) {
                     return $train;
                 }
             }
@@ -474,8 +474,7 @@ class ilVedaCourseImportAdapter
 
             $segment_begin = null;
             $segment_end   = null;
-            if ($train_segment->getOid() == $segment_id) {
-
+            if (\ilVedaUtils::compareOidsEqual($train_segment->getOid(),$segment_id)) {
                 $segment_begin = $train_segment->getBeginn();
                 $segment_end   = $train_segment->getEnde();
             }
@@ -514,8 +513,7 @@ class ilVedaCourseImportAdapter
         foreach ($train->getAusbildungszugabschnitte() as $train_segment) {
 
             $segment_start = $segment_end = null;
-            if ($train_segment->getOid() == $segment_id) {
-
+            if (\ilVedaUtils::compareOidsEqual($train_segment->getOid(),$segment_id)) {
                 $segment_start = $train_segment->getBeginn();
                 $segment_end   = $train_segment->getBearbeitungsende();
                 if (!$segment_end instanceof DateTime) {
