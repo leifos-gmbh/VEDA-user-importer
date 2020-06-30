@@ -93,18 +93,20 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
 
 
 	/**
-	 * @return ilVEDAUserImporterCronJob[]
+	 * @return \ilVedaConnectorCronJob[]
 	 */
 	public function getCronJobInstances(): array
 	{
-		return new \ilVedaConnectorCronJob();
+	    return [
+	        new \ilVedaConnectorCronJob()
+        ];
 	}
 
 	/**
 	 * @param $a_job_id
-	 * @return \ilVEDAUserImporterCronJob
+	 * @return \ilVedaConnectorCronJob
 	 */
-	public function getCronJobInstance($a_job_id): ilVEDAUserImporterCronJob
+	public function getCronJobInstance($a_job_id): ilVedaConnectorCronJob
 	{
 		return new \ilVedaConnectorCronJob();
 	}

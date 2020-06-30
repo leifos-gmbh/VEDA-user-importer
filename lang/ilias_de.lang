@@ -1,7 +1,7 @@
 tab_settings#:#Einstellungen
 tab_credentials#:#Verbindungsdaten
 tbl_settings#:#Allgemeine Einstellungen
-cron_job_info#:#VEDA Connector
+cron_job_info#:#veda Connector: Benutzer-, und Kurssynchronisierung
 credentials_url#:#Webservice URL:
 platform_id#:#Plattform ID
 platform_id_info#:#ID der E-Learning-Plattform

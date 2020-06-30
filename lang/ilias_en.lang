@@ -4,7 +4,7 @@ tab_programs#:#Program ID Assignment
 tbl_settings#:#Cronjob Settings
 err_import_locked#:#Import is locked. Aborting.
 cron_interval#:#Refresh Interval in Hours.
-cron_job_info#:#VEDA User Migration to ILIAS
+cron_job_info#:#veda Connector: user, course, member synchronisation
 tbl_settting_lock#:#Lock Cronjob
 cron#:#Refresh per Cron-job
 no_object_assigned#:#Object not assigned
