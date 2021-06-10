@@ -687,9 +687,9 @@ class ilVedaConnector
 			\ilVedaConnectorSettings::HEADER_TOKEN,
 			$this->settings->getAuthenticationToken()
 		);
+		$config->setHost($this->settings->getRestUrl());
 		$config->setAccessToken($this->settings->getAuthenticationToken());
 		$config->setDebug(true);
-		$config->setDebugFile('/tmp/swagger.txt');
 
 		$header = new \ilVedaConnectorHeaderSelector($config);
 
