@@ -689,7 +689,7 @@ class ilVedaConnector
 		);
 		$config->setHost($this->settings->getRestUrl());
 		$config->setAccessToken($this->settings->getAuthenticationToken());
-		$config->setDebug(true);
+		//$config->setDebug(true);
 
 		$header = new \ilVedaConnectorHeaderSelector($config);
 
