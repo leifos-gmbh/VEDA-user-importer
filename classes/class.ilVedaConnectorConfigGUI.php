@@ -338,6 +338,22 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		$platform_id->setInfo($this->getPluginObject()->txt('platform_id_info'));
 		$form->addItem($platform_id);
 
+        $add_header_auth = new ilCheckboxInputGUI($this->getPluginObject()->txt('additional_header_authentication'), 'add_header_auth');
+        $add_header_auth->setChecked($settings->isAddHeaderAuthEnabled());
+
+        $add_header_name = new ilTextInputGUI($this->getPluginObject()->txt('additional_header_name'), 'add_header_name');
+        $add_header_name->setValue($settings->getAddHeaderName());
+
+        $add_header_auth->addSubItem($add_header_name);
+
+        $add_header_value = new ilTextInputGUI($this->getPluginObject()->txt('additional_header_value'), 'add_header_value');
+        $add_header_value->setValue($settings->getAddHeaderValue());
+
+        $add_header_auth->addSubItem($add_header_value);
+
+        $form->addItem($add_header_auth);
+
+
 		return $form;
 	}
 
@@ -363,6 +379,9 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 				$settings->setRestPassword($form->getInput('restpassword'));
 				$settings->setAuthenticationToken($form->getInput('authentication_id'));
 				$settings->setPlatformId($form->getInput('platform_id'));
+				$settings->setAddHeaderAuth( (bool) $form->getInput('add_header_auth'));
+				$settings->setAddHeaderName($form->getInput('add_header_name'));
+				$settings->setAddHeaderValue($form->getInput('add_header_value'));
 				$settings->save();
 
 				ilUtil::sendSuccess($lng->txt('settings_saved'),true);

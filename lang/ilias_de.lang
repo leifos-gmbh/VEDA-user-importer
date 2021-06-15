@@ -7,6 +7,9 @@ platform_id#:#Plattform ID
 platform_id_info#:#ID der E-Learning-Plattform
 authentication_id#:#Authentication ID
 authentication_id_info#:#Token zur Authentifizierung gegenüber dem Webservice
+additional_header_authentication#:#Zusätzliche Header-Authentifizierung
+additional_header_name#:#Header-Name
+additional_header_value#:#Header-Wert
 success_api_connect#:#Die Verbindung zum Webservice konnte erfolgreich hergestellt werden.
 connection_test#:#Verbindungstest
 tbl_veda_settings_active#:#Aktiviert

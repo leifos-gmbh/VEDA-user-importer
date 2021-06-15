@@ -43,18 +43,15 @@ class ilVedaConnectorSettings
 	 */
 	private $platform_id = '';
 
-
 	/**
 	 * @var string
 	 */
 	private $training_course = '';
 
-
 	/**
 	 * @var int
 	 */
 	private $participant_role = 0;
-
 
 	/**
 	 * @var int
@@ -70,6 +67,21 @@ class ilVedaConnectorSettings
 	 * @var int
 	 */
 	private $switch_temporary_role = 0;
+
+    /**
+     * @var bool
+     */
+    private $add_header_auth = false;
+
+    /**
+     * @var string
+     */
+    private $add_header_name = '';
+
+    /**
+     * @var string
+     */
+    private $add_header_value = '';
 
 	/**
 	 * ilVedaConnectorSettings constructor.
@@ -128,6 +140,10 @@ class ilVedaConnectorSettings
 		$this->setImportDirectory($this->getStorage()->get('import_ref_id', $this->getImportDirectory()));
 		$this->setTemporarySwitchRole($this->getStorage()->get('switch_temporary_role', $this->getTemporarySwitchRole()));
 		$this->setPermanentSwitchRole($this->getStorage()->get('switch_permanent_role', $this->getPermanentSwitchRole()));
+
+		$this->setAddHeaderAuth($this->getStorage()->get('add_header_auth', $this->isAddHeaderAuthEnabled()));
+        $this->setAddHeaderName($this->getStorage()->get('add_header_name', $this->getAddHeaderName()));
+        $this->setAddHeaderValue($this->getStorage()->get('add_header_value', $this->getAddHeaderValue()));
 	}
 
 	/**
@@ -200,6 +216,9 @@ class ilVedaConnectorSettings
 		$this->getStorage()->set('resttoken', $this->getAuthenticationToken());
 		$this->getStorage()->set('platform_id', $this->getPlatformId());
 		$this->getStorage()->set('training_course', $this->getTrainingCourse());
+		$this->getStorage()->set('add_header_auth', $this->isAddHeaderAuthEnabled());
+        $this->getStorage()->set('add_header_name', $this->getAddHeaderName());
+        $this->getStorage()->set('add_header_value', $this->getAddHeaderValue());
 
 		$this->getStorage()->set('active', (int) $this->isActive());
 		$this->getStorage()->set('loglevel', $this->getLogLevel());
@@ -410,4 +429,52 @@ class ilVedaConnectorSettings
 	{
 		$this->training_course = $training_course;
 	}
+
+    /**
+     * @return bool
+     */
+    public function isAddHeaderAuthEnabled() : bool
+    {
+        return $this->add_header_auth;
+    }
+
+    /**
+     * @param bool $add_header_auth
+     */
+    public function setAddHeaderAuth(bool $add_header_auth) : void
+    {
+        $this->add_header_auth = $add_header_auth;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddHeaderName() : string
+    {
+        return $this->add_header_name;
+    }
+
+    /**
+     * @param string $add_header_name
+     */
+    public function setAddHeaderName(string $add_header_name) : void
+    {
+        $this->add_header_name = $add_header_name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddHeaderValue() : string
+    {
+        return $this->add_header_value;
+    }
+
+    /**
+     * @param string $add_header_value
+     */
+    public function setAddHeaderValue(string $add_header_value) : void
+    {
+        $this->add_header_value = $add_header_value;
+    }
 }
