@@ -12,6 +12,8 @@ class ilVedaConnectorHeaderSelector extends HeaderSelector
 
 	private $config = null;
 
+	private $settings = null;
+
 	/**
 	 * ilVedaConnectorHeaderSelector constructor.
 	 * @param \Swagger\Client\Configuration $config
@@ -19,6 +21,7 @@ class ilVedaConnectorHeaderSelector extends HeaderSelector
 	public function __construct(Configuration $config)
 	{
 		$this->config = $config;
+		$this->settings = ilVedaConnectorSettings::getInstance();
 	}
 
 	/**
@@ -30,6 +33,9 @@ class ilVedaConnectorHeaderSelector extends HeaderSelector
 	{
 		$headers = parent::selectHeaders($accept, $contentTypes);
 		$headers[\ilVedaConnectorSettings::HEADER_TOKEN] = $this->config->getAccessToken();
+		if ($this->settings->isAddHeaderAuthEnabled()) {
+		    $headers[$this->settings->getAddHeaderName()] = $this->settings->getAddHeaderValue();
+        }
 		return $headers;
 	}
 
