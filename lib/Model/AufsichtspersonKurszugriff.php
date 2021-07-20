@@ -1,6 +1,6 @@
 <?php
 /**
- * Veranstaltungskategorie
+ * AufsichtspersonKurszugriff
  *
  * PHP version 5
  *
@@ -33,15 +33,15 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * Veranstaltungskategorie Class Doc Comment
+ * AufsichtspersonKurszugriff Class Doc Comment
  *
  * @category Class
- * @description Die Informationen einer Veranstaltungskategorie.
+ * @description Aufsichtspersonen und der Zugriffszeitraum auf den Kurs.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class Veranstaltungskategorie implements ModelInterface, ArrayAccess
+class AufsichtspersonKurszugriff implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'Veranstaltungskategorie';
+    protected static $swaggerModelName = 'AufsichtspersonKurszugriff';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,9 +58,10 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'bezeichnung' => 'string',
-        'links' => '\Swagger\Client\Model\Link[]',
-        'oid' => 'string'
+        'aufsichtsperson_id' => 'string',
+        'kurs_zugriff_ab' => '\DateTime',
+        'kurs_zugriff_bis' => '\DateTime',
+        'links' => '\Swagger\Client\Model\Link[]'
     ];
 
     /**
@@ -69,9 +70,10 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'bezeichnung' => null,
-        'links' => null,
-        'oid' => null
+        'aufsichtsperson_id' => null,
+        'kurs_zugriff_ab' => 'date',
+        'kurs_zugriff_bis' => 'date',
+        'links' => null
     ];
 
     /**
@@ -101,9 +103,10 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'bezeichnung' => 'bezeichnung',
-        'links' => 'links',
-        'oid' => 'oid'
+        'aufsichtsperson_id' => 'aufsichtspersonID',
+        'kurs_zugriff_ab' => 'kursZugriffAb',
+        'kurs_zugriff_bis' => 'kursZugriffBis',
+        'links' => 'links'
     ];
 
     /**
@@ -112,9 +115,10 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'bezeichnung' => 'setBezeichnung',
-        'links' => 'setLinks',
-        'oid' => 'setOid'
+        'aufsichtsperson_id' => 'setAufsichtspersonId',
+        'kurs_zugriff_ab' => 'setKursZugriffAb',
+        'kurs_zugriff_bis' => 'setKursZugriffBis',
+        'links' => 'setLinks'
     ];
 
     /**
@@ -123,9 +127,10 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'bezeichnung' => 'getBezeichnung',
-        'links' => 'getLinks',
-        'oid' => 'getOid'
+        'aufsichtsperson_id' => 'getAufsichtspersonId',
+        'kurs_zugriff_ab' => 'getKursZugriffAb',
+        'kurs_zugriff_bis' => 'getKursZugriffBis',
+        'links' => 'getLinks'
     ];
 
     /**
@@ -188,9 +193,10 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['bezeichnung'] = isset($data['bezeichnung']) ? $data['bezeichnung'] : null;
+        $this->container['aufsichtsperson_id'] = isset($data['aufsichtsperson_id']) ? $data['aufsichtsperson_id'] : null;
+        $this->container['kurs_zugriff_ab'] = isset($data['kurs_zugriff_ab']) ? $data['kurs_zugriff_ab'] : null;
+        $this->container['kurs_zugriff_bis'] = isset($data['kurs_zugriff_bis']) ? $data['kurs_zugriff_bis'] : null;
         $this->container['links'] = isset($data['links']) ? $data['links'] : null;
-        $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
     }
 
     /**
@@ -202,6 +208,9 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
     {
         $invalidProperties = [];
 
+        if ($this->container['aufsichtsperson_id'] === null) {
+            $invalidProperties[] = "'aufsichtsperson_id' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -218,25 +227,73 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets bezeichnung
+     * Gets aufsichtsperson_id
      *
      * @return string
      */
-    public function getBezeichnung()
+    public function getAufsichtspersonId()
     {
-        return $this->container['bezeichnung'];
+        return $this->container['aufsichtsperson_id'];
     }
 
     /**
-     * Sets bezeichnung
+     * Sets aufsichtsperson_id
      *
-     * @param string $bezeichnung Bezeichnung der Veranstaltungskategorie
+     * @param string $aufsichtsperson_id Die Aufsichtsperson, die Zugriff auf den Ausbildungszug hat
      *
      * @return $this
      */
-    public function setBezeichnung($bezeichnung)
+    public function setAufsichtspersonId($aufsichtsperson_id)
     {
-        $this->container['bezeichnung'] = $bezeichnung;
+        $this->container['aufsichtsperson_id'] = $aufsichtsperson_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets kurs_zugriff_ab
+     *
+     * @return \DateTime
+     */
+    public function getKursZugriffAb()
+    {
+        return $this->container['kurs_zugriff_ab'];
+    }
+
+    /**
+     * Sets kurs_zugriff_ab
+     *
+     * @param \DateTime $kurs_zugriff_ab Das Tagesdatum, an dem der Kurszugriff beginnt.
+     *
+     * @return $this
+     */
+    public function setKursZugriffAb($kurs_zugriff_ab)
+    {
+        $this->container['kurs_zugriff_ab'] = $kurs_zugriff_ab;
+
+        return $this;
+    }
+
+    /**
+     * Gets kurs_zugriff_bis
+     *
+     * @return \DateTime
+     */
+    public function getKursZugriffBis()
+    {
+        return $this->container['kurs_zugriff_bis'];
+    }
+
+    /**
+     * Sets kurs_zugriff_bis
+     *
+     * @param \DateTime $kurs_zugriff_bis Das Tagesdatum (einschließlich), an dem der Kurszugriff endet.
+     *
+     * @return $this
+     */
+    public function setKursZugriffBis($kurs_zugriff_bis)
+    {
+        $this->container['kurs_zugriff_bis'] = $kurs_zugriff_bis;
 
         return $this;
     }
@@ -261,30 +318,6 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
     public function setLinks($links)
     {
         $this->container['links'] = $links;
-
-        return $this;
-    }
-
-    /**
-     * Gets oid
-     *
-     * @return string
-     */
-    public function getOid()
-    {
-        return $this->container['oid'];
-    }
-
-    /**
-     * Sets oid
-     *
-     * @param string $oid Eindeutige ID der Veranstaltungskategorie
-     *
-     * @return $this
-     */
-    public function setOid($oid)
-    {
-        $this->container['oid'] = $oid;
 
         return $this;
     }

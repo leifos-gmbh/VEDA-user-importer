@@ -1,6 +1,6 @@
 <?php
 /**
- * Veranstaltungskategorie
+ * Veranstaltungsform
  *
  * PHP version 5
  *
@@ -33,15 +33,15 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * Veranstaltungskategorie Class Doc Comment
+ * Veranstaltungsform Class Doc Comment
  *
  * @category Class
- * @description Die Informationen einer Veranstaltungskategorie.
+ * @description Die Details zur einer Veranstaltungsform.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class Veranstaltungskategorie implements ModelInterface, ArrayAccess
+class Veranstaltungsform implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'Veranstaltungskategorie';
+    protected static $swaggerModelName = 'Veranstaltungsform';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -59,6 +59,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       */
     protected static $swaggerTypes = [
         'bezeichnung' => 'string',
+        'kuerzel' => 'string',
         'links' => '\Swagger\Client\Model\Link[]',
         'oid' => 'string'
     ];
@@ -70,6 +71,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       */
     protected static $swaggerFormats = [
         'bezeichnung' => null,
+        'kuerzel' => null,
         'links' => null,
         'oid' => null
     ];
@@ -102,6 +104,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      */
     protected static $attributeMap = [
         'bezeichnung' => 'bezeichnung',
+        'kuerzel' => 'kuerzel',
         'links' => 'links',
         'oid' => 'oid'
     ];
@@ -113,6 +116,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      */
     protected static $setters = [
         'bezeichnung' => 'setBezeichnung',
+        'kuerzel' => 'setKuerzel',
         'links' => 'setLinks',
         'oid' => 'setOid'
     ];
@@ -124,6 +128,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      */
     protected static $getters = [
         'bezeichnung' => 'getBezeichnung',
+        'kuerzel' => 'getKuerzel',
         'links' => 'getLinks',
         'oid' => 'getOid'
     ];
@@ -189,6 +194,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         $this->container['bezeichnung'] = isset($data['bezeichnung']) ? $data['bezeichnung'] : null;
+        $this->container['kuerzel'] = isset($data['kuerzel']) ? $data['kuerzel'] : null;
         $this->container['links'] = isset($data['links']) ? $data['links'] : null;
         $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
     }
@@ -230,13 +236,37 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
     /**
      * Sets bezeichnung
      *
-     * @param string $bezeichnung Bezeichnung der Veranstaltungskategorie
+     * @param string $bezeichnung Bezeichnung der Veranstaltungsform
      *
      * @return $this
      */
     public function setBezeichnung($bezeichnung)
     {
         $this->container['bezeichnung'] = $bezeichnung;
+
+        return $this;
+    }
+
+    /**
+     * Gets kuerzel
+     *
+     * @return string
+     */
+    public function getKuerzel()
+    {
+        return $this->container['kuerzel'];
+    }
+
+    /**
+     * Sets kuerzel
+     *
+     * @param string $kuerzel Kürzel der Veranstaltungsform
+     *
+     * @return $this
+     */
+    public function setKuerzel($kuerzel)
+    {
+        $this->container['kuerzel'] = $kuerzel;
 
         return $this;
     }
@@ -278,7 +308,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
     /**
      * Sets oid
      *
-     * @param string $oid Eindeutige ID der Veranstaltungskategorie
+     * @param string $oid Eindeutige ID der Veranstaltungsform
      *
      * @return $this
      */

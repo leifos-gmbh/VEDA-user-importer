@@ -1,6 +1,6 @@
 <?php
 /**
- * Veranstaltungsort
+ * Zahlungsbedingung
  *
  * PHP version 5
  *
@@ -33,15 +33,15 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * Veranstaltungsort Class Doc Comment
+ * Zahlungsbedingung Class Doc Comment
  *
  * @category Class
- * @description Die Informationen zu einem Veranstaltungsort.
+ * @description Die Informationen zu einer Zahlungsbedingung.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class Veranstaltungsort implements ModelInterface, ArrayAccess
+class Zahlungsbedingung implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class Veranstaltungsort implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'Veranstaltungsort';
+    protected static $swaggerModelName = 'Zahlungsbedingung';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,14 +58,15 @@ class Veranstaltungsort implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'hausnr' => 'string',
-        'homepage' => 'string',
-        'name' => 'string',
+        'anpassung_der_basis' => 'int',
+        'anzahl_raten' => 'int',
+        'basis' => 'string',
+        'bezeichnung' => 'string',
+        'ext_referenz_number' => 'string',
         'oid' => 'string',
-        'ort' => 'string',
-        'plz' => 'string',
-        'strasse' => 'string',
-        'telefon1' => 'string'
+        'rechnungstext' => 'string',
+        'zahlungsweise' => 'string',
+        'zahlungsziel' => 'int'
     ];
 
     /**
@@ -74,14 +75,15 @@ class Veranstaltungsort implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'hausnr' => null,
-        'homepage' => null,
-        'name' => null,
+        'anpassung_der_basis' => null,
+        'anzahl_raten' => null,
+        'basis' => null,
+        'bezeichnung' => null,
+        'ext_referenz_number' => null,
         'oid' => null,
-        'ort' => null,
-        'plz' => null,
-        'strasse' => null,
-        'telefon1' => null
+        'rechnungstext' => null,
+        'zahlungsweise' => null,
+        'zahlungsziel' => null
     ];
 
     /**
@@ -111,14 +113,15 @@ class Veranstaltungsort implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'hausnr' => 'hausnr',
-        'homepage' => 'homepage',
-        'name' => 'name',
+        'anpassung_der_basis' => 'anpassungDerBasis',
+        'anzahl_raten' => 'anzahlRaten',
+        'basis' => 'basis',
+        'bezeichnung' => 'bezeichnung',
+        'ext_referenz_number' => 'extReferenzNumber',
         'oid' => 'oid',
-        'ort' => 'ort',
-        'plz' => 'plz',
-        'strasse' => 'strasse',
-        'telefon1' => 'telefon1'
+        'rechnungstext' => 'rechnungstext',
+        'zahlungsweise' => 'zahlungsweise',
+        'zahlungsziel' => 'zahlungsziel'
     ];
 
     /**
@@ -127,14 +130,15 @@ class Veranstaltungsort implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'hausnr' => 'setHausnr',
-        'homepage' => 'setHomepage',
-        'name' => 'setName',
+        'anpassung_der_basis' => 'setAnpassungDerBasis',
+        'anzahl_raten' => 'setAnzahlRaten',
+        'basis' => 'setBasis',
+        'bezeichnung' => 'setBezeichnung',
+        'ext_referenz_number' => 'setExtReferenzNumber',
         'oid' => 'setOid',
-        'ort' => 'setOrt',
-        'plz' => 'setPlz',
-        'strasse' => 'setStrasse',
-        'telefon1' => 'setTelefon1'
+        'rechnungstext' => 'setRechnungstext',
+        'zahlungsweise' => 'setZahlungsweise',
+        'zahlungsziel' => 'setZahlungsziel'
     ];
 
     /**
@@ -143,14 +147,15 @@ class Veranstaltungsort implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'hausnr' => 'getHausnr',
-        'homepage' => 'getHomepage',
-        'name' => 'getName',
+        'anpassung_der_basis' => 'getAnpassungDerBasis',
+        'anzahl_raten' => 'getAnzahlRaten',
+        'basis' => 'getBasis',
+        'bezeichnung' => 'getBezeichnung',
+        'ext_referenz_number' => 'getExtReferenzNumber',
         'oid' => 'getOid',
-        'ort' => 'getOrt',
-        'plz' => 'getPlz',
-        'strasse' => 'getStrasse',
-        'telefon1' => 'getTelefon1'
+        'rechnungstext' => 'getRechnungstext',
+        'zahlungsweise' => 'getZahlungsweise',
+        'zahlungsziel' => 'getZahlungsziel'
     ];
 
     /**
@@ -194,8 +199,25 @@ class Veranstaltungsort implements ModelInterface, ArrayAccess
         return self::$swaggerModelName;
     }
 
+    const ZAHLUNGSWEISE_EINMALZAHLUNG = 'Einmalzahlung';
+    const ZAHLUNGSWEISE_RATENZAHLUNG = 'Ratenzahlung';
+    const ZAHLUNGSWEISE_TEILZAHLUNG = 'Teilzahlung';
     
 
+    
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public function getZahlungsweiseAllowableValues()
+    {
+        return [
+            self::ZAHLUNGSWEISE_EINMALZAHLUNG,
+            self::ZAHLUNGSWEISE_RATENZAHLUNG,
+            self::ZAHLUNGSWEISE_TEILZAHLUNG,
+        ];
+    }
     
 
     /**
@@ -213,14 +235,15 @@ class Veranstaltungsort implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['hausnr'] = isset($data['hausnr']) ? $data['hausnr'] : null;
-        $this->container['homepage'] = isset($data['homepage']) ? $data['homepage'] : null;
-        $this->container['name'] = isset($data['name']) ? $data['name'] : null;
+        $this->container['anpassung_der_basis'] = isset($data['anpassung_der_basis']) ? $data['anpassung_der_basis'] : null;
+        $this->container['anzahl_raten'] = isset($data['anzahl_raten']) ? $data['anzahl_raten'] : null;
+        $this->container['basis'] = isset($data['basis']) ? $data['basis'] : null;
+        $this->container['bezeichnung'] = isset($data['bezeichnung']) ? $data['bezeichnung'] : null;
+        $this->container['ext_referenz_number'] = isset($data['ext_referenz_number']) ? $data['ext_referenz_number'] : null;
         $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
-        $this->container['ort'] = isset($data['ort']) ? $data['ort'] : null;
-        $this->container['plz'] = isset($data['plz']) ? $data['plz'] : null;
-        $this->container['strasse'] = isset($data['strasse']) ? $data['strasse'] : null;
-        $this->container['telefon1'] = isset($data['telefon1']) ? $data['telefon1'] : null;
+        $this->container['rechnungstext'] = isset($data['rechnungstext']) ? $data['rechnungstext'] : null;
+        $this->container['zahlungsweise'] = isset($data['zahlungsweise']) ? $data['zahlungsweise'] : null;
+        $this->container['zahlungsziel'] = isset($data['zahlungsziel']) ? $data['zahlungsziel'] : null;
     }
 
     /**
@@ -231,6 +254,14 @@ class Veranstaltungsort implements ModelInterface, ArrayAccess
     public function listInvalidProperties()
     {
         $invalidProperties = [];
+
+        $allowedValues = $this->getZahlungsweiseAllowableValues();
+        if (!is_null($this->container['zahlungsweise']) && !in_array($this->container['zahlungsweise'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value for 'zahlungsweise', must be one of '%s'",
+                implode("', '", $allowedValues)
+            );
+        }
 
         return $invalidProperties;
     }
@@ -248,73 +279,121 @@ class Veranstaltungsort implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets hausnr
+     * Gets anpassung_der_basis
      *
-     * @return string
+     * @return int
      */
-    public function getHausnr()
+    public function getAnpassungDerBasis()
     {
-        return $this->container['hausnr'];
+        return $this->container['anpassung_der_basis'];
     }
 
     /**
-     * Sets hausnr
+     * Sets anpassung_der_basis
      *
-     * @param string $hausnr Hausnummer der Anschrift des Veranstaltungsorts
+     * @param int $anpassung_der_basis Anpassung der Basis der Zahlungsbedingung
      *
      * @return $this
      */
-    public function setHausnr($hausnr)
+    public function setAnpassungDerBasis($anpassung_der_basis)
     {
-        $this->container['hausnr'] = $hausnr;
+        $this->container['anpassung_der_basis'] = $anpassung_der_basis;
 
         return $this;
     }
 
     /**
-     * Gets homepage
+     * Gets anzahl_raten
      *
-     * @return string
+     * @return int
      */
-    public function getHomepage()
+    public function getAnzahlRaten()
     {
-        return $this->container['homepage'];
+        return $this->container['anzahl_raten'];
     }
 
     /**
-     * Sets homepage
+     * Sets anzahl_raten
      *
-     * @param string $homepage Homepage des Veranstaltungsorts
+     * @param int $anzahl_raten Anzahl Raten
      *
      * @return $this
      */
-    public function setHomepage($homepage)
+    public function setAnzahlRaten($anzahl_raten)
     {
-        $this->container['homepage'] = $homepage;
+        $this->container['anzahl_raten'] = $anzahl_raten;
 
         return $this;
     }
 
     /**
-     * Gets name
+     * Gets basis
      *
      * @return string
      */
-    public function getName()
+    public function getBasis()
     {
-        return $this->container['name'];
+        return $this->container['basis'];
     }
 
     /**
-     * Sets name
+     * Sets basis
      *
-     * @param string $name Name des Veranstaltungsorts
+     * @param string $basis Basis der Zahlungsbedingung
      *
      * @return $this
      */
-    public function setName($name)
+    public function setBasis($basis)
     {
-        $this->container['name'] = $name;
+        $this->container['basis'] = $basis;
+
+        return $this;
+    }
+
+    /**
+     * Gets bezeichnung
+     *
+     * @return string
+     */
+    public function getBezeichnung()
+    {
+        return $this->container['bezeichnung'];
+    }
+
+    /**
+     * Sets bezeichnung
+     *
+     * @param string $bezeichnung Bezeichnung der Zahlungsbedingung
+     *
+     * @return $this
+     */
+    public function setBezeichnung($bezeichnung)
+    {
+        $this->container['bezeichnung'] = $bezeichnung;
+
+        return $this;
+    }
+
+    /**
+     * Gets ext_referenz_number
+     *
+     * @return string
+     */
+    public function getExtReferenzNumber()
+    {
+        return $this->container['ext_referenz_number'];
+    }
+
+    /**
+     * Sets ext_referenz_number
+     *
+     * @param string $ext_referenz_number Externe Referenz-Nr. der Zahlungsbedingung
+     *
+     * @return $this
+     */
+    public function setExtReferenzNumber($ext_referenz_number)
+    {
+        $this->container['ext_referenz_number'] = $ext_referenz_number;
 
         return $this;
     }
@@ -332,7 +411,7 @@ class Veranstaltungsort implements ModelInterface, ArrayAccess
     /**
      * Sets oid
      *
-     * @param string $oid Eindeutige ID des Veranstaltungsorts
+     * @param string $oid Eindeutige ID der Zahlungsbedingung
      *
      * @return $this
      */
@@ -344,97 +423,82 @@ class Veranstaltungsort implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets ort
+     * Gets rechnungstext
      *
      * @return string
      */
-    public function getOrt()
+    public function getRechnungstext()
     {
-        return $this->container['ort'];
+        return $this->container['rechnungstext'];
     }
 
     /**
-     * Sets ort
+     * Sets rechnungstext
      *
-     * @param string $ort Ort der Anschrift des Veranstaltungsorts
+     * @param string $rechnungstext Rechnungstext der Zahlungsbedingung
      *
      * @return $this
      */
-    public function setOrt($ort)
+    public function setRechnungstext($rechnungstext)
     {
-        $this->container['ort'] = $ort;
+        $this->container['rechnungstext'] = $rechnungstext;
 
         return $this;
     }
 
     /**
-     * Gets plz
+     * Gets zahlungsweise
      *
      * @return string
      */
-    public function getPlz()
+    public function getZahlungsweise()
     {
-        return $this->container['plz'];
+        return $this->container['zahlungsweise'];
     }
 
     /**
-     * Sets plz
+     * Sets zahlungsweise
      *
-     * @param string $plz PLZ der Anschrift des Veranstaltungsorts
+     * @param string $zahlungsweise Zahlungsweise
      *
      * @return $this
      */
-    public function setPlz($plz)
+    public function setZahlungsweise($zahlungsweise)
     {
-        $this->container['plz'] = $plz;
+        $allowedValues = $this->getZahlungsweiseAllowableValues();
+        if (!is_null($zahlungsweise) && !in_array($zahlungsweise, $allowedValues, true)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Invalid value for 'zahlungsweise', must be one of '%s'",
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
+        $this->container['zahlungsweise'] = $zahlungsweise;
 
         return $this;
     }
 
     /**
-     * Gets strasse
+     * Gets zahlungsziel
      *
-     * @return string
+     * @return int
      */
-    public function getStrasse()
+    public function getZahlungsziel()
     {
-        return $this->container['strasse'];
+        return $this->container['zahlungsziel'];
     }
 
     /**
-     * Sets strasse
+     * Sets zahlungsziel
      *
-     * @param string $strasse Straße der Anschrift des Veranstaltungsorts
+     * @param int $zahlungsziel Zahlungsziel (in Tagen)
      *
      * @return $this
      */
-    public function setStrasse($strasse)
+    public function setZahlungsziel($zahlungsziel)
     {
-        $this->container['strasse'] = $strasse;
-
-        return $this;
-    }
-
-    /**
-     * Gets telefon1
-     *
-     * @return string
-     */
-    public function getTelefon1()
-    {
-        return $this->container['telefon1'];
-    }
-
-    /**
-     * Sets telefon1
-     *
-     * @param string $telefon1 Telefonnummer des Veranstaltungsorts
-     *
-     * @return $this
-     */
-    public function setTelefon1($telefon1)
-    {
-        $this->container['telefon1'] = $telefon1;
+        $this->container['zahlungsziel'] = $zahlungsziel;
 
         return $this;
     }

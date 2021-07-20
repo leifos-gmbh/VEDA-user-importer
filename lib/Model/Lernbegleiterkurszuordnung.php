@@ -1,6 +1,6 @@
 <?php
 /**
- * TeilnehmerELearningPlattform
+ * Lernbegleiterkurszuordnung
  *
  * PHP version 5
  *
@@ -33,15 +33,15 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * TeilnehmerELearningPlattform Class Doc Comment
+ * Lernbegleiterkurszuordnung Class Doc Comment
  *
  * @category Class
- * @description Teilnehmer einer E-Learning-Plattform mit relevanten Informationen.
+ * @description Eine Zuordnung eines Lernbegleiters zu einem Kurs.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class TeilnehmerELearningPlattform implements ModelInterface, ArrayAccess
+class Lernbegleiterkurszuordnung implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class TeilnehmerELearningPlattform implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'TeilnehmerELearningPlattform';
+    protected static $swaggerModelName = 'Lernbegleiterkurszuordnung';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,14 +58,13 @@ class TeilnehmerELearningPlattform implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'benutzername' => 'string',
-        'elearning_plattform_id' => 'string',
-        'email' => 'string',
-        'gueltig_ab' => '\DateTime',
-        'gueltig_bis' => '\DateTime',
-        'initiales_passwort' => 'string',
-        'links' => '\Swagger\Client\Model\Link[]',
-        'teilnehmer' => '\Swagger\Client\Model\Teilnehmer'
+        'elearningbenutzeraccount_id' => 'string',
+        'kurs_id' => 'string',
+        'kurs_zugriff_ab' => '\DateTime',
+        'kurs_zugriff_bis' => '\DateTime',
+        'lernbegleiter_id' => 'string',
+        'lernbegleiterbuchung_id' => 'string',
+        'links' => '\Swagger\Client\Model\Link[]'
     ];
 
     /**
@@ -74,14 +73,13 @@ class TeilnehmerELearningPlattform implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'benutzername' => null,
-        'elearning_plattform_id' => null,
-        'email' => null,
-        'gueltig_ab' => 'date',
-        'gueltig_bis' => 'date',
-        'initiales_passwort' => null,
-        'links' => null,
-        'teilnehmer' => null
+        'elearningbenutzeraccount_id' => null,
+        'kurs_id' => null,
+        'kurs_zugriff_ab' => 'date',
+        'kurs_zugriff_bis' => 'date',
+        'lernbegleiter_id' => null,
+        'lernbegleiterbuchung_id' => null,
+        'links' => null
     ];
 
     /**
@@ -111,14 +109,13 @@ class TeilnehmerELearningPlattform implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'benutzername' => 'benutzername',
-        'elearning_plattform_id' => 'elearningPlattformId',
-        'email' => 'email',
-        'gueltig_ab' => 'gueltigAb',
-        'gueltig_bis' => 'gueltigBis',
-        'initiales_passwort' => 'initialesPasswort',
-        'links' => 'links',
-        'teilnehmer' => 'teilnehmer'
+        'elearningbenutzeraccount_id' => 'elearningbenutzeraccountId',
+        'kurs_id' => 'kursId',
+        'kurs_zugriff_ab' => 'kursZugriffAb',
+        'kurs_zugriff_bis' => 'kursZugriffBis',
+        'lernbegleiter_id' => 'lernbegleiterId',
+        'lernbegleiterbuchung_id' => 'lernbegleiterbuchungId',
+        'links' => 'links'
     ];
 
     /**
@@ -127,14 +124,13 @@ class TeilnehmerELearningPlattform implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'benutzername' => 'setBenutzername',
-        'elearning_plattform_id' => 'setElearningPlattformId',
-        'email' => 'setEmail',
-        'gueltig_ab' => 'setGueltigAb',
-        'gueltig_bis' => 'setGueltigBis',
-        'initiales_passwort' => 'setInitialesPasswort',
-        'links' => 'setLinks',
-        'teilnehmer' => 'setTeilnehmer'
+        'elearningbenutzeraccount_id' => 'setElearningbenutzeraccountId',
+        'kurs_id' => 'setKursId',
+        'kurs_zugriff_ab' => 'setKursZugriffAb',
+        'kurs_zugriff_bis' => 'setKursZugriffBis',
+        'lernbegleiter_id' => 'setLernbegleiterId',
+        'lernbegleiterbuchung_id' => 'setLernbegleiterbuchungId',
+        'links' => 'setLinks'
     ];
 
     /**
@@ -143,14 +139,13 @@ class TeilnehmerELearningPlattform implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'benutzername' => 'getBenutzername',
-        'elearning_plattform_id' => 'getElearningPlattformId',
-        'email' => 'getEmail',
-        'gueltig_ab' => 'getGueltigAb',
-        'gueltig_bis' => 'getGueltigBis',
-        'initiales_passwort' => 'getInitialesPasswort',
-        'links' => 'getLinks',
-        'teilnehmer' => 'getTeilnehmer'
+        'elearningbenutzeraccount_id' => 'getElearningbenutzeraccountId',
+        'kurs_id' => 'getKursId',
+        'kurs_zugriff_ab' => 'getKursZugriffAb',
+        'kurs_zugriff_bis' => 'getKursZugriffBis',
+        'lernbegleiter_id' => 'getLernbegleiterId',
+        'lernbegleiterbuchung_id' => 'getLernbegleiterbuchungId',
+        'links' => 'getLinks'
     ];
 
     /**
@@ -213,14 +208,13 @@ class TeilnehmerELearningPlattform implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['benutzername'] = isset($data['benutzername']) ? $data['benutzername'] : null;
-        $this->container['elearning_plattform_id'] = isset($data['elearning_plattform_id']) ? $data['elearning_plattform_id'] : null;
-        $this->container['email'] = isset($data['email']) ? $data['email'] : null;
-        $this->container['gueltig_ab'] = isset($data['gueltig_ab']) ? $data['gueltig_ab'] : null;
-        $this->container['gueltig_bis'] = isset($data['gueltig_bis']) ? $data['gueltig_bis'] : null;
-        $this->container['initiales_passwort'] = isset($data['initiales_passwort']) ? $data['initiales_passwort'] : null;
+        $this->container['elearningbenutzeraccount_id'] = isset($data['elearningbenutzeraccount_id']) ? $data['elearningbenutzeraccount_id'] : null;
+        $this->container['kurs_id'] = isset($data['kurs_id']) ? $data['kurs_id'] : null;
+        $this->container['kurs_zugriff_ab'] = isset($data['kurs_zugriff_ab']) ? $data['kurs_zugriff_ab'] : null;
+        $this->container['kurs_zugriff_bis'] = isset($data['kurs_zugriff_bis']) ? $data['kurs_zugriff_bis'] : null;
+        $this->container['lernbegleiter_id'] = isset($data['lernbegleiter_id']) ? $data['lernbegleiter_id'] : null;
+        $this->container['lernbegleiterbuchung_id'] = isset($data['lernbegleiterbuchung_id']) ? $data['lernbegleiterbuchung_id'] : null;
         $this->container['links'] = isset($data['links']) ? $data['links'] : null;
-        $this->container['teilnehmer'] = isset($data['teilnehmer']) ? $data['teilnehmer'] : null;
     }
 
     /**
@@ -232,11 +226,23 @@ class TeilnehmerELearningPlattform implements ModelInterface, ArrayAccess
     {
         $invalidProperties = [];
 
-        if ($this->container['gueltig_ab'] === null) {
-            $invalidProperties[] = "'gueltig_ab' can't be null";
+        if ($this->container['elearningbenutzeraccount_id'] === null) {
+            $invalidProperties[] = "'elearningbenutzeraccount_id' can't be null";
         }
-        if ($this->container['teilnehmer'] === null) {
-            $invalidProperties[] = "'teilnehmer' can't be null";
+        if ($this->container['kurs_id'] === null) {
+            $invalidProperties[] = "'kurs_id' can't be null";
+        }
+        if ($this->container['kurs_zugriff_ab'] === null) {
+            $invalidProperties[] = "'kurs_zugriff_ab' can't be null";
+        }
+        if ($this->container['kurs_zugriff_bis'] === null) {
+            $invalidProperties[] = "'kurs_zugriff_bis' can't be null";
+        }
+        if ($this->container['lernbegleiter_id'] === null) {
+            $invalidProperties[] = "'lernbegleiter_id' can't be null";
+        }
+        if ($this->container['lernbegleiterbuchung_id'] === null) {
+            $invalidProperties[] = "'lernbegleiterbuchung_id' can't be null";
         }
         return $invalidProperties;
     }
@@ -254,145 +260,145 @@ class TeilnehmerELearningPlattform implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets benutzername
+     * Gets elearningbenutzeraccount_id
      *
      * @return string
      */
-    public function getBenutzername()
+    public function getElearningbenutzeraccountId()
     {
-        return $this->container['benutzername'];
+        return $this->container['elearningbenutzeraccount_id'];
     }
 
     /**
-     * Sets benutzername
+     * Sets elearningbenutzeraccount_id
      *
-     * @param string $benutzername Der Benutzername für die E-Learning-Plattform
+     * @param string $elearningbenutzeraccount_id ID des E-Learning-Benutzeraccounts
      *
      * @return $this
      */
-    public function setBenutzername($benutzername)
+    public function setElearningbenutzeraccountId($elearningbenutzeraccount_id)
     {
-        $this->container['benutzername'] = $benutzername;
+        $this->container['elearningbenutzeraccount_id'] = $elearningbenutzeraccount_id;
 
         return $this;
     }
 
     /**
-     * Gets elearning_plattform_id
+     * Gets kurs_id
      *
      * @return string
      */
-    public function getElearningPlattformId()
+    public function getKursId()
     {
-        return $this->container['elearning_plattform_id'];
+        return $this->container['kurs_id'];
     }
 
     /**
-     * Sets elearning_plattform_id
+     * Sets kurs_id
      *
-     * @param string $elearning_plattform_id elearning_plattform_id
+     * @param string $kurs_id ID des Kurses
      *
      * @return $this
      */
-    public function setElearningPlattformId($elearning_plattform_id)
+    public function setKursId($kurs_id)
     {
-        $this->container['elearning_plattform_id'] = $elearning_plattform_id;
+        $this->container['kurs_id'] = $kurs_id;
 
         return $this;
     }
 
     /**
-     * Gets email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->container['email'];
-    }
-
-    /**
-     * Sets email
-     *
-     * @param string $email email
-     *
-     * @return $this
-     */
-    public function setEmail($email)
-    {
-        $this->container['email'] = $email;
-
-        return $this;
-    }
-
-    /**
-     * Gets gueltig_ab
+     * Gets kurs_zugriff_ab
      *
      * @return \DateTime
      */
-    public function getGueltigAb()
+    public function getKursZugriffAb()
     {
-        return $this->container['gueltig_ab'];
+        return $this->container['kurs_zugriff_ab'];
     }
 
     /**
-     * Sets gueltig_ab
+     * Sets kurs_zugriff_ab
      *
-     * @param \DateTime $gueltig_ab Gültig ab des E-Learning-Benutzeraccounts
+     * @param \DateTime $kurs_zugriff_ab Das Tagesdatum, an dem der Kurszugriff beginnt.
      *
      * @return $this
      */
-    public function setGueltigAb($gueltig_ab)
+    public function setKursZugriffAb($kurs_zugriff_ab)
     {
-        $this->container['gueltig_ab'] = $gueltig_ab;
+        $this->container['kurs_zugriff_ab'] = $kurs_zugriff_ab;
 
         return $this;
     }
 
     /**
-     * Gets gueltig_bis
+     * Gets kurs_zugriff_bis
      *
      * @return \DateTime
      */
-    public function getGueltigBis()
+    public function getKursZugriffBis()
     {
-        return $this->container['gueltig_bis'];
+        return $this->container['kurs_zugriff_bis'];
     }
 
     /**
-     * Sets gueltig_bis
+     * Sets kurs_zugriff_bis
      *
-     * @param \DateTime $gueltig_bis Gültig bis des E-Learning-Benutzeraccounts
+     * @param \DateTime $kurs_zugriff_bis Das Tagesdatum (einschließlich), an dem der Kurszugriff endet.
      *
      * @return $this
      */
-    public function setGueltigBis($gueltig_bis)
+    public function setKursZugriffBis($kurs_zugriff_bis)
     {
-        $this->container['gueltig_bis'] = $gueltig_bis;
+        $this->container['kurs_zugriff_bis'] = $kurs_zugriff_bis;
 
         return $this;
     }
 
     /**
-     * Gets initiales_passwort
+     * Gets lernbegleiter_id
      *
      * @return string
      */
-    public function getInitialesPasswort()
+    public function getLernbegleiterId()
     {
-        return $this->container['initiales_passwort'];
+        return $this->container['lernbegleiter_id'];
     }
 
     /**
-     * Sets initiales_passwort
+     * Sets lernbegleiter_id
      *
-     * @param string $initiales_passwort Das initiale Passwort für die E-Learning-Plattform
+     * @param string $lernbegleiter_id ID des Lernbegleiters
      *
      * @return $this
      */
-    public function setInitialesPasswort($initiales_passwort)
+    public function setLernbegleiterId($lernbegleiter_id)
     {
-        $this->container['initiales_passwort'] = $initiales_passwort;
+        $this->container['lernbegleiter_id'] = $lernbegleiter_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets lernbegleiterbuchung_id
+     *
+     * @return string
+     */
+    public function getLernbegleiterbuchungId()
+    {
+        return $this->container['lernbegleiterbuchung_id'];
+    }
+
+    /**
+     * Sets lernbegleiterbuchung_id
+     *
+     * @param string $lernbegleiterbuchung_id ID der Lernbegleiterbuchung
+     *
+     * @return $this
+     */
+    public function setLernbegleiterbuchungId($lernbegleiterbuchung_id)
+    {
+        $this->container['lernbegleiterbuchung_id'] = $lernbegleiterbuchung_id;
 
         return $this;
     }
@@ -417,30 +423,6 @@ class TeilnehmerELearningPlattform implements ModelInterface, ArrayAccess
     public function setLinks($links)
     {
         $this->container['links'] = $links;
-
-        return $this;
-    }
-
-    /**
-     * Gets teilnehmer
-     *
-     * @return \Swagger\Client\Model\Teilnehmer
-     */
-    public function getTeilnehmer()
-    {
-        return $this->container['teilnehmer'];
-    }
-
-    /**
-     * Sets teilnehmer
-     *
-     * @param \Swagger\Client\Model\Teilnehmer $teilnehmer Teilnehmer der E-Learning-Plattform
-     *
-     * @return $this
-     */
-    public function setTeilnehmer($teilnehmer)
-    {
-        $this->container['teilnehmer'] = $teilnehmer;
 
         return $this;
     }

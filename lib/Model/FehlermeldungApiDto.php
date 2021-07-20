@@ -1,6 +1,6 @@
 <?php
 /**
- * Veranstaltungskategorie
+ * FehlermeldungApiDto
  *
  * PHP version 5
  *
@@ -33,15 +33,15 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * Veranstaltungskategorie Class Doc Comment
+ * FehlermeldungApiDto Class Doc Comment
  *
  * @category Class
- * @description Die Informationen einer Veranstaltungskategorie.
+ * @description Beinhaltet den Fehlertext zu einer nicht weiter differenzierten Fehlermeldung zur Zwecken der Protokollierung. Eine maschinelle Weiterverarbeitung ist nicht vorgesehen. Die Meldung beinhaltet typischerweise Prosatext.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class Veranstaltungskategorie implements ModelInterface, ArrayAccess
+class FehlermeldungApiDto implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'Veranstaltungskategorie';
+    protected static $swaggerModelName = 'FehlermeldungApiDto';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,9 +58,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'bezeichnung' => 'string',
-        'links' => '\Swagger\Client\Model\Link[]',
-        'oid' => 'string'
+        'fehlermeldung' => 'string'
     ];
 
     /**
@@ -69,9 +67,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'bezeichnung' => null,
-        'links' => null,
-        'oid' => null
+        'fehlermeldung' => null
     ];
 
     /**
@@ -101,9 +97,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'bezeichnung' => 'bezeichnung',
-        'links' => 'links',
-        'oid' => 'oid'
+        'fehlermeldung' => 'fehlermeldung'
     ];
 
     /**
@@ -112,9 +106,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'bezeichnung' => 'setBezeichnung',
-        'links' => 'setLinks',
-        'oid' => 'setOid'
+        'fehlermeldung' => 'setFehlermeldung'
     ];
 
     /**
@@ -123,9 +115,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'bezeichnung' => 'getBezeichnung',
-        'links' => 'getLinks',
-        'oid' => 'getOid'
+        'fehlermeldung' => 'getFehlermeldung'
     ];
 
     /**
@@ -188,9 +178,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['bezeichnung'] = isset($data['bezeichnung']) ? $data['bezeichnung'] : null;
-        $this->container['links'] = isset($data['links']) ? $data['links'] : null;
-        $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
+        $this->container['fehlermeldung'] = isset($data['fehlermeldung']) ? $data['fehlermeldung'] : null;
     }
 
     /**
@@ -218,73 +206,25 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets bezeichnung
+     * Gets fehlermeldung
      *
      * @return string
      */
-    public function getBezeichnung()
+    public function getFehlermeldung()
     {
-        return $this->container['bezeichnung'];
+        return $this->container['fehlermeldung'];
     }
 
     /**
-     * Sets bezeichnung
+     * Sets fehlermeldung
      *
-     * @param string $bezeichnung Bezeichnung der Veranstaltungskategorie
+     * @param string $fehlermeldung Der Text der Fehlermeldung.
      *
      * @return $this
      */
-    public function setBezeichnung($bezeichnung)
+    public function setFehlermeldung($fehlermeldung)
     {
-        $this->container['bezeichnung'] = $bezeichnung;
-
-        return $this;
-    }
-
-    /**
-     * Gets links
-     *
-     * @return \Swagger\Client\Model\Link[]
-     */
-    public function getLinks()
-    {
-        return $this->container['links'];
-    }
-
-    /**
-     * Sets links
-     *
-     * @param \Swagger\Client\Model\Link[] $links links
-     *
-     * @return $this
-     */
-    public function setLinks($links)
-    {
-        $this->container['links'] = $links;
-
-        return $this;
-    }
-
-    /**
-     * Gets oid
-     *
-     * @return string
-     */
-    public function getOid()
-    {
-        return $this->container['oid'];
-    }
-
-    /**
-     * Sets oid
-     *
-     * @param string $oid Eindeutige ID der Veranstaltungskategorie
-     *
-     * @return $this
-     */
-    public function setOid($oid)
-    {
-        $this->container['oid'] = $oid;
+        $this->container['fehlermeldung'] = $fehlermeldung;
 
         return $this;
     }

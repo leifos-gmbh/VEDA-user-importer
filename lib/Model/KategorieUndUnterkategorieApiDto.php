@@ -1,6 +1,6 @@
 <?php
 /**
- * Veranstaltungskategorie
+ * KategorieUndUnterkategorieApiDto
  *
  * PHP version 5
  *
@@ -33,15 +33,14 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * Veranstaltungskategorie Class Doc Comment
+ * KategorieUndUnterkategorieApiDto Class Doc Comment
  *
  * @category Class
- * @description Die Informationen einer Veranstaltungskategorie.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class Veranstaltungskategorie implements ModelInterface, ArrayAccess
+class KategorieUndUnterkategorieApiDto implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +49,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'Veranstaltungskategorie';
+    protected static $swaggerModelName = 'KategorieUndUnterkategorieApiDto';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,9 +57,8 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'bezeichnung' => 'string',
-        'links' => '\Swagger\Client\Model\Link[]',
-        'oid' => 'string'
+        'veranstaltungskategorie' => '\Swagger\Client\Model\Veranstaltungskategorie',
+        'veranstaltungsunterkategorie' => '\Swagger\Client\Model\Veranstaltungsunterkategorie'
     ];
 
     /**
@@ -69,9 +67,8 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'bezeichnung' => null,
-        'links' => null,
-        'oid' => null
+        'veranstaltungskategorie' => null,
+        'veranstaltungsunterkategorie' => null
     ];
 
     /**
@@ -101,9 +98,8 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'bezeichnung' => 'bezeichnung',
-        'links' => 'links',
-        'oid' => 'oid'
+        'veranstaltungskategorie' => 'veranstaltungskategorie',
+        'veranstaltungsunterkategorie' => 'veranstaltungsunterkategorie'
     ];
 
     /**
@@ -112,9 +108,8 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'bezeichnung' => 'setBezeichnung',
-        'links' => 'setLinks',
-        'oid' => 'setOid'
+        'veranstaltungskategorie' => 'setVeranstaltungskategorie',
+        'veranstaltungsunterkategorie' => 'setVeranstaltungsunterkategorie'
     ];
 
     /**
@@ -123,9 +118,8 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'bezeichnung' => 'getBezeichnung',
-        'links' => 'getLinks',
-        'oid' => 'getOid'
+        'veranstaltungskategorie' => 'getVeranstaltungskategorie',
+        'veranstaltungsunterkategorie' => 'getVeranstaltungsunterkategorie'
     ];
 
     /**
@@ -188,9 +182,8 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['bezeichnung'] = isset($data['bezeichnung']) ? $data['bezeichnung'] : null;
-        $this->container['links'] = isset($data['links']) ? $data['links'] : null;
-        $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
+        $this->container['veranstaltungskategorie'] = isset($data['veranstaltungskategorie']) ? $data['veranstaltungskategorie'] : null;
+        $this->container['veranstaltungsunterkategorie'] = isset($data['veranstaltungsunterkategorie']) ? $data['veranstaltungsunterkategorie'] : null;
     }
 
     /**
@@ -218,73 +211,49 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets bezeichnung
+     * Gets veranstaltungskategorie
      *
-     * @return string
+     * @return \Swagger\Client\Model\Veranstaltungskategorie
      */
-    public function getBezeichnung()
+    public function getVeranstaltungskategorie()
     {
-        return $this->container['bezeichnung'];
+        return $this->container['veranstaltungskategorie'];
     }
 
     /**
-     * Sets bezeichnung
+     * Sets veranstaltungskategorie
      *
-     * @param string $bezeichnung Bezeichnung der Veranstaltungskategorie
+     * @param \Swagger\Client\Model\Veranstaltungskategorie $veranstaltungskategorie Die Veranstaltungskategorie
      *
      * @return $this
      */
-    public function setBezeichnung($bezeichnung)
+    public function setVeranstaltungskategorie($veranstaltungskategorie)
     {
-        $this->container['bezeichnung'] = $bezeichnung;
+        $this->container['veranstaltungskategorie'] = $veranstaltungskategorie;
 
         return $this;
     }
 
     /**
-     * Gets links
+     * Gets veranstaltungsunterkategorie
      *
-     * @return \Swagger\Client\Model\Link[]
+     * @return \Swagger\Client\Model\Veranstaltungsunterkategorie
      */
-    public function getLinks()
+    public function getVeranstaltungsunterkategorie()
     {
-        return $this->container['links'];
+        return $this->container['veranstaltungsunterkategorie'];
     }
 
     /**
-     * Sets links
+     * Sets veranstaltungsunterkategorie
      *
-     * @param \Swagger\Client\Model\Link[] $links links
+     * @param \Swagger\Client\Model\Veranstaltungsunterkategorie $veranstaltungsunterkategorie Die Veranstaltungsunterkategorie
      *
      * @return $this
      */
-    public function setLinks($links)
+    public function setVeranstaltungsunterkategorie($veranstaltungsunterkategorie)
     {
-        $this->container['links'] = $links;
-
-        return $this;
-    }
-
-    /**
-     * Gets oid
-     *
-     * @return string
-     */
-    public function getOid()
-    {
-        return $this->container['oid'];
-    }
-
-    /**
-     * Sets oid
-     *
-     * @param string $oid Eindeutige ID der Veranstaltungskategorie
-     *
-     * @return $this
-     */
-    public function setOid($oid)
-    {
-        $this->container['oid'] = $oid;
+        $this->container['veranstaltungsunterkategorie'] = $veranstaltungsunterkategorie;
 
         return $this;
     }

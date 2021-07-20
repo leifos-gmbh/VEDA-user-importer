@@ -1,6 +1,6 @@
 <?php
 /**
- * Veranstaltungskategorie
+ * Veranstaltungsunterkategorie
  *
  * PHP version 5
  *
@@ -33,15 +33,15 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * Veranstaltungskategorie Class Doc Comment
+ * Veranstaltungsunterkategorie Class Doc Comment
  *
  * @category Class
- * @description Die Informationen einer Veranstaltungskategorie.
+ * @description Die Informationen einer Veranstaltungsunterkategorie.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class Veranstaltungskategorie implements ModelInterface, ArrayAccess
+class Veranstaltungsunterkategorie implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'Veranstaltungskategorie';
+    protected static $swaggerModelName = 'Veranstaltungsunterkategorie';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -230,7 +230,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
     /**
      * Sets bezeichnung
      *
-     * @param string $bezeichnung Bezeichnung der Veranstaltungskategorie
+     * @param string $bezeichnung Bezeichnung der Veranstaltungsunterkategorie
      *
      * @return $this
      */
@@ -278,7 +278,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
     /**
      * Sets oid
      *
-     * @param string $oid Eindeutige ID der Veranstaltungskategorie
+     * @param string $oid Eindeutige ID der Veranstaltungsunterkategorie
      *
      * @return $this
      */

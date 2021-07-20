@@ -1,6 +1,6 @@
 <?php
 /**
- * Veranstaltungskategorie
+ * Teilnehmerkurszuordnung
  *
  * PHP version 5
  *
@@ -33,15 +33,15 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * Veranstaltungskategorie Class Doc Comment
+ * Teilnehmerkurszuordnung Class Doc Comment
  *
  * @category Class
- * @description Die Informationen einer Veranstaltungskategorie.
+ * @description Eine Zuordnung eines Teilnehmers zu einem Kurs.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class Veranstaltungskategorie implements ModelInterface, ArrayAccess
+class Teilnehmerkurszuordnung implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'Veranstaltungskategorie';
+    protected static $swaggerModelName = 'Teilnehmerkurszuordnung';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,9 +58,13 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'bezeichnung' => 'string',
+        'elearningbenutzeraccount_id' => 'string',
+        'kurs_id' => 'string',
+        'kurs_zugriff_ab' => '\DateTime',
+        'kurs_zugriff_bis' => '\DateTime',
         'links' => '\Swagger\Client\Model\Link[]',
-        'oid' => 'string'
+        'teilnehmer_id' => 'string',
+        'teilnehmerbuchung_id' => 'string'
     ];
 
     /**
@@ -69,9 +73,13 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'bezeichnung' => null,
+        'elearningbenutzeraccount_id' => null,
+        'kurs_id' => null,
+        'kurs_zugriff_ab' => 'date',
+        'kurs_zugriff_bis' => 'date',
         'links' => null,
-        'oid' => null
+        'teilnehmer_id' => null,
+        'teilnehmerbuchung_id' => null
     ];
 
     /**
@@ -101,9 +109,13 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'bezeichnung' => 'bezeichnung',
+        'elearningbenutzeraccount_id' => 'elearningbenutzeraccountId',
+        'kurs_id' => 'kursId',
+        'kurs_zugriff_ab' => 'kursZugriffAb',
+        'kurs_zugriff_bis' => 'kursZugriffBis',
         'links' => 'links',
-        'oid' => 'oid'
+        'teilnehmer_id' => 'teilnehmerId',
+        'teilnehmerbuchung_id' => 'teilnehmerbuchungId'
     ];
 
     /**
@@ -112,9 +124,13 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'bezeichnung' => 'setBezeichnung',
+        'elearningbenutzeraccount_id' => 'setElearningbenutzeraccountId',
+        'kurs_id' => 'setKursId',
+        'kurs_zugriff_ab' => 'setKursZugriffAb',
+        'kurs_zugriff_bis' => 'setKursZugriffBis',
         'links' => 'setLinks',
-        'oid' => 'setOid'
+        'teilnehmer_id' => 'setTeilnehmerId',
+        'teilnehmerbuchung_id' => 'setTeilnehmerbuchungId'
     ];
 
     /**
@@ -123,9 +139,13 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'bezeichnung' => 'getBezeichnung',
+        'elearningbenutzeraccount_id' => 'getElearningbenutzeraccountId',
+        'kurs_id' => 'getKursId',
+        'kurs_zugriff_ab' => 'getKursZugriffAb',
+        'kurs_zugriff_bis' => 'getKursZugriffBis',
         'links' => 'getLinks',
-        'oid' => 'getOid'
+        'teilnehmer_id' => 'getTeilnehmerId',
+        'teilnehmerbuchung_id' => 'getTeilnehmerbuchungId'
     ];
 
     /**
@@ -188,9 +208,13 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['bezeichnung'] = isset($data['bezeichnung']) ? $data['bezeichnung'] : null;
+        $this->container['elearningbenutzeraccount_id'] = isset($data['elearningbenutzeraccount_id']) ? $data['elearningbenutzeraccount_id'] : null;
+        $this->container['kurs_id'] = isset($data['kurs_id']) ? $data['kurs_id'] : null;
+        $this->container['kurs_zugriff_ab'] = isset($data['kurs_zugriff_ab']) ? $data['kurs_zugriff_ab'] : null;
+        $this->container['kurs_zugriff_bis'] = isset($data['kurs_zugriff_bis']) ? $data['kurs_zugriff_bis'] : null;
         $this->container['links'] = isset($data['links']) ? $data['links'] : null;
-        $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
+        $this->container['teilnehmer_id'] = isset($data['teilnehmer_id']) ? $data['teilnehmer_id'] : null;
+        $this->container['teilnehmerbuchung_id'] = isset($data['teilnehmerbuchung_id']) ? $data['teilnehmerbuchung_id'] : null;
     }
 
     /**
@@ -202,6 +226,24 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
     {
         $invalidProperties = [];
 
+        if ($this->container['elearningbenutzeraccount_id'] === null) {
+            $invalidProperties[] = "'elearningbenutzeraccount_id' can't be null";
+        }
+        if ($this->container['kurs_id'] === null) {
+            $invalidProperties[] = "'kurs_id' can't be null";
+        }
+        if ($this->container['kurs_zugriff_ab'] === null) {
+            $invalidProperties[] = "'kurs_zugriff_ab' can't be null";
+        }
+        if ($this->container['kurs_zugriff_bis'] === null) {
+            $invalidProperties[] = "'kurs_zugriff_bis' can't be null";
+        }
+        if ($this->container['teilnehmer_id'] === null) {
+            $invalidProperties[] = "'teilnehmer_id' can't be null";
+        }
+        if ($this->container['teilnehmerbuchung_id'] === null) {
+            $invalidProperties[] = "'teilnehmerbuchung_id' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -218,25 +260,97 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets bezeichnung
+     * Gets elearningbenutzeraccount_id
      *
      * @return string
      */
-    public function getBezeichnung()
+    public function getElearningbenutzeraccountId()
     {
-        return $this->container['bezeichnung'];
+        return $this->container['elearningbenutzeraccount_id'];
     }
 
     /**
-     * Sets bezeichnung
+     * Sets elearningbenutzeraccount_id
      *
-     * @param string $bezeichnung Bezeichnung der Veranstaltungskategorie
+     * @param string $elearningbenutzeraccount_id ID des E-Learning-Benutzeraccounts
      *
      * @return $this
      */
-    public function setBezeichnung($bezeichnung)
+    public function setElearningbenutzeraccountId($elearningbenutzeraccount_id)
     {
-        $this->container['bezeichnung'] = $bezeichnung;
+        $this->container['elearningbenutzeraccount_id'] = $elearningbenutzeraccount_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets kurs_id
+     *
+     * @return string
+     */
+    public function getKursId()
+    {
+        return $this->container['kurs_id'];
+    }
+
+    /**
+     * Sets kurs_id
+     *
+     * @param string $kurs_id ID des Kurses
+     *
+     * @return $this
+     */
+    public function setKursId($kurs_id)
+    {
+        $this->container['kurs_id'] = $kurs_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets kurs_zugriff_ab
+     *
+     * @return \DateTime
+     */
+    public function getKursZugriffAb()
+    {
+        return $this->container['kurs_zugriff_ab'];
+    }
+
+    /**
+     * Sets kurs_zugriff_ab
+     *
+     * @param \DateTime $kurs_zugriff_ab Das Tagesdatum, an dem der Kurszugriff beginnt.
+     *
+     * @return $this
+     */
+    public function setKursZugriffAb($kurs_zugriff_ab)
+    {
+        $this->container['kurs_zugriff_ab'] = $kurs_zugriff_ab;
+
+        return $this;
+    }
+
+    /**
+     * Gets kurs_zugriff_bis
+     *
+     * @return \DateTime
+     */
+    public function getKursZugriffBis()
+    {
+        return $this->container['kurs_zugriff_bis'];
+    }
+
+    /**
+     * Sets kurs_zugriff_bis
+     *
+     * @param \DateTime $kurs_zugriff_bis Das Tagesdatum (einschließlich), an dem der Kurszugriff endet.
+     *
+     * @return $this
+     */
+    public function setKursZugriffBis($kurs_zugriff_bis)
+    {
+        $this->container['kurs_zugriff_bis'] = $kurs_zugriff_bis;
 
         return $this;
     }
@@ -266,25 +380,49 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets oid
+     * Gets teilnehmer_id
      *
      * @return string
      */
-    public function getOid()
+    public function getTeilnehmerId()
     {
-        return $this->container['oid'];
+        return $this->container['teilnehmer_id'];
     }
 
     /**
-     * Sets oid
+     * Sets teilnehmer_id
      *
-     * @param string $oid Eindeutige ID der Veranstaltungskategorie
+     * @param string $teilnehmer_id ID des Teilnehmers
      *
      * @return $this
      */
-    public function setOid($oid)
+    public function setTeilnehmerId($teilnehmer_id)
     {
-        $this->container['oid'] = $oid;
+        $this->container['teilnehmer_id'] = $teilnehmer_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets teilnehmerbuchung_id
+     *
+     * @return string
+     */
+    public function getTeilnehmerbuchungId()
+    {
+        return $this->container['teilnehmerbuchung_id'];
+    }
+
+    /**
+     * Sets teilnehmerbuchung_id
+     *
+     * @param string $teilnehmerbuchung_id ID der Teilnehmerbuchung
+     *
+     * @return $this
+     */
+    public function setTeilnehmerbuchungId($teilnehmerbuchung_id)
+    {
+        $this->container['teilnehmerbuchung_id'] = $teilnehmerbuchung_id;
 
         return $this;
     }

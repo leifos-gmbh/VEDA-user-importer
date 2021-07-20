@@ -1,6 +1,6 @@
 <?php
 /**
- * Veranstaltungstyp
+ * Veranstaltungsterminreihe
  *
  * PHP version 5
  *
@@ -33,15 +33,15 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * Veranstaltungstyp Class Doc Comment
+ * Veranstaltungsterminreihe Class Doc Comment
  *
  * @category Class
- * @description Ein Veranstaltungstyp mit seinen relevanten Daten.
+ * @description Eine Veranstaltungsterminreihe mit ihren relevanten Daten
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class Veranstaltungstyp implements ModelInterface, ArrayAccess
+class Veranstaltungsterminreihe implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'Veranstaltungstyp';
+    protected static $swaggerModelName = 'Veranstaltungsterminreihe';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -59,41 +59,41 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
       */
     protected static $swaggerTypes = [
         'oid' => 'string',
-        'anzahl_teilnehmertage' => 'float',
-        'anzahl_ue' => 'float',
+        'anzahl_freier_plaetze' => 'int',
+        'anzahl_freier_wartelistenplaetze' => 'int',
+        'anzahl_teilnehmerbuchungen' => 'int',
+        'anzahl_wartelistenbuchungen' => 'int',
+        'auslastungsstatus' => 'string',
         'beschreibung' => 'string',
-        'dauer_in_tagen' => 'float',
-        'gueltig_ab' => '\DateTime',
-        'gueltig_bis' => '\DateTime',
+        'geschlossen' => 'bool',
         'hinweise' => 'string',
         'inhalt' => 'string',
-        'inhouse_durchfuehrbar' => 'bool',
         'kategorien' => '\Swagger\Client\Model\KategorieUndUnterkategorieApiDto[]',
-        'kurzbezeichnung' => 'string',
         'links' => '\Swagger\Client\Model\Link[]',
         'methodik' => 'string',
+        'preis' => 'float',
         'preise_je_teilnehmergruppe' => '\Swagger\Client\Model\TeilnehmergruppePreis[]',
-        'publizierung_aktiv' => 'bool',
-        'regulaere_uhrzeit_bis' => 'string',
-        'regulaere_uhrzeit_von' => 'string',
         'sachbearbeiter' => '\Swagger\Client\Model\Sachbearbeiter',
         'schlagwoerter' => '\Swagger\Client\Model\Schlagwort[]',
+        'sprache' => 'string',
         'standardzahlungsbedingung' => '\Swagger\Client\Model\Zahlungsbedingung',
         'teilnehmermaximum' => 'int',
         'teilnehmerminimum' => 'int',
+        'termin_bis' => '\DateTime',
+        'termin_von' => '\DateTime',
+        'termine' => '\Swagger\Client\Model\VeranstaltungsterminDerReiheApiDto[]',
         'thema' => 'string',
         'thema2' => 'string',
-        'uhrzeit_bis' => 'string',
-        'uhrzeit_von' => 'string',
         'veranstaltungs_nr' => 'string',
-        'veranstaltungsart' => 'string',
+        'veranstaltungsanbieter' => '\Swagger\Client\Model\Veranstaltungsanbieter',
         'veranstaltungsform' => '\Swagger\Client\Model\Veranstaltungsform',
         'veranstaltungskategorie' => '\Swagger\Client\Model\Veranstaltungskategorie',
+        'veranstaltungsort' => '\Swagger\Client\Model\Veranstaltungsort',
+        'veranstaltungsterminreihen_nr' => 'string',
+        'veranstaltungstyp_id' => 'string',
         'veranstaltungsunterkategorie' => '\Swagger\Client\Model\Veranstaltungsunterkategorie',
         'voraussetzung' => 'string',
-        'wbd_relevant' => 'bool',
-        'wbd_thema' => 'string',
-        'webcode' => 'string',
+        'wartelistenmaximum' => 'int',
         'ziel' => 'string',
         'zielgruppen' => '\Swagger\Client\Model\Zielgruppe[]'
     ];
@@ -105,41 +105,41 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
       */
     protected static $swaggerFormats = [
         'oid' => null,
-        'anzahl_teilnehmertage' => null,
-        'anzahl_ue' => null,
+        'anzahl_freier_plaetze' => null,
+        'anzahl_freier_wartelistenplaetze' => null,
+        'anzahl_teilnehmerbuchungen' => null,
+        'anzahl_wartelistenbuchungen' => null,
+        'auslastungsstatus' => null,
         'beschreibung' => null,
-        'dauer_in_tagen' => null,
-        'gueltig_ab' => 'date',
-        'gueltig_bis' => 'date',
+        'geschlossen' => null,
         'hinweise' => null,
         'inhalt' => null,
-        'inhouse_durchfuehrbar' => null,
         'kategorien' => null,
-        'kurzbezeichnung' => null,
         'links' => null,
         'methodik' => null,
+        'preis' => null,
         'preise_je_teilnehmergruppe' => null,
-        'publizierung_aktiv' => null,
-        'regulaere_uhrzeit_bis' => null,
-        'regulaere_uhrzeit_von' => null,
         'sachbearbeiter' => null,
         'schlagwoerter' => null,
+        'sprache' => null,
         'standardzahlungsbedingung' => null,
         'teilnehmermaximum' => null,
         'teilnehmerminimum' => null,
+        'termin_bis' => 'date-time',
+        'termin_von' => 'date-time',
+        'termine' => null,
         'thema' => null,
         'thema2' => null,
-        'uhrzeit_bis' => null,
-        'uhrzeit_von' => null,
         'veranstaltungs_nr' => null,
-        'veranstaltungsart' => null,
+        'veranstaltungsanbieter' => null,
         'veranstaltungsform' => null,
         'veranstaltungskategorie' => null,
+        'veranstaltungsort' => null,
+        'veranstaltungsterminreihen_nr' => null,
+        'veranstaltungstyp_id' => null,
         'veranstaltungsunterkategorie' => null,
         'voraussetzung' => null,
-        'wbd_relevant' => null,
-        'wbd_thema' => null,
-        'webcode' => null,
+        'wartelistenmaximum' => null,
         'ziel' => null,
         'zielgruppen' => null
     ];
@@ -172,41 +172,41 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
      */
     protected static $attributeMap = [
         'oid' => 'oid',
-        'anzahl_teilnehmertage' => 'anzahlTeilnehmertage',
-        'anzahl_ue' => 'anzahlUE',
+        'anzahl_freier_plaetze' => 'anzahlFreierPlaetze',
+        'anzahl_freier_wartelistenplaetze' => 'anzahlFreierWartelistenplaetze',
+        'anzahl_teilnehmerbuchungen' => 'anzahlTeilnehmerbuchungen',
+        'anzahl_wartelistenbuchungen' => 'anzahlWartelistenbuchungen',
+        'auslastungsstatus' => 'auslastungsstatus',
         'beschreibung' => 'beschreibung',
-        'dauer_in_tagen' => 'dauerInTagen',
-        'gueltig_ab' => 'gueltigAb',
-        'gueltig_bis' => 'gueltigBis',
+        'geschlossen' => 'geschlossen',
         'hinweise' => 'hinweise',
         'inhalt' => 'inhalt',
-        'inhouse_durchfuehrbar' => 'inhouseDurchfuehrbar',
         'kategorien' => 'kategorien',
-        'kurzbezeichnung' => 'kurzbezeichnung',
         'links' => 'links',
         'methodik' => 'methodik',
+        'preis' => 'preis',
         'preise_je_teilnehmergruppe' => 'preiseJeTeilnehmergruppe',
-        'publizierung_aktiv' => 'publizierungAktiv',
-        'regulaere_uhrzeit_bis' => 'regulaereUhrzeitBis',
-        'regulaere_uhrzeit_von' => 'regulaereUhrzeitVon',
         'sachbearbeiter' => 'sachbearbeiter',
         'schlagwoerter' => 'schlagwoerter',
+        'sprache' => 'sprache',
         'standardzahlungsbedingung' => 'standardzahlungsbedingung',
         'teilnehmermaximum' => 'teilnehmermaximum',
         'teilnehmerminimum' => 'teilnehmerminimum',
+        'termin_bis' => 'terminBis',
+        'termin_von' => 'terminVon',
+        'termine' => 'termine',
         'thema' => 'thema',
         'thema2' => 'thema2',
-        'uhrzeit_bis' => 'uhrzeitBis',
-        'uhrzeit_von' => 'uhrzeitVon',
         'veranstaltungs_nr' => 'veranstaltungsNr',
-        'veranstaltungsart' => 'veranstaltungsart',
+        'veranstaltungsanbieter' => 'veranstaltungsanbieter',
         'veranstaltungsform' => 'veranstaltungsform',
         'veranstaltungskategorie' => 'veranstaltungskategorie',
+        'veranstaltungsort' => 'veranstaltungsort',
+        'veranstaltungsterminreihen_nr' => 'veranstaltungsterminreihenNr',
+        'veranstaltungstyp_id' => 'veranstaltungstypID',
         'veranstaltungsunterkategorie' => 'veranstaltungsunterkategorie',
         'voraussetzung' => 'voraussetzung',
-        'wbd_relevant' => 'wbdRelevant',
-        'wbd_thema' => 'wbdThema',
-        'webcode' => 'webcode',
+        'wartelistenmaximum' => 'wartelistenmaximum',
         'ziel' => 'ziel',
         'zielgruppen' => 'zielgruppen'
     ];
@@ -218,41 +218,41 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
      */
     protected static $setters = [
         'oid' => 'setOid',
-        'anzahl_teilnehmertage' => 'setAnzahlTeilnehmertage',
-        'anzahl_ue' => 'setAnzahlUe',
+        'anzahl_freier_plaetze' => 'setAnzahlFreierPlaetze',
+        'anzahl_freier_wartelistenplaetze' => 'setAnzahlFreierWartelistenplaetze',
+        'anzahl_teilnehmerbuchungen' => 'setAnzahlTeilnehmerbuchungen',
+        'anzahl_wartelistenbuchungen' => 'setAnzahlWartelistenbuchungen',
+        'auslastungsstatus' => 'setAuslastungsstatus',
         'beschreibung' => 'setBeschreibung',
-        'dauer_in_tagen' => 'setDauerInTagen',
-        'gueltig_ab' => 'setGueltigAb',
-        'gueltig_bis' => 'setGueltigBis',
+        'geschlossen' => 'setGeschlossen',
         'hinweise' => 'setHinweise',
         'inhalt' => 'setInhalt',
-        'inhouse_durchfuehrbar' => 'setInhouseDurchfuehrbar',
         'kategorien' => 'setKategorien',
-        'kurzbezeichnung' => 'setKurzbezeichnung',
         'links' => 'setLinks',
         'methodik' => 'setMethodik',
+        'preis' => 'setPreis',
         'preise_je_teilnehmergruppe' => 'setPreiseJeTeilnehmergruppe',
-        'publizierung_aktiv' => 'setPublizierungAktiv',
-        'regulaere_uhrzeit_bis' => 'setRegulaereUhrzeitBis',
-        'regulaere_uhrzeit_von' => 'setRegulaereUhrzeitVon',
         'sachbearbeiter' => 'setSachbearbeiter',
         'schlagwoerter' => 'setSchlagwoerter',
+        'sprache' => 'setSprache',
         'standardzahlungsbedingung' => 'setStandardzahlungsbedingung',
         'teilnehmermaximum' => 'setTeilnehmermaximum',
         'teilnehmerminimum' => 'setTeilnehmerminimum',
+        'termin_bis' => 'setTerminBis',
+        'termin_von' => 'setTerminVon',
+        'termine' => 'setTermine',
         'thema' => 'setThema',
         'thema2' => 'setThema2',
-        'uhrzeit_bis' => 'setUhrzeitBis',
-        'uhrzeit_von' => 'setUhrzeitVon',
         'veranstaltungs_nr' => 'setVeranstaltungsNr',
-        'veranstaltungsart' => 'setVeranstaltungsart',
+        'veranstaltungsanbieter' => 'setVeranstaltungsanbieter',
         'veranstaltungsform' => 'setVeranstaltungsform',
         'veranstaltungskategorie' => 'setVeranstaltungskategorie',
+        'veranstaltungsort' => 'setVeranstaltungsort',
+        'veranstaltungsterminreihen_nr' => 'setVeranstaltungsterminreihenNr',
+        'veranstaltungstyp_id' => 'setVeranstaltungstypId',
         'veranstaltungsunterkategorie' => 'setVeranstaltungsunterkategorie',
         'voraussetzung' => 'setVoraussetzung',
-        'wbd_relevant' => 'setWbdRelevant',
-        'wbd_thema' => 'setWbdThema',
-        'webcode' => 'setWebcode',
+        'wartelistenmaximum' => 'setWartelistenmaximum',
         'ziel' => 'setZiel',
         'zielgruppen' => 'setZielgruppen'
     ];
@@ -264,41 +264,41 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
      */
     protected static $getters = [
         'oid' => 'getOid',
-        'anzahl_teilnehmertage' => 'getAnzahlTeilnehmertage',
-        'anzahl_ue' => 'getAnzahlUe',
+        'anzahl_freier_plaetze' => 'getAnzahlFreierPlaetze',
+        'anzahl_freier_wartelistenplaetze' => 'getAnzahlFreierWartelistenplaetze',
+        'anzahl_teilnehmerbuchungen' => 'getAnzahlTeilnehmerbuchungen',
+        'anzahl_wartelistenbuchungen' => 'getAnzahlWartelistenbuchungen',
+        'auslastungsstatus' => 'getAuslastungsstatus',
         'beschreibung' => 'getBeschreibung',
-        'dauer_in_tagen' => 'getDauerInTagen',
-        'gueltig_ab' => 'getGueltigAb',
-        'gueltig_bis' => 'getGueltigBis',
+        'geschlossen' => 'getGeschlossen',
         'hinweise' => 'getHinweise',
         'inhalt' => 'getInhalt',
-        'inhouse_durchfuehrbar' => 'getInhouseDurchfuehrbar',
         'kategorien' => 'getKategorien',
-        'kurzbezeichnung' => 'getKurzbezeichnung',
         'links' => 'getLinks',
         'methodik' => 'getMethodik',
+        'preis' => 'getPreis',
         'preise_je_teilnehmergruppe' => 'getPreiseJeTeilnehmergruppe',
-        'publizierung_aktiv' => 'getPublizierungAktiv',
-        'regulaere_uhrzeit_bis' => 'getRegulaereUhrzeitBis',
-        'regulaere_uhrzeit_von' => 'getRegulaereUhrzeitVon',
         'sachbearbeiter' => 'getSachbearbeiter',
         'schlagwoerter' => 'getSchlagwoerter',
+        'sprache' => 'getSprache',
         'standardzahlungsbedingung' => 'getStandardzahlungsbedingung',
         'teilnehmermaximum' => 'getTeilnehmermaximum',
         'teilnehmerminimum' => 'getTeilnehmerminimum',
+        'termin_bis' => 'getTerminBis',
+        'termin_von' => 'getTerminVon',
+        'termine' => 'getTermine',
         'thema' => 'getThema',
         'thema2' => 'getThema2',
-        'uhrzeit_bis' => 'getUhrzeitBis',
-        'uhrzeit_von' => 'getUhrzeitVon',
         'veranstaltungs_nr' => 'getVeranstaltungsNr',
-        'veranstaltungsart' => 'getVeranstaltungsart',
+        'veranstaltungsanbieter' => 'getVeranstaltungsanbieter',
         'veranstaltungsform' => 'getVeranstaltungsform',
         'veranstaltungskategorie' => 'getVeranstaltungskategorie',
+        'veranstaltungsort' => 'getVeranstaltungsort',
+        'veranstaltungsterminreihen_nr' => 'getVeranstaltungsterminreihenNr',
+        'veranstaltungstyp_id' => 'getVeranstaltungstypId',
         'veranstaltungsunterkategorie' => 'getVeranstaltungsunterkategorie',
         'voraussetzung' => 'getVoraussetzung',
-        'wbd_relevant' => 'getWbdRelevant',
-        'wbd_thema' => 'getWbdThema',
-        'webcode' => 'getWebcode',
+        'wartelistenmaximum' => 'getWartelistenmaximum',
         'ziel' => 'getZiel',
         'zielgruppen' => 'getZielgruppen'
     ];
@@ -364,41 +364,41 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
-        $this->container['anzahl_teilnehmertage'] = isset($data['anzahl_teilnehmertage']) ? $data['anzahl_teilnehmertage'] : null;
-        $this->container['anzahl_ue'] = isset($data['anzahl_ue']) ? $data['anzahl_ue'] : null;
+        $this->container['anzahl_freier_plaetze'] = isset($data['anzahl_freier_plaetze']) ? $data['anzahl_freier_plaetze'] : null;
+        $this->container['anzahl_freier_wartelistenplaetze'] = isset($data['anzahl_freier_wartelistenplaetze']) ? $data['anzahl_freier_wartelistenplaetze'] : null;
+        $this->container['anzahl_teilnehmerbuchungen'] = isset($data['anzahl_teilnehmerbuchungen']) ? $data['anzahl_teilnehmerbuchungen'] : null;
+        $this->container['anzahl_wartelistenbuchungen'] = isset($data['anzahl_wartelistenbuchungen']) ? $data['anzahl_wartelistenbuchungen'] : null;
+        $this->container['auslastungsstatus'] = isset($data['auslastungsstatus']) ? $data['auslastungsstatus'] : null;
         $this->container['beschreibung'] = isset($data['beschreibung']) ? $data['beschreibung'] : null;
-        $this->container['dauer_in_tagen'] = isset($data['dauer_in_tagen']) ? $data['dauer_in_tagen'] : null;
-        $this->container['gueltig_ab'] = isset($data['gueltig_ab']) ? $data['gueltig_ab'] : null;
-        $this->container['gueltig_bis'] = isset($data['gueltig_bis']) ? $data['gueltig_bis'] : null;
+        $this->container['geschlossen'] = isset($data['geschlossen']) ? $data['geschlossen'] : null;
         $this->container['hinweise'] = isset($data['hinweise']) ? $data['hinweise'] : null;
         $this->container['inhalt'] = isset($data['inhalt']) ? $data['inhalt'] : null;
-        $this->container['inhouse_durchfuehrbar'] = isset($data['inhouse_durchfuehrbar']) ? $data['inhouse_durchfuehrbar'] : null;
         $this->container['kategorien'] = isset($data['kategorien']) ? $data['kategorien'] : null;
-        $this->container['kurzbezeichnung'] = isset($data['kurzbezeichnung']) ? $data['kurzbezeichnung'] : null;
         $this->container['links'] = isset($data['links']) ? $data['links'] : null;
         $this->container['methodik'] = isset($data['methodik']) ? $data['methodik'] : null;
+        $this->container['preis'] = isset($data['preis']) ? $data['preis'] : null;
         $this->container['preise_je_teilnehmergruppe'] = isset($data['preise_je_teilnehmergruppe']) ? $data['preise_je_teilnehmergruppe'] : null;
-        $this->container['publizierung_aktiv'] = isset($data['publizierung_aktiv']) ? $data['publizierung_aktiv'] : null;
-        $this->container['regulaere_uhrzeit_bis'] = isset($data['regulaere_uhrzeit_bis']) ? $data['regulaere_uhrzeit_bis'] : null;
-        $this->container['regulaere_uhrzeit_von'] = isset($data['regulaere_uhrzeit_von']) ? $data['regulaere_uhrzeit_von'] : null;
         $this->container['sachbearbeiter'] = isset($data['sachbearbeiter']) ? $data['sachbearbeiter'] : null;
         $this->container['schlagwoerter'] = isset($data['schlagwoerter']) ? $data['schlagwoerter'] : null;
+        $this->container['sprache'] = isset($data['sprache']) ? $data['sprache'] : null;
         $this->container['standardzahlungsbedingung'] = isset($data['standardzahlungsbedingung']) ? $data['standardzahlungsbedingung'] : null;
         $this->container['teilnehmermaximum'] = isset($data['teilnehmermaximum']) ? $data['teilnehmermaximum'] : null;
         $this->container['teilnehmerminimum'] = isset($data['teilnehmerminimum']) ? $data['teilnehmerminimum'] : null;
+        $this->container['termin_bis'] = isset($data['termin_bis']) ? $data['termin_bis'] : null;
+        $this->container['termin_von'] = isset($data['termin_von']) ? $data['termin_von'] : null;
+        $this->container['termine'] = isset($data['termine']) ? $data['termine'] : null;
         $this->container['thema'] = isset($data['thema']) ? $data['thema'] : null;
         $this->container['thema2'] = isset($data['thema2']) ? $data['thema2'] : null;
-        $this->container['uhrzeit_bis'] = isset($data['uhrzeit_bis']) ? $data['uhrzeit_bis'] : null;
-        $this->container['uhrzeit_von'] = isset($data['uhrzeit_von']) ? $data['uhrzeit_von'] : null;
         $this->container['veranstaltungs_nr'] = isset($data['veranstaltungs_nr']) ? $data['veranstaltungs_nr'] : null;
-        $this->container['veranstaltungsart'] = isset($data['veranstaltungsart']) ? $data['veranstaltungsart'] : null;
+        $this->container['veranstaltungsanbieter'] = isset($data['veranstaltungsanbieter']) ? $data['veranstaltungsanbieter'] : null;
         $this->container['veranstaltungsform'] = isset($data['veranstaltungsform']) ? $data['veranstaltungsform'] : null;
         $this->container['veranstaltungskategorie'] = isset($data['veranstaltungskategorie']) ? $data['veranstaltungskategorie'] : null;
+        $this->container['veranstaltungsort'] = isset($data['veranstaltungsort']) ? $data['veranstaltungsort'] : null;
+        $this->container['veranstaltungsterminreihen_nr'] = isset($data['veranstaltungsterminreihen_nr']) ? $data['veranstaltungsterminreihen_nr'] : null;
+        $this->container['veranstaltungstyp_id'] = isset($data['veranstaltungstyp_id']) ? $data['veranstaltungstyp_id'] : null;
         $this->container['veranstaltungsunterkategorie'] = isset($data['veranstaltungsunterkategorie']) ? $data['veranstaltungsunterkategorie'] : null;
         $this->container['voraussetzung'] = isset($data['voraussetzung']) ? $data['voraussetzung'] : null;
-        $this->container['wbd_relevant'] = isset($data['wbd_relevant']) ? $data['wbd_relevant'] : null;
-        $this->container['wbd_thema'] = isset($data['wbd_thema']) ? $data['wbd_thema'] : null;
-        $this->container['webcode'] = isset($data['webcode']) ? $data['webcode'] : null;
+        $this->container['wartelistenmaximum'] = isset($data['wartelistenmaximum']) ? $data['wartelistenmaximum'] : null;
         $this->container['ziel'] = isset($data['ziel']) ? $data['ziel'] : null;
         $this->container['zielgruppen'] = isset($data['zielgruppen']) ? $data['zielgruppen'] : null;
     }
@@ -414,12 +414,6 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
 
         if ($this->container['oid'] === null) {
             $invalidProperties[] = "'oid' can't be null";
-        }
-        if ($this->container['thema'] === null) {
-            $invalidProperties[] = "'thema' can't be null";
-        }
-        if ($this->container['veranstaltungs_nr'] === null) {
-            $invalidProperties[] = "'veranstaltungs_nr' can't be null";
         }
         return $invalidProperties;
     }
@@ -461,49 +455,121 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets anzahl_teilnehmertage
+     * Gets anzahl_freier_plaetze
      *
-     * @return float
+     * @return int
      */
-    public function getAnzahlTeilnehmertage()
+    public function getAnzahlFreierPlaetze()
     {
-        return $this->container['anzahl_teilnehmertage'];
+        return $this->container['anzahl_freier_plaetze'];
     }
 
     /**
-     * Sets anzahl_teilnehmertage
+     * Sets anzahl_freier_plaetze
      *
-     * @param float $anzahl_teilnehmertage Die Anzahl der Teilnehmertage des Veranstaltungstyps
+     * @param int $anzahl_freier_plaetze anzahl_freier_plaetze
      *
      * @return $this
      */
-    public function setAnzahlTeilnehmertage($anzahl_teilnehmertage)
+    public function setAnzahlFreierPlaetze($anzahl_freier_plaetze)
     {
-        $this->container['anzahl_teilnehmertage'] = $anzahl_teilnehmertage;
+        $this->container['anzahl_freier_plaetze'] = $anzahl_freier_plaetze;
 
         return $this;
     }
 
     /**
-     * Gets anzahl_ue
+     * Gets anzahl_freier_wartelistenplaetze
      *
-     * @return float
+     * @return int
      */
-    public function getAnzahlUe()
+    public function getAnzahlFreierWartelistenplaetze()
     {
-        return $this->container['anzahl_ue'];
+        return $this->container['anzahl_freier_wartelistenplaetze'];
     }
 
     /**
-     * Sets anzahl_ue
+     * Sets anzahl_freier_wartelistenplaetze
      *
-     * @param float $anzahl_ue Die Anzahl der Unterrichtseinheiten des Veranstaltungstyps
+     * @param int $anzahl_freier_wartelistenplaetze anzahl_freier_wartelistenplaetze
      *
      * @return $this
      */
-    public function setAnzahlUe($anzahl_ue)
+    public function setAnzahlFreierWartelistenplaetze($anzahl_freier_wartelistenplaetze)
     {
-        $this->container['anzahl_ue'] = $anzahl_ue;
+        $this->container['anzahl_freier_wartelistenplaetze'] = $anzahl_freier_wartelistenplaetze;
+
+        return $this;
+    }
+
+    /**
+     * Gets anzahl_teilnehmerbuchungen
+     *
+     * @return int
+     */
+    public function getAnzahlTeilnehmerbuchungen()
+    {
+        return $this->container['anzahl_teilnehmerbuchungen'];
+    }
+
+    /**
+     * Sets anzahl_teilnehmerbuchungen
+     *
+     * @param int $anzahl_teilnehmerbuchungen anzahl_teilnehmerbuchungen
+     *
+     * @return $this
+     */
+    public function setAnzahlTeilnehmerbuchungen($anzahl_teilnehmerbuchungen)
+    {
+        $this->container['anzahl_teilnehmerbuchungen'] = $anzahl_teilnehmerbuchungen;
+
+        return $this;
+    }
+
+    /**
+     * Gets anzahl_wartelistenbuchungen
+     *
+     * @return int
+     */
+    public function getAnzahlWartelistenbuchungen()
+    {
+        return $this->container['anzahl_wartelistenbuchungen'];
+    }
+
+    /**
+     * Sets anzahl_wartelistenbuchungen
+     *
+     * @param int $anzahl_wartelistenbuchungen anzahl_wartelistenbuchungen
+     *
+     * @return $this
+     */
+    public function setAnzahlWartelistenbuchungen($anzahl_wartelistenbuchungen)
+    {
+        $this->container['anzahl_wartelistenbuchungen'] = $anzahl_wartelistenbuchungen;
+
+        return $this;
+    }
+
+    /**
+     * Gets auslastungsstatus
+     *
+     * @return string
+     */
+    public function getAuslastungsstatus()
+    {
+        return $this->container['auslastungsstatus'];
+    }
+
+    /**
+     * Sets auslastungsstatus
+     *
+     * @param string $auslastungsstatus auslastungsstatus
+     *
+     * @return $this
+     */
+    public function setAuslastungsstatus($auslastungsstatus)
+    {
+        $this->container['auslastungsstatus'] = $auslastungsstatus;
 
         return $this;
     }
@@ -521,7 +587,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets beschreibung
      *
-     * @param string $beschreibung Die Beschreibung des Veranstaltungstyps (HTML möglich)
+     * @param string $beschreibung beschreibung
      *
      * @return $this
      */
@@ -533,73 +599,25 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets dauer_in_tagen
+     * Gets geschlossen
      *
-     * @return float
+     * @return bool
      */
-    public function getDauerInTagen()
+    public function getGeschlossen()
     {
-        return $this->container['dauer_in_tagen'];
+        return $this->container['geschlossen'];
     }
 
     /**
-     * Sets dauer_in_tagen
+     * Sets geschlossen
      *
-     * @param float $dauer_in_tagen Die Dauer in Tagen des Veranstaltungstyps
+     * @param bool $geschlossen Gibt an, ob die Veranstaltungsterminreihe geschlossen ist.
      *
      * @return $this
      */
-    public function setDauerInTagen($dauer_in_tagen)
+    public function setGeschlossen($geschlossen)
     {
-        $this->container['dauer_in_tagen'] = $dauer_in_tagen;
-
-        return $this;
-    }
-
-    /**
-     * Gets gueltig_ab
-     *
-     * @return \DateTime
-     */
-    public function getGueltigAb()
-    {
-        return $this->container['gueltig_ab'];
-    }
-
-    /**
-     * Sets gueltig_ab
-     *
-     * @param \DateTime $gueltig_ab Der Gültigkeitsbeginn des Veranstaltungstyps
-     *
-     * @return $this
-     */
-    public function setGueltigAb($gueltig_ab)
-    {
-        $this->container['gueltig_ab'] = $gueltig_ab;
-
-        return $this;
-    }
-
-    /**
-     * Gets gueltig_bis
-     *
-     * @return \DateTime
-     */
-    public function getGueltigBis()
-    {
-        return $this->container['gueltig_bis'];
-    }
-
-    /**
-     * Sets gueltig_bis
-     *
-     * @param \DateTime $gueltig_bis Das Gültigkeitsende des Veranstaltungstyps
-     *
-     * @return $this
-     */
-    public function setGueltigBis($gueltig_bis)
-    {
-        $this->container['gueltig_bis'] = $gueltig_bis;
+        $this->container['geschlossen'] = $geschlossen;
 
         return $this;
     }
@@ -617,7 +635,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets hinweise
      *
-     * @param string $hinweise Hinweise zum Veranstaltungstyp
+     * @param string $hinweise hinweise
      *
      * @return $this
      */
@@ -641,37 +659,13 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets inhalt
      *
-     * @param string $inhalt Der Inhalt des Veranstaltungstyps (HTML möglich)
+     * @param string $inhalt inhalt
      *
      * @return $this
      */
     public function setInhalt($inhalt)
     {
         $this->container['inhalt'] = $inhalt;
-
-        return $this;
-    }
-
-    /**
-     * Gets inhouse_durchfuehrbar
-     *
-     * @return bool
-     */
-    public function getInhouseDurchfuehrbar()
-    {
-        return $this->container['inhouse_durchfuehrbar'];
-    }
-
-    /**
-     * Sets inhouse_durchfuehrbar
-     *
-     * @param bool $inhouse_durchfuehrbar Dieses Kennzeichen gibt an, ob der Veranstaltungstyp bei Bedarf auch als Inhouse-Seminar durchgeführt werden kann.
-     *
-     * @return $this
-     */
-    public function setInhouseDurchfuehrbar($inhouse_durchfuehrbar)
-    {
-        $this->container['inhouse_durchfuehrbar'] = $inhouse_durchfuehrbar;
 
         return $this;
     }
@@ -689,37 +683,13 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets kategorien
      *
-     * @param \Swagger\Client\Model\KategorieUndUnterkategorieApiDto[] $kategorien Die Liste der Kategorien, die dem Veranstaltungstyp zugeordnet sind.
+     * @param \Swagger\Client\Model\KategorieUndUnterkategorieApiDto[] $kategorien Die Liste der Kategorien, die der Veranstaltungsterminreihe zugeordnet sind.
      *
      * @return $this
      */
     public function setKategorien($kategorien)
     {
         $this->container['kategorien'] = $kategorien;
-
-        return $this;
-    }
-
-    /**
-     * Gets kurzbezeichnung
-     *
-     * @return string
-     */
-    public function getKurzbezeichnung()
-    {
-        return $this->container['kurzbezeichnung'];
-    }
-
-    /**
-     * Sets kurzbezeichnung
-     *
-     * @param string $kurzbezeichnung Die Kurzbezeichnung des Veranstaltungstyps
-     *
-     * @return $this
-     */
-    public function setKurzbezeichnung($kurzbezeichnung)
-    {
-        $this->container['kurzbezeichnung'] = $kurzbezeichnung;
 
         return $this;
     }
@@ -761,13 +731,37 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets methodik
      *
-     * @param string $methodik Die Methodik des Veranstaltungstyps (HTML möglich)
+     * @param string $methodik methodik
      *
      * @return $this
      */
     public function setMethodik($methodik)
     {
         $this->container['methodik'] = $methodik;
+
+        return $this;
+    }
+
+    /**
+     * Gets preis
+     *
+     * @return float
+     */
+    public function getPreis()
+    {
+        return $this->container['preis'];
+    }
+
+    /**
+     * Sets preis
+     *
+     * @param float $preis Der Standardpreis der Veranstaltungsterminreihe.
+     *
+     * @return $this
+     */
+    public function setPreis($preis)
+    {
+        $this->container['preis'] = $preis;
 
         return $this;
     }
@@ -785,85 +779,13 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets preise_je_teilnehmergruppe
      *
-     * @param \Swagger\Client\Model\TeilnehmergruppePreis[] $preise_je_teilnehmergruppe Die Preise je nach Teilnehmergruppe des Veranstaltungstyps.
+     * @param \Swagger\Client\Model\TeilnehmergruppePreis[] $preise_je_teilnehmergruppe Die Preise je nach Teilnehmergruppe der Veranstaltungsterminreihe.
      *
      * @return $this
      */
     public function setPreiseJeTeilnehmergruppe($preise_je_teilnehmergruppe)
     {
         $this->container['preise_je_teilnehmergruppe'] = $preise_je_teilnehmergruppe;
-
-        return $this;
-    }
-
-    /**
-     * Gets publizierung_aktiv
-     *
-     * @return bool
-     */
-    public function getPublizierungAktiv()
-    {
-        return $this->container['publizierung_aktiv'];
-    }
-
-    /**
-     * Sets publizierung_aktiv
-     *
-     * @param bool $publizierung_aktiv Gibt an, ob die Publizierung ins Web aktiv ist. Entspricht dem invertierten Schalter \"Keine Publizierung im Web\".
-     *
-     * @return $this
-     */
-    public function setPublizierungAktiv($publizierung_aktiv)
-    {
-        $this->container['publizierung_aktiv'] = $publizierung_aktiv;
-
-        return $this;
-    }
-
-    /**
-     * Gets regulaere_uhrzeit_bis
-     *
-     * @return string
-     */
-    public function getRegulaereUhrzeitBis()
-    {
-        return $this->container['regulaere_uhrzeit_bis'];
-    }
-
-    /**
-     * Sets regulaere_uhrzeit_bis
-     *
-     * @param string $regulaere_uhrzeit_bis Die Reguläre bis Uhrzeit des Veranstaltungstyps.
-     *
-     * @return $this
-     */
-    public function setRegulaereUhrzeitBis($regulaere_uhrzeit_bis)
-    {
-        $this->container['regulaere_uhrzeit_bis'] = $regulaere_uhrzeit_bis;
-
-        return $this;
-    }
-
-    /**
-     * Gets regulaere_uhrzeit_von
-     *
-     * @return string
-     */
-    public function getRegulaereUhrzeitVon()
-    {
-        return $this->container['regulaere_uhrzeit_von'];
-    }
-
-    /**
-     * Sets regulaere_uhrzeit_von
-     *
-     * @param string $regulaere_uhrzeit_von Die Reguläre von Uhrzeit des Veranstaltungstyps.
-     *
-     * @return $this
-     */
-    public function setRegulaereUhrzeitVon($regulaere_uhrzeit_von)
-    {
-        $this->container['regulaere_uhrzeit_von'] = $regulaere_uhrzeit_von;
 
         return $this;
     }
@@ -881,7 +803,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets sachbearbeiter
      *
-     * @param \Swagger\Client\Model\Sachbearbeiter $sachbearbeiter Der Sachbearbeiter des Veranstaltungstyps.
+     * @param \Swagger\Client\Model\Sachbearbeiter $sachbearbeiter Der Sachbearbeiter TN der Veranstaltungsterminreihe.
      *
      * @return $this
      */
@@ -905,13 +827,37 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets schlagwoerter
      *
-     * @param \Swagger\Client\Model\Schlagwort[] $schlagwoerter Die Schlagwörter für den Veranstaltungstyp.
+     * @param \Swagger\Client\Model\Schlagwort[] $schlagwoerter Die Schlagwörter für die Veranstaltungsterminreihe.
      *
      * @return $this
      */
     public function setSchlagwoerter($schlagwoerter)
     {
         $this->container['schlagwoerter'] = $schlagwoerter;
+
+        return $this;
+    }
+
+    /**
+     * Gets sprache
+     *
+     * @return string
+     */
+    public function getSprache()
+    {
+        return $this->container['sprache'];
+    }
+
+    /**
+     * Sets sprache
+     *
+     * @param string $sprache Die Sprache, in der die Veranstaltungsterminreihe durchgeführt wird.
+     *
+     * @return $this
+     */
+    public function setSprache($sprache)
+    {
+        $this->container['sprache'] = $sprache;
 
         return $this;
     }
@@ -953,7 +899,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets teilnehmermaximum
      *
-     * @param int $teilnehmermaximum Das Teilnehmermaximum des Veranstaltungstyps
+     * @param int $teilnehmermaximum teilnehmermaximum
      *
      * @return $this
      */
@@ -977,13 +923,85 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets teilnehmerminimum
      *
-     * @param int $teilnehmerminimum Das Teilnehmerminimum des Veranstaltungstyps
+     * @param int $teilnehmerminimum teilnehmerminimum
      *
      * @return $this
      */
     public function setTeilnehmerminimum($teilnehmerminimum)
     {
         $this->container['teilnehmerminimum'] = $teilnehmerminimum;
+
+        return $this;
+    }
+
+    /**
+     * Gets termin_bis
+     *
+     * @return \DateTime
+     */
+    public function getTerminBis()
+    {
+        return $this->container['termin_bis'];
+    }
+
+    /**
+     * Sets termin_bis
+     *
+     * @param \DateTime $termin_bis termin_bis
+     *
+     * @return $this
+     */
+    public function setTerminBis($termin_bis)
+    {
+        $this->container['termin_bis'] = $termin_bis;
+
+        return $this;
+    }
+
+    /**
+     * Gets termin_von
+     *
+     * @return \DateTime
+     */
+    public function getTerminVon()
+    {
+        return $this->container['termin_von'];
+    }
+
+    /**
+     * Sets termin_von
+     *
+     * @param \DateTime $termin_von termin_von
+     *
+     * @return $this
+     */
+    public function setTerminVon($termin_von)
+    {
+        $this->container['termin_von'] = $termin_von;
+
+        return $this;
+    }
+
+    /**
+     * Gets termine
+     *
+     * @return \Swagger\Client\Model\VeranstaltungsterminDerReiheApiDto[]
+     */
+    public function getTermine()
+    {
+        return $this->container['termine'];
+    }
+
+    /**
+     * Sets termine
+     *
+     * @param \Swagger\Client\Model\VeranstaltungsterminDerReiheApiDto[] $termine Die einzelnen Termine der Reihe.
+     *
+     * @return $this
+     */
+    public function setTermine($termine)
+    {
+        $this->container['termine'] = $termine;
 
         return $this;
     }
@@ -1001,7 +1019,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets thema
      *
-     * @param string $thema Das Thema des Veranstaltungstyps
+     * @param string $thema thema
      *
      * @return $this
      */
@@ -1025,61 +1043,13 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets thema2
      *
-     * @param string $thema2 Thema 2 des Veranstaltungstyps
+     * @param string $thema2 thema2
      *
      * @return $this
      */
     public function setThema2($thema2)
     {
         $this->container['thema2'] = $thema2;
-
-        return $this;
-    }
-
-    /**
-     * Gets uhrzeit_bis
-     *
-     * @return string
-     */
-    public function getUhrzeitBis()
-    {
-        return $this->container['uhrzeit_bis'];
-    }
-
-    /**
-     * Sets uhrzeit_bis
-     *
-     * @param string $uhrzeit_bis Die bis Uhrzeit des Veranstaltungstyps, am letzten Tag des Veranstaltungstyps.
-     *
-     * @return $this
-     */
-    public function setUhrzeitBis($uhrzeit_bis)
-    {
-        $this->container['uhrzeit_bis'] = $uhrzeit_bis;
-
-        return $this;
-    }
-
-    /**
-     * Gets uhrzeit_von
-     *
-     * @return string
-     */
-    public function getUhrzeitVon()
-    {
-        return $this->container['uhrzeit_von'];
-    }
-
-    /**
-     * Sets uhrzeit_von
-     *
-     * @param string $uhrzeit_von Die von Uhrzeit des Veranstaltungstyps, am ersten Tag des Veranstaltungstyps.
-     *
-     * @return $this
-     */
-    public function setUhrzeitVon($uhrzeit_von)
-    {
-        $this->container['uhrzeit_von'] = $uhrzeit_von;
 
         return $this;
     }
@@ -1097,7 +1067,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets veranstaltungs_nr
      *
-     * @param string $veranstaltungs_nr Die Veranstaltungs-Nr. des Veranstaltungstyps
+     * @param string $veranstaltungs_nr Die Veranstaltungs-Nr aus dem Veranstaltungstypen.
      *
      * @return $this
      */
@@ -1109,25 +1079,25 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets veranstaltungsart
+     * Gets veranstaltungsanbieter
      *
-     * @return string
+     * @return \Swagger\Client\Model\Veranstaltungsanbieter
      */
-    public function getVeranstaltungsart()
+    public function getVeranstaltungsanbieter()
     {
-        return $this->container['veranstaltungsart'];
+        return $this->container['veranstaltungsanbieter'];
     }
 
     /**
-     * Sets veranstaltungsart
+     * Sets veranstaltungsanbieter
      *
-     * @param string $veranstaltungsart Veranstaltungsart des Veranstaltungstyps, zulässig sind hier VIRTUELL und PRAESENZ.
+     * @param \Swagger\Client\Model\Veranstaltungsanbieter $veranstaltungsanbieter Der Veranstaltungsanbieter der Veranstaltungsterminreihe.
      *
      * @return $this
      */
-    public function setVeranstaltungsart($veranstaltungsart)
+    public function setVeranstaltungsanbieter($veranstaltungsanbieter)
     {
-        $this->container['veranstaltungsart'] = $veranstaltungsart;
+        $this->container['veranstaltungsanbieter'] = $veranstaltungsanbieter;
 
         return $this;
     }
@@ -1145,7 +1115,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets veranstaltungsform
      *
-     * @param \Swagger\Client\Model\Veranstaltungsform $veranstaltungsform Die Veranstaltungsform des Veranstaltungstypen.
+     * @param \Swagger\Client\Model\Veranstaltungsform $veranstaltungsform Die Veranstaltungsform der Veranstaltungsreihe.
      *
      * @return $this
      */
@@ -1169,13 +1139,85 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets veranstaltungskategorie
      *
-     * @param \Swagger\Client\Model\Veranstaltungskategorie $veranstaltungskategorie Die Kategorie, der der Veranstaltungstyp zugeordnet ist.
+     * @param \Swagger\Client\Model\Veranstaltungskategorie $veranstaltungskategorie Die Kategorie, der die Veranstaltungsterminreihe zugeordnet ist.
      *
      * @return $this
      */
     public function setVeranstaltungskategorie($veranstaltungskategorie)
     {
         $this->container['veranstaltungskategorie'] = $veranstaltungskategorie;
+
+        return $this;
+    }
+
+    /**
+     * Gets veranstaltungsort
+     *
+     * @return \Swagger\Client\Model\Veranstaltungsort
+     */
+    public function getVeranstaltungsort()
+    {
+        return $this->container['veranstaltungsort'];
+    }
+
+    /**
+     * Sets veranstaltungsort
+     *
+     * @param \Swagger\Client\Model\Veranstaltungsort $veranstaltungsort Der Veranstaltungsort der Veranstaltungsterminreihe.
+     *
+     * @return $this
+     */
+    public function setVeranstaltungsort($veranstaltungsort)
+    {
+        $this->container['veranstaltungsort'] = $veranstaltungsort;
+
+        return $this;
+    }
+
+    /**
+     * Gets veranstaltungsterminreihen_nr
+     *
+     * @return string
+     */
+    public function getVeranstaltungsterminreihenNr()
+    {
+        return $this->container['veranstaltungsterminreihen_nr'];
+    }
+
+    /**
+     * Sets veranstaltungsterminreihen_nr
+     *
+     * @param string $veranstaltungsterminreihen_nr veranstaltungsterminreihen_nr
+     *
+     * @return $this
+     */
+    public function setVeranstaltungsterminreihenNr($veranstaltungsterminreihen_nr)
+    {
+        $this->container['veranstaltungsterminreihen_nr'] = $veranstaltungsterminreihen_nr;
+
+        return $this;
+    }
+
+    /**
+     * Gets veranstaltungstyp_id
+     *
+     * @return string
+     */
+    public function getVeranstaltungstypId()
+    {
+        return $this->container['veranstaltungstyp_id'];
+    }
+
+    /**
+     * Sets veranstaltungstyp_id
+     *
+     * @param string $veranstaltungstyp_id veranstaltungstyp_id
+     *
+     * @return $this
+     */
+    public function setVeranstaltungstypId($veranstaltungstyp_id)
+    {
+        $this->container['veranstaltungstyp_id'] = $veranstaltungstyp_id;
 
         return $this;
     }
@@ -1193,7 +1235,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets veranstaltungsunterkategorie
      *
-     * @param \Swagger\Client\Model\Veranstaltungsunterkategorie $veranstaltungsunterkategorie Die Unterkategorie, der der Veranstaltungstyp zugeordnet ist.
+     * @param \Swagger\Client\Model\Veranstaltungsunterkategorie $veranstaltungsunterkategorie Die Unterkategorie, der die Veranstaltungsterminreihe zugeordnet ist.
      *
      * @return $this
      */
@@ -1217,7 +1259,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets voraussetzung
      *
-     * @param string $voraussetzung Die Voraussetzungen für den Veranstaltungstyp (HTML möglich)
+     * @param string $voraussetzung voraussetzung
      *
      * @return $this
      */
@@ -1229,73 +1271,25 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets wbd_relevant
+     * Gets wartelistenmaximum
      *
-     * @return bool
+     * @return int
      */
-    public function getWbdRelevant()
+    public function getWartelistenmaximum()
     {
-        return $this->container['wbd_relevant'];
+        return $this->container['wartelistenmaximum'];
     }
 
     /**
-     * Sets wbd_relevant
+     * Sets wartelistenmaximum
      *
-     * @param bool $wbd_relevant Dieses Kennzeichen gibt an, ob der Veranstaltungstyp relevant für die Weiterbildungsdatenbank(WBD) ist
+     * @param int $wartelistenmaximum wartelistenmaximum
      *
      * @return $this
      */
-    public function setWbdRelevant($wbd_relevant)
+    public function setWartelistenmaximum($wartelistenmaximum)
     {
-        $this->container['wbd_relevant'] = $wbd_relevant;
-
-        return $this;
-    }
-
-    /**
-     * Gets wbd_thema
-     *
-     * @return string
-     */
-    public function getWbdThema()
-    {
-        return $this->container['wbd_thema'];
-    }
-
-    /**
-     * Sets wbd_thema
-     *
-     * @param string $wbd_thema Das WBD-Thema des Veranstaltungstyps
-     *
-     * @return $this
-     */
-    public function setWbdThema($wbd_thema)
-    {
-        $this->container['wbd_thema'] = $wbd_thema;
-
-        return $this;
-    }
-
-    /**
-     * Gets webcode
-     *
-     * @return string
-     */
-    public function getWebcode()
-    {
-        return $this->container['webcode'];
-    }
-
-    /**
-     * Sets webcode
-     *
-     * @param string $webcode Webcode des Veranstaltungstypen
-     *
-     * @return $this
-     */
-    public function setWebcode($webcode)
-    {
-        $this->container['webcode'] = $webcode;
+        $this->container['wartelistenmaximum'] = $wartelistenmaximum;
 
         return $this;
     }
@@ -1313,7 +1307,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets ziel
      *
-     * @param string $ziel Die Ziele des Veranstaltungstyps (HTML möglich)
+     * @param string $ziel ziel
      *
      * @return $this
      */
@@ -1337,7 +1331,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess
     /**
      * Sets zielgruppen
      *
-     * @param \Swagger\Client\Model\Zielgruppe[] $zielgruppen Die Zielgruppen für den Veranstaltungstyp.
+     * @param \Swagger\Client\Model\Zielgruppe[] $zielgruppen Die Zielgruppen für die Veranstaltungsterminreihe.
      *
      * @return $this
      */

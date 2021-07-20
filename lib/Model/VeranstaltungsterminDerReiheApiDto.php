@@ -1,6 +1,6 @@
 <?php
 /**
- * Veranstaltungskategorie
+ * VeranstaltungsterminDerReiheApiDto
  *
  * PHP version 5
  *
@@ -33,15 +33,14 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * Veranstaltungskategorie Class Doc Comment
+ * VeranstaltungsterminDerReiheApiDto Class Doc Comment
  *
  * @category Class
- * @description Die Informationen einer Veranstaltungskategorie.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class Veranstaltungskategorie implements ModelInterface, ArrayAccess
+class VeranstaltungsterminDerReiheApiDto implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +49,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'Veranstaltungskategorie';
+    protected static $swaggerModelName = 'VeranstaltungsterminDerReiheApiDto';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,9 +57,14 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'bezeichnung' => 'string',
+        'oid' => 'string',
         'links' => '\Swagger\Client\Model\Link[]',
-        'oid' => 'string'
+        'termin_bis' => '\DateTime',
+        'termin_von' => '\DateTime',
+        'thema' => 'string',
+        'thema2' => 'string',
+        'veranstaltungsort' => '\Swagger\Client\Model\Veranstaltungsort',
+        'veranstaltungstermin_nr' => 'string'
     ];
 
     /**
@@ -69,9 +73,14 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'bezeichnung' => null,
+        'oid' => null,
         'links' => null,
-        'oid' => null
+        'termin_bis' => 'date-time',
+        'termin_von' => 'date-time',
+        'thema' => null,
+        'thema2' => null,
+        'veranstaltungsort' => null,
+        'veranstaltungstermin_nr' => null
     ];
 
     /**
@@ -101,9 +110,14 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'bezeichnung' => 'bezeichnung',
+        'oid' => 'oid',
         'links' => 'links',
-        'oid' => 'oid'
+        'termin_bis' => 'terminBis',
+        'termin_von' => 'terminVon',
+        'thema' => 'thema',
+        'thema2' => 'thema2',
+        'veranstaltungsort' => 'veranstaltungsort',
+        'veranstaltungstermin_nr' => 'veranstaltungsterminNr'
     ];
 
     /**
@@ -112,9 +126,14 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'bezeichnung' => 'setBezeichnung',
+        'oid' => 'setOid',
         'links' => 'setLinks',
-        'oid' => 'setOid'
+        'termin_bis' => 'setTerminBis',
+        'termin_von' => 'setTerminVon',
+        'thema' => 'setThema',
+        'thema2' => 'setThema2',
+        'veranstaltungsort' => 'setVeranstaltungsort',
+        'veranstaltungstermin_nr' => 'setVeranstaltungsterminNr'
     ];
 
     /**
@@ -123,9 +142,14 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'bezeichnung' => 'getBezeichnung',
+        'oid' => 'getOid',
         'links' => 'getLinks',
-        'oid' => 'getOid'
+        'termin_bis' => 'getTerminBis',
+        'termin_von' => 'getTerminVon',
+        'thema' => 'getThema',
+        'thema2' => 'getThema2',
+        'veranstaltungsort' => 'getVeranstaltungsort',
+        'veranstaltungstermin_nr' => 'getVeranstaltungsterminNr'
     ];
 
     /**
@@ -188,9 +212,14 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['bezeichnung'] = isset($data['bezeichnung']) ? $data['bezeichnung'] : null;
-        $this->container['links'] = isset($data['links']) ? $data['links'] : null;
         $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
+        $this->container['links'] = isset($data['links']) ? $data['links'] : null;
+        $this->container['termin_bis'] = isset($data['termin_bis']) ? $data['termin_bis'] : null;
+        $this->container['termin_von'] = isset($data['termin_von']) ? $data['termin_von'] : null;
+        $this->container['thema'] = isset($data['thema']) ? $data['thema'] : null;
+        $this->container['thema2'] = isset($data['thema2']) ? $data['thema2'] : null;
+        $this->container['veranstaltungsort'] = isset($data['veranstaltungsort']) ? $data['veranstaltungsort'] : null;
+        $this->container['veranstaltungstermin_nr'] = isset($data['veranstaltungstermin_nr']) ? $data['veranstaltungstermin_nr'] : null;
     }
 
     /**
@@ -202,6 +231,21 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
     {
         $invalidProperties = [];
 
+        if ($this->container['oid'] === null) {
+            $invalidProperties[] = "'oid' can't be null";
+        }
+        if ($this->container['termin_bis'] === null) {
+            $invalidProperties[] = "'termin_bis' can't be null";
+        }
+        if ($this->container['termin_von'] === null) {
+            $invalidProperties[] = "'termin_von' can't be null";
+        }
+        if ($this->container['thema'] === null) {
+            $invalidProperties[] = "'thema' can't be null";
+        }
+        if ($this->container['veranstaltungstermin_nr'] === null) {
+            $invalidProperties[] = "'veranstaltungstermin_nr' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -218,25 +262,25 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets bezeichnung
+     * Gets oid
      *
      * @return string
      */
-    public function getBezeichnung()
+    public function getOid()
     {
-        return $this->container['bezeichnung'];
+        return $this->container['oid'];
     }
 
     /**
-     * Sets bezeichnung
+     * Sets oid
      *
-     * @param string $bezeichnung Bezeichnung der Veranstaltungskategorie
+     * @param string $oid UUID des Datensatzes
      *
      * @return $this
      */
-    public function setBezeichnung($bezeichnung)
+    public function setOid($oid)
     {
-        $this->container['bezeichnung'] = $bezeichnung;
+        $this->container['oid'] = $oid;
 
         return $this;
     }
@@ -266,25 +310,145 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets oid
+     * Gets termin_bis
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getOid()
+    public function getTerminBis()
     {
-        return $this->container['oid'];
+        return $this->container['termin_bis'];
     }
 
     /**
-     * Sets oid
+     * Sets termin_bis
      *
-     * @param string $oid Eindeutige ID der Veranstaltungskategorie
+     * @param \DateTime $termin_bis 'Termin bis' des Veranstaltungstermins
      *
      * @return $this
      */
-    public function setOid($oid)
+    public function setTerminBis($termin_bis)
     {
-        $this->container['oid'] = $oid;
+        $this->container['termin_bis'] = $termin_bis;
+
+        return $this;
+    }
+
+    /**
+     * Gets termin_von
+     *
+     * @return \DateTime
+     */
+    public function getTerminVon()
+    {
+        return $this->container['termin_von'];
+    }
+
+    /**
+     * Sets termin_von
+     *
+     * @param \DateTime $termin_von 'Termin von' des Veranstaltungstermins
+     *
+     * @return $this
+     */
+    public function setTerminVon($termin_von)
+    {
+        $this->container['termin_von'] = $termin_von;
+
+        return $this;
+    }
+
+    /**
+     * Gets thema
+     *
+     * @return string
+     */
+    public function getThema()
+    {
+        return $this->container['thema'];
+    }
+
+    /**
+     * Sets thema
+     *
+     * @param string $thema Das Thema des Veranstaltungstermins.
+     *
+     * @return $this
+     */
+    public function setThema($thema)
+    {
+        $this->container['thema'] = $thema;
+
+        return $this;
+    }
+
+    /**
+     * Gets thema2
+     *
+     * @return string
+     */
+    public function getThema2()
+    {
+        return $this->container['thema2'];
+    }
+
+    /**
+     * Sets thema2
+     *
+     * @param string $thema2 Thema 2 des Veranstaltungstermins.
+     *
+     * @return $this
+     */
+    public function setThema2($thema2)
+    {
+        $this->container['thema2'] = $thema2;
+
+        return $this;
+    }
+
+    /**
+     * Gets veranstaltungsort
+     *
+     * @return \Swagger\Client\Model\Veranstaltungsort
+     */
+    public function getVeranstaltungsort()
+    {
+        return $this->container['veranstaltungsort'];
+    }
+
+    /**
+     * Sets veranstaltungsort
+     *
+     * @param \Swagger\Client\Model\Veranstaltungsort $veranstaltungsort Der Veranstaltungsort des Veranstaltungstermins.
+     *
+     * @return $this
+     */
+    public function setVeranstaltungsort($veranstaltungsort)
+    {
+        $this->container['veranstaltungsort'] = $veranstaltungsort;
+
+        return $this;
+    }
+
+    /**
+     * Gets veranstaltungstermin_nr
+     *
+     * @return string
+     */
+    public function getVeranstaltungsterminNr()
+    {
+        return $this->container['veranstaltungstermin_nr'];
+    }
+
+    /**
+     * Sets veranstaltungstermin_nr
+     *
+     * @param string $veranstaltungstermin_nr Die Veranstaltungstermin-Nr. des Veranstaltungstermins.
+     *
+     * @return $this
+     */
+    public function setVeranstaltungsterminNr($veranstaltungstermin_nr)
+    {
+        $this->container['veranstaltungstermin_nr'] = $veranstaltungstermin_nr;
 
         return $this;
     }

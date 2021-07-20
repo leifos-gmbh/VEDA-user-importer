@@ -1,6 +1,6 @@
 <?php
 /**
- * Veranstaltungskategorie
+ * GebuchterDozentApiDto
  *
  * PHP version 5
  *
@@ -33,15 +33,14 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * Veranstaltungskategorie Class Doc Comment
+ * GebuchterDozentApiDto Class Doc Comment
  *
  * @category Class
- * @description Die Informationen einer Veranstaltungskategorie.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class Veranstaltungskategorie implements ModelInterface, ArrayAccess
+class GebuchterDozentApiDto implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +49,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'Veranstaltungskategorie';
+    protected static $swaggerModelName = 'GebuchterDozentApiDto';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,9 +57,11 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'bezeichnung' => 'string',
-        'links' => '\Swagger\Client\Model\Link[]',
-        'oid' => 'string'
+        'anrede' => 'string',
+        'nachname' => 'string',
+        'titel' => 'string',
+        'titel_nachgestellt' => 'string',
+        'vorname' => 'string'
     ];
 
     /**
@@ -69,9 +70,11 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'bezeichnung' => null,
-        'links' => null,
-        'oid' => null
+        'anrede' => null,
+        'nachname' => null,
+        'titel' => null,
+        'titel_nachgestellt' => null,
+        'vorname' => null
     ];
 
     /**
@@ -101,9 +104,11 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'bezeichnung' => 'bezeichnung',
-        'links' => 'links',
-        'oid' => 'oid'
+        'anrede' => 'anrede',
+        'nachname' => 'nachname',
+        'titel' => 'titel',
+        'titel_nachgestellt' => 'titelNachgestellt',
+        'vorname' => 'vorname'
     ];
 
     /**
@@ -112,9 +117,11 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'bezeichnung' => 'setBezeichnung',
-        'links' => 'setLinks',
-        'oid' => 'setOid'
+        'anrede' => 'setAnrede',
+        'nachname' => 'setNachname',
+        'titel' => 'setTitel',
+        'titel_nachgestellt' => 'setTitelNachgestellt',
+        'vorname' => 'setVorname'
     ];
 
     /**
@@ -123,9 +130,11 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'bezeichnung' => 'getBezeichnung',
-        'links' => 'getLinks',
-        'oid' => 'getOid'
+        'anrede' => 'getAnrede',
+        'nachname' => 'getNachname',
+        'titel' => 'getTitel',
+        'titel_nachgestellt' => 'getTitelNachgestellt',
+        'vorname' => 'getVorname'
     ];
 
     /**
@@ -188,9 +197,11 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['bezeichnung'] = isset($data['bezeichnung']) ? $data['bezeichnung'] : null;
-        $this->container['links'] = isset($data['links']) ? $data['links'] : null;
-        $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
+        $this->container['anrede'] = isset($data['anrede']) ? $data['anrede'] : null;
+        $this->container['nachname'] = isset($data['nachname']) ? $data['nachname'] : null;
+        $this->container['titel'] = isset($data['titel']) ? $data['titel'] : null;
+        $this->container['titel_nachgestellt'] = isset($data['titel_nachgestellt']) ? $data['titel_nachgestellt'] : null;
+        $this->container['vorname'] = isset($data['vorname']) ? $data['vorname'] : null;
     }
 
     /**
@@ -218,73 +229,121 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets bezeichnung
+     * Gets anrede
      *
      * @return string
      */
-    public function getBezeichnung()
+    public function getAnrede()
     {
-        return $this->container['bezeichnung'];
+        return $this->container['anrede'];
     }
 
     /**
-     * Sets bezeichnung
+     * Sets anrede
      *
-     * @param string $bezeichnung Bezeichnung der Veranstaltungskategorie
+     * @param string $anrede Die Anrede des Dozenten
      *
      * @return $this
      */
-    public function setBezeichnung($bezeichnung)
+    public function setAnrede($anrede)
     {
-        $this->container['bezeichnung'] = $bezeichnung;
+        $this->container['anrede'] = $anrede;
 
         return $this;
     }
 
     /**
-     * Gets links
+     * Gets nachname
      *
-     * @return \Swagger\Client\Model\Link[]
+     * @return string
      */
-    public function getLinks()
+    public function getNachname()
     {
-        return $this->container['links'];
+        return $this->container['nachname'];
     }
 
     /**
-     * Sets links
+     * Sets nachname
      *
-     * @param \Swagger\Client\Model\Link[] $links links
+     * @param string $nachname Der Nachname des Dozenten
      *
      * @return $this
      */
-    public function setLinks($links)
+    public function setNachname($nachname)
     {
-        $this->container['links'] = $links;
+        $this->container['nachname'] = $nachname;
 
         return $this;
     }
 
     /**
-     * Gets oid
+     * Gets titel
      *
      * @return string
      */
-    public function getOid()
+    public function getTitel()
     {
-        return $this->container['oid'];
+        return $this->container['titel'];
     }
 
     /**
-     * Sets oid
+     * Sets titel
      *
-     * @param string $oid Eindeutige ID der Veranstaltungskategorie
+     * @param string $titel Der Titel des Dozenten
      *
      * @return $this
      */
-    public function setOid($oid)
+    public function setTitel($titel)
     {
-        $this->container['oid'] = $oid;
+        $this->container['titel'] = $titel;
+
+        return $this;
+    }
+
+    /**
+     * Gets titel_nachgestellt
+     *
+     * @return string
+     */
+    public function getTitelNachgestellt()
+    {
+        return $this->container['titel_nachgestellt'];
+    }
+
+    /**
+     * Sets titel_nachgestellt
+     *
+     * @param string $titel_nachgestellt Der nachgestellte Titel des Dozenten
+     *
+     * @return $this
+     */
+    public function setTitelNachgestellt($titel_nachgestellt)
+    {
+        $this->container['titel_nachgestellt'] = $titel_nachgestellt;
+
+        return $this;
+    }
+
+    /**
+     * Gets vorname
+     *
+     * @return string
+     */
+    public function getVorname()
+    {
+        return $this->container['vorname'];
+    }
+
+    /**
+     * Sets vorname
+     *
+     * @param string $vorname Der Vorname des Dozenten
+     *
+     * @return $this
+     */
+    public function setVorname($vorname)
+    {
+        $this->container['vorname'] = $vorname;
 
         return $this;
     }

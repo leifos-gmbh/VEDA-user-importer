@@ -1,6 +1,6 @@
 <?php
 /**
- * VeranstaltungstypenApi
+ * VeranstaltungsterminreihenApi
  * PHP version 5
  *
  * @category Class
@@ -40,14 +40,14 @@ use Swagger\Client\HeaderSelector;
 use Swagger\Client\ObjectSerializer;
 
 /**
- * VeranstaltungstypenApi Class Doc Comment
+ * VeranstaltungsterminreihenApi Class Doc Comment
  *
  * @category Class
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class VeranstaltungstypenApi
+class VeranstaltungsterminreihenApi
 {
     /**
      * @var ClientInterface
@@ -88,37 +88,39 @@ class VeranstaltungstypenApi
     }
 
     /**
-     * Operation getAllePraesenzVirtuellVeranstaltungstypenUsingGET
+     * Operation getVeranstaltungsterminreiheUsingGET
      *
-     * Ruft alle Präsenz- und Virtuell-Veranstaltungstypen ab
+     * Ruft eine Veranstaltungsterminreihe ab (entweder nicht storniert oder storniert)
      *
-     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle publiziertenVeranstaltungen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $id ID der Veranstaltungsterminreihe (required)
+     * @param  bool $stornierte_veranstaltungsterminreihe_abrufen Optionaler Parameter, um zu steuern, ob eine stornierte oder eine nicht stornierte Veranstaltungsterminreihe abgerufen werden soll. Der Default ist false. (optional)
      *
      * @throws \Swagger\Client\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return \Swagger\Client\Model\Veranstaltungstyp[]
+     * @return \Swagger\Client\Model\Veranstaltungsterminreihe
      */
-    public function getAllePraesenzVirtuellVeranstaltungstypenUsingGET($teilnehmergruppekuerzel = null)
+    public function getVeranstaltungsterminreiheUsingGET($id, $stornierte_veranstaltungsterminreihe_abrufen = null)
     {
-        list($response) = $this->getAllePraesenzVirtuellVeranstaltungstypenUsingGETWithHttpInfo($teilnehmergruppekuerzel);
+        list($response) = $this->getVeranstaltungsterminreiheUsingGETWithHttpInfo($id, $stornierte_veranstaltungsterminreihe_abrufen);
         return $response;
     }
 
     /**
-     * Operation getAllePraesenzVirtuellVeranstaltungstypenUsingGETWithHttpInfo
+     * Operation getVeranstaltungsterminreiheUsingGETWithHttpInfo
      *
-     * Ruft alle Präsenz- und Virtuell-Veranstaltungstypen ab
+     * Ruft eine Veranstaltungsterminreihe ab (entweder nicht storniert oder storniert)
      *
-     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle publiziertenVeranstaltungen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $id ID der Veranstaltungsterminreihe (required)
+     * @param  bool $stornierte_veranstaltungsterminreihe_abrufen Optionaler Parameter, um zu steuern, ob eine stornierte oder eine nicht stornierte Veranstaltungsterminreihe abgerufen werden soll. Der Default ist false. (optional)
      *
      * @throws \Swagger\Client\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return array of \Swagger\Client\Model\Veranstaltungstyp[], HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Swagger\Client\Model\Veranstaltungsterminreihe, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getAllePraesenzVirtuellVeranstaltungstypenUsingGETWithHttpInfo($teilnehmergruppekuerzel = null)
+    public function getVeranstaltungsterminreiheUsingGETWithHttpInfo($id, $stornierte_veranstaltungsterminreihe_abrufen = null)
     {
-        $returnType = '\Swagger\Client\Model\Veranstaltungstyp[]';
-        $request = $this->getAllePraesenzVirtuellVeranstaltungstypenUsingGETRequest($teilnehmergruppekuerzel);
+        $returnType = '\Swagger\Client\Model\Veranstaltungsterminreihe';
+        $request = $this->getVeranstaltungsterminreiheUsingGETRequest($id, $stornierte_veranstaltungsterminreihe_abrufen);
 
         try {
             $options = $this->createHttpClientOption();
@@ -169,7 +171,7 @@ class VeranstaltungstypenApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Swagger\Client\Model\Veranstaltungstyp[]',
+                        '\Swagger\Client\Model\Veranstaltungsterminreihe',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -180,18 +182,19 @@ class VeranstaltungstypenApi
     }
 
     /**
-     * Operation getAllePraesenzVirtuellVeranstaltungstypenUsingGETAsync
+     * Operation getVeranstaltungsterminreiheUsingGETAsync
      *
-     * Ruft alle Präsenz- und Virtuell-Veranstaltungstypen ab
+     * Ruft eine Veranstaltungsterminreihe ab (entweder nicht storniert oder storniert)
      *
-     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle publiziertenVeranstaltungen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $id ID der Veranstaltungsterminreihe (required)
+     * @param  bool $stornierte_veranstaltungsterminreihe_abrufen Optionaler Parameter, um zu steuern, ob eine stornierte oder eine nicht stornierte Veranstaltungsterminreihe abgerufen werden soll. Der Default ist false. (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getAllePraesenzVirtuellVeranstaltungstypenUsingGETAsync($teilnehmergruppekuerzel = null)
+    public function getVeranstaltungsterminreiheUsingGETAsync($id, $stornierte_veranstaltungsterminreihe_abrufen = null)
     {
-        return $this->getAllePraesenzVirtuellVeranstaltungstypenUsingGETAsyncWithHttpInfo($teilnehmergruppekuerzel)
+        return $this->getVeranstaltungsterminreiheUsingGETAsyncWithHttpInfo($id, $stornierte_veranstaltungsterminreihe_abrufen)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -200,19 +203,20 @@ class VeranstaltungstypenApi
     }
 
     /**
-     * Operation getAllePraesenzVirtuellVeranstaltungstypenUsingGETAsyncWithHttpInfo
+     * Operation getVeranstaltungsterminreiheUsingGETAsyncWithHttpInfo
      *
-     * Ruft alle Präsenz- und Virtuell-Veranstaltungstypen ab
+     * Ruft eine Veranstaltungsterminreihe ab (entweder nicht storniert oder storniert)
      *
-     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle publiziertenVeranstaltungen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $id ID der Veranstaltungsterminreihe (required)
+     * @param  bool $stornierte_veranstaltungsterminreihe_abrufen Optionaler Parameter, um zu steuern, ob eine stornierte oder eine nicht stornierte Veranstaltungsterminreihe abgerufen werden soll. Der Default ist false. (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getAllePraesenzVirtuellVeranstaltungstypenUsingGETAsyncWithHttpInfo($teilnehmergruppekuerzel = null)
+    public function getVeranstaltungsterminreiheUsingGETAsyncWithHttpInfo($id, $stornierte_veranstaltungsterminreihe_abrufen = null)
     {
-        $returnType = '\Swagger\Client\Model\Veranstaltungstyp[]';
-        $request = $this->getAllePraesenzVirtuellVeranstaltungstypenUsingGETRequest($teilnehmergruppekuerzel);
+        $returnType = '\Swagger\Client\Model\Veranstaltungsterminreihe';
+        $request = $this->getVeranstaltungsterminreiheUsingGETRequest($id, $stornierte_veranstaltungsterminreihe_abrufen);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -252,547 +256,34 @@ class VeranstaltungstypenApi
     }
 
     /**
-     * Create request for operation 'getAllePraesenzVirtuellVeranstaltungstypenUsingGET'
+     * Create request for operation 'getVeranstaltungsterminreiheUsingGET'
      *
-     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle publiziertenVeranstaltungen für diese Teilnehmergruppe zurückgegeben. (optional)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    protected function getAllePraesenzVirtuellVeranstaltungstypenUsingGETRequest($teilnehmergruppekuerzel = null)
-    {
-
-        $resourcePath = '/v2/veranstaltungstypen';
-        $formParams = [];
-        $queryParams = [];
-        $headerParams = [];
-        $httpBody = '';
-        $multipart = false;
-
-        // query params
-        if ($teilnehmergruppekuerzel !== null) {
-            $queryParams['teilnehmergruppekuerzel'] = ObjectSerializer::toQueryValue($teilnehmergruppekuerzel);
-        }
-
-
-        // body params
-        $_tempBody = null;
-
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
-
-        // for model (json/xml)
-        if (isset($_tempBody)) {
-            // $_tempBody is the method argument, if present
-            $httpBody = $_tempBody;
-            
-            if($headers['Content-Type'] === 'application/json') {
-                // \stdClass has no __toString(), so we should encode it manually
-                if ($httpBody instanceof \stdClass) {
-                    $httpBody = \GuzzleHttp\json_encode($httpBody);
-                }
-                // array has no __toString(), so we should encode it manually
-                if(is_array($httpBody)) {
-                    $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($httpBody));
-                }
-            }
-        } elseif (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $multipartContents[] = [
-                        'name' => $formParamName,
-                        'contents' => $formParamValue
-                    ];
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
-            } else {
-                // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
-            }
-        }
-
-
-        $defaultHeaders = [];
-        if ($this->config->getUserAgent()) {
-            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
-        }
-
-        $headers = array_merge(
-            $defaultHeaders,
-            $headerParams,
-            $headers
-        );
-
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
-        return new Request(
-            'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
-            $headers,
-            $httpBody
-        );
-    }
-
-    /**
-     * Operation getAllePraesenzVirtuellVeranstaltungstypenUsingGET1
-     *
-     * Ruft alle Präsenz- und Virtuell-Veranstaltungstypen ab
-     *
-     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle publiziertenVeranstaltungen für diese Teilnehmergruppe zurückgegeben. (optional)
-     *
-     * @throws \Swagger\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return \Swagger\Client\Model\Veranstaltungstyp[]
-     */
-    public function getAllePraesenzVirtuellVeranstaltungstypenUsingGET1($teilnehmergruppekuerzel = null)
-    {
-        list($response) = $this->getAllePraesenzVirtuellVeranstaltungstypenUsingGET1WithHttpInfo($teilnehmergruppekuerzel);
-        return $response;
-    }
-
-    /**
-     * Operation getAllePraesenzVirtuellVeranstaltungstypenUsingGET1WithHttpInfo
-     *
-     * Ruft alle Präsenz- und Virtuell-Veranstaltungstypen ab
-     *
-     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle publiziertenVeranstaltungen für diese Teilnehmergruppe zurückgegeben. (optional)
-     *
-     * @throws \Swagger\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return array of \Swagger\Client\Model\Veranstaltungstyp[], HTTP status code, HTTP response headers (array of strings)
-     */
-    public function getAllePraesenzVirtuellVeranstaltungstypenUsingGET1WithHttpInfo($teilnehmergruppekuerzel = null)
-    {
-        $returnType = '\Swagger\Client\Model\Veranstaltungstyp[]';
-        $request = $this->getAllePraesenzVirtuellVeranstaltungstypenUsingGET1Request($teilnehmergruppekuerzel);
-
-        try {
-            $options = $this->createHttpClientOption();
-            try {
-                $response = $this->client->send($request, $options);
-            } catch (RequestException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
-                );
-            }
-
-            $statusCode = $response->getStatusCode();
-
-            if ($statusCode < 200 || $statusCode > 299) {
-                throw new ApiException(
-                    sprintf(
-                        '[%d] Error connecting to the API (%s)',
-                        $statusCode,
-                        $request->getUri()
-                    ),
-                    $statusCode,
-                    $response->getHeaders(),
-                    $response->getBody()
-                );
-            }
-
-            $responseBody = $response->getBody();
-            if ($returnType === '\SplFileObject') {
-                $content = $responseBody; //stream goes to serializer
-            } else {
-                $content = $responseBody->getContents();
-                if ($returnType !== 'string') {
-                    $content = json_decode($content);
-                }
-            }
-
-            return [
-                ObjectSerializer::deserialize($content, $returnType, []),
-                $response->getStatusCode(),
-                $response->getHeaders()
-            ];
-
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Swagger\Client\Model\Veranstaltungstyp[]',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
-            }
-            throw $e;
-        }
-    }
-
-    /**
-     * Operation getAllePraesenzVirtuellVeranstaltungstypenUsingGET1Async
-     *
-     * Ruft alle Präsenz- und Virtuell-Veranstaltungstypen ab
-     *
-     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle publiziertenVeranstaltungen für diese Teilnehmergruppe zurückgegeben. (optional)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function getAllePraesenzVirtuellVeranstaltungstypenUsingGET1Async($teilnehmergruppekuerzel = null)
-    {
-        return $this->getAllePraesenzVirtuellVeranstaltungstypenUsingGET1AsyncWithHttpInfo($teilnehmergruppekuerzel)
-            ->then(
-                function ($response) {
-                    return $response[0];
-                }
-            );
-    }
-
-    /**
-     * Operation getAllePraesenzVirtuellVeranstaltungstypenUsingGET1AsyncWithHttpInfo
-     *
-     * Ruft alle Präsenz- und Virtuell-Veranstaltungstypen ab
-     *
-     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle publiziertenVeranstaltungen für diese Teilnehmergruppe zurückgegeben. (optional)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function getAllePraesenzVirtuellVeranstaltungstypenUsingGET1AsyncWithHttpInfo($teilnehmergruppekuerzel = null)
-    {
-        $returnType = '\Swagger\Client\Model\Veranstaltungstyp[]';
-        $request = $this->getAllePraesenzVirtuellVeranstaltungstypenUsingGET1Request($teilnehmergruppekuerzel);
-
-        return $this->client
-            ->sendAsync($request, $this->createHttpClientOption())
-            ->then(
-                function ($response) use ($returnType) {
-                    $responseBody = $response->getBody();
-                    if ($returnType === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
-                    } else {
-                        $content = $responseBody->getContents();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, $returnType, []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-                },
-                function ($exception) {
-                    $response = $exception->getResponse();
-                    $statusCode = $response->getStatusCode();
-                    throw new ApiException(
-                        sprintf(
-                            '[%d] Error connecting to the API (%s)',
-                            $statusCode,
-                            $exception->getRequest()->getUri()
-                        ),
-                        $statusCode,
-                        $response->getHeaders(),
-                        $response->getBody()
-                    );
-                }
-            );
-    }
-
-    /**
-     * Create request for operation 'getAllePraesenzVirtuellVeranstaltungstypenUsingGET1'
-     *
-     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle publiziertenVeranstaltungen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $id ID der Veranstaltungsterminreihe (required)
+     * @param  bool $stornierte_veranstaltungsterminreihe_abrufen Optionaler Parameter, um zu steuern, ob eine stornierte oder eine nicht stornierte Veranstaltungsterminreihe abgerufen werden soll. Der Default ist false. (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function getAllePraesenzVirtuellVeranstaltungstypenUsingGET1Request($teilnehmergruppekuerzel = null)
-    {
-
-        $resourcePath = '/v2/20010/veranstaltungstypen';
-        $formParams = [];
-        $queryParams = [];
-        $headerParams = [];
-        $httpBody = '';
-        $multipart = false;
-
-        // query params
-        if ($teilnehmergruppekuerzel !== null) {
-            $queryParams['teilnehmergruppekuerzel'] = ObjectSerializer::toQueryValue($teilnehmergruppekuerzel);
-        }
-
-
-        // body params
-        $_tempBody = null;
-
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
-
-        // for model (json/xml)
-        if (isset($_tempBody)) {
-            // $_tempBody is the method argument, if present
-            $httpBody = $_tempBody;
-            
-            if($headers['Content-Type'] === 'application/json') {
-                // \stdClass has no __toString(), so we should encode it manually
-                if ($httpBody instanceof \stdClass) {
-                    $httpBody = \GuzzleHttp\json_encode($httpBody);
-                }
-                // array has no __toString(), so we should encode it manually
-                if(is_array($httpBody)) {
-                    $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($httpBody));
-                }
-            }
-        } elseif (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $multipartContents[] = [
-                        'name' => $formParamName,
-                        'contents' => $formParamValue
-                    ];
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
-            } else {
-                // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
-            }
-        }
-
-
-        $defaultHeaders = [];
-        if ($this->config->getUserAgent()) {
-            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
-        }
-
-        $headers = array_merge(
-            $defaultHeaders,
-            $headerParams,
-            $headers
-        );
-
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
-        return new Request(
-            'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
-            $headers,
-            $httpBody
-        );
-    }
-
-    /**
-     * Operation getPraesenzVirtuellVeranstaltungstypUsingGET
-     *
-     * Ruft einen Präsenz- und Virtuell-Veranstaltungstypen ab
-     *
-     * @param  string $id ID des Veranstaltungstypen (required)
-     *
-     * @throws \Swagger\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return \Swagger\Client\Model\Veranstaltungstyp
-     */
-    public function getPraesenzVirtuellVeranstaltungstypUsingGET($id)
-    {
-        list($response) = $this->getPraesenzVirtuellVeranstaltungstypUsingGETWithHttpInfo($id);
-        return $response;
-    }
-
-    /**
-     * Operation getPraesenzVirtuellVeranstaltungstypUsingGETWithHttpInfo
-     *
-     * Ruft einen Präsenz- und Virtuell-Veranstaltungstypen ab
-     *
-     * @param  string $id ID des Veranstaltungstypen (required)
-     *
-     * @throws \Swagger\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return array of \Swagger\Client\Model\Veranstaltungstyp, HTTP status code, HTTP response headers (array of strings)
-     */
-    public function getPraesenzVirtuellVeranstaltungstypUsingGETWithHttpInfo($id)
-    {
-        $returnType = '\Swagger\Client\Model\Veranstaltungstyp';
-        $request = $this->getPraesenzVirtuellVeranstaltungstypUsingGETRequest($id);
-
-        try {
-            $options = $this->createHttpClientOption();
-            try {
-                $response = $this->client->send($request, $options);
-            } catch (RequestException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
-                );
-            }
-
-            $statusCode = $response->getStatusCode();
-
-            if ($statusCode < 200 || $statusCode > 299) {
-                throw new ApiException(
-                    sprintf(
-                        '[%d] Error connecting to the API (%s)',
-                        $statusCode,
-                        $request->getUri()
-                    ),
-                    $statusCode,
-                    $response->getHeaders(),
-                    $response->getBody()
-                );
-            }
-
-            $responseBody = $response->getBody();
-            if ($returnType === '\SplFileObject') {
-                $content = $responseBody; //stream goes to serializer
-            } else {
-                $content = $responseBody->getContents();
-                if ($returnType !== 'string') {
-                    $content = json_decode($content);
-                }
-            }
-
-            return [
-                ObjectSerializer::deserialize($content, $returnType, []),
-                $response->getStatusCode(),
-                $response->getHeaders()
-            ];
-
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Swagger\Client\Model\Veranstaltungstyp',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
-            }
-            throw $e;
-        }
-    }
-
-    /**
-     * Operation getPraesenzVirtuellVeranstaltungstypUsingGETAsync
-     *
-     * Ruft einen Präsenz- und Virtuell-Veranstaltungstypen ab
-     *
-     * @param  string $id ID des Veranstaltungstypen (required)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function getPraesenzVirtuellVeranstaltungstypUsingGETAsync($id)
-    {
-        return $this->getPraesenzVirtuellVeranstaltungstypUsingGETAsyncWithHttpInfo($id)
-            ->then(
-                function ($response) {
-                    return $response[0];
-                }
-            );
-    }
-
-    /**
-     * Operation getPraesenzVirtuellVeranstaltungstypUsingGETAsyncWithHttpInfo
-     *
-     * Ruft einen Präsenz- und Virtuell-Veranstaltungstypen ab
-     *
-     * @param  string $id ID des Veranstaltungstypen (required)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function getPraesenzVirtuellVeranstaltungstypUsingGETAsyncWithHttpInfo($id)
-    {
-        $returnType = '\Swagger\Client\Model\Veranstaltungstyp';
-        $request = $this->getPraesenzVirtuellVeranstaltungstypUsingGETRequest($id);
-
-        return $this->client
-            ->sendAsync($request, $this->createHttpClientOption())
-            ->then(
-                function ($response) use ($returnType) {
-                    $responseBody = $response->getBody();
-                    if ($returnType === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
-                    } else {
-                        $content = $responseBody->getContents();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, $returnType, []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-                },
-                function ($exception) {
-                    $response = $exception->getResponse();
-                    $statusCode = $response->getStatusCode();
-                    throw new ApiException(
-                        sprintf(
-                            '[%d] Error connecting to the API (%s)',
-                            $statusCode,
-                            $exception->getRequest()->getUri()
-                        ),
-                        $statusCode,
-                        $response->getHeaders(),
-                        $response->getBody()
-                    );
-                }
-            );
-    }
-
-    /**
-     * Create request for operation 'getPraesenzVirtuellVeranstaltungstypUsingGET'
-     *
-     * @param  string $id ID des Veranstaltungstypen (required)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    protected function getPraesenzVirtuellVeranstaltungstypUsingGETRequest($id)
+    protected function getVeranstaltungsterminreiheUsingGETRequest($id, $stornierte_veranstaltungsterminreihe_abrufen = null)
     {
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $id when calling getPraesenzVirtuellVeranstaltungstypUsingGET'
+                'Missing the required parameter $id when calling getVeranstaltungsterminreiheUsingGET'
             );
         }
 
-        $resourcePath = '/v2/veranstaltungstypen/{id}';
+        $resourcePath = '/v2/veranstaltungsterminreihen/{id}';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        if ($stornierte_veranstaltungsterminreihe_abrufen !== null) {
+            $queryParams['stornierteVeranstaltungsterminreiheAbrufen'] = ObjectSerializer::toQueryValue($stornierte_veranstaltungsterminreihe_abrufen);
+        }
 
         // path params
         if ($id !== null) {
@@ -875,37 +366,39 @@ class VeranstaltungstypenApi
     }
 
     /**
-     * Operation getPraesenzVirtuellVeranstaltungstypUsingGET1
+     * Operation getVeranstaltungsterminreiheUsingGET1
      *
-     * Ruft einen Präsenz- und Virtuell-Veranstaltungstypen ab
+     * Ruft eine Veranstaltungsterminreihe ab (entweder nicht storniert oder storniert)
      *
-     * @param  string $id ID des Veranstaltungstypen (required)
+     * @param  string $id ID der Veranstaltungsterminreihe (required)
+     * @param  bool $stornierte_veranstaltungsterminreihe_abrufen Optionaler Parameter, um zu steuern, ob eine stornierte oder eine nicht stornierte Veranstaltungsterminreihe abgerufen werden soll. Der Default ist false. (optional)
      *
      * @throws \Swagger\Client\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return \Swagger\Client\Model\Veranstaltungstyp
+     * @return \Swagger\Client\Model\Veranstaltungsterminreihe
      */
-    public function getPraesenzVirtuellVeranstaltungstypUsingGET1($id)
+    public function getVeranstaltungsterminreiheUsingGET1($id, $stornierte_veranstaltungsterminreihe_abrufen = null)
     {
-        list($response) = $this->getPraesenzVirtuellVeranstaltungstypUsingGET1WithHttpInfo($id);
+        list($response) = $this->getVeranstaltungsterminreiheUsingGET1WithHttpInfo($id, $stornierte_veranstaltungsterminreihe_abrufen);
         return $response;
     }
 
     /**
-     * Operation getPraesenzVirtuellVeranstaltungstypUsingGET1WithHttpInfo
+     * Operation getVeranstaltungsterminreiheUsingGET1WithHttpInfo
      *
-     * Ruft einen Präsenz- und Virtuell-Veranstaltungstypen ab
+     * Ruft eine Veranstaltungsterminreihe ab (entweder nicht storniert oder storniert)
      *
-     * @param  string $id ID des Veranstaltungstypen (required)
+     * @param  string $id ID der Veranstaltungsterminreihe (required)
+     * @param  bool $stornierte_veranstaltungsterminreihe_abrufen Optionaler Parameter, um zu steuern, ob eine stornierte oder eine nicht stornierte Veranstaltungsterminreihe abgerufen werden soll. Der Default ist false. (optional)
      *
      * @throws \Swagger\Client\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return array of \Swagger\Client\Model\Veranstaltungstyp, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Swagger\Client\Model\Veranstaltungsterminreihe, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getPraesenzVirtuellVeranstaltungstypUsingGET1WithHttpInfo($id)
+    public function getVeranstaltungsterminreiheUsingGET1WithHttpInfo($id, $stornierte_veranstaltungsterminreihe_abrufen = null)
     {
-        $returnType = '\Swagger\Client\Model\Veranstaltungstyp';
-        $request = $this->getPraesenzVirtuellVeranstaltungstypUsingGET1Request($id);
+        $returnType = '\Swagger\Client\Model\Veranstaltungsterminreihe';
+        $request = $this->getVeranstaltungsterminreiheUsingGET1Request($id, $stornierte_veranstaltungsterminreihe_abrufen);
 
         try {
             $options = $this->createHttpClientOption();
@@ -956,7 +449,7 @@ class VeranstaltungstypenApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Swagger\Client\Model\Veranstaltungstyp',
+                        '\Swagger\Client\Model\Veranstaltungsterminreihe',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -967,18 +460,19 @@ class VeranstaltungstypenApi
     }
 
     /**
-     * Operation getPraesenzVirtuellVeranstaltungstypUsingGET1Async
+     * Operation getVeranstaltungsterminreiheUsingGET1Async
      *
-     * Ruft einen Präsenz- und Virtuell-Veranstaltungstypen ab
+     * Ruft eine Veranstaltungsterminreihe ab (entweder nicht storniert oder storniert)
      *
-     * @param  string $id ID des Veranstaltungstypen (required)
+     * @param  string $id ID der Veranstaltungsterminreihe (required)
+     * @param  bool $stornierte_veranstaltungsterminreihe_abrufen Optionaler Parameter, um zu steuern, ob eine stornierte oder eine nicht stornierte Veranstaltungsterminreihe abgerufen werden soll. Der Default ist false. (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getPraesenzVirtuellVeranstaltungstypUsingGET1Async($id)
+    public function getVeranstaltungsterminreiheUsingGET1Async($id, $stornierte_veranstaltungsterminreihe_abrufen = null)
     {
-        return $this->getPraesenzVirtuellVeranstaltungstypUsingGET1AsyncWithHttpInfo($id)
+        return $this->getVeranstaltungsterminreiheUsingGET1AsyncWithHttpInfo($id, $stornierte_veranstaltungsterminreihe_abrufen)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -987,19 +481,20 @@ class VeranstaltungstypenApi
     }
 
     /**
-     * Operation getPraesenzVirtuellVeranstaltungstypUsingGET1AsyncWithHttpInfo
+     * Operation getVeranstaltungsterminreiheUsingGET1AsyncWithHttpInfo
      *
-     * Ruft einen Präsenz- und Virtuell-Veranstaltungstypen ab
+     * Ruft eine Veranstaltungsterminreihe ab (entweder nicht storniert oder storniert)
      *
-     * @param  string $id ID des Veranstaltungstypen (required)
+     * @param  string $id ID der Veranstaltungsterminreihe (required)
+     * @param  bool $stornierte_veranstaltungsterminreihe_abrufen Optionaler Parameter, um zu steuern, ob eine stornierte oder eine nicht stornierte Veranstaltungsterminreihe abgerufen werden soll. Der Default ist false. (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getPraesenzVirtuellVeranstaltungstypUsingGET1AsyncWithHttpInfo($id)
+    public function getVeranstaltungsterminreiheUsingGET1AsyncWithHttpInfo($id, $stornierte_veranstaltungsterminreihe_abrufen = null)
     {
-        $returnType = '\Swagger\Client\Model\Veranstaltungstyp';
-        $request = $this->getPraesenzVirtuellVeranstaltungstypUsingGET1Request($id);
+        $returnType = '\Swagger\Client\Model\Veranstaltungsterminreihe';
+        $request = $this->getVeranstaltungsterminreiheUsingGET1Request($id, $stornierte_veranstaltungsterminreihe_abrufen);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1039,29 +534,34 @@ class VeranstaltungstypenApi
     }
 
     /**
-     * Create request for operation 'getPraesenzVirtuellVeranstaltungstypUsingGET1'
+     * Create request for operation 'getVeranstaltungsterminreiheUsingGET1'
      *
-     * @param  string $id ID des Veranstaltungstypen (required)
+     * @param  string $id ID der Veranstaltungsterminreihe (required)
+     * @param  bool $stornierte_veranstaltungsterminreihe_abrufen Optionaler Parameter, um zu steuern, ob eine stornierte oder eine nicht stornierte Veranstaltungsterminreihe abgerufen werden soll. Der Default ist false. (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function getPraesenzVirtuellVeranstaltungstypUsingGET1Request($id)
+    protected function getVeranstaltungsterminreiheUsingGET1Request($id, $stornierte_veranstaltungsterminreihe_abrufen = null)
     {
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $id when calling getPraesenzVirtuellVeranstaltungstypUsingGET1'
+                'Missing the required parameter $id when calling getVeranstaltungsterminreiheUsingGET1'
             );
         }
 
-        $resourcePath = '/v2/20010/veranstaltungstypen/{id}';
+        $resourcePath = '/v2/20010/veranstaltungsterminreihen/{id}';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        if ($stornierte_veranstaltungsterminreihe_abrufen !== null) {
+            $queryParams['stornierteVeranstaltungsterminreiheAbrufen'] = ObjectSerializer::toQueryValue($stornierte_veranstaltungsterminreihe_abrufen);
+        }
 
         // path params
         if ($id !== null) {
@@ -1071,6 +571,596 @@ class VeranstaltungstypenApi
                 $resourcePath
             );
         }
+
+        // body params
+        $_tempBody = null;
+
+        if ($multipart) {
+            $headers = $this->headerSelector->selectHeadersForMultipart(
+                ['application/json']
+            );
+        } else {
+            $headers = $this->headerSelector->selectHeaders(
+                ['application/json'],
+                ['application/json']
+            );
+        }
+
+        // for model (json/xml)
+        if (isset($_tempBody)) {
+            // $_tempBody is the method argument, if present
+            $httpBody = $_tempBody;
+            
+            if($headers['Content-Type'] === 'application/json') {
+                // \stdClass has no __toString(), so we should encode it manually
+                if ($httpBody instanceof \stdClass) {
+                    $httpBody = \GuzzleHttp\json_encode($httpBody);
+                }
+                // array has no __toString(), so we should encode it manually
+                if(is_array($httpBody)) {
+                    $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($httpBody));
+                }
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $multipartContents[] = [
+                        'name' => $formParamName,
+                        'contents' => $formParamValue
+                    ];
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif ($headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($formParams);
+
+            } else {
+                // for HTTP post (form)
+                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+            }
+        }
+
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        return new Request(
+            'GET',
+            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getVeranstaltungsterminreihenUsingGET
+     *
+     * Ruft Veranstaltungsterminreihen ab (entweder nicht stornierte oder stornierte)
+     *
+     * @param  \DateTime $modifiziert_ab Änderungs- bzw. Einfügezeitpunkt, ab dem die Veranstaltungsterminreihen geliefert werden sollen. Das Format muss wie folgt sein: yyyy-MM-ddTHH:mm:ss.SSS (optional)
+     * @param  bool $stornierte_veranstaltungsterminreihen_abrufen Optionaler Parameter, um zu steuern, ob stornierte oder nicht stornierte Veranstaltungsterminreihen abgerufen werden sollen. Der Default ist false. (optional)
+     * @param  string $veranstaltungstyp_id Optionaler Parameter, um nur Veranstaltungsterminreihen eines bestimmten Veranstaltungstyps abzurufen. Beispiel-ID: cfa1403a-13c6-4681-8ee3-e30127554845 (optional)
+     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungsterminreihen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle in der Zukunft liegenden und publizierten Veranstaltungsterminreihen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $veranstaltungskategorie_id Optionaler Parameter, um Veranstaltungsterminreihen nach einer Veranstaltungskategorie zu filtern. (optional)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return \Swagger\Client\Model\Veranstaltungsterminreihe[]
+     */
+    public function getVeranstaltungsterminreihenUsingGET($modifiziert_ab = null, $stornierte_veranstaltungsterminreihen_abrufen = null, $veranstaltungstyp_id = null, $teilnehmergruppekuerzel = null, $veranstaltungskategorie_id = null)
+    {
+        list($response) = $this->getVeranstaltungsterminreihenUsingGETWithHttpInfo($modifiziert_ab, $stornierte_veranstaltungsterminreihen_abrufen, $veranstaltungstyp_id, $teilnehmergruppekuerzel, $veranstaltungskategorie_id);
+        return $response;
+    }
+
+    /**
+     * Operation getVeranstaltungsterminreihenUsingGETWithHttpInfo
+     *
+     * Ruft Veranstaltungsterminreihen ab (entweder nicht stornierte oder stornierte)
+     *
+     * @param  \DateTime $modifiziert_ab Änderungs- bzw. Einfügezeitpunkt, ab dem die Veranstaltungsterminreihen geliefert werden sollen. Das Format muss wie folgt sein: yyyy-MM-ddTHH:mm:ss.SSS (optional)
+     * @param  bool $stornierte_veranstaltungsterminreihen_abrufen Optionaler Parameter, um zu steuern, ob stornierte oder nicht stornierte Veranstaltungsterminreihen abgerufen werden sollen. Der Default ist false. (optional)
+     * @param  string $veranstaltungstyp_id Optionaler Parameter, um nur Veranstaltungsterminreihen eines bestimmten Veranstaltungstyps abzurufen. Beispiel-ID: cfa1403a-13c6-4681-8ee3-e30127554845 (optional)
+     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungsterminreihen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle in der Zukunft liegenden und publizierten Veranstaltungsterminreihen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $veranstaltungskategorie_id Optionaler Parameter, um Veranstaltungsterminreihen nach einer Veranstaltungskategorie zu filtern. (optional)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return array of \Swagger\Client\Model\Veranstaltungsterminreihe[], HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getVeranstaltungsterminreihenUsingGETWithHttpInfo($modifiziert_ab = null, $stornierte_veranstaltungsterminreihen_abrufen = null, $veranstaltungstyp_id = null, $teilnehmergruppekuerzel = null, $veranstaltungskategorie_id = null)
+    {
+        $returnType = '\Swagger\Client\Model\Veranstaltungsterminreihe[]';
+        $request = $this->getVeranstaltungsterminreihenUsingGETRequest($modifiziert_ab, $stornierte_veranstaltungsterminreihen_abrufen, $veranstaltungstyp_id, $teilnehmergruppekuerzel, $veranstaltungskategorie_id);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    $response->getBody()
+                );
+            }
+
+            $responseBody = $response->getBody();
+            if ($returnType === '\SplFileObject') {
+                $content = $responseBody; //stream goes to serializer
+            } else {
+                $content = $responseBody->getContents();
+                if ($returnType !== 'string') {
+                    $content = json_decode($content);
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Swagger\Client\Model\Veranstaltungsterminreihe[]',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getVeranstaltungsterminreihenUsingGETAsync
+     *
+     * Ruft Veranstaltungsterminreihen ab (entweder nicht stornierte oder stornierte)
+     *
+     * @param  \DateTime $modifiziert_ab Änderungs- bzw. Einfügezeitpunkt, ab dem die Veranstaltungsterminreihen geliefert werden sollen. Das Format muss wie folgt sein: yyyy-MM-ddTHH:mm:ss.SSS (optional)
+     * @param  bool $stornierte_veranstaltungsterminreihen_abrufen Optionaler Parameter, um zu steuern, ob stornierte oder nicht stornierte Veranstaltungsterminreihen abgerufen werden sollen. Der Default ist false. (optional)
+     * @param  string $veranstaltungstyp_id Optionaler Parameter, um nur Veranstaltungsterminreihen eines bestimmten Veranstaltungstyps abzurufen. Beispiel-ID: cfa1403a-13c6-4681-8ee3-e30127554845 (optional)
+     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungsterminreihen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle in der Zukunft liegenden und publizierten Veranstaltungsterminreihen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $veranstaltungskategorie_id Optionaler Parameter, um Veranstaltungsterminreihen nach einer Veranstaltungskategorie zu filtern. (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getVeranstaltungsterminreihenUsingGETAsync($modifiziert_ab = null, $stornierte_veranstaltungsterminreihen_abrufen = null, $veranstaltungstyp_id = null, $teilnehmergruppekuerzel = null, $veranstaltungskategorie_id = null)
+    {
+        return $this->getVeranstaltungsterminreihenUsingGETAsyncWithHttpInfo($modifiziert_ab, $stornierte_veranstaltungsterminreihen_abrufen, $veranstaltungstyp_id, $teilnehmergruppekuerzel, $veranstaltungskategorie_id)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getVeranstaltungsterminreihenUsingGETAsyncWithHttpInfo
+     *
+     * Ruft Veranstaltungsterminreihen ab (entweder nicht stornierte oder stornierte)
+     *
+     * @param  \DateTime $modifiziert_ab Änderungs- bzw. Einfügezeitpunkt, ab dem die Veranstaltungsterminreihen geliefert werden sollen. Das Format muss wie folgt sein: yyyy-MM-ddTHH:mm:ss.SSS (optional)
+     * @param  bool $stornierte_veranstaltungsterminreihen_abrufen Optionaler Parameter, um zu steuern, ob stornierte oder nicht stornierte Veranstaltungsterminreihen abgerufen werden sollen. Der Default ist false. (optional)
+     * @param  string $veranstaltungstyp_id Optionaler Parameter, um nur Veranstaltungsterminreihen eines bestimmten Veranstaltungstyps abzurufen. Beispiel-ID: cfa1403a-13c6-4681-8ee3-e30127554845 (optional)
+     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungsterminreihen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle in der Zukunft liegenden und publizierten Veranstaltungsterminreihen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $veranstaltungskategorie_id Optionaler Parameter, um Veranstaltungsterminreihen nach einer Veranstaltungskategorie zu filtern. (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getVeranstaltungsterminreihenUsingGETAsyncWithHttpInfo($modifiziert_ab = null, $stornierte_veranstaltungsterminreihen_abrufen = null, $veranstaltungstyp_id = null, $teilnehmergruppekuerzel = null, $veranstaltungskategorie_id = null)
+    {
+        $returnType = '\Swagger\Client\Model\Veranstaltungsterminreihe[]';
+        $request = $this->getVeranstaltungsterminreihenUsingGETRequest($modifiziert_ab, $stornierte_veranstaltungsterminreihen_abrufen, $veranstaltungstyp_id, $teilnehmergruppekuerzel, $veranstaltungskategorie_id);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    $responseBody = $response->getBody();
+                    if ($returnType === '\SplFileObject') {
+                        $content = $responseBody; //stream goes to serializer
+                    } else {
+                        $content = $responseBody->getContents();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getVeranstaltungsterminreihenUsingGET'
+     *
+     * @param  \DateTime $modifiziert_ab Änderungs- bzw. Einfügezeitpunkt, ab dem die Veranstaltungsterminreihen geliefert werden sollen. Das Format muss wie folgt sein: yyyy-MM-ddTHH:mm:ss.SSS (optional)
+     * @param  bool $stornierte_veranstaltungsterminreihen_abrufen Optionaler Parameter, um zu steuern, ob stornierte oder nicht stornierte Veranstaltungsterminreihen abgerufen werden sollen. Der Default ist false. (optional)
+     * @param  string $veranstaltungstyp_id Optionaler Parameter, um nur Veranstaltungsterminreihen eines bestimmten Veranstaltungstyps abzurufen. Beispiel-ID: cfa1403a-13c6-4681-8ee3-e30127554845 (optional)
+     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungsterminreihen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle in der Zukunft liegenden und publizierten Veranstaltungsterminreihen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $veranstaltungskategorie_id Optionaler Parameter, um Veranstaltungsterminreihen nach einer Veranstaltungskategorie zu filtern. (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    protected function getVeranstaltungsterminreihenUsingGETRequest($modifiziert_ab = null, $stornierte_veranstaltungsterminreihen_abrufen = null, $veranstaltungstyp_id = null, $teilnehmergruppekuerzel = null, $veranstaltungskategorie_id = null)
+    {
+
+        $resourcePath = '/v2/veranstaltungsterminreihen';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        if ($modifiziert_ab !== null) {
+            $queryParams['modifiziertAb'] = ObjectSerializer::toQueryValue($modifiziert_ab);
+        }
+        // query params
+        if ($stornierte_veranstaltungsterminreihen_abrufen !== null) {
+            $queryParams['stornierteVeranstaltungsterminreihenAbrufen'] = ObjectSerializer::toQueryValue($stornierte_veranstaltungsterminreihen_abrufen);
+        }
+        // query params
+        if ($veranstaltungstyp_id !== null) {
+            $queryParams['veranstaltungstypID'] = ObjectSerializer::toQueryValue($veranstaltungstyp_id);
+        }
+        // query params
+        if ($teilnehmergruppekuerzel !== null) {
+            $queryParams['teilnehmergruppekuerzel'] = ObjectSerializer::toQueryValue($teilnehmergruppekuerzel);
+        }
+        // query params
+        if ($veranstaltungskategorie_id !== null) {
+            $queryParams['veranstaltungskategorieId'] = ObjectSerializer::toQueryValue($veranstaltungskategorie_id);
+        }
+
+
+        // body params
+        $_tempBody = null;
+
+        if ($multipart) {
+            $headers = $this->headerSelector->selectHeadersForMultipart(
+                ['application/json']
+            );
+        } else {
+            $headers = $this->headerSelector->selectHeaders(
+                ['application/json'],
+                ['application/json']
+            );
+        }
+
+        // for model (json/xml)
+        if (isset($_tempBody)) {
+            // $_tempBody is the method argument, if present
+            $httpBody = $_tempBody;
+            
+            if($headers['Content-Type'] === 'application/json') {
+                // \stdClass has no __toString(), so we should encode it manually
+                if ($httpBody instanceof \stdClass) {
+                    $httpBody = \GuzzleHttp\json_encode($httpBody);
+                }
+                // array has no __toString(), so we should encode it manually
+                if(is_array($httpBody)) {
+                    $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($httpBody));
+                }
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $multipartContents[] = [
+                        'name' => $formParamName,
+                        'contents' => $formParamValue
+                    ];
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif ($headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($formParams);
+
+            } else {
+                // for HTTP post (form)
+                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+            }
+        }
+
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        return new Request(
+            'GET',
+            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getVeranstaltungsterminreihenUsingGET1
+     *
+     * Ruft Veranstaltungsterminreihen ab (entweder nicht stornierte oder stornierte)
+     *
+     * @param  \DateTime $modifiziert_ab Änderungs- bzw. Einfügezeitpunkt, ab dem die Veranstaltungsterminreihen geliefert werden sollen. Das Format muss wie folgt sein: yyyy-MM-ddTHH:mm:ss.SSS (optional)
+     * @param  bool $stornierte_veranstaltungsterminreihen_abrufen Optionaler Parameter, um zu steuern, ob stornierte oder nicht stornierte Veranstaltungsterminreihen abgerufen werden sollen. Der Default ist false. (optional)
+     * @param  string $veranstaltungstyp_id Optionaler Parameter, um nur Veranstaltungsterminreihen eines bestimmten Veranstaltungstyps abzurufen. Beispiel-ID: cfa1403a-13c6-4681-8ee3-e30127554845 (optional)
+     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungsterminreihen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle in der Zukunft liegenden und publizierten Veranstaltungsterminreihen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $veranstaltungskategorie_id Optionaler Parameter, um Veranstaltungsterminreihen nach einer Veranstaltungskategorie zu filtern. (optional)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return \Swagger\Client\Model\Veranstaltungsterminreihe[]
+     */
+    public function getVeranstaltungsterminreihenUsingGET1($modifiziert_ab = null, $stornierte_veranstaltungsterminreihen_abrufen = null, $veranstaltungstyp_id = null, $teilnehmergruppekuerzel = null, $veranstaltungskategorie_id = null)
+    {
+        list($response) = $this->getVeranstaltungsterminreihenUsingGET1WithHttpInfo($modifiziert_ab, $stornierte_veranstaltungsterminreihen_abrufen, $veranstaltungstyp_id, $teilnehmergruppekuerzel, $veranstaltungskategorie_id);
+        return $response;
+    }
+
+    /**
+     * Operation getVeranstaltungsterminreihenUsingGET1WithHttpInfo
+     *
+     * Ruft Veranstaltungsterminreihen ab (entweder nicht stornierte oder stornierte)
+     *
+     * @param  \DateTime $modifiziert_ab Änderungs- bzw. Einfügezeitpunkt, ab dem die Veranstaltungsterminreihen geliefert werden sollen. Das Format muss wie folgt sein: yyyy-MM-ddTHH:mm:ss.SSS (optional)
+     * @param  bool $stornierte_veranstaltungsterminreihen_abrufen Optionaler Parameter, um zu steuern, ob stornierte oder nicht stornierte Veranstaltungsterminreihen abgerufen werden sollen. Der Default ist false. (optional)
+     * @param  string $veranstaltungstyp_id Optionaler Parameter, um nur Veranstaltungsterminreihen eines bestimmten Veranstaltungstyps abzurufen. Beispiel-ID: cfa1403a-13c6-4681-8ee3-e30127554845 (optional)
+     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungsterminreihen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle in der Zukunft liegenden und publizierten Veranstaltungsterminreihen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $veranstaltungskategorie_id Optionaler Parameter, um Veranstaltungsterminreihen nach einer Veranstaltungskategorie zu filtern. (optional)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return array of \Swagger\Client\Model\Veranstaltungsterminreihe[], HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getVeranstaltungsterminreihenUsingGET1WithHttpInfo($modifiziert_ab = null, $stornierte_veranstaltungsterminreihen_abrufen = null, $veranstaltungstyp_id = null, $teilnehmergruppekuerzel = null, $veranstaltungskategorie_id = null)
+    {
+        $returnType = '\Swagger\Client\Model\Veranstaltungsterminreihe[]';
+        $request = $this->getVeranstaltungsterminreihenUsingGET1Request($modifiziert_ab, $stornierte_veranstaltungsterminreihen_abrufen, $veranstaltungstyp_id, $teilnehmergruppekuerzel, $veranstaltungskategorie_id);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    $response->getBody()
+                );
+            }
+
+            $responseBody = $response->getBody();
+            if ($returnType === '\SplFileObject') {
+                $content = $responseBody; //stream goes to serializer
+            } else {
+                $content = $responseBody->getContents();
+                if ($returnType !== 'string') {
+                    $content = json_decode($content);
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Swagger\Client\Model\Veranstaltungsterminreihe[]',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getVeranstaltungsterminreihenUsingGET1Async
+     *
+     * Ruft Veranstaltungsterminreihen ab (entweder nicht stornierte oder stornierte)
+     *
+     * @param  \DateTime $modifiziert_ab Änderungs- bzw. Einfügezeitpunkt, ab dem die Veranstaltungsterminreihen geliefert werden sollen. Das Format muss wie folgt sein: yyyy-MM-ddTHH:mm:ss.SSS (optional)
+     * @param  bool $stornierte_veranstaltungsterminreihen_abrufen Optionaler Parameter, um zu steuern, ob stornierte oder nicht stornierte Veranstaltungsterminreihen abgerufen werden sollen. Der Default ist false. (optional)
+     * @param  string $veranstaltungstyp_id Optionaler Parameter, um nur Veranstaltungsterminreihen eines bestimmten Veranstaltungstyps abzurufen. Beispiel-ID: cfa1403a-13c6-4681-8ee3-e30127554845 (optional)
+     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungsterminreihen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle in der Zukunft liegenden und publizierten Veranstaltungsterminreihen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $veranstaltungskategorie_id Optionaler Parameter, um Veranstaltungsterminreihen nach einer Veranstaltungskategorie zu filtern. (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getVeranstaltungsterminreihenUsingGET1Async($modifiziert_ab = null, $stornierte_veranstaltungsterminreihen_abrufen = null, $veranstaltungstyp_id = null, $teilnehmergruppekuerzel = null, $veranstaltungskategorie_id = null)
+    {
+        return $this->getVeranstaltungsterminreihenUsingGET1AsyncWithHttpInfo($modifiziert_ab, $stornierte_veranstaltungsterminreihen_abrufen, $veranstaltungstyp_id, $teilnehmergruppekuerzel, $veranstaltungskategorie_id)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getVeranstaltungsterminreihenUsingGET1AsyncWithHttpInfo
+     *
+     * Ruft Veranstaltungsterminreihen ab (entweder nicht stornierte oder stornierte)
+     *
+     * @param  \DateTime $modifiziert_ab Änderungs- bzw. Einfügezeitpunkt, ab dem die Veranstaltungsterminreihen geliefert werden sollen. Das Format muss wie folgt sein: yyyy-MM-ddTHH:mm:ss.SSS (optional)
+     * @param  bool $stornierte_veranstaltungsterminreihen_abrufen Optionaler Parameter, um zu steuern, ob stornierte oder nicht stornierte Veranstaltungsterminreihen abgerufen werden sollen. Der Default ist false. (optional)
+     * @param  string $veranstaltungstyp_id Optionaler Parameter, um nur Veranstaltungsterminreihen eines bestimmten Veranstaltungstyps abzurufen. Beispiel-ID: cfa1403a-13c6-4681-8ee3-e30127554845 (optional)
+     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungsterminreihen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle in der Zukunft liegenden und publizierten Veranstaltungsterminreihen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $veranstaltungskategorie_id Optionaler Parameter, um Veranstaltungsterminreihen nach einer Veranstaltungskategorie zu filtern. (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getVeranstaltungsterminreihenUsingGET1AsyncWithHttpInfo($modifiziert_ab = null, $stornierte_veranstaltungsterminreihen_abrufen = null, $veranstaltungstyp_id = null, $teilnehmergruppekuerzel = null, $veranstaltungskategorie_id = null)
+    {
+        $returnType = '\Swagger\Client\Model\Veranstaltungsterminreihe[]';
+        $request = $this->getVeranstaltungsterminreihenUsingGET1Request($modifiziert_ab, $stornierte_veranstaltungsterminreihen_abrufen, $veranstaltungstyp_id, $teilnehmergruppekuerzel, $veranstaltungskategorie_id);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    $responseBody = $response->getBody();
+                    if ($returnType === '\SplFileObject') {
+                        $content = $responseBody; //stream goes to serializer
+                    } else {
+                        $content = $responseBody->getContents();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getVeranstaltungsterminreihenUsingGET1'
+     *
+     * @param  \DateTime $modifiziert_ab Änderungs- bzw. Einfügezeitpunkt, ab dem die Veranstaltungsterminreihen geliefert werden sollen. Das Format muss wie folgt sein: yyyy-MM-ddTHH:mm:ss.SSS (optional)
+     * @param  bool $stornierte_veranstaltungsterminreihen_abrufen Optionaler Parameter, um zu steuern, ob stornierte oder nicht stornierte Veranstaltungsterminreihen abgerufen werden sollen. Der Default ist false. (optional)
+     * @param  string $veranstaltungstyp_id Optionaler Parameter, um nur Veranstaltungsterminreihen eines bestimmten Veranstaltungstyps abzurufen. Beispiel-ID: cfa1403a-13c6-4681-8ee3-e30127554845 (optional)
+     * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungsterminreihen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle in der Zukunft liegenden und publizierten Veranstaltungsterminreihen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $veranstaltungskategorie_id Optionaler Parameter, um Veranstaltungsterminreihen nach einer Veranstaltungskategorie zu filtern. (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    protected function getVeranstaltungsterminreihenUsingGET1Request($modifiziert_ab = null, $stornierte_veranstaltungsterminreihen_abrufen = null, $veranstaltungstyp_id = null, $teilnehmergruppekuerzel = null, $veranstaltungskategorie_id = null)
+    {
+
+        $resourcePath = '/v2/20010/veranstaltungsterminreihen';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        if ($modifiziert_ab !== null) {
+            $queryParams['modifiziertAb'] = ObjectSerializer::toQueryValue($modifiziert_ab);
+        }
+        // query params
+        if ($stornierte_veranstaltungsterminreihen_abrufen !== null) {
+            $queryParams['stornierteVeranstaltungsterminreihenAbrufen'] = ObjectSerializer::toQueryValue($stornierte_veranstaltungsterminreihen_abrufen);
+        }
+        // query params
+        if ($veranstaltungstyp_id !== null) {
+            $queryParams['veranstaltungstypID'] = ObjectSerializer::toQueryValue($veranstaltungstyp_id);
+        }
+        // query params
+        if ($teilnehmergruppekuerzel !== null) {
+            $queryParams['teilnehmergruppekuerzel'] = ObjectSerializer::toQueryValue($teilnehmergruppekuerzel);
+        }
+        // query params
+        if ($veranstaltungskategorie_id !== null) {
+            $queryParams['veranstaltungskategorieId'] = ObjectSerializer::toQueryValue($veranstaltungskategorie_id);
+        }
+
 
         // body params
         $_tempBody = null;

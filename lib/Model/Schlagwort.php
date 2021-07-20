@@ -1,6 +1,6 @@
 <?php
 /**
- * Veranstaltungskategorie
+ * Schlagwort
  *
  * PHP version 5
  *
@@ -33,15 +33,15 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * Veranstaltungskategorie Class Doc Comment
+ * Schlagwort Class Doc Comment
  *
  * @category Class
- * @description Die Informationen einer Veranstaltungskategorie.
+ * @description Die Informationen eines Schlagwortes.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class Veranstaltungskategorie implements ModelInterface, ArrayAccess
+class Schlagwort implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'Veranstaltungskategorie';
+    protected static $swaggerModelName = 'Schlagwort';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,8 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       */
     protected static $swaggerTypes = [
         'bezeichnung' => 'string',
-        'links' => '\Swagger\Client\Model\Link[]',
-        'oid' => 'string'
+        'kuerzel' => 'string',
+        'links' => '\Swagger\Client\Model\Link[]'
     ];
 
     /**
@@ -70,8 +70,8 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       */
     protected static $swaggerFormats = [
         'bezeichnung' => null,
-        'links' => null,
-        'oid' => null
+        'kuerzel' => null,
+        'links' => null
     ];
 
     /**
@@ -102,8 +102,8 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      */
     protected static $attributeMap = [
         'bezeichnung' => 'bezeichnung',
-        'links' => 'links',
-        'oid' => 'oid'
+        'kuerzel' => 'kuerzel',
+        'links' => 'links'
     ];
 
     /**
@@ -113,8 +113,8 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      */
     protected static $setters = [
         'bezeichnung' => 'setBezeichnung',
-        'links' => 'setLinks',
-        'oid' => 'setOid'
+        'kuerzel' => 'setKuerzel',
+        'links' => 'setLinks'
     ];
 
     /**
@@ -124,8 +124,8 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      */
     protected static $getters = [
         'bezeichnung' => 'getBezeichnung',
-        'links' => 'getLinks',
-        'oid' => 'getOid'
+        'kuerzel' => 'getKuerzel',
+        'links' => 'getLinks'
     ];
 
     /**
@@ -189,8 +189,8 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         $this->container['bezeichnung'] = isset($data['bezeichnung']) ? $data['bezeichnung'] : null;
+        $this->container['kuerzel'] = isset($data['kuerzel']) ? $data['kuerzel'] : null;
         $this->container['links'] = isset($data['links']) ? $data['links'] : null;
-        $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
     }
 
     /**
@@ -230,13 +230,37 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
     /**
      * Sets bezeichnung
      *
-     * @param string $bezeichnung Bezeichnung der Veranstaltungskategorie
+     * @param string $bezeichnung Bezeichnung des Schlagwortes
      *
      * @return $this
      */
     public function setBezeichnung($bezeichnung)
     {
         $this->container['bezeichnung'] = $bezeichnung;
+
+        return $this;
+    }
+
+    /**
+     * Gets kuerzel
+     *
+     * @return string
+     */
+    public function getKuerzel()
+    {
+        return $this->container['kuerzel'];
+    }
+
+    /**
+     * Sets kuerzel
+     *
+     * @param string $kuerzel Kürzel des Schlagwortes
+     *
+     * @return $this
+     */
+    public function setKuerzel($kuerzel)
+    {
+        $this->container['kuerzel'] = $kuerzel;
 
         return $this;
     }
@@ -261,30 +285,6 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
     public function setLinks($links)
     {
         $this->container['links'] = $links;
-
-        return $this;
-    }
-
-    /**
-     * Gets oid
-     *
-     * @return string
-     */
-    public function getOid()
-    {
-        return $this->container['oid'];
-    }
-
-    /**
-     * Sets oid
-     *
-     * @param string $oid Eindeutige ID der Veranstaltungskategorie
-     *
-     * @return $this
-     */
-    public function setOid($oid)
-    {
-        $this->container['oid'] = $oid;
 
         return $this;
     }

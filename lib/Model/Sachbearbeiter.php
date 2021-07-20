@@ -1,6 +1,6 @@
 <?php
 /**
- * Veranstaltungskategorie
+ * Sachbearbeiter
  *
  * PHP version 5
  *
@@ -33,15 +33,15 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * Veranstaltungskategorie Class Doc Comment
+ * Sachbearbeiter Class Doc Comment
  *
  * @category Class
- * @description Die Informationen einer Veranstaltungskategorie.
+ * @description Die Informationen zu einem Sachbearbeiter.
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class Veranstaltungskategorie implements ModelInterface, ArrayAccess
+class Sachbearbeiter implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'Veranstaltungskategorie';
+    protected static $swaggerModelName = 'Sachbearbeiter';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,9 +58,13 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'bezeichnung' => 'string',
-        'links' => '\Swagger\Client\Model\Link[]',
-        'oid' => 'string'
+        'freitext_titel' => 'string',
+        'geschaeftliche_e_mail_adresse' => 'string',
+        'geschaeftliche_telefonnummer' => 'string',
+        'nachname' => 'string',
+        'oid' => 'string',
+        'titel' => 'string',
+        'vorname' => 'string'
     ];
 
     /**
@@ -69,9 +73,13 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'bezeichnung' => null,
-        'links' => null,
-        'oid' => null
+        'freitext_titel' => null,
+        'geschaeftliche_e_mail_adresse' => null,
+        'geschaeftliche_telefonnummer' => null,
+        'nachname' => null,
+        'oid' => null,
+        'titel' => null,
+        'vorname' => null
     ];
 
     /**
@@ -101,9 +109,13 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'bezeichnung' => 'bezeichnung',
-        'links' => 'links',
-        'oid' => 'oid'
+        'freitext_titel' => 'freitextTitel',
+        'geschaeftliche_e_mail_adresse' => 'geschaeftlicheEMailAdresse',
+        'geschaeftliche_telefonnummer' => 'geschaeftlicheTelefonnummer',
+        'nachname' => 'nachname',
+        'oid' => 'oid',
+        'titel' => 'titel',
+        'vorname' => 'vorname'
     ];
 
     /**
@@ -112,9 +124,13 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'bezeichnung' => 'setBezeichnung',
-        'links' => 'setLinks',
-        'oid' => 'setOid'
+        'freitext_titel' => 'setFreitextTitel',
+        'geschaeftliche_e_mail_adresse' => 'setGeschaeftlicheEMailAdresse',
+        'geschaeftliche_telefonnummer' => 'setGeschaeftlicheTelefonnummer',
+        'nachname' => 'setNachname',
+        'oid' => 'setOid',
+        'titel' => 'setTitel',
+        'vorname' => 'setVorname'
     ];
 
     /**
@@ -123,9 +139,13 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'bezeichnung' => 'getBezeichnung',
-        'links' => 'getLinks',
-        'oid' => 'getOid'
+        'freitext_titel' => 'getFreitextTitel',
+        'geschaeftliche_e_mail_adresse' => 'getGeschaeftlicheEMailAdresse',
+        'geschaeftliche_telefonnummer' => 'getGeschaeftlicheTelefonnummer',
+        'nachname' => 'getNachname',
+        'oid' => 'getOid',
+        'titel' => 'getTitel',
+        'vorname' => 'getVorname'
     ];
 
     /**
@@ -188,9 +208,13 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['bezeichnung'] = isset($data['bezeichnung']) ? $data['bezeichnung'] : null;
-        $this->container['links'] = isset($data['links']) ? $data['links'] : null;
+        $this->container['freitext_titel'] = isset($data['freitext_titel']) ? $data['freitext_titel'] : null;
+        $this->container['geschaeftliche_e_mail_adresse'] = isset($data['geschaeftliche_e_mail_adresse']) ? $data['geschaeftliche_e_mail_adresse'] : null;
+        $this->container['geschaeftliche_telefonnummer'] = isset($data['geschaeftliche_telefonnummer']) ? $data['geschaeftliche_telefonnummer'] : null;
+        $this->container['nachname'] = isset($data['nachname']) ? $data['nachname'] : null;
         $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
+        $this->container['titel'] = isset($data['titel']) ? $data['titel'] : null;
+        $this->container['vorname'] = isset($data['vorname']) ? $data['vorname'] : null;
     }
 
     /**
@@ -218,49 +242,97 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets bezeichnung
+     * Gets freitext_titel
      *
      * @return string
      */
-    public function getBezeichnung()
+    public function getFreitextTitel()
     {
-        return $this->container['bezeichnung'];
+        return $this->container['freitext_titel'];
     }
 
     /**
-     * Sets bezeichnung
+     * Sets freitext_titel
      *
-     * @param string $bezeichnung Bezeichnung der Veranstaltungskategorie
+     * @param string $freitext_titel Titel (Freitext) des Sachbearbeiters
      *
      * @return $this
      */
-    public function setBezeichnung($bezeichnung)
+    public function setFreitextTitel($freitext_titel)
     {
-        $this->container['bezeichnung'] = $bezeichnung;
+        $this->container['freitext_titel'] = $freitext_titel;
 
         return $this;
     }
 
     /**
-     * Gets links
+     * Gets geschaeftliche_e_mail_adresse
      *
-     * @return \Swagger\Client\Model\Link[]
+     * @return string
      */
-    public function getLinks()
+    public function getGeschaeftlicheEMailAdresse()
     {
-        return $this->container['links'];
+        return $this->container['geschaeftliche_e_mail_adresse'];
     }
 
     /**
-     * Sets links
+     * Sets geschaeftliche_e_mail_adresse
      *
-     * @param \Swagger\Client\Model\Link[] $links links
+     * @param string $geschaeftliche_e_mail_adresse Die geschäftliche E-Mail-Adresse des Sachbearbeiters
      *
      * @return $this
      */
-    public function setLinks($links)
+    public function setGeschaeftlicheEMailAdresse($geschaeftliche_e_mail_adresse)
     {
-        $this->container['links'] = $links;
+        $this->container['geschaeftliche_e_mail_adresse'] = $geschaeftliche_e_mail_adresse;
+
+        return $this;
+    }
+
+    /**
+     * Gets geschaeftliche_telefonnummer
+     *
+     * @return string
+     */
+    public function getGeschaeftlicheTelefonnummer()
+    {
+        return $this->container['geschaeftliche_telefonnummer'];
+    }
+
+    /**
+     * Sets geschaeftliche_telefonnummer
+     *
+     * @param string $geschaeftliche_telefonnummer Telefonnummer des Sachbearbeiters
+     *
+     * @return $this
+     */
+    public function setGeschaeftlicheTelefonnummer($geschaeftliche_telefonnummer)
+    {
+        $this->container['geschaeftliche_telefonnummer'] = $geschaeftliche_telefonnummer;
+
+        return $this;
+    }
+
+    /**
+     * Gets nachname
+     *
+     * @return string
+     */
+    public function getNachname()
+    {
+        return $this->container['nachname'];
+    }
+
+    /**
+     * Sets nachname
+     *
+     * @param string $nachname Nachname des Sachbearbeiters
+     *
+     * @return $this
+     */
+    public function setNachname($nachname)
+    {
+        $this->container['nachname'] = $nachname;
 
         return $this;
     }
@@ -278,13 +350,61 @@ class Veranstaltungskategorie implements ModelInterface, ArrayAccess
     /**
      * Sets oid
      *
-     * @param string $oid Eindeutige ID der Veranstaltungskategorie
+     * @param string $oid Eindeutige ID des Sachbearbeiters
      *
      * @return $this
      */
     public function setOid($oid)
     {
         $this->container['oid'] = $oid;
+
+        return $this;
+    }
+
+    /**
+     * Gets titel
+     *
+     * @return string
+     */
+    public function getTitel()
+    {
+        return $this->container['titel'];
+    }
+
+    /**
+     * Sets titel
+     *
+     * @param string $titel Titel des Sachbearbeiters
+     *
+     * @return $this
+     */
+    public function setTitel($titel)
+    {
+        $this->container['titel'] = $titel;
+
+        return $this;
+    }
+
+    /**
+     * Gets vorname
+     *
+     * @return string
+     */
+    public function getVorname()
+    {
+        return $this->container['vorname'];
+    }
+
+    /**
+     * Sets vorname
+     *
+     * @param string $vorname Vorname des Sachbearbeiters
+     *
+     * @return $this
+     */
+    public function setVorname($vorname)
+    {
+        $this->container['vorname'] = $vorname;
 
         return $this;
     }
