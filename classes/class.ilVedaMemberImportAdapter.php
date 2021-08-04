@@ -265,6 +265,12 @@ class ilVedaMemberImportAdapter
 
 			$found = false;
 			foreach($remote_tutors as $remote_tutor) {
+			    if (!$this->isValidDate($remote_tutor->getKursZugriffAb(), $remote_tutor->getKursZugriffBis())) {
+			        $this->logger->debug('Ignoring tutor outside time frame: ' .
+                        $remote_tutor->getDozentId()
+                    );
+			        continue;
+                }
 			    if (\ilVedaUtils::compareOidsEqual($remote_tutor->getDozentId(),$tutor_oid)) {
 					$found = true;
 					break;
@@ -276,7 +282,6 @@ class ilVedaMemberImportAdapter
 					$this->logger->debug('Ignoring companion outside time frame: ' . $remote_companion->getLernbegleiterId());
 					continue;
 				}
-
 				if (\ilVedaUtils::compareOidsEqual($remote_companion->getLernbegleiterId(),$companion_oid)) {
 					$found = true;
 					break;
@@ -650,14 +655,27 @@ class ilVedaMemberImportAdapter
 	 */
 	public function isValidDate(?DateTime $start, ?DateTime $end)
 	{
-		if($start == null) {
+		if($start == null && $end == null) {
 			return true;
 		}
+
 		$now = new \ilDate(time(), IL_CAL_UNIX);
-		$ilstart = new \ilDate($start->format('Y-m-d'),IL_CAL_DATE);
+		if ($start == null) {
+		    $ilend = new \ilDateTime($end->format('Y-m-d'), IL_CAL_DATE);
+		    // check ending time > now
+            if (
+                \ilDateTime::_after($ilend, $now, IL_CAL_DAY) ||
+                \ilDateTime::_equals($ilend, $now, IL_CAL_DAY)
+            ) {
+                $this->logger->debug('Ending date is valid');
+                return true;
+            }
+            $this->logger->debug('Ending date is invalid');
+            return false;
+        }
 
 		if($end == null) {
-
+            $ilstart = new \ilDate($start->format('Y-m-d'),IL_CAL_DATE);
 			// check starting time <= now
 			if(
 			    \ilDateTime::_before($ilstart, $now , IL_CAL_DAY) ||
@@ -670,6 +688,7 @@ class ilVedaMemberImportAdapter
 			return false;
 		}
 
+        $ilstart = new \ilDate($start->format('Y-m-d'),IL_CAL_DATE);
 		$ilend = new \ilDate($end->format('Y-m-d'), IL_CAL_DATE);
 
 		if(
