@@ -365,7 +365,7 @@ class ilVedaMemberImportAdapter
 				if(
 				    $member->getMitgliedschaftsart() == self::REGULAR &&
                     !$member->getWechsel() &&
-                    $this->isValidDate($member->getBeginn(), $member->getEnde())
+                    $this->isValidDate($member->getKursZugriffAb(), $member->getKursZugriffBis())
                 ) {
 					$found = true;
 					break;
@@ -418,7 +418,7 @@ class ilVedaMemberImportAdapter
 				if(
 					$member->getMitgliedschaftsart() == self::REGULAR &&
 					$member->getWechsel() &&
-					$this->isValidDate($member->getBeginn(), $member->getEnde())
+					$this->isValidDate($member->getKursZugriffAb(), $member->getKursZugriffBis())
 				) {
 					$found = true;
 					break;
@@ -508,7 +508,7 @@ class ilVedaMemberImportAdapter
 				$this->logger->debug('Ignoring switch membership.');
 				continue;
 			}
-			if(!$this->isValidDate($member->getBeginn(), $member->getEnde())) {
+			if(!$this->isValidDate($member->getKursZugriffAb(), $member->getKursZugriffBis())) {
 				$this->logger->debug('Ignoring deprecated assignment.');
 				continue;
 			}
@@ -557,7 +557,7 @@ class ilVedaMemberImportAdapter
 				$this->logger->debug('Ignoring regular membership.');
 				continue;
 			}
-			if(!$this->isValidDate($member->getBeginn(), $member->getEnde())) {
+			if (!$this->isValidDate($member->getKursZugriffAb(), $member->getKursZugriffBis())) {
 				$this->logger->debug('Ignoring deprecated assignment.');
 				continue;
 			}
@@ -602,7 +602,7 @@ class ilVedaMemberImportAdapter
 				$this->logger->debug('Ignoring permanent member.');
 				continue;
 			}
-			if(!$this->isValidDate($member->getBeginn(), $member->getEnde())) {
+			if (!$this->isValidDate($member->getKursZugriffAb(), $member->getKursZugriffBis())) {
 				$this->logger->debug('Ignoring deprecated assignment.');
 				continue;
 			}
