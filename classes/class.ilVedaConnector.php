@@ -15,6 +15,7 @@ use Swagger\Client\Model\AusbildungszugTeilnehmer;
 use Swagger\Client\Model\MeldeLernerfolgApiDto;
 use Swagger\Client\Model\PraktikumsberichtEingegangenApiDto;
 use Swagger\Client\Model\PraktikumsberichtKorrigiertApiDto;
+use Swagger\Client\Model\FehlermeldungApiDto as FehlermeldungApiDtoAlias;
 
 /**
  * Connector for all rest api calls.
@@ -619,6 +620,51 @@ class ilVedaConnector
 			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
 		}
 	}
+
+    /**
+     * Send failure message to ws.
+     * @param string $import_id
+     * @param string $message
+     * @return bool
+     */
+	public function handleFailedAccountCreation(string $import_id, string $message)
+    {
+        if(!$this->api_elearning instanceof ELearningPlattformenApi)
+        {
+            list(
+                $client,
+                $config,
+                $header
+                ) = $this->initApiParameters();
+            $this->api_elearning = new ELearningPlattformenApi(
+                $client,
+                $config,
+                $header
+            );
+        }
+        try {
+            $error_message = new FehlermeldungApiDtoAlias();
+            $error_message->setFehlermeldung($message);
+            $response = $this->api_elearning->meldeElearningaccountAnlageAlsFehlgeschlagenUsingPOST(
+                $this->settings->getPlatformId(),
+                $import_id,
+                $error_message
+            );
+            $this->logger->info('Send message: ' . $error_message->getFehlermeldung());
+            return true;
+        }
+        catch(ApiException $e) {
+            $this->logger->warning('meldeElearningaccountAnlageAlsFehlgeschlagen failed with message: ' . $e->getMessage());
+            $this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+            $this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+            $this->logger->warning($e->getResponseBody());
+            throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+        }
+        catch(Exception $e) {
+            $this->logger->warning('meldeElearningaccountAnlageAlsFehlgeschlagen failed with message: ' . $e->getMessage());
+            throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+        }
+    }
 
 	/**
 	 * send password notification, if required.

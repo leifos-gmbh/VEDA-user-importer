@@ -13,6 +13,8 @@ class ilVedaUserImportAdapter
 {
 	private const AUTH_MODE = 'local';
 
+	private const ERR_LOGIN_EXIST_MSG = 'Ein ILIAS-Benutzerkonto mit dem Namen %s existiert bereits.';
+
 
 	/**
 	 * @var \ilLogger|null
@@ -360,6 +362,16 @@ class ilVedaUserImportAdapter
 		if(strcmp($generated_login, $login) !== 0) {
 			$this->logger->warning('User with login: ' . $login . ' already exists.');
 
+			try {
+			    $connector = \ilVedaConnector::getInstance();
+			    $connector->handleFailedAccountCreation(
+			        $participant->getTeilnehmer()->getOid(),
+                    sprintf(self::ERR_LOGIN_EXIST_MSG, $login)
+                );
+            } catch (Exception $e) {
+			    $this->logger->error('Sending creation feedback failed with message: ' . $e->getMessage());
+            }
+
 			$user_status = new \ilVedaUserStatus($participant->getTeilnehmer()->getOid());
 			$user_status->setLogin($participant->getBenutzername());
 			$user_status->setCreationStatus(\ilVedaUserStatus::STATUS_NONE);
@@ -398,6 +410,16 @@ class ilVedaUserImportAdapter
 		if(strcmp($generated_login, $login) !== 0) {
 
 			$this->logger->warning('User with login: ' . $login . ' already exists.');
+
+            try {
+                $connector = \ilVedaConnector::getInstance();
+                $connector->handleFailedAccountCreation(
+                    $participant->getTeilnehmer()->getOid(),
+                    sprintf(self::ERR_LOGIN_EXIST_MSG, $login)
+                );
+            } catch (Exception $e) {
+                $this->logger->error('Sending creation feedback failed with message: ' . $e->getMessage());
+            }
 
 			$user_status = new \ilVedaUserStatus($participant->getTeilnehmer()->getOid());
 			$user_status->setLogin($participant->getBenutzername());
