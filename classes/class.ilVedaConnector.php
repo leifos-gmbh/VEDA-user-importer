@@ -25,6 +25,8 @@ use Swagger\Client\Model\FehlermeldungApiDto as FehlermeldungApiDtoAlias;
  */
 class ilVedaConnector
 {
+    public const COURSE_CREATION_FAILED = 'Synchronisierung des Ausbildungszugs fehlgeschlagen.';
+
 	/**
 	 * @var null
 	 */
@@ -97,6 +99,34 @@ class ilVedaConnector
 		}
 		return self::$instance;
 	}
+
+	public function sendCourseCreationFailed(string $oid)
+    {
+        if (!$this->api_training_course_train instanceof AusbildungszgeApi) {
+            list(
+                $client,
+                $config,
+                $header
+                ) = $this->initApiParameters();
+            $this->api_training_course_train = new AusbildungszgeApi(
+                $client,
+                $config,
+                $header
+            );
+        }
+
+        try {
+            $error_message = new \Swagger\Client\Model\FehlermeldungApiDto();
+            $error_message->setFehlermeldung(self::COURSE_CREATION_FAILED);
+            $response = $this->api_training_course_train->meldeAusbildungszugAnlageFehlgeschlagenUsingPOST(
+                $oid,
+                $error_message
+            );
+        } catch (Exception $e) {
+            $this->logger->error('Sending course creation failed message failed with message: ' . $e->getMessage());
+            throw new ilVedaConnectionException($e->getMessage());
+        }
+    }
 
 	/**
 	 * @param string $segment_id
@@ -254,7 +284,6 @@ class ilVedaConnector
 			$this->logger->warning('meldeLernerfolgUsingPUT failed with message: ' . $e->getMessage());
 			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
 		}
-
 	}
 
 

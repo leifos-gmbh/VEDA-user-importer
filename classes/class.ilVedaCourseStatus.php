@@ -9,6 +9,9 @@ class ilVedaCourseStatus
 	public const STATUS_NONE = 0;
 	public const STATUS_PENDING = 1;
 	public const STATUS_SYNCHRONIZED = 2;
+	public const STATUS_FAILED = 3;
+
+	public const ASSUMPTION_FAILED_SECONDS = 5400;
 
 	private const TABLE_NAME = 'cron_crnhk_vedaimp_crs';
 	/**
@@ -53,6 +56,12 @@ class ilVedaCourseStatus
 	 */
 	private $logger = null;
 
+    /**
+     * @var int
+     */
+	private $modified = 0;
+
+
 
 
 	/**
@@ -69,6 +78,28 @@ class ilVedaCourseStatus
 
 		$this->read();
 	}
+
+    /**
+     * @return ilVedaCourseStatus[]
+     * @throws ilDatabaseException
+     */
+	public static function getProbablyFailed() : array
+    {
+        global $DIC;
+
+        $db = $DIC->database();
+
+        $query = 'select oid from ' . self::TABLE_NAME . ' ' .
+            'where ' .
+            'status_created = ' . $db->quote(self::STATUS_PENDING, ilDBConstants::T_INTEGER) . ' ' .
+            'and modified < ' . $db->quote(time() - self::ASSUMPTION_FAILED_SECONDS, ilDBConstants::T_INTEGER);
+        $res = $db->query($query);
+        $failed = [];
+        while ($row = $res->fetchRow(ilDBConstants::FETCHMODE_OBJECT)) {
+            $failed[] = new self($row->oid);
+        }
+        return $failed;
+    }
 
 	/**
 	 * @return ilVedaCourseStatus[]
@@ -89,6 +120,23 @@ class ilVedaCourseStatus
 		}
 		return $courses;
 	}
+
+    /**
+     * @return int
+     */
+    public function getModified() : int
+    {
+        return $this->modified ? $this->modified : time();
+    }
+
+    /**
+     * @param int $modified
+     */
+    public function setModified(int $modified) : void
+    {
+        $this->modified = $modified;
+    }
+
 
 	/**
 	 * @param string $oid
@@ -165,13 +213,14 @@ class ilVedaCourseStatus
 		}
 
 		$query = 'insert into ' . self::TABLE_NAME . ' ' .
-			'(oid, obj_id, switchp, switcht, status_created) ' .
+			'(oid, obj_id, switchp, switcht, status_created, modified) ' .
 			'values ( '.
 			$this->db->quote($this->getOid(),'text') . ', '.
 			$this->db->quote($this->getObjId(),'integer') . ', '.
 			$this->db->quote($this->getPermanentSwitchRole(),'integer'). ', '.
 			$this->db->quote($this->getTemporarySwitchRole(),'integer'). ', '.
-			$this->db->quote($this->getCreationStatus(), 'integer') . ' ) ';
+			$this->db->quote($this->getCreationStatus(), 'integer') . ', ' .
+            $this->db->quote($this->getModified(), ilDBConstants::T_INTEGER) . ')';
 		$this->db->manipulate($query);
 		$this->is_persistent = true;
 	}
@@ -186,7 +235,8 @@ class ilVedaCourseStatus
 			'obj_id = ' . $this->db->quote($this->getObjId(),'integer') . ', ' .
 			'switchp = ' . $this->db->quote($this->getPermanentSwitchRole(),'integer') . ', ' .
 			'switcht = ' . $this->db->quote($this->getTemporarySwitchRole(),'integer') . ', ' .
-			'status_created = ' . $this->db->quote($this->getCreationStatus(),'integer') . ' ' .
+			'status_created = ' . $this->db->quote($this->getCreationStatus(),'integer') . ', ' .
+            'modified = ' . $this->db->quote(time(), ilDBConstants::T_INTEGER) . ' ' .
 			'where oid = ' . $this->db->quote($this->getOid(),'text');
 		$this->logger->debug($query);
 		$this->db->manipulate($query);
@@ -223,6 +273,7 @@ class ilVedaCourseStatus
 			$this->setTemporarySwitchRole((int) $row->switcht);
 			$this->setCreationStatus((int) $row->status_created);
 			$this->setObjId((int) $row->obj_id);
+			$this->setModified((int) $row->modified);
 		}
 	}
 

@@ -87,6 +87,7 @@ class ilVedaMDHelper
 		$this->writeTrainingCourseTrainId($target_id, $tc_oid);
 
 		$course_status = new \ilVedaCourseStatus($train->getOid());
+		$course_status->setModified(time());
 		$course_status->setCreationStatus(\ilVedaCourseStatus::STATUS_PENDING);
 		$course_status->save();
 

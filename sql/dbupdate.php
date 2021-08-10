@@ -125,3 +125,18 @@ if(!$ilDB->tableExists('cron_crnhk_vedaimp_seg')) {
 	$ilDB->addPrimaryKey('cron_crnhk_vedaimp_seg',['oid','type']);
 }
 ?>
+<#7>
+<?php
+if (!$ilDB->tableColumnExists('cron_crnhk_vedaimp_crs', 'modified')) {
+    $ilDB->addTableColumn(
+        'cron_crnhk_vedaimp_crs',
+        'modified',
+        [
+            "type" => ilDBConstants::T_INTEGER,
+            "notnull" => true,
+            "length" => 8,
+            "default" => 0
+        ]
+    );
+}
+?>

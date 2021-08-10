@@ -323,5 +323,12 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
 				$a_parameter['status']
 			);
 		}
+		if (
+		    $a_component == self::OBJECT_SERVICE
+        ) {
+		    $course_importer = new \ilVedaCourseImportAdapter();
+		    $course_importer->handleCloningFailed();
+        }
+
 	}
 }

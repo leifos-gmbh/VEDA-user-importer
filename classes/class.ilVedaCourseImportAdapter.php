@@ -39,12 +39,32 @@ class ilVedaCourseImportAdapter
      */
     public function __construct()
     {
-
         $this->plugin   = ilVedaConnectorPlugin::getInstance();
         $this->logger   = $this->plugin->getLogger();
         $this->settings = ilVedaConnectorSettings::getInstance();
         $this->mdhelper = ilVedaMDHelper::getInstance();
 
+    }
+
+    public function handleCloningFailed()
+    {
+        $failed = ilVedaCourseStatus::getProbablyFailed();
+        foreach ($failed as $fail) {
+            $this->logger->info('Handling failed clone event for oid: ' . $fail->getOid());
+            $connector = \ilVedaConnector::getInstance();
+            try {
+                $connector->sendCourseCreationFailed($fail->getOid());
+            } catch (Exception $e) {
+                $this->logger->error($e->getMessage());
+                // no fallback
+                continue;
+            }
+            // Fallback
+            $status = new ilVedaCourseStatus($fail->getOid());
+            $status->setModified(time());
+            $status->setCreationStatus(\ilVedaCourseStatus::STATUS_FAILED);
+            $status->save();
+        }
     }
 
     /**
@@ -282,6 +302,7 @@ class ilVedaCourseImportAdapter
 
             $course_status = new ilVedaCourseStatus($oid);
             $course_status->setCreationStatus(ilVedaCourseStatus::STATUS_SYNCHRONIZED);
+            $course_status->setModified(time());
             $course_status->save();
         } catch (ilVedaConnectionException $e) {
             $this->logger->error('Cannot send course creation status');
@@ -347,6 +368,7 @@ class ilVedaCourseImportAdapter
             if ($target instanceof ilObjCourse) {
 
                 $course_status = new ilVedaCourseStatus($train->getOid());
+                $course_status->setModified(time());
                 $course_status->setObjId($target->getId());
                 $course_status->setCreationStatus(ilVedaCourseStatus::STATUS_PENDING);
                 $course_status->save();
@@ -422,12 +444,14 @@ class ilVedaCourseImportAdapter
         switch ($rolt_id) {
             case $this->settings->getTemporarySwitchRole():
                 $course_status = new ilVedaCourseStatus($train->getOid());
+                $course_status->setModified(time());
                 $course_status->setTemporarySwitchRole($role->getId());
                 $course_status->setCreationStatus(ilVedaCourseStatus::STATUS_PENDING);
                 $course_status->save();
                 break;
             case $this->settings->getPermanentSwitchRole():
                 $course_status = new ilVedaCourseStatus($train->getOid());
+                $course_status->setModified(time());
                 $course_status->setPermanentSwitchRole($role->getId());
                 $course_status->setCreationStatus(ilVedaCourseStatus::STATUS_PENDING);
                 $course_status->save();
