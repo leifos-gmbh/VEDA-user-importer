@@ -216,6 +216,21 @@ class ilVedaCourseImportAdapter
             $soap_client->setResponseTimeout(600);
             $soap_client->enableWSDL(true);
 
+            // Add new entry for oid
+            $status = new \ilVedaCourseStatus();
+            $status->setOid($train->getOid());
+            $status->setModified(time());
+            $status->setCreationStatus(\ilVedaCourseStatus::STATUS_PENDING);
+            $status->save();
+
+            // send copy start
+            try {
+                $connector = \ilVedaConnector::getInstance();
+                $connector->sendTrainingCourseTrainCopyStarted($train->getOid());
+            } catch (Exception $e) {
+                $this->logger->error('Sending course copy start message failed with message: ' . $e->getMessage());
+            }
+
             if ($soap_client->init()) {
                 ilLoggerFactory::getLogger('obj')->info('Calling soap clone method');
                 $soap_client->call('ilClone', array($new_session_id . '::' . $client_id, $copy_id));

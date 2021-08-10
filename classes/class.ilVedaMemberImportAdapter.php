@@ -51,7 +51,6 @@ class ilVedaMemberImportAdapter
 	{
 		$this->logger->debug('Reading "Ausbildungszüge" ...');
 		foreach($this->mdhelper->findTrainingCourseTrains() as $oid) {
-
 			$this->importTrainingCourseTrain($oid);
 		}
 	}
