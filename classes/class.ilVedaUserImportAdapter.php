@@ -200,9 +200,14 @@ class ilVedaUserImportAdapter
 			$this->writer->xmlElement(
 				'Active',
 				[],
-				$participant_container->getTeilnehmer()->getAktiv() ? 'true' : 'false'
-				);
-
+                ($this->isValidDate(
+				    $participant_container->getGueltigAb(),
+                    $participant_container->getGueltigBis()) &&
+                    $participant_container->getTeilnehmer()->getAktiv())
+                    ?
+                    'true' :
+                    'false'
+            );
 			$this->updateTimeLimit($participant_container, $user);
 
 
@@ -237,6 +242,7 @@ class ilVedaUserImportAdapter
 	 */
 	protected function updateTimeLimit(TeilnehmerELearningPlattform $participant, ilObjUser $user = null)
 	{
+	    $start = $end = 0;
 		if($participant->getGueltigAb() instanceof DateTime) {
 			$start = $participant->getGueltigAb()->getTimestamp();
 		}
@@ -244,21 +250,21 @@ class ilVedaUserImportAdapter
 			$end = $participant->getGueltigBis()->getTimestamp();
 		}
 
-		$this->writer->xmlElement('TimeLimitOwner',[],USER_FOLDER_ID);
-		$this->writer->xmlElement('TimeLimitUnlimited',[], $start && $end);
-		if($start) {
-			$this->writer->xmlElement('TimeLimitFrom',[],$start);
-		}
+        $this->writer->xmlElement('TimeLimitOwner', [], USER_FOLDER_ID);
+		if (!$start || !$end) {
+            $this->writer->xmlElement('TimeLimitUnlimited', [], 1);
+        } else {
+            $this->writer->xmlElement('TimeLimitUnlimited', [], 0);
+        }
+		if ($start && $end) {
+            $this->writer->xmlElement('TimeLimitFrom', [], $start);
+            $this->writer->xmlElement('TimeLimitUntil', [], $end);
+        }
 		else {
-			$this->writer->xmlElement('TimeLimitFrom',[],0);
-		}
-		if($end) {
-			$this->writer->xmlElement('TimeLimitUntil',[],$end);
-		}
-		else {
-			$this->writer->xmlElement('TimeLimitUntil',[],0);
-		}
-	}
+            $this->writer->xmlElement('TimeLimitFrom', [], 0);
+            $this->writer->xmlElement('TimeLimitUntil', [], 0);
+        }
+    }
 
 	/**
 	 * import user xml
@@ -346,11 +352,7 @@ class ilVedaUserImportAdapter
 			return true;
 		}
 
-
-		if(!$this->isValidDate(
-			$participant->getGueltigAb(),
-			$participant->getGueltigBis()
-		)) {
+		if(!$this->isValidDate($participant->getGueltigAb(), $participant->getGueltigBis())) {
 			$this->logger->info('Ignoring participant outside valid time.');
 			return false;
 		}
