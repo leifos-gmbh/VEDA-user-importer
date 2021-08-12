@@ -233,8 +233,11 @@ class ilVedaMemberImportAdapter
 			$connector = \ilVedaConnector::getInstance();
 			$remote_tutors = $connector->readTrainingCourseTrainTutors($oid);
 			$remote_companions = $connector->readTrainingCourseTrainCompanions($oid);
+			$remote_supervisors = $connector->readTrainingCourseTrainSupervisors($oid);
 			$this->logger->dump($remote_tutors, \ilLogLevel::DEBUG);
 			$this->logger->dump($remote_companions, \ilLogLevel::DEBUG);
+            $this->logger->dump($remote_supervisors, \ilLogLevel::DEBUG);
+            $this->logger->debug('For course: ' . $course->getTitle());
 		}
 		catch(\ilVedaConnectionException $e) {
 			$this->logger->warning('Reading assigned tutors failed. Aborting tutor update');
@@ -257,7 +260,11 @@ class ilVedaMemberImportAdapter
 			if(isset($udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_COMPANION_ID]])) {
 				$companion_oid = $udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_COMPANION_ID]];
 			}
-			if(!$tutor_oid && !$companion_oid) {
+			$supervisor_oid = '';
+			if (isset($udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_SUPERVISOR_ID]])) {
+			    $supervisor_id = $udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_SUPERVISOR_ID]];
+            }
+			if(!$tutor_oid && !$companion_oid && !$supervisor_oid) {
 				$this->logger->debug('Ignoring tutor without tutor_oid: ' . $tutor->getLogin());
 				continue;
 			}
@@ -276,7 +283,6 @@ class ilVedaMemberImportAdapter
 				}
 			}
 			foreach($remote_companions as $remote_companion) {
-
 				if(!$this->isValidDate($remote_companion->getZustaendigAb(), $remote_companion->getZustaendigBis())) {
 					$this->logger->debug('Ignoring companion outside time frame: ' . $remote_companion->getLernbegleiterId());
 					continue;
@@ -286,6 +292,16 @@ class ilVedaMemberImportAdapter
 					break;
 				}
 			}
+			foreach ($remote_supervisors as $remote_supervisor) {
+			    if (!$this->isValidDate($remote_supervisor->getKursZugriffAb(), $remote_supervisor->getKursZugriffBis())) {
+                    $this->logger->debug('Ignoring supervisor outside time frame: ' . $remote_supervisor->getAufsichtspersonId());
+                    continue;
+                }
+			    if (\ilVedaUtils::compareOidsEqual($remote_supervisor->getAufsichtspersonId(), $supervisor_oid)) {
+			        $found = true;
+			        break;
+                }
+            }
 			if(!$found) {
 				$this->logger->info('Deassigning deprecated tutor from course: ' . $tutor->getLogin());
 				$admin->deassignUser($course->getDefaultTutorRole(), $tutor_id);
@@ -302,7 +318,6 @@ class ilVedaMemberImportAdapter
 			foreach($udfplugin->getUsersForTutorId($tutor_oid) as $uid) {
 				if(!in_array($uid, $participants->getTutors())) {
 					$admin->assignUser($course->getDefaultTutorRole(), $uid);
-					$participants->addDesktopItem($uid);
 					$participants->updateContact($uid, true);
 				}
 			}
@@ -322,11 +337,27 @@ class ilVedaMemberImportAdapter
 				if(!in_array($uid, $participants->getTutors())) {
 					$this->logger->info('Assigning new course tutor with id: ' . $companion_id . ' ILIAS id: ' . $uid);
 					$admin->assignUser($course->getDefaultTutorRole(), $uid);
-					$participants->addDesktopItem($uid);
 					$participants->updateContact($uid, true);
 				}
 			}
 		}
+		foreach ($remote_supervisors as $remote_supervisor) {
+            $supervisor_id = $remote_supervisor->getAufsichtspersonId();
+            $this->logger->debug('Remote supervisor oid is: ' . $supervisor_id);
+            $this->logger->dump($udfplugin->getUsersForSupervisorId($supervisor_id));
+
+            if(!$this->isValidDate($remote_supervisor->getKursZugriffAb(), $remote_supervisor->getKursZugriffBis())) {
+                $this->logger->info('Outside time frame: Ignoring supervisor with id: ' . $supervisor_id);
+                continue;
+            }
+            foreach($udfplugin->getUsersForSupervisorId($supervisor_id) as $uid) {
+                if(!in_array($uid, $participants->getTutors())) {
+                    $this->logger->info('Assigning new course tutor with id: ' . $supervisor_id . ' ILIAS id: ' . $uid);
+                    $admin->assignUser($course->getDefaultTutorRole(), $uid);
+                    $participants->updateContact($uid, true);
+                }
+            }
+        }
 	}
 
 	/**
