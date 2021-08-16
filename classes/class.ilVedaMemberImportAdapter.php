@@ -262,7 +262,7 @@ class ilVedaMemberImportAdapter
 			}
 			$supervisor_oid = '';
 			if (isset($udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_SUPERVISOR_ID]])) {
-			    $supervisor_id = $udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_SUPERVISOR_ID]];
+			    $supervisor_oid = $udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_SUPERVISOR_ID]];
             }
 			if(!$tutor_oid && !$companion_oid && !$supervisor_oid) {
 				$this->logger->debug('Ignoring tutor without tutor_oid: ' . $tutor->getLogin());

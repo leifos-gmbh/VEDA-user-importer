@@ -141,7 +141,7 @@ class ilVedaCourseStatus
 	/**
 	 * @param string $oid
 	 */
-	public function setOid(string $oid)
+	protected function setOid(string $oid)
 	{
 		$this->oid = $oid;
 	}

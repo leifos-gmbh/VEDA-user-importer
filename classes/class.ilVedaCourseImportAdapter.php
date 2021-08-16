@@ -217,8 +217,7 @@ class ilVedaCourseImportAdapter
             $soap_client->enableWSDL(true);
 
             // Add new entry for oid
-            $status = new \ilVedaCourseStatus();
-            $status->setOid($train->getOid());
+            $status = new \ilVedaCourseStatus($train->getOid());
             $status->setModified(time());
             $status->setCreationStatus(\ilVedaCourseStatus::STATUS_PENDING);
             $status->save();
