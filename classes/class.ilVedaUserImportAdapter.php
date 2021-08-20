@@ -212,7 +212,7 @@ class ilVedaUserImportAdapter
 
 
 			// Role assignment
-			$long_role_id = ('il_' . IL_INST_ID . '_role_'.$this->settings->getParticipantRole());
+			$long_role_id = ('il_' . IL_INST_ID . '_role_'.$this->settings->getSifaParticipantRole());
 			$this->writer->xmlElement(
 				'Role',
 				[
@@ -277,7 +277,7 @@ class ilVedaUserImportAdapter
 		$importParser->setXMLContent($this->writer->xmlDumpMem(false));
 		$importParser->setRoleAssignment(
 			[
-				$this->settings->getParticipantRole() => $this->settings->getParticipantRole()
+				$this->settings->getSifaParticipantRole() => $this->settings->getSifaParticipantRole()
 			]
 		);
 		$importParser->setFolderId(USER_FOLDER_ID);

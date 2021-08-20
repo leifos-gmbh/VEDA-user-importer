@@ -5,6 +5,10 @@
  */
 class ilVedaConnectorSettings
 {
+    public const SIFA_SETTINGS_TYPE = 1;
+    public const SIBE_SETTINGS_TYPE = 2;
+
+
 	public const HEADER_TOKEN = 'x-jwp-apiaccesstoken';
 
 	private static $instance = null;
@@ -22,6 +26,11 @@ class ilVedaConnectorSettings
 	 * @var bool
 	 */
 	private $active = false;
+
+    private  $sifa_active = false;
+
+
+    private $sibe_active = false;
 
 	/**
 	 * @var int
@@ -51,12 +60,23 @@ class ilVedaConnectorSettings
 	/**
 	 * @var int
 	 */
-	private $participant_role = 0;
+	private $sifa_participant_role = 0;
+
+
+    /**
+     * @var int
+     */
+    private $sibe_participant_role = 0;
 
 	/**
 	 * @var int
 	 */
-	private $import_ref_id = 0;
+	private $sifa_import_ref_id = 0;
+
+    /**
+     * @var int
+     */
+    private $sibe_import_ref_id = 0;
 
 	/**
 	 * @var int
@@ -134,10 +154,14 @@ class ilVedaConnectorSettings
 		$this->setTrainingCourse($this->getStorage()->get('training_course', $this->getTrainingCourse()));
 
 		$this->setActive((bool) $this->getStorage()->get('active', $this->isActive()));
+		$this->setSibeActive((bool) $this->getStorage()->get('sibe_active', $this->isSibeActive()));
+        $this->setSifaActive((bool) $this->getStorage()->get('sifa_active', $this->isSifaActive()));
 		$this->setLogLevel($this->getStorage()->get('loglevel', $this->getLogLevel()));
 		$this->setLogFile($this->getStorage()->get('logfile', $this->getLogFile()));
-		$this->setParticipantRole($this->getStorage()->get('part_role', $this->getParticipantRole()));
-		$this->setImportDirectory($this->getStorage()->get('import_ref_id', $this->getImportDirectory()));
+		$this->setSifaParticipantRole($this->getStorage()->get('part_role', $this->getSifaParticipantRole()));
+        $this->setSibeParticipantRole($this->getStorage()->get('sibe_part_role', $this->getSibeParticipantRole()));
+		$this->setSifaImportDirectory($this->getStorage()->get('sifa_import_ref_id', $this->getSifaImportDirectory()));
+        $this->setSibeImportDirectory($this->getStorage()->get('sibe_import_ref_id', $this->getSibeImportDirectory()));
 		$this->setTemporarySwitchRole($this->getStorage()->get('switch_temporary_role', $this->getTemporarySwitchRole()));
 		$this->setPermanentSwitchRole($this->getStorage()->get('switch_permanent_role', $this->getPermanentSwitchRole()));
 
@@ -202,6 +226,39 @@ class ilVedaConnectorSettings
 		return $this->lock;
 	}
 
+    /**
+     * @return bool
+     */
+    public function isSifaActive() : bool
+    {
+        return $this->sifa_active;
+    }
+
+    /**
+     * @param bool $sifa_active
+     */
+    public function setSifaActive(bool $sifa_active) : void
+    {
+        $this->sifa_active = $sifa_active;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSibeActive() : bool
+    {
+        return $this->sibe_active;
+    }
+
+    /**
+     * @param bool $sibe_active
+     */
+    public function setSibeActive(bool $sibe_active) : void
+    {
+        $this->sibe_active = $sibe_active;
+    }
+
+
 	/**
 	 * Save settings
 	 */
@@ -221,10 +278,14 @@ class ilVedaConnectorSettings
         $this->getStorage()->set('add_header_value', $this->getAddHeaderValue());
 
 		$this->getStorage()->set('active', (int) $this->isActive());
+		$this->getStorage()->set('sifa_active', (int) $this->isSifaActive());
+        $this->getStorage()->set('sibe_active', (int) $this->isSibeActive());
 		$this->getStorage()->set('loglevel', $this->getLogLevel());
 		$this->getStorage()->set('logfile', $this->getLogFile());
-		$this->getStorage()->set('part_role', $this->getParticipantRole());
-		$this->getStorage()->set('import_ref_id', $this->getImportDirectory());
+		$this->getStorage()->set('part_role', $this->getSifaParticipantRole());
+        $this->getStorage()->set('sibe_part_role', $this->getSibeParticipantRole());
+		$this->getStorage()->set('sifa_import_ref_id', $this->getSifaImportDirectory());
+        $this->getStorage()->set('sibe_import_ref_id', $this->getSibeImportDirectory());
 		$this->getStorage()->set('switch_temporary_role', $this->getTemporarySwitchRole());
 		$this->getStorage()->set('switch_permanent_role', $this->getPermanentSwitchRole());
 	}
@@ -382,37 +443,102 @@ class ilVedaConnectorSettings
 		return $this->logfile;
 	}
 
-	/**
-	 * @param int $role
-	 */
-	public function setParticipantRole(int $role)
-	{
-		$this->participant_role = $role;
-	}
+
+    /**
+     * @param int $type
+     * @return int|null
+     * @throws InvalidArgumentException
+     */
+	public function getParticipantRoleByType(int $type) : ?int
+    {
+        switch ($type) {
+            case self::SIFA_SETTINGS_TYPE:
+                return $this->getSifaParticipantRole();
+            case self::SIBE_SETTINGS_TYPE:
+                return $this->getSibeParticipantsRole();
+        }
+        throw new  \InvalidArgumentException('Invalid type given');
+    }
+
+    /**
+     * @return int
+     */
+    public function getSifaParticipantRole() : int
+    {
+        return $this->sifa_participant_role;
+    }
+
+    /**
+     * @param int $sifa_participant_role
+     */
+    public function setSifaParticipantRole(int $sifa_participant_role) : void
+    {
+        $this->sifa_participant_role = $sifa_participant_role;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSibeParticipantRole() : int
+    {
+        return $this->sibe_participant_role;
+    }
+
+    /**
+     * @param int $sibe_participant_role
+     */
+    public function setSibeParticipantRole(int $sibe_participant_role) : void
+    {
+        $this->sibe_participant_role = $sibe_participant_role;
+    }
+
+    /**
+     * @param int $type
+     * @return int
+     * @throws \InvalidArgumentException
+     */
+    public function getImportDirectoryByType(int $type) : int
+    {
+        switch ($type) {
+            case self::SIFA_SETTINGS_TYPE:
+                return $this->getSifaImportDirectory();
+            case self::SIBE_SETTINGS_TYPE:
+                return $this->getSibeImportDirectory();
+        }
+        throw new  \InvalidArgumentException('Invalid type given');
+    }
 
 	/**
 	 * @return int
 	 */
-	public function getParticipantRole() : int
+	public function getSifaImportDirectory() : int
 	{
-		return $this->participant_role;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getImportDirectory() : int
-	{
-		return $this->import_ref_id;
+		return $this->sifa_import_ref_id;
 	}
 
 	/**
 	 * @param int $ref_id
 	 */
-	public function setImportDirectory(int $ref_id)
+	public function setSifaImportDirectory(int $ref_id)
 	{
-		$this->import_ref_id = $ref_id;
+		$this->sibe_import_ref_id = $ref_id;
 	}
+
+    /**
+     * @return int
+     */
+    public function getSibeImportDirectory() : int
+    {
+        return $this->sibe_import_ref_id;
+    }
+
+    /**
+     * @param int $ref_id
+     */
+    public function setSibeImportDirectory(int $ref_id)
+    {
+        $this->sibe_import_ref_id = $ref_id;
+    }
 
 	/**
 	 * @return string

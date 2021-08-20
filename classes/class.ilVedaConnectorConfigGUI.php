@@ -164,38 +164,41 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		$cron_i->setRequired(true);
 		$cron_i->setValue($settings->getCronInterval());
 		$cron_i->setInfo($this->getPluginObject()->txt('cron_interval'));
-		#$form->addItem($cron_i);
 
-		$user_sync = new \ilFormSectionHeaderGUI();
-		$user_sync->setTitle($this->getPluginObject()->txt('tbl_settings_section_user_sync'));
-		$form->addItem($user_sync);
 
-		$roles = new ilSelectInputGUI(
-			$this->getPluginObject()->txt('tbl_settings_participant_role'),
-			'participant_role'
-		);
-		$roles->setValue($settings->getParticipantRole());
-		$roles->setInfo($this->getPluginObject()->txt('tbl_settings_participant_role_info'));
-		$roles->setOptions($this->prepareRoleSelection());
-		$roles->setRequired(true);
-		$form->addItem($roles);
 
-		$course_sync = new \ilFormSectionHeaderGUI();
-		$course_sync->setTitle($this->getPluginObject()->txt('tbl_settings_section_course_sync'));
-		$form->addItem($course_sync);
+		$sifa_sync = new \ilFormSectionHeaderGUI();
+		$sifa_sync->setTitle($this->getPluginObject()->txt('tbl_settings_section_sifa_sync'));
+		$form->addItem($sifa_sync);
+
+		$sifa_active = new \ilCheckboxInputGUI(
+		    $this->getPluginObject()->txt('tbl_settings_sifa_active'),
+            'sifa_active'
+        );
+		$sifa_active->setChecked($settings->isSifaActive());
+		$form->addItem($sifa_active);
+
+        $roles = new ilSelectInputGUI(
+            $this->getPluginObject()->txt('tbl_settings_participant_role'),
+            'sifa_participant_role'
+        );
+        $roles->setValue($settings->getSifaParticipantRole());
+        $roles->setInfo($this->getPluginObject()->txt('tbl_settings_participant_role_info'));
+        $roles->setOptions($this->prepareRoleSelection());
+        $roles->setRequired(true);
+        $sifa_active->addSubItem($roles);
 
 		$import_dir = new \ilRepositorySelector2InputGUI(
 			$this->getPluginObject()->txt('tbl_settings_course_import'),
-			'crs_import',
+			'sifa_crs_import',
 			true
 		);
 		$import_dir->setRequired(true);
 		$import_dir->setInfo($this->getPluginObject()->txt('tbl_settings_course_import_info'));
 		$white_list[] = 'cat';
 		$import_dir->getExplorerGUI()->setTypeWhiteList($white_list);
-		$import_dir->setValue($settings->getImportDirectory());
-
-		$form->addItem($import_dir);
+		$import_dir->setValue($settings->getSifaImportDirectory());
+		$sifa_active->addSubItem($import_dir);
 
 		$switch = new \ilNumberInputGUI(
 			$this->getPluginObject()->txt('tbl_settings_switch_permanent_role'),
@@ -207,7 +210,7 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 			$switch->setSuffix(\ilObject::_lookupTitle($settings->getPermanentSwitchRole()));
 		}
 		$switch->setInfo($this->getPluginObject()->txt('tbl_settings_switch_permanent_role_info'));
-		$form->addItem($switch);
+		$sifa_active->addSubItem($switch);
 
 		$switcht = new \ilNumberInputGUI(
 			$this->getPluginObject()->txt('tbl_settings_switch_temp_role'),
@@ -219,7 +222,40 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 			$switcht->setSuffix(\ilObject::_lookupTitle($settings->getTemporarySwitchRole()));
 		}
 		$switcht->setInfo($this->getPluginObject()->txt('tbl_settings_switch_temp_role_info'));
-		$form->addItem($switcht);
+        $sifa_active->addSubItem($switcht);
+
+        $sibe_sync = new \ilFormSectionHeaderGUI();
+        $sibe_sync->setTitle($this->getPluginObject()->txt('tbl_settings_section_sibe_sync'));
+        $form->addItem($sibe_sync);
+
+        $sibe_active = new \ilCheckboxInputGUI(
+            $this->getPluginObject()->txt('tbl_settings_sibe_active'),
+            'sibe_active'
+        );
+        $sibe_active->setChecked($settings->isSibeActive());
+        $form->addItem($sibe_active);
+
+        $roles = new ilSelectInputGUI(
+            $this->getPluginObject()->txt('tbl_settings_participant_role'),
+            'sibe_participant_role'
+        );
+        $roles->setValue($settings->getSibeParticipantRole());
+        $roles->setInfo($this->getPluginObject()->txt('tbl_settings_participant_role_info'));
+        $roles->setOptions($this->prepareRoleSelection());
+        $roles->setRequired(true);
+        $sibe_active->addSubItem($roles);
+
+        $import_dir = new \ilRepositorySelector2InputGUI(
+            $this->getPluginObject()->txt('tbl_settings_course_import'),
+            'sibe_crs_import',
+            true
+        );
+        $import_dir->setRequired(true);
+        $import_dir->setInfo($this->getPluginObject()->txt('tbl_settings_course_import_info'));
+        $white_list[] = 'cat';
+        $import_dir->getExplorerGUI()->setTypeWhiteList($white_list);
+        $import_dir->setValue($settings->getSibeImportDirectory());
+        $sibe_active->addSubItem($import_dir);
 
 		return $form;
 	}
@@ -244,13 +280,19 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 				$settings->setActive($form->getInput('active'));
 				$settings->setLogLevel($form->getInput('log_level'));
 				$settings->setLogFile($form->getInput('log_file'));
-				$settings->setParticipantRole($form->getInput('participant_role'));
+				$settings->setSifaParticipantRole($form->getInput('sifa_participant_role'));
+                $settings->setSibeParticipantRole($form->getInput('sibe_participant_role'));
 				$settings->enableLock($form->getInput('lock'));
 
-				$category_ref_ids = $form->getInput('crs_import');
-				$settings->setImportDirectory((int) end($category_ref_ids));
+				$category_ref_ids = $form->getInput('sifa_crs_import');
+				$settings->setSifaImportDirectory((int) end($category_ref_ids));
+                $category_ref_ids = $form->getInput('sibe_crs_import');
+                $settings->setSibeImportDirectory((int) end($category_ref_ids));
 				$settings->setPermanentSwitchRole($form->getInput('switch_permanent'));
 				$settings->setTemporarySwitchRole($form->getInput('switch_temp'));
+
+				$settings->setSibeActive($form->getInput('sibe_active'));
+                $settings->setSiFaActive($form->getInput('sifa_active'));
 				$settings->save();
 
 				ilUtil::sendSuccess($lng->txt('settings_saved'),true);

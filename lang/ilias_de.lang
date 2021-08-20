@@ -16,7 +16,10 @@ tbl_veda_settings_active#:#Aktiviert
 tbl_veda_settings_loglevel#:#Loglevel
 tbl_veda_settings_logfile#:#Logdatei
 tbl_veda_settings_logfile_info#:#Eine zusätzliche Logdatei, in die ausschließlich VEDA-spezifische Log-Nachrichten geschrieben werden.
-tbl_settings_section_user_sync#:#Einstellungen zur Benutzersynchronisierung
+tbl_settings_section_sifa_sync#:#Einstellungen zur "SiFa-Synchronisierung"
+tbl_settings_section_sibe_sync#:#Einstellungen zur "SiBe-Synchronisierung"
+tbl_settings_sifa_active#:#"SiFa-Synchronisierung" aktivieren
+tbl_settings_sibe_active#:#"SiBe-Synchronisierung" aktivieren
 tbl_settings_participant_role#:#Teilnehmerrolle
 tbl_settings_participant_role_info#:#Globale Rolle, der alle neuen Teilnehmer zugeordnet werden.
 tbl_import#:#Einstellungen zum Import
@@ -41,7 +44,6 @@ tbl_usr_result_import_failure#:#Fehlermeldungen
 err_import_usr_duplicate#:#Duplikat: ein ILIAS-Benutzerkonto mit dem selben Benutzernamen existiert bereits.
 err_claiming_missing#:#Der Import kann nicht durchgeführt werden, da das "VedaMDClaiming-Plugin" nicht vorhanden oder nicht aktiviert ist.
 err_udf_claiming_missing#:#Der Import kann nicht durchgeführt werden, da das "VedaUDFClaiming-Plugin" nicht vorhanden oder nicht aktiviert ist.
-tbl_settings_section_course_sync#:#Einstellungen zur Kurssynchronisierung
 tbl_settings_course_import#:#Importverzeichnis
 tbl_settings_course_import_info#:#Bitte wählen Sie die Kategorie aus, in der neue Ausbildungszüge erstellt werden sollen.
 training_course#:#Ausbildungsgang ID

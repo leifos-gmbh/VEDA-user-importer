@@ -130,7 +130,7 @@ class ilVedaCourseImportAdapter
 
         $user = $DIC->user();
 
-        $parent_id = $this->settings->getImportDirectory();
+        $parent_id = $this->settings->getSifaImportDirectory();
 
         $copy_writer = new ilXmlWriter();
         $copy_writer->xmlStartTag(
