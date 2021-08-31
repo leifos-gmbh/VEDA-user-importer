@@ -208,7 +208,11 @@ class ilVedaImporter
 	protected function importMembers()
 	{
 		try {
-			$importer = new ilVedaMemberImportAdapter();
+		    if ($this->getImportType() == self::IMPORT_TYPE_SIFA) {
+                $importer = new ilVedaMemberImportAdapter();
+            } else {
+		        $importer = new \ilVedaMemberSibeImportAdapter();
+            }
 			$importer->import();
 		}
 		catch(\ilVedaConnectionException $e) {

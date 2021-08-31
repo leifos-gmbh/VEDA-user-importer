@@ -84,6 +84,22 @@ class ilVedaCourseStatus
 		$this->read();
 	}
 
+	public static function lookupSynchronizedCourses(int $type) : array
+    {
+        global $DIC;
+
+        $db = $DIC->database();
+        $query = 'select oid, obj_id from ' . self::TABLE_NAME . ' ' .
+            'where type = ' . $db->quote($type, \ilDBConstants::T_INTEGER) . ' ' .
+            'and status_created = ' . $db->quote(self::STATUS_SYNCHRONIZED, \ilDBConstants::T_INTEGER);
+        $res = $db->query($query);
+        $courses = [];
+        while ($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
+            $courses[$row->oid] = $row->obj_id;
+        }
+        return $courses;
+    }
+
     /**
      * @return ilVedaCourseStatus[]
      * @throws ilDatabaseException

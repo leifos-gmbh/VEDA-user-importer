@@ -405,6 +405,117 @@ class ilVedaConnector
 	}
 
 
+    public function readSibeCourseMembers(string $course_oid) : array
+    {
+        if(!$this->api_elearning instanceof ELearningPlattformenApi)
+        {
+            list(
+                $client,
+                $config,
+                $header
+                ) = $this->initApiParameters();
+            $this->api_elearning = new ELearningPlattformenApi(
+                $client,
+                $config,
+                $header
+            );
+        }
+        try {
+            $response = $this->api_elearning->getVonTeilnehmernDieAktivenKurszuordnungenUsingGET(
+                $this->settings->getPlatformId(),
+                $course_oid
+            );
+            return $response;
+        } catch(ApiException $e) {
+            $this->logger->error('getVonTeilnehmernDieAktivenKurszuordnungenUsingGET failed with message: ' . $e->getMessage());
+            $this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+            $this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+            $this->logger->warning($e->getResponseBody());
+            throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+        } catch(Exception $e) {
+            $this->logger->warning('getVonTeilnehmernDieAktivenKurszuordnungenUsingGET failed with message: ' . $e->getMessage());
+            throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+        }
+    }
+
+
+	public function readSibeCourseSupervisors(string $course_oid) : array
+    {
+        if(!$this->api_elearning instanceof ELearningPlattformenApi)
+        {
+            list(
+                $client,
+                $config,
+                $header
+                ) = $this->initApiParameters();
+            $this->api_elearning = new ELearningPlattformenApi(
+                $client,
+                $config,
+                $header
+            );
+        }
+        try {
+            $response = $this->api_elearning->getVonLernbegleiternDieAktivenKurszuordnungenUsingGET(
+                $this->settings->getPlatformId(),
+                $course_oid
+            );
+            return $response;
+        } catch(ApiException $e) {
+            $this->logger->error('getVonLernbegleiternDieAktivenKurszuordnungenUsingGET failed with message: ' . $e->getMessage());
+            $this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+            $this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+            $this->logger->warning($e->getResponseBody());
+            throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+        } catch(Exception $e) {
+            $this->logger->warning('getVonLernbegleiternDieAktivenKurszuordnungenUsingGET failed with message: ' . $e->getMessage());
+            throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+        }
+
+    }
+
+	public function readSibeCourseTutors(string $course_oid) : array
+    {
+        if(!$this->api_elearning instanceof ELearningPlattformenApi)
+        {
+            list(
+                $client,
+                $config,
+                $header
+                ) = $this->initApiParameters();
+            $this->api_elearning = new ELearningPlattformenApi(
+                $client,
+                $config,
+                $header
+            );
+        }
+	    try {
+            $response = $this->api_elearning->getVonDozentenDieAktivenKurszuordnungenUsingGET(
+                $this->settings->getPlatformId(),
+                $course_oid
+            );
+            /*
+            $dozent = new \Swagger\Client\Model\Dozentenkurszuordnung();
+            $dozent->setElearningbenutzeraccountId('3742cfba-afc5-40ed-914d-113b3be570e0');
+            $dozent->setKursZugriffAb(new DateTime('2021-08-30'));
+            $dozent->setKursZugriffBis(new DateTime('2021-09-20'));
+            $response = [$dozent];
+            */
+
+
+            return $response;
+        } catch(ApiException $e) {
+            $this->logger->error('getVonDozentenDieAktivenKurszuordnungenUsingGET failed with message: ' . $e->getMessage());
+            $this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+            $this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+            $this->logger->warning($e->getResponseBody());
+            throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+        } catch(Exception $e) {
+            $this->logger->warning('getVonDozentenDieAktivenKurszuordnungenUsingGET failed with message: ' . $e->getMessage());
+            throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+        }
+    }
+
+
 	/**
 	 * @param string|null $oid
 	 * @return \Swagger\Client\Model\AusbildungszugDozent[]
