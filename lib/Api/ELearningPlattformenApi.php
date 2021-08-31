@@ -88,6 +88,553 @@ class ELearningPlattformenApi
     }
 
     /**
+     * Operation getAktiveELearningKurseUsingGET
+     *
+     * Liefert die aktiven E-Learning-Kurse.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return \Swagger\Client\Model\Elearningkurs[]
+     */
+    public function getAktiveELearningKurseUsingGET($plattform_id)
+    {
+        list($response) = $this->getAktiveELearningKurseUsingGETWithHttpInfo($plattform_id);
+        return $response;
+    }
+
+    /**
+     * Operation getAktiveELearningKurseUsingGETWithHttpInfo
+     *
+     * Liefert die aktiven E-Learning-Kurse.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return array of \Swagger\Client\Model\Elearningkurs[], HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getAktiveELearningKurseUsingGETWithHttpInfo($plattform_id)
+    {
+        $returnType = '\Swagger\Client\Model\Elearningkurs[]';
+        $request = $this->getAktiveELearningKurseUsingGETRequest($plattform_id);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    $response->getBody()
+                );
+            }
+
+            $responseBody = $response->getBody();
+            if ($returnType === '\SplFileObject') {
+                $content = $responseBody; //stream goes to serializer
+            } else {
+                $content = $responseBody->getContents();
+                if ($returnType !== 'string') {
+                    $content = json_decode($content);
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Swagger\Client\Model\Elearningkurs[]',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getAktiveELearningKurseUsingGETAsync
+     *
+     * Liefert die aktiven E-Learning-Kurse.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getAktiveELearningKurseUsingGETAsync($plattform_id)
+    {
+        return $this->getAktiveELearningKurseUsingGETAsyncWithHttpInfo($plattform_id)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getAktiveELearningKurseUsingGETAsyncWithHttpInfo
+     *
+     * Liefert die aktiven E-Learning-Kurse.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getAktiveELearningKurseUsingGETAsyncWithHttpInfo($plattform_id)
+    {
+        $returnType = '\Swagger\Client\Model\Elearningkurs[]';
+        $request = $this->getAktiveELearningKurseUsingGETRequest($plattform_id);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    $responseBody = $response->getBody();
+                    if ($returnType === '\SplFileObject') {
+                        $content = $responseBody; //stream goes to serializer
+                    } else {
+                        $content = $responseBody->getContents();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getAktiveELearningKurseUsingGET'
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    protected function getAktiveELearningKurseUsingGETRequest($plattform_id)
+    {
+        // verify the required parameter 'plattform_id' is set
+        if ($plattform_id === null || (is_array($plattform_id) && count($plattform_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $plattform_id when calling getAktiveELearningKurseUsingGET'
+            );
+        }
+
+        $resourcePath = '/v2/elearningplattformen/{plattformId}/aktivekurse';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+        // path params
+        if ($plattform_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'plattformId' . '}',
+                ObjectSerializer::toPathValue($plattform_id),
+                $resourcePath
+            );
+        }
+
+        // body params
+        $_tempBody = null;
+
+        if ($multipart) {
+            $headers = $this->headerSelector->selectHeadersForMultipart(
+                ['application/json']
+            );
+        } else {
+            $headers = $this->headerSelector->selectHeaders(
+                ['application/json'],
+                ['application/json']
+            );
+        }
+
+        // for model (json/xml)
+        if (isset($_tempBody)) {
+            // $_tempBody is the method argument, if present
+            $httpBody = $_tempBody;
+            
+            if($headers['Content-Type'] === 'application/json') {
+                // \stdClass has no __toString(), so we should encode it manually
+                if ($httpBody instanceof \stdClass) {
+                    $httpBody = \GuzzleHttp\json_encode($httpBody);
+                }
+                // array has no __toString(), so we should encode it manually
+                if(is_array($httpBody)) {
+                    $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($httpBody));
+                }
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $multipartContents[] = [
+                        'name' => $formParamName,
+                        'contents' => $formParamValue
+                    ];
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif ($headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($formParams);
+
+            } else {
+                // for HTTP post (form)
+                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+            }
+        }
+
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        return new Request(
+            'GET',
+            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getBeendeteELearningKurseUsingGET
+     *
+     * Liefert die beendeten E-Learning-Kurse.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  \DateTime $beendet_ab Filtert und liefert nur Kurse, die seit dem Stichtag beendet wurden. Das Format muss wie folgt sein: yyyy-MM-dd (optional)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return \Swagger\Client\Model\Elearningkurs[]
+     */
+    public function getBeendeteELearningKurseUsingGET($plattform_id, $beendet_ab = null)
+    {
+        list($response) = $this->getBeendeteELearningKurseUsingGETWithHttpInfo($plattform_id, $beendet_ab);
+        return $response;
+    }
+
+    /**
+     * Operation getBeendeteELearningKurseUsingGETWithHttpInfo
+     *
+     * Liefert die beendeten E-Learning-Kurse.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  \DateTime $beendet_ab Filtert und liefert nur Kurse, die seit dem Stichtag beendet wurden. Das Format muss wie folgt sein: yyyy-MM-dd (optional)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return array of \Swagger\Client\Model\Elearningkurs[], HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getBeendeteELearningKurseUsingGETWithHttpInfo($plattform_id, $beendet_ab = null)
+    {
+        $returnType = '\Swagger\Client\Model\Elearningkurs[]';
+        $request = $this->getBeendeteELearningKurseUsingGETRequest($plattform_id, $beendet_ab);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    $response->getBody()
+                );
+            }
+
+            $responseBody = $response->getBody();
+            if ($returnType === '\SplFileObject') {
+                $content = $responseBody; //stream goes to serializer
+            } else {
+                $content = $responseBody->getContents();
+                if ($returnType !== 'string') {
+                    $content = json_decode($content);
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Swagger\Client\Model\Elearningkurs[]',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getBeendeteELearningKurseUsingGETAsync
+     *
+     * Liefert die beendeten E-Learning-Kurse.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  \DateTime $beendet_ab Filtert und liefert nur Kurse, die seit dem Stichtag beendet wurden. Das Format muss wie folgt sein: yyyy-MM-dd (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getBeendeteELearningKurseUsingGETAsync($plattform_id, $beendet_ab = null)
+    {
+        return $this->getBeendeteELearningKurseUsingGETAsyncWithHttpInfo($plattform_id, $beendet_ab)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getBeendeteELearningKurseUsingGETAsyncWithHttpInfo
+     *
+     * Liefert die beendeten E-Learning-Kurse.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  \DateTime $beendet_ab Filtert und liefert nur Kurse, die seit dem Stichtag beendet wurden. Das Format muss wie folgt sein: yyyy-MM-dd (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getBeendeteELearningKurseUsingGETAsyncWithHttpInfo($plattform_id, $beendet_ab = null)
+    {
+        $returnType = '\Swagger\Client\Model\Elearningkurs[]';
+        $request = $this->getBeendeteELearningKurseUsingGETRequest($plattform_id, $beendet_ab);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    $responseBody = $response->getBody();
+                    if ($returnType === '\SplFileObject') {
+                        $content = $responseBody; //stream goes to serializer
+                    } else {
+                        $content = $responseBody->getContents();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getBeendeteELearningKurseUsingGET'
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  \DateTime $beendet_ab Filtert und liefert nur Kurse, die seit dem Stichtag beendet wurden. Das Format muss wie folgt sein: yyyy-MM-dd (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    protected function getBeendeteELearningKurseUsingGETRequest($plattform_id, $beendet_ab = null)
+    {
+        // verify the required parameter 'plattform_id' is set
+        if ($plattform_id === null || (is_array($plattform_id) && count($plattform_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $plattform_id when calling getBeendeteELearningKurseUsingGET'
+            );
+        }
+
+        $resourcePath = '/v2/elearningplattformen/{plattformId}/beendetekurse';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        if ($beendet_ab !== null) {
+            $queryParams['beendetAb'] = ObjectSerializer::toQueryValue($beendet_ab);
+        }
+
+        // path params
+        if ($plattform_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'plattformId' . '}',
+                ObjectSerializer::toPathValue($plattform_id),
+                $resourcePath
+            );
+        }
+
+        // body params
+        $_tempBody = null;
+
+        if ($multipart) {
+            $headers = $this->headerSelector->selectHeadersForMultipart(
+                ['application/json']
+            );
+        } else {
+            $headers = $this->headerSelector->selectHeaders(
+                ['application/json'],
+                ['application/json']
+            );
+        }
+
+        // for model (json/xml)
+        if (isset($_tempBody)) {
+            // $_tempBody is the method argument, if present
+            $httpBody = $_tempBody;
+            
+            if($headers['Content-Type'] === 'application/json') {
+                // \stdClass has no __toString(), so we should encode it manually
+                if ($httpBody instanceof \stdClass) {
+                    $httpBody = \GuzzleHttp\json_encode($httpBody);
+                }
+                // array has no __toString(), so we should encode it manually
+                if(is_array($httpBody)) {
+                    $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($httpBody));
+                }
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $multipartContents[] = [
+                        'name' => $formParamName,
+                        'contents' => $formParamValue
+                    ];
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif ($headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($formParams);
+
+            } else {
+                // for HTTP post (form)
+                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+            }
+        }
+
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        return new Request(
+            'GET',
+            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET
      *
      * Ruft alle Ausbildungszüge eines Ausbildungsgangs ab, die zur E-Learning-Plattform gehören
@@ -2740,6 +3287,767 @@ class ELearningPlattformenApi
             $resourcePath = str_replace(
                 '{' . 'teilnehmerId' . '}',
                 ObjectSerializer::toPathValue($teilnehmer_id),
+                $resourcePath
+            );
+        }
+
+        // body params
+        $_tempBody = null;
+        if (isset($fehlermeldung_api_dto)) {
+            $_tempBody = $fehlermeldung_api_dto;
+        }
+
+        if ($multipart) {
+            $headers = $this->headerSelector->selectHeadersForMultipart(
+                ['*/*']
+            );
+        } else {
+            $headers = $this->headerSelector->selectHeaders(
+                ['*/*'],
+                ['application/json']
+            );
+        }
+
+        // for model (json/xml)
+        if (isset($_tempBody)) {
+            // $_tempBody is the method argument, if present
+            $httpBody = $_tempBody;
+            
+            if($headers['Content-Type'] === 'application/json') {
+                // \stdClass has no __toString(), so we should encode it manually
+                if ($httpBody instanceof \stdClass) {
+                    $httpBody = \GuzzleHttp\json_encode($httpBody);
+                }
+                // array has no __toString(), so we should encode it manually
+                if(is_array($httpBody)) {
+                    $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($httpBody));
+                }
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $multipartContents[] = [
+                        'name' => $formParamName,
+                        'contents' => $formParamValue
+                    ];
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif ($headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($formParams);
+
+            } else {
+                // for HTTP post (form)
+                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+            }
+        }
+
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        return new Request(
+            'POST',
+            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation meldeElearningkursExternExistierendUsingPOST
+     *
+     * Meldet und protokolliert, dass der E-Learning-Kurs extern erfolgreich angelegt wurde.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  string $kurs_id ID des E-Learning-Kurses (required)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return void
+     */
+    public function meldeElearningkursExternExistierendUsingPOST($plattform_id, $kurs_id)
+    {
+        $this->meldeElearningkursExternExistierendUsingPOSTWithHttpInfo($plattform_id, $kurs_id);
+    }
+
+    /**
+     * Operation meldeElearningkursExternExistierendUsingPOSTWithHttpInfo
+     *
+     * Meldet und protokolliert, dass der E-Learning-Kurs extern erfolgreich angelegt wurde.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  string $kurs_id ID des E-Learning-Kurses (required)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function meldeElearningkursExternExistierendUsingPOSTWithHttpInfo($plattform_id, $kurs_id)
+    {
+        $returnType = '';
+        $request = $this->meldeElearningkursExternExistierendUsingPOSTRequest($plattform_id, $kurs_id);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    $response->getBody()
+                );
+            }
+
+            return [null, $statusCode, $response->getHeaders()];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation meldeElearningkursExternExistierendUsingPOSTAsync
+     *
+     * Meldet und protokolliert, dass der E-Learning-Kurs extern erfolgreich angelegt wurde.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  string $kurs_id ID des E-Learning-Kurses (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function meldeElearningkursExternExistierendUsingPOSTAsync($plattform_id, $kurs_id)
+    {
+        return $this->meldeElearningkursExternExistierendUsingPOSTAsyncWithHttpInfo($plattform_id, $kurs_id)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation meldeElearningkursExternExistierendUsingPOSTAsyncWithHttpInfo
+     *
+     * Meldet und protokolliert, dass der E-Learning-Kurs extern erfolgreich angelegt wurde.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  string $kurs_id ID des E-Learning-Kurses (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function meldeElearningkursExternExistierendUsingPOSTAsyncWithHttpInfo($plattform_id, $kurs_id)
+    {
+        $returnType = '';
+        $request = $this->meldeElearningkursExternExistierendUsingPOSTRequest($plattform_id, $kurs_id);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'meldeElearningkursExternExistierendUsingPOST'
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  string $kurs_id ID des E-Learning-Kurses (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    protected function meldeElearningkursExternExistierendUsingPOSTRequest($plattform_id, $kurs_id)
+    {
+        // verify the required parameter 'plattform_id' is set
+        if ($plattform_id === null || (is_array($plattform_id) && count($plattform_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $plattform_id when calling meldeElearningkursExternExistierendUsingPOST'
+            );
+        }
+        // verify the required parameter 'kurs_id' is set
+        if ($kurs_id === null || (is_array($kurs_id) && count($kurs_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $kurs_id when calling meldeElearningkursExternExistierendUsingPOST'
+            );
+        }
+
+        $resourcePath = '/v2/elearningplattformen/{plattformId}/elearningkurse/{kursId}/meldeexternexistierend';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+        // path params
+        if ($plattform_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'plattformId' . '}',
+                ObjectSerializer::toPathValue($plattform_id),
+                $resourcePath
+            );
+        }
+        // path params
+        if ($kurs_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'kursId' . '}',
+                ObjectSerializer::toPathValue($kurs_id),
+                $resourcePath
+            );
+        }
+
+        // body params
+        $_tempBody = null;
+
+        if ($multipart) {
+            $headers = $this->headerSelector->selectHeadersForMultipart(
+                ['*/*']
+            );
+        } else {
+            $headers = $this->headerSelector->selectHeaders(
+                ['*/*'],
+                ['application/json']
+            );
+        }
+
+        // for model (json/xml)
+        if (isset($_tempBody)) {
+            // $_tempBody is the method argument, if present
+            $httpBody = $_tempBody;
+            
+            if($headers['Content-Type'] === 'application/json') {
+                // \stdClass has no __toString(), so we should encode it manually
+                if ($httpBody instanceof \stdClass) {
+                    $httpBody = \GuzzleHttp\json_encode($httpBody);
+                }
+                // array has no __toString(), so we should encode it manually
+                if(is_array($httpBody)) {
+                    $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($httpBody));
+                }
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $multipartContents[] = [
+                        'name' => $formParamName,
+                        'contents' => $formParamValue
+                    ];
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif ($headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($formParams);
+
+            } else {
+                // for HTTP post (form)
+                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+            }
+        }
+
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        return new Request(
+            'POST',
+            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation meldeElearningkursExterneAnlageAngestossenUsingPOST
+     *
+     * Meldet und protokolliert, dass die externe Anlage des E-Learning-Kurses in Bearbeitung ist.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  string $kurs_id ID des E-Learning-Kurses (required)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return void
+     */
+    public function meldeElearningkursExterneAnlageAngestossenUsingPOST($plattform_id, $kurs_id)
+    {
+        $this->meldeElearningkursExterneAnlageAngestossenUsingPOSTWithHttpInfo($plattform_id, $kurs_id);
+    }
+
+    /**
+     * Operation meldeElearningkursExterneAnlageAngestossenUsingPOSTWithHttpInfo
+     *
+     * Meldet und protokolliert, dass die externe Anlage des E-Learning-Kurses in Bearbeitung ist.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  string $kurs_id ID des E-Learning-Kurses (required)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function meldeElearningkursExterneAnlageAngestossenUsingPOSTWithHttpInfo($plattform_id, $kurs_id)
+    {
+        $returnType = '';
+        $request = $this->meldeElearningkursExterneAnlageAngestossenUsingPOSTRequest($plattform_id, $kurs_id);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    $response->getBody()
+                );
+            }
+
+            return [null, $statusCode, $response->getHeaders()];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation meldeElearningkursExterneAnlageAngestossenUsingPOSTAsync
+     *
+     * Meldet und protokolliert, dass die externe Anlage des E-Learning-Kurses in Bearbeitung ist.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  string $kurs_id ID des E-Learning-Kurses (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function meldeElearningkursExterneAnlageAngestossenUsingPOSTAsync($plattform_id, $kurs_id)
+    {
+        return $this->meldeElearningkursExterneAnlageAngestossenUsingPOSTAsyncWithHttpInfo($plattform_id, $kurs_id)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation meldeElearningkursExterneAnlageAngestossenUsingPOSTAsyncWithHttpInfo
+     *
+     * Meldet und protokolliert, dass die externe Anlage des E-Learning-Kurses in Bearbeitung ist.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  string $kurs_id ID des E-Learning-Kurses (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function meldeElearningkursExterneAnlageAngestossenUsingPOSTAsyncWithHttpInfo($plattform_id, $kurs_id)
+    {
+        $returnType = '';
+        $request = $this->meldeElearningkursExterneAnlageAngestossenUsingPOSTRequest($plattform_id, $kurs_id);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'meldeElearningkursExterneAnlageAngestossenUsingPOST'
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  string $kurs_id ID des E-Learning-Kurses (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    protected function meldeElearningkursExterneAnlageAngestossenUsingPOSTRequest($plattform_id, $kurs_id)
+    {
+        // verify the required parameter 'plattform_id' is set
+        if ($plattform_id === null || (is_array($plattform_id) && count($plattform_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $plattform_id when calling meldeElearningkursExterneAnlageAngestossenUsingPOST'
+            );
+        }
+        // verify the required parameter 'kurs_id' is set
+        if ($kurs_id === null || (is_array($kurs_id) && count($kurs_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $kurs_id when calling meldeElearningkursExterneAnlageAngestossenUsingPOST'
+            );
+        }
+
+        $resourcePath = '/v2/elearningplattformen/{plattformId}/elearningkurse/{kursId}/meldeexterneanlageangestossen';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+        // path params
+        if ($plattform_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'plattformId' . '}',
+                ObjectSerializer::toPathValue($plattform_id),
+                $resourcePath
+            );
+        }
+        // path params
+        if ($kurs_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'kursId' . '}',
+                ObjectSerializer::toPathValue($kurs_id),
+                $resourcePath
+            );
+        }
+
+        // body params
+        $_tempBody = null;
+
+        if ($multipart) {
+            $headers = $this->headerSelector->selectHeadersForMultipart(
+                ['*/*']
+            );
+        } else {
+            $headers = $this->headerSelector->selectHeaders(
+                ['*/*'],
+                ['application/json']
+            );
+        }
+
+        // for model (json/xml)
+        if (isset($_tempBody)) {
+            // $_tempBody is the method argument, if present
+            $httpBody = $_tempBody;
+            
+            if($headers['Content-Type'] === 'application/json') {
+                // \stdClass has no __toString(), so we should encode it manually
+                if ($httpBody instanceof \stdClass) {
+                    $httpBody = \GuzzleHttp\json_encode($httpBody);
+                }
+                // array has no __toString(), so we should encode it manually
+                if(is_array($httpBody)) {
+                    $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($httpBody));
+                }
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $multipartContents[] = [
+                        'name' => $formParamName,
+                        'contents' => $formParamValue
+                    ];
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif ($headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($formParams);
+
+            } else {
+                // for HTTP post (form)
+                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+            }
+        }
+
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        return new Request(
+            'POST',
+            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation meldeElearningkursExterneAnlageFehlgeschlagenUsingPOST
+     *
+     * Meldet und protokolliert, dass die externe Anlage des E-Learning-Kurses fehlgeschlagen ist.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  string $kurs_id ID des E-Learning-Kurses (required)
+     * @param  \Swagger\Client\Model\FehlermeldungApiDto $fehlermeldung_api_dto Der Text der Fehlermeldung (optional)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return void
+     */
+    public function meldeElearningkursExterneAnlageFehlgeschlagenUsingPOST($plattform_id, $kurs_id, $fehlermeldung_api_dto = null)
+    {
+        $this->meldeElearningkursExterneAnlageFehlgeschlagenUsingPOSTWithHttpInfo($plattform_id, $kurs_id, $fehlermeldung_api_dto);
+    }
+
+    /**
+     * Operation meldeElearningkursExterneAnlageFehlgeschlagenUsingPOSTWithHttpInfo
+     *
+     * Meldet und protokolliert, dass die externe Anlage des E-Learning-Kurses fehlgeschlagen ist.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  string $kurs_id ID des E-Learning-Kurses (required)
+     * @param  \Swagger\Client\Model\FehlermeldungApiDto $fehlermeldung_api_dto Der Text der Fehlermeldung (optional)
+     *
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function meldeElearningkursExterneAnlageFehlgeschlagenUsingPOSTWithHttpInfo($plattform_id, $kurs_id, $fehlermeldung_api_dto = null)
+    {
+        $returnType = '';
+        $request = $this->meldeElearningkursExterneAnlageFehlgeschlagenUsingPOSTRequest($plattform_id, $kurs_id, $fehlermeldung_api_dto);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    $response->getBody()
+                );
+            }
+
+            return [null, $statusCode, $response->getHeaders()];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation meldeElearningkursExterneAnlageFehlgeschlagenUsingPOSTAsync
+     *
+     * Meldet und protokolliert, dass die externe Anlage des E-Learning-Kurses fehlgeschlagen ist.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  string $kurs_id ID des E-Learning-Kurses (required)
+     * @param  \Swagger\Client\Model\FehlermeldungApiDto $fehlermeldung_api_dto Der Text der Fehlermeldung (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function meldeElearningkursExterneAnlageFehlgeschlagenUsingPOSTAsync($plattform_id, $kurs_id, $fehlermeldung_api_dto = null)
+    {
+        return $this->meldeElearningkursExterneAnlageFehlgeschlagenUsingPOSTAsyncWithHttpInfo($plattform_id, $kurs_id, $fehlermeldung_api_dto)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation meldeElearningkursExterneAnlageFehlgeschlagenUsingPOSTAsyncWithHttpInfo
+     *
+     * Meldet und protokolliert, dass die externe Anlage des E-Learning-Kurses fehlgeschlagen ist.
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  string $kurs_id ID des E-Learning-Kurses (required)
+     * @param  \Swagger\Client\Model\FehlermeldungApiDto $fehlermeldung_api_dto Der Text der Fehlermeldung (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function meldeElearningkursExterneAnlageFehlgeschlagenUsingPOSTAsyncWithHttpInfo($plattform_id, $kurs_id, $fehlermeldung_api_dto = null)
+    {
+        $returnType = '';
+        $request = $this->meldeElearningkursExterneAnlageFehlgeschlagenUsingPOSTRequest($plattform_id, $kurs_id, $fehlermeldung_api_dto);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'meldeElearningkursExterneAnlageFehlgeschlagenUsingPOST'
+     *
+     * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  string $kurs_id ID des E-Learning-Kurses (required)
+     * @param  \Swagger\Client\Model\FehlermeldungApiDto $fehlermeldung_api_dto Der Text der Fehlermeldung (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    protected function meldeElearningkursExterneAnlageFehlgeschlagenUsingPOSTRequest($plattform_id, $kurs_id, $fehlermeldung_api_dto = null)
+    {
+        // verify the required parameter 'plattform_id' is set
+        if ($plattform_id === null || (is_array($plattform_id) && count($plattform_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $plattform_id when calling meldeElearningkursExterneAnlageFehlgeschlagenUsingPOST'
+            );
+        }
+        // verify the required parameter 'kurs_id' is set
+        if ($kurs_id === null || (is_array($kurs_id) && count($kurs_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $kurs_id when calling meldeElearningkursExterneAnlageFehlgeschlagenUsingPOST'
+            );
+        }
+
+        $resourcePath = '/v2/elearningplattformen/{plattformId}/elearningkurse/{kursId}/meldeexterneanlagefehlgeschlagen';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+        // path params
+        if ($plattform_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'plattformId' . '}',
+                ObjectSerializer::toPathValue($plattform_id),
+                $resourcePath
+            );
+        }
+        // path params
+        if ($kurs_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'kursId' . '}',
+                ObjectSerializer::toPathValue($kurs_id),
                 $resourcePath
             );
         }

@@ -226,9 +226,6 @@ class Teilnehmerkurszuordnung implements ModelInterface, ArrayAccess
     {
         $invalidProperties = [];
 
-        if ($this->container['elearningbenutzeraccount_id'] === null) {
-            $invalidProperties[] = "'elearningbenutzeraccount_id' can't be null";
-        }
         if ($this->container['kurs_id'] === null) {
             $invalidProperties[] = "'kurs_id' can't be null";
         }

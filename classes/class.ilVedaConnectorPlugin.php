@@ -300,6 +300,12 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
 				$a_parameter['target_id'],
 				$a_parameter['copy_id']
 			);
+			$sibe_importer = new \ilVedaCourseSibeImportAdapter();
+			$sibe_importer->handleAfterCloningEvent(
+			    $a_parameter['source_id'],
+                $a_parameter['target_id'],
+                $a_parameter['copy_id']
+            );
 		}
 		if(
 			$a_component == self::OBJECT_SERVICE &&
@@ -311,7 +317,12 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
 				$a_parameter['target_id'],
 				$a_parameter['copy_id']
 			);
-
+            $sibe_importer = new \ilVedaCourseSibeImportAdapter();
+            $sibe_importer->handleAfterCloningDependenciesEvent(
+                $a_parameter['source_id'],
+                $a_parameter['target_id'],
+                $a_parameter['copy_id']
+            );
 		}
 		if(
 			$a_component == self::TRACKING_SERVICE && $a_event == self::EVENT_UPDATE_STATUS
@@ -326,8 +337,8 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
 		if (
 		    $a_component == self::OBJECT_SERVICE
         ) {
-		    $course_importer = new \ilVedaCourseImportAdapter();
-		    $course_importer->handleCloningFailed();
+		    $importer = \ilVedaImporter::getInstance();
+		    $importer->handleCloningFailed();
         }
 
 	}

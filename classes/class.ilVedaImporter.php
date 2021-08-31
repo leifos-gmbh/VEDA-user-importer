@@ -2,10 +2,15 @@
 
 class ilVedaImporter
 {
+    public const IMPORT_TYPE_UNDEFINED = 0;
+    public const IMPORT_TYPE_SIFA = 1;
+    public const IMPORT_TYPE_SIBE = 2;
+
 	public const IMPORT_USR = 'usr';
 	public const IMPORT_CRS = 'crs';
 	public const IMPORT_MEM = 'mem';
 
+	public const IMPORT_NONE = 0;
 	public const IMPORT_ALL = 1;
 	public const IMPORT_SELECTED = 2;
 
@@ -32,6 +37,8 @@ class ilVedaImporter
 	 */
 	private $import_modes = [];
 
+	private $import_type = self::IMPORT_TYPE_UNDEFINED;
+
 	/**
 	 * ilVedaImporter constructor.
 	 */
@@ -54,6 +61,16 @@ class ilVedaImporter
 		}
 		return self::$instance;
 	}
+
+	public function setImportType(int $type) : void
+    {
+        $this->import_type = $type;
+    }
+
+    public function getImportType() : int
+    {
+        return $this->import_type;
+    }
 
 	/**
 	 * @param bool $all
@@ -101,7 +118,9 @@ class ilVedaImporter
 		$this->settings->save();
 
 		try {
-			$this->ensureClaimingPluginConfigured();
+		    if ($this->getImportType() == self::IMPORT_TYPE_SIFA) {
+                $this->ensureClaimingPluginConfigured();
+            }
 			if($this->isImportModeEnabled(self::IMPORT_USR)) {
 				$this->importUsers();
 			}
@@ -143,8 +162,8 @@ class ilVedaImporter
 			throw $e;
 		}
 		catch (ilVedaUserImporterException $e) {
-			throw $e;
-		}
+            throw $e;
+        }
 	}
 
 	/**
@@ -153,8 +172,11 @@ class ilVedaImporter
 	protected function importCourses()
 	{
 		try {
-
-			$importer = new \ilVedaCourseImportAdapter();
+		    if ($this->getImportType() == self::IMPORT_TYPE_SIBE) {
+                $importer = new \ilVedaCourseSibeImportAdapter();
+            } else {
+                $importer = new \ilVedaCourseImportAdapter();
+            }
 			$importer->import();
 		}
 		catch(\ilVedaConnectionException $e) {
@@ -163,7 +185,6 @@ class ilVedaImporter
 		catch(\ilVedaCourseImporterException $e) {
 			throw $e;
 		}
-
 		return true;
 	}
 
@@ -194,5 +215,35 @@ class ilVedaImporter
 			throw $e;
 		}
 	}
+    public function handleCloningFailed()
+    {
+        $failed = \ilVedaCourseStatus::getProbablyFailed();
+        foreach ($failed as $fail) {
+            $this->logger->notice('Handling failed clone event for oid: ' . $fail->getOid());
+            $connector = \ilVedaConnector::getInstance();
+            try {
+                if ($fail->getType() == \ilVedaCourseStatus::TYPE_SIFA) {
+                    $connector->sendCourseCreationFailed($fail->getOid());
+                } elseif ($fail->getType() == \ilVedaCourseStatus::TYPE_SIBE) {
+                    $connector->sendSibeCourseCreationFailed(
+                        $fail->getOid(),
+                        \ilVedaConnector::COURSE_CREATION_FAILED_ELARNING
+                    );
+                } else {
+                    $this->logger->error('Unknown type given for oid ' . $fail->getOid());
+                }
+            } catch (Exception $e) {
+                $this->logger->error($e->getMessage());
+                // no fallback
+                continue;
+            }
+            // Fallback
+            $status = new ilVedaCourseStatus($fail->getOid());
+            $status->setModified(time());
+            $status->setCreationStatus(\ilVedaCourseStatus::STATUS_FAILED);
+            $status->save();
+        }
+    }
+
 
 }

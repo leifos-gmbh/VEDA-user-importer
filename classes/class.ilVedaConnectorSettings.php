@@ -521,7 +521,7 @@ class ilVedaConnectorSettings
 	 */
 	public function setSifaImportDirectory(int $ref_id)
 	{
-		$this->sibe_import_ref_id = $ref_id;
+		$this->sifa_import_ref_id = $ref_id;
 	}
 
     /**

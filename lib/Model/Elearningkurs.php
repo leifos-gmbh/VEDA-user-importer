@@ -1,6 +1,6 @@
 <?php
 /**
- * Dozentenkurszuordnung
+ * Elearningkurs
  *
  * PHP version 5
  *
@@ -33,15 +33,15 @@ use \ArrayAccess;
 use \Swagger\Client\ObjectSerializer;
 
 /**
- * Dozentenkurszuordnung Class Doc Comment
+ * Elearningkurs Class Doc Comment
  *
  * @category Class
- * @description Eine Zuordnung eines Dozenten zu einem Kurs.
+ * @description Beschreibt einen E-Learning-Kurs zur Verwendung auf einer externen E-Learning-Plattform
  * @package  Swagger\Client
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class Dozentenkurszuordnung implements ModelInterface, ArrayAccess
+class Elearningkurs implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class Dozentenkurszuordnung implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'Dozentenkurszuordnung';
+    protected static $swaggerModelName = 'Elearningkurs';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,13 +58,13 @@ class Dozentenkurszuordnung implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'dozent_id' => 'string',
-        'dozentenbuchung_id' => 'string',
-        'elearningbenutzeraccount_id' => 'string',
-        'kurs_id' => 'string',
-        'kurs_zugriff_ab' => '\DateTime',
-        'kurs_zugriff_bis' => '\DateTime',
-        'links' => '\Swagger\Client\Model\Link[]'
+        'oid' => 'string',
+        'beginn' => '\DateTime',
+        'bezeichnung' => 'string',
+        'ende' => '\DateTime',
+        'kapazitaet' => 'int',
+        'links' => '\Swagger\Client\Model\Link[]',
+        'masterkurs' => 'string'
     ];
 
     /**
@@ -73,13 +73,13 @@ class Dozentenkurszuordnung implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'dozent_id' => null,
-        'dozentenbuchung_id' => null,
-        'elearningbenutzeraccount_id' => null,
-        'kurs_id' => null,
-        'kurs_zugriff_ab' => 'date',
-        'kurs_zugriff_bis' => 'date',
-        'links' => null
+        'oid' => null,
+        'beginn' => 'date',
+        'bezeichnung' => null,
+        'ende' => 'date',
+        'kapazitaet' => null,
+        'links' => null,
+        'masterkurs' => null
     ];
 
     /**
@@ -109,13 +109,13 @@ class Dozentenkurszuordnung implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'dozent_id' => 'dozentId',
-        'dozentenbuchung_id' => 'dozentenbuchungId',
-        'elearningbenutzeraccount_id' => 'elearningbenutzeraccountId',
-        'kurs_id' => 'kursId',
-        'kurs_zugriff_ab' => 'kursZugriffAb',
-        'kurs_zugriff_bis' => 'kursZugriffBis',
-        'links' => 'links'
+        'oid' => 'oid',
+        'beginn' => 'beginn',
+        'bezeichnung' => 'bezeichnung',
+        'ende' => 'ende',
+        'kapazitaet' => 'kapazitaet',
+        'links' => 'links',
+        'masterkurs' => 'masterkurs'
     ];
 
     /**
@@ -124,13 +124,13 @@ class Dozentenkurszuordnung implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'dozent_id' => 'setDozentId',
-        'dozentenbuchung_id' => 'setDozentenbuchungId',
-        'elearningbenutzeraccount_id' => 'setElearningbenutzeraccountId',
-        'kurs_id' => 'setKursId',
-        'kurs_zugriff_ab' => 'setKursZugriffAb',
-        'kurs_zugriff_bis' => 'setKursZugriffBis',
-        'links' => 'setLinks'
+        'oid' => 'setOid',
+        'beginn' => 'setBeginn',
+        'bezeichnung' => 'setBezeichnung',
+        'ende' => 'setEnde',
+        'kapazitaet' => 'setKapazitaet',
+        'links' => 'setLinks',
+        'masterkurs' => 'setMasterkurs'
     ];
 
     /**
@@ -139,13 +139,13 @@ class Dozentenkurszuordnung implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'dozent_id' => 'getDozentId',
-        'dozentenbuchung_id' => 'getDozentenbuchungId',
-        'elearningbenutzeraccount_id' => 'getElearningbenutzeraccountId',
-        'kurs_id' => 'getKursId',
-        'kurs_zugriff_ab' => 'getKursZugriffAb',
-        'kurs_zugriff_bis' => 'getKursZugriffBis',
-        'links' => 'getLinks'
+        'oid' => 'getOid',
+        'beginn' => 'getBeginn',
+        'bezeichnung' => 'getBezeichnung',
+        'ende' => 'getEnde',
+        'kapazitaet' => 'getKapazitaet',
+        'links' => 'getLinks',
+        'masterkurs' => 'getMasterkurs'
     ];
 
     /**
@@ -208,13 +208,13 @@ class Dozentenkurszuordnung implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['dozent_id'] = isset($data['dozent_id']) ? $data['dozent_id'] : null;
-        $this->container['dozentenbuchung_id'] = isset($data['dozentenbuchung_id']) ? $data['dozentenbuchung_id'] : null;
-        $this->container['elearningbenutzeraccount_id'] = isset($data['elearningbenutzeraccount_id']) ? $data['elearningbenutzeraccount_id'] : null;
-        $this->container['kurs_id'] = isset($data['kurs_id']) ? $data['kurs_id'] : null;
-        $this->container['kurs_zugriff_ab'] = isset($data['kurs_zugriff_ab']) ? $data['kurs_zugriff_ab'] : null;
-        $this->container['kurs_zugriff_bis'] = isset($data['kurs_zugriff_bis']) ? $data['kurs_zugriff_bis'] : null;
+        $this->container['oid'] = isset($data['oid']) ? $data['oid'] : null;
+        $this->container['beginn'] = isset($data['beginn']) ? $data['beginn'] : null;
+        $this->container['bezeichnung'] = isset($data['bezeichnung']) ? $data['bezeichnung'] : null;
+        $this->container['ende'] = isset($data['ende']) ? $data['ende'] : null;
+        $this->container['kapazitaet'] = isset($data['kapazitaet']) ? $data['kapazitaet'] : null;
         $this->container['links'] = isset($data['links']) ? $data['links'] : null;
+        $this->container['masterkurs'] = isset($data['masterkurs']) ? $data['masterkurs'] : null;
     }
 
     /**
@@ -226,20 +226,17 @@ class Dozentenkurszuordnung implements ModelInterface, ArrayAccess
     {
         $invalidProperties = [];
 
-        if ($this->container['dozent_id'] === null) {
-            $invalidProperties[] = "'dozent_id' can't be null";
+        if ($this->container['oid'] === null) {
+            $invalidProperties[] = "'oid' can't be null";
         }
-        if ($this->container['dozentenbuchung_id'] === null) {
-            $invalidProperties[] = "'dozentenbuchung_id' can't be null";
+        if ($this->container['beginn'] === null) {
+            $invalidProperties[] = "'beginn' can't be null";
         }
-        if ($this->container['kurs_id'] === null) {
-            $invalidProperties[] = "'kurs_id' can't be null";
+        if ($this->container['bezeichnung'] === null) {
+            $invalidProperties[] = "'bezeichnung' can't be null";
         }
-        if ($this->container['kurs_zugriff_ab'] === null) {
-            $invalidProperties[] = "'kurs_zugriff_ab' can't be null";
-        }
-        if ($this->container['kurs_zugriff_bis'] === null) {
-            $invalidProperties[] = "'kurs_zugriff_bis' can't be null";
+        if ($this->container['masterkurs'] === null) {
+            $invalidProperties[] = "'masterkurs' can't be null";
         }
         return $invalidProperties;
     }
@@ -257,145 +254,121 @@ class Dozentenkurszuordnung implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets dozent_id
+     * Gets oid
      *
      * @return string
      */
-    public function getDozentId()
+    public function getOid()
     {
-        return $this->container['dozent_id'];
+        return $this->container['oid'];
     }
 
     /**
-     * Sets dozent_id
+     * Sets oid
      *
-     * @param string $dozent_id ID des Dozenten
+     * @param string $oid UUID des Datensatzes
      *
      * @return $this
      */
-    public function setDozentId($dozent_id)
+    public function setOid($oid)
     {
-        $this->container['dozent_id'] = $dozent_id;
+        $this->container['oid'] = $oid;
 
         return $this;
     }
 
     /**
-     * Gets dozentenbuchung_id
-     *
-     * @return string
-     */
-    public function getDozentenbuchungId()
-    {
-        return $this->container['dozentenbuchung_id'];
-    }
-
-    /**
-     * Sets dozentenbuchung_id
-     *
-     * @param string $dozentenbuchung_id ID der Dozentenbuchung
-     *
-     * @return $this
-     */
-    public function setDozentenbuchungId($dozentenbuchung_id)
-    {
-        $this->container['dozentenbuchung_id'] = $dozentenbuchung_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets elearningbenutzeraccount_id
-     *
-     * @return string
-     */
-    public function getElearningbenutzeraccountId()
-    {
-        return $this->container['elearningbenutzeraccount_id'];
-    }
-
-    /**
-     * Sets elearningbenutzeraccount_id
-     *
-     * @param string $elearningbenutzeraccount_id ID des E-Learning-Benutzeraccounts
-     *
-     * @return $this
-     */
-    public function setElearningbenutzeraccountId($elearningbenutzeraccount_id)
-    {
-        $this->container['elearningbenutzeraccount_id'] = $elearningbenutzeraccount_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets kurs_id
-     *
-     * @return string
-     */
-    public function getKursId()
-    {
-        return $this->container['kurs_id'];
-    }
-
-    /**
-     * Sets kurs_id
-     *
-     * @param string $kurs_id ID des Kurses
-     *
-     * @return $this
-     */
-    public function setKursId($kurs_id)
-    {
-        $this->container['kurs_id'] = $kurs_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets kurs_zugriff_ab
+     * Gets beginn
      *
      * @return \DateTime
      */
-    public function getKursZugriffAb()
+    public function getBeginn()
     {
-        return $this->container['kurs_zugriff_ab'];
+        return $this->container['beginn'];
     }
 
     /**
-     * Sets kurs_zugriff_ab
+     * Sets beginn
      *
-     * @param \DateTime $kurs_zugriff_ab Das Tagesdatum, an dem der Kurszugriff beginnt.
+     * @param \DateTime $beginn Das Tagesdatum, an dem der Kurs beginnt.
      *
      * @return $this
      */
-    public function setKursZugriffAb($kurs_zugriff_ab)
+    public function setBeginn($beginn)
     {
-        $this->container['kurs_zugriff_ab'] = $kurs_zugriff_ab;
+        $this->container['beginn'] = $beginn;
 
         return $this;
     }
 
     /**
-     * Gets kurs_zugriff_bis
+     * Gets bezeichnung
      *
-     * @return \DateTime
+     * @return string
      */
-    public function getKursZugriffBis()
+    public function getBezeichnung()
     {
-        return $this->container['kurs_zugriff_bis'];
+        return $this->container['bezeichnung'];
     }
 
     /**
-     * Sets kurs_zugriff_bis
+     * Sets bezeichnung
      *
-     * @param \DateTime $kurs_zugriff_bis Das Tagesdatum (einschließlich), an dem der Kurszugriff endet.
+     * @param string $bezeichnung Eindeutige Bezeichnung des E-Learning-Kurses.
      *
      * @return $this
      */
-    public function setKursZugriffBis($kurs_zugriff_bis)
+    public function setBezeichnung($bezeichnung)
     {
-        $this->container['kurs_zugriff_bis'] = $kurs_zugriff_bis;
+        $this->container['bezeichnung'] = $bezeichnung;
+
+        return $this;
+    }
+
+    /**
+     * Gets ende
+     *
+     * @return \DateTime
+     */
+    public function getEnde()
+    {
+        return $this->container['ende'];
+    }
+
+    /**
+     * Sets ende
+     *
+     * @param \DateTime $ende Das Tagesdatum, an dem der Kurs endet.
+     *
+     * @return $this
+     */
+    public function setEnde($ende)
+    {
+        $this->container['ende'] = $ende;
+
+        return $this;
+    }
+
+    /**
+     * Gets kapazitaet
+     *
+     * @return int
+     */
+    public function getKapazitaet()
+    {
+        return $this->container['kapazitaet'];
+    }
+
+    /**
+     * Sets kapazitaet
+     *
+     * @param int $kapazitaet Die maximale Anzahl an Teilnehmer, die der Kurs unterstützt.
+     *
+     * @return $this
+     */
+    public function setKapazitaet($kapazitaet)
+    {
+        $this->container['kapazitaet'] = $kapazitaet;
 
         return $this;
     }
@@ -420,6 +393,30 @@ class Dozentenkurszuordnung implements ModelInterface, ArrayAccess
     public function setLinks($links)
     {
         $this->container['links'] = $links;
+
+        return $this;
+    }
+
+    /**
+     * Gets masterkurs
+     *
+     * @return string
+     */
+    public function getMasterkurs()
+    {
+        return $this->container['masterkurs'];
+    }
+
+    /**
+     * Sets masterkurs
+     *
+     * @param string $masterkurs Die eindeutige ID des Masterkurses im externen System.
+     *
+     * @return $this
+     */
+    public function setMasterkurs($masterkurs)
+    {
+        $this->container['masterkurs'] = $masterkurs;
 
         return $this;
     }

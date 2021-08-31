@@ -20,6 +20,21 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 	 */
 	private $logger = null;
 
+    /**
+     * @var ilToolbarGUI
+     */
+	private $toolbar;
+
+    /**
+     * @var ilLanguage
+     */
+	private $lng;
+
+    /**
+     * @var ilCtrl
+     */
+	private $ctrl;
+
 
 	/**
 	 * \ilVedaConnectorConfigGUI constructor.
@@ -29,6 +44,9 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		global $DIC;
 
 		$this->logger = $DIC->logger()->vedaimp();
+		$this->toolbar = $DIC->toolbar();
+		$this->lng = $DIC->language();
+		$this->ctrl = $DIC->ctrl();
 	}
 
 	/**
@@ -477,11 +495,17 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		$form->setFormAction($ilCtrl->getFormAction($this));
 		$form->addCommandButton('doImport', $this->getPluginObject()->txt('btn_import'));
 
+		$sifa = new ilFormSectionHeaderGUI();
+		$sifa->setTitle($this->getPluginObject()->txt('section_import_sifa'));
+		$form->addItem($sifa);
+
 		// selection all or single elements
-		$imp_type = new ilRadioGroupInputGUI($this->getPluginObject()->txt('import_selection'),'selection');
-		$imp_type->setValue(\ilVedaImporter::IMPORT_SELECTED);
-		$imp_type->setRequired(true);
+		$imp_type = new ilRadioGroupInputGUI($this->getPluginObject()->txt('import_selection'),'selection_' . ilVedaImporter::IMPORT_TYPE_SIFA);
+		$imp_type->setValue(\ilVedaImporter::IMPORT_NONE);
 		$form->addItem($imp_type);
+
+        $none = new ilRadioOption($this->getPluginObject()->txt('import_selection_none'),\ilVedaImporter::IMPORT_NONE);
+        $imp_type->addOption($none);
 
 		$all = new ilRadioOption($this->getPluginObject()->txt('import_selection_all'),\ilVedaImporter::IMPORT_ALL);
 		$imp_type->addOption($all);
@@ -489,18 +513,49 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		$sel = new ilRadioOption($this->getPluginObject()->txt('import_selection_selected'), \ilVedaImporter::IMPORT_SELECTED);
 		$imp_type->addOption($sel);
 
-		$usr = new ilCheckboxInputGUI($lng->txt('obj_usr'),'usr');
+		$usr = new ilCheckboxInputGUI($lng->txt('obj_usr'),'usr_' . \ilVedaImporter::IMPORT_TYPE_SIFA);
 		$usr->setValue(\ilVedaImporter::IMPORT_USR);
 		$sel->addSubItem($usr);
 
 
-		$crs = new ilCheckboxInputGUI($lng->txt('objs_crs'),'crs');
+		$crs = new ilCheckboxInputGUI($lng->txt('objs_crs'),'crs_' . \ilVedaImporter::IMPORT_TYPE_SIFA);
 		$crs->setValue(\ilVedaImporter::IMPORT_CRS);
 		$sel->addSubItem($crs);
 
-		$mem = new ilCheckboxInputGUI($this->getPluginObject()->txt('type_membership'),'mem');
+		$mem = new ilCheckboxInputGUI($this->getPluginObject()->txt('type_membership'),'mem_' . \ilVedaImporter::IMPORT_TYPE_SIFA);
 		$mem->setValue(\ilVedaImporter::IMPORT_MEM);
 		$sel->addSubItem($mem);
+
+        $sibe = new ilFormSectionHeaderGUI();
+        $sibe->setTitle($this->getPluginObject()->txt('section_import_sibe'));
+        $form->addItem($sibe);
+
+        // selection all or single elements
+        $imp_type = new ilRadioGroupInputGUI($this->getPluginObject()->txt('import_selection'),'selection_' . ilVedaImporter::IMPORT_TYPE_SIBE);
+        $imp_type->setValue(\ilVedaImporter::IMPORT_NONE);
+        $form->addItem($imp_type);
+
+        $none = new ilRadioOption($this->getPluginObject()->txt('import_selection_none'),\ilVedaImporter::IMPORT_NONE);
+        $imp_type->addOption($none);
+
+        $all = new ilRadioOption($this->getPluginObject()->txt('import_selection_all'),\ilVedaImporter::IMPORT_ALL);
+        $imp_type->addOption($all);
+
+        $sel = new ilRadioOption($this->getPluginObject()->txt('import_selection_selected'), \ilVedaImporter::IMPORT_SELECTED);
+        $imp_type->addOption($sel);
+
+        $usr = new ilCheckboxInputGUI($lng->txt('obj_usr'),'usr_' . \ilVedaImporter::IMPORT_TYPE_SIBE);
+        $usr->setValue(\ilVedaImporter::IMPORT_USR);
+        $sel->addSubItem($usr);
+
+
+        $crs = new ilCheckboxInputGUI($lng->txt('objs_crs'),'crs_' . \ilVedaImporter::IMPORT_TYPE_SIBE);
+        $crs->setValue(\ilVedaImporter::IMPORT_CRS);
+        $sel->addSubItem($crs);
+
+        $mem = new ilCheckboxInputGUI($this->getPluginObject()->txt('type_membership'),'mem_' . \ilVedaImporter::IMPORT_TYPE_SIBE);
+        $mem->setValue(\ilVedaImporter::IMPORT_MEM);
+        $sel->addSubItem($mem);
 
 		$form->setShowTopButtons(false);
 
@@ -523,21 +578,31 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		}
 
 		try{
-			$importer = \ilVedaImporter::getInstance();
-			if($form->getInput('selection') == \ilVedaImporter::IMPORT_ALL) {
-				$importer->setImportMode(true);
-			}
-			else {
-				$modes = [];
-				foreach(['usr', 'crs', 'mem'] as $mode) {
-					if($form->getInput($mode)) {
-						$modes[] = $mode;
-					}
-				}
-				$importer->setImportMode(false, $modes);
-			}
-
-			$importer->import();
+		    foreach ([\ilVedaImporter::IMPORT_TYPE_SIFA, \ilVedaImporter::IMPORT_TYPE_SIBE] as $import_type) {
+		        $import_type_selection = (int) $form->getInput('selection_' . (string) $import_type);
+		        if ($import_type_selection == ilVedaImporter::IMPORT_NONE) {
+		            continue;
+                }
+                $modes = [];
+                foreach([
+                    \ilVedaImporter::IMPORT_USR,
+                    \ilVedaImporter::IMPORT_CRS,
+                    \ilVedaImporter::IMPORT_MEM] as $mode) {
+                    if($form->getInput($mode . '_' . (string) $import_type)) {
+                        $modes[] = $mode;
+                    }
+                }
+		        $importer = \ilVedaImporter::getInstance();
+                $importer->setImportType($import_type);
+                $this->logger->dump($import_type, \ilLogLevel::NOTICE);
+                $this->logger->dump($import_type_selection, \ilLogLevel::NOTICE);
+                $this->logger->dump($modes, \ilLogLevel::NOTICE);
+		        $importer->setImportMode(
+                    (bool) ($import_type_selection == \ilVedaImporter::IMPORT_ALL),
+                    $modes
+                );
+		        $importer->import();
+            }
 		}
 		catch(Exception $e) {
 		    $this->logger->logStack(\ilLogLevel::WARNING);
@@ -547,6 +612,7 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		}
 
 		ilUtil::sendSuccess($this->getPluginObject()->txt('success_import'));
+		$form->setValuesByPost();
 		$this->import($form);
 	}
 

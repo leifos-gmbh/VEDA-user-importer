@@ -26,6 +26,8 @@ use Swagger\Client\Model\FehlermeldungApiDto as FehlermeldungApiDtoAlias;
 class ilVedaConnector
 {
     public const COURSE_CREATION_FAILED = 'Synchronisierung des Ausbildungszugs fehlgeschlagen.';
+    public const COURSE_CREATION_FAILED_MASTER_COURSE_MISSING = 'Masterkurs-Id nicht vorhanden.';
+    public const COURSE_CREATION_FAILED_ELARNING = 'Synchronisierung des ELearning-Kurses fehlgeschlagen.';
 
 	/**
 	 * @var null
@@ -128,7 +130,123 @@ class ilVedaConnector
         }
     }
 
-	/**
+    /**
+     * @param string $oid
+     * @throws \ilVedaConnectionException
+     */
+    public function sendSibeCourseCopyStarted(string $oid)
+    {
+        if(!$this->api_elearning instanceof ELearningPlattformenApi)
+        {
+            list(
+                $client,
+                $config,
+                $header
+                ) = $this->initApiParameters();
+            $this->api_elearning = new ELearningPlattformenApi(
+                $client,
+                $config,
+                $header
+            );
+        }
+
+        try {
+            $response = $this->api_elearning->meldeElearningkursExterneAnlageAngestossenUsingPOST(
+                $this->settings->getPlatformId(),
+                $oid
+            );
+        }
+        catch(ApiException $e) {
+            $this->logger->error('meldeElearningkursExterneAnlageAngestossenUsingPOST failed with message: ' . $e->getMessage());
+            $this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+            $this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+            $this->logger->warning($e->getResponseBody());
+
+            throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+        }
+        catch(Exception $e) {
+            $this->logger->warning('meldeElearningkursExterneAnlageAngestossenUsingPOST failed with message: ' . $e->getMessage());
+            throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+        }
+    }
+
+
+    /**
+     * @param string $oid
+     * @param string $message
+     * @throws ilVedaConnectionException
+     */
+    public function sendSibeCourseCreationFailed(string $oid, string $message)
+    {
+        if(!$this->api_elearning instanceof ELearningPlattformenApi)
+        {
+            list(
+                $client,
+                $config,
+                $header
+                ) = $this->initApiParameters();
+            $this->api_elearning = new ELearningPlattformenApi(
+                $client,
+                $config,
+                $header
+            );
+        }
+
+        try {
+            $error_message = new \Swagger\Client\Model\FehlermeldungApiDto();
+            $error_message->setFehlermeldung($message);
+            $response = $this->api_elearning->meldeElearningkursExterneAnlageFehlgeschlagenUsingPOST(
+                $this->settings->getPlatformId(),
+                $oid,
+                $error_message
+            );
+        } catch (Exception $e) {
+            $this->logger->error('Sending course creation failed message failed with message: ' . $e->getMessage());
+            throw new ilVedaConnectionException($e->getMessage());
+        }
+    }
+
+    /**
+     * @param string $oid
+     * @throws \ilVedaConnectionException
+     */
+    public function sendSibeCourseCreated(string $oid)
+    {
+        if(!$this->api_elearning instanceof ELearningPlattformenApi)
+        {
+            list(
+                $client,
+                $config,
+                $header
+                ) = $this->initApiParameters();
+            $this->api_elearning = new ELearningPlattformenApi(
+                $client,
+                $config,
+                $header
+            );
+        }
+
+        try {
+            $response = $this->api_elearning->meldeElearningkursExternExistierendUsingPOST(
+                $this->settings->getPlatformId(),
+                $oid
+            );
+        }
+        catch(ApiException $e) {
+            $this->logger->error('meldeElearningkursExternExistierendUsingPOST failed with message: ' . $e->getMessage());
+            $this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+            $this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+            $this->logger->warning($e->getResponseBody());
+
+            throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+        }
+        catch(Exception $e) {
+            $this->logger->warning('meldeElearningkursExternExistierendUsingPOST failed with message: ' . $e->getMessage());
+            throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+        }
+    }
+
+    /**
 	 * @param string $segment_id
 	 * @param string $participant_id
 	 * @param \DateTime|null $confirmed
@@ -516,6 +634,43 @@ class ilVedaConnector
         }
     }
 
+    public function getSibeCourses() : array
+    {
+        if(!$this->api_elearning instanceof ELearningPlattformenApi)
+        {
+            list(
+                $client,
+                $config,
+                $header
+                ) = $this->initApiParameters();
+            $this->api_elearning = new ELearningPlattformenApi(
+                $client,
+                $config,
+                $header
+            );
+        }
+        try {
+            $response = $this->api_elearning->getAktiveELearningKurseUsingGET(
+                $this->settings->getPlatformId()
+            );
+            return $response;
+        }
+        catch(ApiException $e) {
+
+            $this->logger->warning(\ilVedaConnectorSettings::HEADER_TOKEN . ': ' . $this->settings->getAuthenticationToken());
+            $this->logger->warning('getAktiveELearningKurseUsingGET failed with message: ' . $e->getMessage());
+            $this->logger->dump($e->getResponseHeaders(), \ilLogLevel::WARNING);
+            $this->logger->dump($e->getTraceAsString(), \ilLogLevel::WARNING);
+            $this->logger->warning($e->getResponseBody());
+
+            throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+        }
+        catch(Exception $e) {
+            $this->logger->warning('getAktiveELearningKurseUsingGET failed with message: ' . $e->getMessage());
+            throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
+        }
+    }
+
 	/**
 	 * @param string $training_course_id
 	 * @return Ausbildungszug[]
@@ -558,8 +713,6 @@ class ilVedaConnector
 			$this->logger->warning('getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET failed with message: ' . $e->getMessage());
 			throw new \ilVedaConnectionException($e->getMessage(), \ilVedaConnectionException::ERR_API);
 		}
-
-
 	}
 
 	/**

@@ -41,6 +41,10 @@ class ilVedaCourseImportResultTableGUI extends \ilTable2GUI
 			$this->lng->txt('title'),
 			'title'
 		);
+        $this->addColumn(
+            $this->lng->txt('type'),
+            'type'
+        );
 		$this->addColumn(
 			$this->plugin->txt('tbl_crs_result_created'),
 			'created'
@@ -74,6 +78,7 @@ class ilVedaCourseImportResultTableGUI extends \ilTable2GUI
 
 			$row['obj_id'] = $course->getObjId();
 			$row['title'] = \ilObject::_lookupTitle($course->getObjId());
+			$row['type'] = $course->getType();
 			$row['oid'] = $course->getOid();
 			$row['created'] = $course->getCreationStatus();
 			$row['pswitch'] = $course->getPermanentSwitchRole();
@@ -107,7 +112,13 @@ class ilVedaCourseImportResultTableGUI extends \ilTable2GUI
 			$this->tpl->setVariable('TXT_TITLE', \ilObject::_lookupTitle($obj_id));
 			$this->tpl->parseCurrentBlock();
 		}
-
+		$this->tpl->setVariable(
+		    'TXT_TYPE',
+            $row['type'] ==
+            ilVedaCourseStatus::TYPE_SIFA ?
+                $this->plugin->txt('type_sifa') :
+                $this->plugin->txt('type_sibe')
+        );
 		$this->tpl->setVariable('CREATED_IMG',
 			$row['created']  == \ilVedaCourseStatus::STATUS_SYNCHRONIZED ?
 				ilUtil::getImagePath('icon_ok.svg') :
@@ -128,9 +139,6 @@ class ilVedaCourseImportResultTableGUI extends \ilTable2GUI
 			$this->tpl->setVariable('TXT_PAVAILABLE', $this->plugin->txt('role_unavailable'));
 
 		}
-
-
-
 		$this->tpl->setVariable('OID', $row['oid']);
 	}
 }

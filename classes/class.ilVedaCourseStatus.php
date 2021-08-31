@@ -11,6 +11,9 @@ class ilVedaCourseStatus
 	public const STATUS_SYNCHRONIZED = 2;
 	public const STATUS_FAILED = 3;
 
+	public const TYPE_SIFA = 1;
+	public const TYPE_SIBE = 2;
+
 	public const ASSUMPTION_FAILED_SECONDS = 5400;
 
 	private const TABLE_NAME = 'cron_crnhk_vedaimp_crs';
@@ -61,8 +64,10 @@ class ilVedaCourseStatus
      */
 	private $modified = 0;
 
-
-
+    /**
+     * @var int
+     */
+	private $type = 0;
 
 	/**
 	 * ilVedaUserStatus constructor.
@@ -154,6 +159,23 @@ class ilVedaCourseStatus
 		return $this->oid;
 	}
 
+    /**
+     * @return int
+     */
+    public function getType() : int
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param int $type
+     */
+    public function setType(int $type) : void
+    {
+        $this->type = $type;
+    }
+
+
 	/**
 	 * @param int $role
 	 */
@@ -213,14 +235,15 @@ class ilVedaCourseStatus
 		}
 
 		$query = 'insert into ' . self::TABLE_NAME . ' ' .
-			'(oid, obj_id, switchp, switcht, status_created, modified) ' .
+			'(oid, obj_id, switchp, switcht, status_created, modified, type) ' .
 			'values ( '.
 			$this->db->quote($this->getOid(),'text') . ', '.
 			$this->db->quote($this->getObjId(),'integer') . ', '.
 			$this->db->quote($this->getPermanentSwitchRole(),'integer'). ', '.
 			$this->db->quote($this->getTemporarySwitchRole(),'integer'). ', '.
 			$this->db->quote($this->getCreationStatus(), 'integer') . ', ' .
-            $this->db->quote($this->getModified(), ilDBConstants::T_INTEGER) . ')';
+            $this->db->quote($this->getModified(), ilDBConstants::T_INTEGER) . ', ' .
+            $this->db->quote($this->getType(), ilDBConstants::T_INTEGER) . ')';
 		$this->db->manipulate($query);
 		$this->is_persistent = true;
 	}
@@ -236,7 +259,8 @@ class ilVedaCourseStatus
 			'switchp = ' . $this->db->quote($this->getPermanentSwitchRole(),'integer') . ', ' .
 			'switcht = ' . $this->db->quote($this->getTemporarySwitchRole(),'integer') . ', ' .
 			'status_created = ' . $this->db->quote($this->getCreationStatus(),'integer') . ', ' .
-            'modified = ' . $this->db->quote(time(), ilDBConstants::T_INTEGER) . ' ' .
+            'modified = ' . $this->db->quote(time(), ilDBConstants::T_INTEGER) . ', ' .
+            'type = ' . $this->db->quote($this->getType(), \ilDBConstants::T_INTEGER) . ' ' .
 			'where oid = ' . $this->db->quote($this->getOid(),'text');
 		$this->logger->debug($query);
 		$this->db->manipulate($query);
@@ -274,6 +298,7 @@ class ilVedaCourseStatus
 			$this->setCreationStatus((int) $row->status_created);
 			$this->setObjId((int) $row->obj_id);
 			$this->setModified((int) $row->modified);
+			$this->setType((int) $row->type);
 		}
 	}
 

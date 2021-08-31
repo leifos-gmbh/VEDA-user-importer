@@ -247,6 +247,12 @@ class AusbildungszugTeilnehmer implements ModelInterface, ArrayAccess
     {
         $invalidProperties = [];
 
+        if ($this->container['kurs_zugriff_ab'] === null) {
+            $invalidProperties[] = "'kurs_zugriff_ab' can't be null";
+        }
+        if ($this->container['kurs_zugriff_bis'] === null) {
+            $invalidProperties[] = "'kurs_zugriff_bis' can't be null";
+        }
         $allowedValues = $this->getMitgliedschaftsartAllowableValues();
         if (!is_null($this->container['mitgliedschaftsart']) && !in_array($this->container['mitgliedschaftsart'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
@@ -334,7 +340,7 @@ class AusbildungszugTeilnehmer implements ModelInterface, ArrayAccess
     /**
      * Sets kurs_zugriff_ab
      *
-     * @param \DateTime $kurs_zugriff_ab Das Tagesdatum, an dem er Kurszugriff beginnt.
+     * @param \DateTime $kurs_zugriff_ab Das Tagesdatum, an dem der Kurszugriff beginnt.
      *
      * @return $this
      */

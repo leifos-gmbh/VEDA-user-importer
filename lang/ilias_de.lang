@@ -27,6 +27,7 @@ tab_import#:#Import
 btn_import#:#Import starten
 import_selection#:#Auswahl zum Import
 import_selection_all#:#Alles importieren
+import_selection_none#:#Nicht importieren
 import_selection_selected#:#Nur ausgewählte Objekte importieren
 type_membership#:#Mitgliedschaften
 success_import#:#Die ausgewählten Objekte wurde importiert.
@@ -64,3 +65,7 @@ tbl_crs_result_pswitch#:#"Wechsler-Rolle"
 tbl_crs_result_tswitch#:#"Temporäre Wechsler-Rolle"
 role_available#:#Vorhanden
 role_unavailable#:#Nicht vorhanden
+section_import_sifa#:#"SiFa-Import"
+section_import_sibe#:#"SiBe-Import"
+type_sifa#:#"SiFa-Kurs"
+type_sibe#:#"SiBe-Kurs"

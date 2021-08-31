@@ -140,3 +140,18 @@ if (!$ilDB->tableColumnExists('cron_crnhk_vedaimp_crs', 'modified')) {
     );
 }
 ?>
+<#8>
+<?php
+if (!$ilDB->tableColumnExists('cron_crnhk_vedaimp_crs', 'type')) {
+    $ilDB->addTableColumn(
+        'cron_crnhk_vedaimp_crs',
+        'type',
+        [
+            "type" => ilDBConstants::T_INTEGER,
+            "notnull" => true,
+            "length" => 2,
+            "default" => 0
+        ]
+    );
+}
+?>
