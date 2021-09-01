@@ -78,6 +78,8 @@ class ilVedaMemberSibeImportAdapter
         $supervisors = $connector->readSibeCourseSupervisors($oid);
         $members = $connector->readSibeCourseMembers($oid);
 
+        $this->logger->dump(array_merge($tutors, $supervisors, $members), \ilLogLevel::DEBUG);
+
         $participants = $this->initParticipants($obj_id);
         $course = $this->initCourse($obj_id);
 
@@ -100,7 +102,7 @@ class ilVedaMemberSibeImportAdapter
             }
             $found = false;
             foreach ($members as $member) {
-                if (!\ilVedaUtils::compareOidsEqual($import_id, $member->getElearningbenutzeraccountId())) {
+                if (!\ilVedaUtils::compareOidsEqual($import_id, $member->getTeilnehmerId())) {
                     continue;
                 }
                 // same oid, check date
@@ -164,9 +166,11 @@ class ilVedaMemberSibeImportAdapter
     protected function addNewMembers(ilCourseParticipants $participants, ilObjCourse $course, array $members) : void
     {
         foreach ($members as $member) {
-            $user_id = $this->getUserIdForImportId($member->getElearningbenutzeraccountId());
+            $this->logger->debug('Validating ' . $member->getTeilnehmerId());
+            $user_id = $this->getUserIdForImportId($member->getTeilnehmerId());
+            $this->logger->debug('Found usr_id: ' . $user_id);
             if (!$user_id) {
-                $this->logger->warning('Cannot find user id for import_id: ' . $member->getElearningbenutzeraccountId());
+                $this->logger->warning('Cannot find user id for import_id: ' . $member->getTeilnehmerId());
                 continue;
             }
             if ($participants->isMember($user_id)) {
@@ -181,6 +185,8 @@ class ilVedaMemberSibeImportAdapter
                     $participants,
                     $course
                 );
+            } else {
+                $this->logger->info('Ignoring user with access: ' . $member->getKursZugriffAb()->format('Y-m-d') . ', ' . $member->getKursZugriffBis()->format('Y-m-d'));
             }
         }
     }
@@ -198,7 +204,7 @@ class ilVedaMemberSibeImportAdapter
         foreach ($combined_tutors as $tutor) {
             $user_id = $this->getUserIdForImportId($tutor->getElearningbenutzeraccountId());
             if (!$user_id) {
-                $this->logger->warning('Cannot find user id for import_id: ' . $tutors->getElearningbenutzeraccountId());
+                //$this->logger->warning('Cannot find user id for import_id: ' . $tutors->getElearningbenutzeraccountId());
                 continue;
             }
             if ($participants->isMember($user_id)) {

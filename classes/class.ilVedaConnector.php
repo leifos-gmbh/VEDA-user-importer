@@ -493,6 +493,7 @@ class ilVedaConnector
                 $this->settings->getPlatformId(),
                 $course_oid
             );
+
             /*
             $dozent = new \Swagger\Client\Model\Dozentenkurszuordnung();
             $dozent->setElearningbenutzeraccountId('3742cfba-afc5-40ed-914d-113b3be570e0');
@@ -500,7 +501,6 @@ class ilVedaConnector
             $dozent->setKursZugriffBis(new DateTime('2021-09-20'));
             $response = [$dozent];
             */
-
 
             return $response;
         } catch(ApiException $e) {
