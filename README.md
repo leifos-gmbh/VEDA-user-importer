@@ -3,10 +3,10 @@
 ILIAS cron job plugin to import users from VEDA (https://www.veda.net)
 
 **Minimum ILIAS Version:**
-5.4.4   
+6.2 
 
 **Maximum ILIAS Version:**
-5.4.99
+6.99
 
 **Supported Languages:**
 English
