@@ -19,6 +19,6 @@ German
     
 - Clone the plugin repository as follows:
      
-      git clone https://github.com/leifos-gmbh/VedaConnector.git
+      git clone -b 7 https://github.com/leifos-gmbh/VedaConnector.git
 
 - Install and Activate it in the ILIAS Administration - Plugins.
