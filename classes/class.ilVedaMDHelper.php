@@ -294,6 +294,7 @@ class ilVedaMDHelper
 				$fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSZUG],
 				\ilDBConstants::T_INTEGER) . ' ' .
 			'and value = ' . $this->db->quote($oid, \ilDBConstants::T_TEXT);
+        $this->logger->fatal($query);
 		$res = $this->db->query($query);
 
 		$ref_id = 0;
