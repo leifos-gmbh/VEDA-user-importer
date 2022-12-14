@@ -325,7 +325,8 @@ class ilVedaMDHelper
 		$query = 'select obj_id from adv_md_values_ltext ' . ' ' .
 			'where field_id = ' . $this->db->quote(
 				$fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSGANG],
-				\ilDBConstants::T_INTEGER) . ' ';
+				\ilDBConstants::T_INTEGER) . ' ' .
+            'and value != ' . $this->db->quote('', ilDBConstants::T_TEXT);
 		$res = $this->db->query($query);
 
 		$template_references = [];
@@ -370,7 +371,8 @@ class ilVedaMDHelper
 
 		$query = 'select value from adv_md_values_ltext ' .
 			'where field_id = ' . $this->db->quote($fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSGANGABSCHNITT], \ilDBConstants::T_INTEGER) . ' '.
-			'and obj_id = ' . $this->db->quote($obj_id , \ilDBConstants::T_INTEGER);
+			'and obj_id = ' . $this->db->quote($obj_id , \ilDBConstants::T_INTEGER) . ' ' .
+            'and value != ' . $this->db->quote('', ilDBConstants::T_TEXT);
 		$res = $this->db->query($query);
 		while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
 			return $row->value;
