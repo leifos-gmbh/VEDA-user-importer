@@ -28,5 +28,4 @@ err_val_sess_local_info#:#Die folgenden Ausbildungsgangabschnitte sind laut Ausb
 err_val_exc_remote_info#:#Für die folgenden ILIAS-Übungen konnten im Ausbildungsgang im VEDA Bildungsmanager keine Ausbildungsgangabschnitte für die hinterlegten Ausbildungsgangabschnitt-IDs gefunden werden, die zur Abbildung in ILIAS vorgesehen sind. Bitte überprüfen Sie, ob diese den Ausbildungsgangabschnitt-IDs in der Ausbildungsgangdefinition im VEDA Bildungsmanager entsprechen und dort zur Abbildung in ILIAS vorgesehen sind.
 err_val_exc_local_info#:#Die folgenden Ausbildungsgangabschnitte sind laut Ausbildungsgangdefinition zur Abbildung als Übung in ILIAS vorgesehen. Es konnten jedoch keine zugeordneten ILIAS-Übungen gefunden werden. Bitte ergänzen Sie die Ausbildungsgangabschnitt-IDs in den zugehörigen ILIAS-Übungen im Masterkurs.
 tbl_settings_section_sifa_sync#:#"SiFa Synchronisation" Settings
-tbl_settings_section_sibe_sync#:#"SiBa Synchronisation" Settings
-
+tbl_settings_section_sibe_sync#:#"SiBe Synchronisation" Settings

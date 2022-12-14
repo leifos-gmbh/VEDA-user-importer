@@ -140,7 +140,7 @@ class ilVedaMDHelper
 		$obj_id = \ilObject::_lookupObjId($target_id);
 		$fields = $this->claiming->getFields();
 
-		$query = 'insert into adv_md_values_text (obj_id, field_id, value, disabled) ' .
+		$query = 'insert into adv_md_values_ltext (obj_id, field_id, value, disabled) ' .
 			'values ( '.
 			$this->db->quote($obj_id, \ilDBConstants::T_INTEGER). ', '.
 			$this->db->quote($fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSZUGABSCHNITT], \ilDBConstants::T_TEXT). ', ' .
@@ -159,7 +159,7 @@ class ilVedaMDHelper
 		$obj_id = \ilObject::_lookupObjId($target_id);
 		$fields = $this->claiming->getFields();
 
-		$query = 'insert into adv_md_values_text (obj_id, field_id, value, disabled) ' .
+		$query = 'insert into adv_md_values_ltext (obj_id, field_id, value, disabled) ' .
 			'values ( '.
 			$this->db->quote($obj_id, \ilDBConstants::T_INTEGER). ', '.
 			$this->db->quote($fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSZUG], \ilDBConstants::T_TEXT). ', ' .
@@ -179,7 +179,7 @@ class ilVedaMDHelper
 	{
 		$obj_id = \ilObject::_lookupObjId($ref_id);
 		$fields = $this->claiming->getFields();
-		$query = 'delete from adv_md_values_text ' .
+		$query = 'delete from adv_md_values_ltext ' .
 			'where field_id = ' . $this->db->quote(
 				$fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSGANGABSCHNITT],
 				\ilDBConstants::T_INTEGER). ' ' .
@@ -194,7 +194,7 @@ class ilVedaMDHelper
 	{
 		$obj_id = \ilObject::_lookupObjId($ref_id);
 		$fields = $this->claiming->getFields();
-		$query = 'delete from adv_md_values_text ' .
+		$query = 'delete from adv_md_values_ltext ' .
 			'where field_id = ' . $this->db->quote(
 				$fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSGANG],
 				\ilDBConstants::T_INTEGER). ' ' .
@@ -210,7 +210,7 @@ class ilVedaMDHelper
 	{
 		$obj_id = \ilObject::_lookupObjId($ref_id);
 		$fields = $this->claiming->getFields();
-		$query = 'delete from adv_md_values_text ' .
+		$query = 'delete from adv_md_values_ltext ' .
 			'where field_id = ' . $this->db->quote(
 				$fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSZUG],
 				\ilDBConstants::T_INTEGER) . ' ' .
@@ -225,7 +225,7 @@ class ilVedaMDHelper
 	{
 		$obj_id = \ilObject::_lookupObjId($ref_id);
 		$fields = $this->claiming->getFields();
-		$query = 'delete from adv_md_values_text ' .
+		$query = 'delete from adv_md_values_ltext ' .
 			'where field_id = ' . $this->db->quote(
 				$fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSZUGABSCHNITT],
 				\ilDBConstants::T_INTEGER) . ' ' .
@@ -243,7 +243,7 @@ class ilVedaMDHelper
 		$obj_id = \ilObject::_lookupObjId($ref_id);
 		$fields = $this->claiming->getFields();
 
-		$query = 'select value from adv_md_values_text ' .
+		$query = 'select value from adv_md_values_ltext ' .
 			'where field_id = ' . $this->db->quote(
 				$fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSGANG],
 				\ilDBConstants::T_INTEGER) . ' '.
@@ -263,7 +263,7 @@ class ilVedaMDHelper
 	{
 		$fields = $this->claiming->getFields();
 
-		$query = 'select value from adv_md_values_text ' .
+		$query = 'select value from adv_md_values_ltext ' .
 			'where field_id = ' . $this->db->quote(
 				$fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSZUG],
 				\ilDBConstants::T_INTEGER);
@@ -271,8 +271,9 @@ class ilVedaMDHelper
 
 		$oids = [];
 		while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
-
-			$oids[] = $row->value;
+            if (!in_array($row->value, $oids)) {
+                $oids[] = $row->value;
+            }
 		}
 		return $oids;
 	}
@@ -287,7 +288,7 @@ class ilVedaMDHelper
 	{
 		$fields = $this->claiming->getFields();
 
-		$query = 'select obj_id from adv_md_values_text ' .
+		$query = 'select obj_id from adv_md_values_ltext ' .
 			'where field_id = ' . $this->db->quote(
 				$fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSZUG],
 				\ilDBConstants::T_INTEGER) . ' ' .
@@ -296,18 +297,14 @@ class ilVedaMDHelper
 
 		$ref_id = 0;
 		while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
-
 			// find ref_id
 			$refs = \ilObject::_getAllReferences($row->obj_id);
 			$ref = end($refs);
-
 			$object = \ilObjectFactory::getInstanceByRefId($ref, false);
 			if(!$object instanceof \ilObjCourse) {
-
 				$this->logger->error('Found invalid "Ausbildungszug" with obj_id: ' . $row->obj_id);
 				continue;
 			}
-
 			return $object->getRefId();
 		}
 		return 0;
@@ -324,14 +321,20 @@ class ilVedaMDHelper
 		$tree = $DIC->repositoryTree();
 		$fields = $this->claiming->getFields();
 
-		$query = 'select obj_id from adv_md_values_text ' . ' ' .
+		$query = 'select obj_id from adv_md_values_ltext ' . ' ' .
 			'where field_id = ' . $this->db->quote(
 				$fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSGANG],
 				\ilDBConstants::T_INTEGER) . ' ';
 		$res = $this->db->query($query);
 
 		$template_references = [];
+        $obj_ids = [];
 		while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
+
+            if (in_array($row->obj_id, $obj_ids)) {
+                continue;
+            }
+            $obj_ids[] = $row->obj_id;
 
 			// find ref_id
 			$refs = \ilObject::_getAllReferences($row->obj_id);
@@ -343,12 +346,10 @@ class ilVedaMDHelper
 				$this->logger->error('Found invalid "Ausbildungsgang" with obj_id: ' . $row->obj_id);
 				continue;
 			}
-
 			if($tree->isDeleted($object->getRefId())) {
 				$this->logger->notice('Ignoring deleted course with obj_id: ' . $row->obj_id);
 				continue;
 			}
-
 			$template_references[] = $object->getRefId();
 		}
 
@@ -366,7 +367,7 @@ class ilVedaMDHelper
 
 		$fields = $this->claiming->getFields();
 
-		$query = 'select value from adv_md_values_text ' .
+		$query = 'select value from adv_md_values_ltext ' .
 			'where field_id = ' . $this->db->quote($fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSGANGABSCHNITT], \ilDBConstants::T_INTEGER) . ' '.
 			'and obj_id = ' . $this->db->quote($obj_id , \ilDBConstants::T_INTEGER);
 		$res = $this->db->query($query);
@@ -386,7 +387,7 @@ class ilVedaMDHelper
 		$obj_id = \ilObject::_lookupObjId($ref_id);
 		$fields = $this->claiming->getFields();
 
-		$query = 'select value from adv_md_values_text ' .
+		$query = 'select value from adv_md_values_ltext ' .
 			'where field_id = ' . $this->db->quote(
 				$fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSZUGABSCHNITT],
 				\ilDBConstants::T_INTEGER) . ' '.
