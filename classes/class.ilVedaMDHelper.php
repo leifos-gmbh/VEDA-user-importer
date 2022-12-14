@@ -249,6 +249,7 @@ class ilVedaMDHelper
 				\ilDBConstants::T_INTEGER) . ' '.
 			'and obj_id = ' . $this->db->quote($obj_id , \ilDBConstants::T_INTEGER);
 		$res = $this->db->query($query);
+        $this->logger->dump($query);
 		while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
 			return $row->value;
 		}
