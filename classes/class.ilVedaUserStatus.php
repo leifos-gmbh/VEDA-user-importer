@@ -80,7 +80,8 @@ class ilVedaUserStatus
 		$logger = $DIC->logger()->vedaimp();
 
 		$query = 'select oid from ' . self::TABLE_NAME . ' ' .
-			'where status_created = ' . $db->quote(self::STATUS_PENDING, 'integer') . ' ' .
+			'where ( status_created = ' . $db->quote(self::STATUS_PENDING, 'integer') . ' ' .
+            'or status_created = ' . $db->quote(self::STATUS_NONE, ilDBConstants::T_INTEGER) . ' ) ' .
 			'and import_failure = ' . $db->quote(0 , 'integer');
 		$res = $db->query($query);
 		$pending_participants = [];
