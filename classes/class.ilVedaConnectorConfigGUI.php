@@ -776,7 +776,7 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
     protected function migrateUser()
     {
         $oid = $this->http->request()->getQueryParams()['oid'] ?? '';
-        $login = $this->http->request()->getQueryParams()['login'] ?? '';
+        $login = urldecode($this->http->request()->getQueryParams()['login'] ?? '');
         if ($oid === '' || $login === '') {
             ilUtil::sendFailure($this->lng->txt('err_check_input'), true);
             $this->ctrl->redirect($this, 'importResultUser');

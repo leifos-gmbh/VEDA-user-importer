@@ -121,7 +121,7 @@ class ilVedaUserImportResultTableGUI extends \ilTable2GUI
             $this->ctrl->setParameter(
                 $this->getParentObject(),
                 'login',
-                $row['login']
+                urlencode($row['login'])
             );
             $list->addItem(
                 ilVedaConnectorPlugin::getInstance()->txt('migrate_user'),
