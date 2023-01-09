@@ -267,8 +267,10 @@ class ilVedaMDHelper
 		$query = 'select value from adv_md_values_ltext ' .
 			'where field_id = ' . $this->db->quote(
 				$fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSZUG],
-				\ilDBConstants::T_INTEGER);
-		$res = $this->db->query($query);
+				\ilDBConstants::T_INTEGER) . ' ' .
+            'and value != ' . $this->db->quote('', ilDBConstants::T_TEXT);
+
+        $res = $this->db->query($query);
 
 		$oids = [];
 		while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
