@@ -148,6 +148,15 @@ class ilVedaMDHelper
 			$this->db->quote(1, \ilDBConstants::T_INTEGER) .
 			')';
 		$this->db->manipulate($query);
+        $query = 'insert into adv_md_values_ltext (obj_id, field_id, value_index, value, disabled) ' .
+            'values ( '.
+            $this->db->quote($obj_id, \ilDBConstants::T_INTEGER). ', '.
+            $this->db->quote($fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSZUGABSCHNITT], \ilDBConstants::T_TEXT). ', ' .
+            $this->db->quote('de', ilDBConstants::T_TEXT) . ', ' .
+            $this->db->quote($tc_oid, \ilDBConstants::T_TEXT) . ', '.
+            $this->db->quote(1, \ilDBConstants::T_INTEGER) .
+            ')';
+        $this->db->manipulate($query);
 	}
 
 	/**
@@ -166,10 +175,20 @@ class ilVedaMDHelper
 			$this->db->quote($tc_oid, \ilDBConstants::T_TEXT) . ', '.
 			$this->db->quote(1, \ilDBConstants::T_INTEGER) .
 			')';
-
-		$this->logger->debug($query);
-
+        $this->logger->debug($query);
 		$this->db->manipulate($query);
+        $query = 'insert into adv_md_values_ltext (obj_id, field_id, value_index, value, disabled) ' .
+            'values ( '.
+            $this->db->quote($obj_id, \ilDBConstants::T_INTEGER). ', '.
+            $this->db->quote($fields[\ilVedaMDClaimingPlugin::FIELD_AUSBILDUNGSZUG], \ilDBConstants::T_TEXT). ', ' .
+            $this->db->quote('de', ilDBConstants::T_TEXT) . ', ' .
+            $this->db->quote($tc_oid, \ilDBConstants::T_TEXT) . ', '.
+            $this->db->quote(1, \ilDBConstants::T_INTEGER) .
+            ')';
+
+        $this->logger->debug($query);
+
+        $this->db->manipulate($query);
 	}
 
 	/**
@@ -251,7 +270,9 @@ class ilVedaMDHelper
 		$res = $this->db->query($query);
         $this->logger->dump($query);
 		while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
-			return $row->value;
+            if ($row->value) {
+                return $row->value;
+            }
 		}
 		return '';
 	}
@@ -402,11 +423,10 @@ class ilVedaMDHelper
 				\ilDBConstants::T_INTEGER);
 		$res = $this->db->query($query);
 		while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
-			return $row->value;
+            if ($row->value) {
+                return $row->value;
+            }
 		}
 		return '';
-
 	}
-
-
 }
