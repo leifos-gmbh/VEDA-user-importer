@@ -69,3 +69,4 @@ section_import_sifa#:#"SiFa-Import"
 section_import_sibe#:#"SiBe-Import"
 type_sifa#:#"SiFa-Kurs"
 type_sibe#:#"SiBe-Kurs"
+migrate_user#:#vorhandenes Benutzerkonto migrieren

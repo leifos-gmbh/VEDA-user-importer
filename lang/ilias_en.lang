@@ -29,3 +29,4 @@ err_val_exc_remote_info#:#Für die folgenden ILIAS-Übungen konnten im Ausbildun
 err_val_exc_local_info#:#Die folgenden Ausbildungsgangabschnitte sind laut Ausbildungsgangdefinition zur Abbildung als Übung in ILIAS vorgesehen. Es konnten jedoch keine zugeordneten ILIAS-Übungen gefunden werden. Bitte ergänzen Sie die Ausbildungsgangabschnitt-IDs in den zugehörigen ILIAS-Übungen im Masterkurs.
 tbl_settings_section_sifa_sync#:#"SiFa Synchronisation" Settings
 tbl_settings_section_sibe_sync#:#"SiBe Synchronisation" Settings
+migrate_user#:#Migrate existing user account

@@ -59,6 +59,11 @@ class ilVedaUserImportResultTableGUI extends \ilTable2GUI
 			$this->plugin->txt('tbl_usr_result_import_failure'),
 			'failure'
 		);
+        $this->addColumn(
+            $this->lng->txt('actions'),
+            ''
+        );
+
 	}
 
 	/**
@@ -67,9 +72,7 @@ class ilVedaUserImportResultTableGUI extends \ilTable2GUI
 	 */
 	public function parse()
 	{
-
 		$users = \ilVedaUserStatus::getAllUsers();
-
 		$rows = [];
 		foreach($users as $user) {
 
@@ -82,7 +85,6 @@ class ilVedaUserImportResultTableGUI extends \ilTable2GUI
 
 			$rows[] = $row;
 		}
-
 		$this->setData($rows);
 	}
 
@@ -107,9 +109,29 @@ class ilVedaUserImportResultTableGUI extends \ilTable2GUI
 
 		if($row['failure']) {
 			$this->tpl->setVariable('FAILURE_TXT', $this->plugin->txt('err_import_usr_duplicate'));
+            $list = new ilAdvancedSelectionListGUI();
+            $list->setId('veda_oid_' . $row['login'] . '_' . $row['oid']);
+            $list->setListTitle($this->lng->txt('actions'));
+
+            $this->ctrl->setParameter(
+                $this->getParentObject(),
+                'oid',
+                $row['oid']
+            );
+            $this->ctrl->setParameter(
+                $this->getParentObject(),
+                'login',
+                $row['login']
+            );
+            $list->addItem(
+                ilViteroPlugin::getInstance()->txt('migrate_user'),
+                '',
+                $this->ctrl->getLinkTarget(
+                    $this->getParentObject(),
+                    'migrateUser'
+                )
+            );
 		}
-
-
 	}
 
 }
