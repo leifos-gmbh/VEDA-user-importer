@@ -1,6 +1,25 @@
 <?php
 
 /**
+ * This file is part of ILIAS, a powerful learning management system
+ * published by ILIAS open source e-Learning e.V.
+ *
+ * ILIAS is licensed with the GPL-3.0,
+ * see https://www.gnu.org/licenses/gpl-3.0.en.html
+ * You should have received a copy of said license along with the
+ * source code, too.
+ *
+ * If this is not the case or you just want to try ILIAS, you'll find
+ * us at:
+ * https://www.ilias.de
+ * https://github.com/ILIAS-eLearning
+ *
+ *********************************************************************/
+
+use ILIAS\Refinery\Factory as RefineryFactory;
+use ILIAS\HTTP\Services as HttpServices;
+
+/**
  * @author Stefan Meyer <smeyer.ilias@gmx.de>
  * @ilCtrl_Calls ilVedaConnectorConfigGUI: ilPropertyFormGUI
  */
@@ -36,7 +55,10 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 	private $ctrl;
 
 
-	/**
+    protected RefineryFactory $refinery;
+    protected HttpServices $http;
+
+    /**
 	 * \ilVedaConnectorConfigGUI constructor.
 	 */
 	public function __construct()
@@ -47,6 +69,9 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		$this->toolbar = $DIC->toolbar();
 		$this->lng = $DIC->language();
 		$this->ctrl = $DIC->ctrl();
+
+        $this->http = $DIC->http();
+        $this->refinery = $DIC->refinery();
 	}
 
 	/**
@@ -748,6 +773,42 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 		}
 		return $select;
 	}
+
+    protected function migrateUser()
+    {
+        $oid = $this->http->request()->getQueryParams()['oid'] ?? '';
+        $login = $this->http->request()->getQueryParams()['login'] ?? '';
+        if ($oid === '' || $login === '') {
+            ilUtil::sendFailure($this->lng->txt('err_check_input'), true);
+            $this->ctrl->redirect($this, 'importResultUser');
+        }
+        $obj_id_from_oid = ilObjUser::_getImportedUserId($oid);
+        $type_from_oid = ilObject::_lookupType($obj_id_from_oid);
+        $obj_id_from_login = ilObjUser::_loginExists($login);
+        $import_id_from_login = ilObject::_lookupImportId($obj_id_from_login);
+
+        if ($import_id_from_login != '') {
+            $this->logger->warning('Migration failed: user already imported');
+            ilUtil::sendFailure($this->lng->txt('err_check_input'), true);
+            $this->ctrl->redirect($this, 'importResultUser');
+        }
+        if ($obj_id_from_login) {
+            $this->logger->warning('Migration failed: user does not exist');
+            ilUtil::sendFailure($this->lng->txt('err_check_input'), true);
+            $this->ctrl->redirect($this, 'importResultUser');
+        }
+        if ($obj_id_from_oid > 0) {
+            $this->logger->warning('Migration failed: user already imported');
+            ilUtil::sendFailure($this->lng->txt('err_check_input'), true);
+            $this->ctrl->redirect($this, 'importResultUser');
+        }
+        ilObjUser::_writeImportId($obj_id_from_login, $oid);
+        $status = new ilVedaUserStatus($oid);
+        $status->setImportFailure(false);
+        $status->save();
+        ilUtil::sendSuccess(ilVedaConnectorPlugin::getInstance()->txt('migrated_account'), true);
+        $this->ctrl->redirect($this, 'importResultUser');
+    }
 
 
 }

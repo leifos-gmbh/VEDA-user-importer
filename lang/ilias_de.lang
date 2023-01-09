@@ -70,3 +70,4 @@ section_import_sibe#:#"SiBe-Import"
 type_sifa#:#"SiFa-Kurs"
 type_sibe#:#"SiBe-Kurs"
 migrate_user#:#vorhandenes Benutzerkonto migrieren
+migrated_account#:#Das Benutzerkonto wurde migriert und wird beim nächsten Import aktualisiert.

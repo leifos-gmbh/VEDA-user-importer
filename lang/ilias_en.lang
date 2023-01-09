@@ -30,3 +30,4 @@ err_val_exc_local_info#:#Die folgenden Ausbildungsgangabschnitte sind laut Ausbi
 tbl_settings_section_sifa_sync#:#"SiFa Synchronisation" Settings
 tbl_settings_section_sibe_sync#:#"SiBe Synchronisation" Settings
 migrate_user#:#Migrate existing user account
+migrated_account#:#The account has been migrated. The user data will be refreshed after the next import.
