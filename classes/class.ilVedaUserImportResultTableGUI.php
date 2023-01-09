@@ -131,6 +131,7 @@ class ilVedaUserImportResultTableGUI extends \ilTable2GUI
                     'migrateUser'
                 )
             );
+            $this->tpl->setVariable('SELECTION', $list->getHTML());
 		}
 	}
 
