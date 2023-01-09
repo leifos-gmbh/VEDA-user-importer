@@ -17,7 +17,6 @@
  *********************************************************************/
 
 use ILIAS\Refinery\Factory as RefineryFactory;
-use ILIAS\HTTP\Services as HttpServices;
 
 /**
  * @author Stefan Meyer <smeyer.ilias@gmx.de>
@@ -56,7 +55,7 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 
 
     protected RefineryFactory $refinery;
-    protected HttpServices $http;
+    protected \ILIAS\DI\HTTPServices $http;
 
     /**
 	 * \ilVedaConnectorConfigGUI constructor.
