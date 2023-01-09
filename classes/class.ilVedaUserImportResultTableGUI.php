@@ -124,7 +124,7 @@ class ilVedaUserImportResultTableGUI extends \ilTable2GUI
                 $row['login']
             );
             $list->addItem(
-                ilViteroPlugin::getInstance()->txt('migrate_user'),
+                ilVedaConnectorPlugin::getInstance()->txt('migrate_user'),
                 '',
                 $this->ctrl->getLinkTarget(
                     $this->getParentObject(),
