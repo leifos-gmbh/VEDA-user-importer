@@ -791,7 +791,7 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
             ilUtil::sendFailure($this->lng->txt('err_check_input'), true);
             $this->ctrl->redirect($this, 'importResultUser');
         }
-        if ($obj_id_from_login) {
+        if (!$obj_id_from_login) {
             $this->logger->warning('Migration failed: user does not exist');
             ilUtil::sendFailure($this->lng->txt('err_check_input'), true);
             $this->ctrl->redirect($this, 'importResultUser');
