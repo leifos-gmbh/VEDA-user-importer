@@ -67,13 +67,12 @@ class ilVedaMemberImportAdapter
 			return false;
 		}
 		$usr_oid = \ilObjUser::_lookupImportId($usr_id);
-
+        if(!$usr_oid) {
+            $this->logger->debug('Not imported user.');
+            return false;
+        }
 		// additional check in user status table
 		$us = new \ilVedaUserStatus($usr_oid);
-		if(!$usr_oid) {
-			$this->logger->debug('Not imported user.');
-			return false;
-		}
 		if($us->getCreationStatus() != \ilVedaUserStatus::STATUS_SYNCHRONIZED) {
 			$this->logger->info('Ignoring not synchronized user account: ' . $usr_oid);
 			return false;
