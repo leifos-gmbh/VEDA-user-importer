@@ -6,63 +6,62 @@ class ilVedaImporter
     public const IMPORT_TYPE_SIFA = 1;
     public const IMPORT_TYPE_SIBE = 2;
 
-	public const IMPORT_USR = 'usr';
-	public const IMPORT_CRS = 'crs';
-	public const IMPORT_MEM = 'mem';
+    public const IMPORT_USR = 'usr';
+    public const IMPORT_CRS = 'crs';
+    public const IMPORT_MEM = 'mem';
 
-	public const IMPORT_NONE = 0;
-	public const IMPORT_ALL = 1;
-	public const IMPORT_SELECTED = 2;
+    public const IMPORT_NONE = 0;
+    public const IMPORT_ALL = 1;
+    public const IMPORT_SELECTED = 2;
 
-	/**
-	 * @var \ilVedaImporter
-	 */
-	private static $instance = null;
+    /**
+     * @var \ilVedaImporter
+     */
+    private static $instance = null;
 
-	/**
-	 * @var \ilLogger|null
-	 */
-	private $logger = null;
+    /**
+     * @var \ilLogger|null
+     */
+    private $logger = null;
 
-	/**
-	 * @var \ilVedaConnectorSettings|null
-	 */
-	private $settings = null;
+    /**
+     * @var \ilVedaConnectorSettings|null
+     */
+    private $settings = null;
 
+    private $plugin = null;
 
-	private $plugin = null;
+    /**
+     * @var string[]
+     */
+    private $import_modes = [];
 
-	/**
-	 * @var string[]
-	 */
-	private $import_modes = [];
+    private $import_type = self::IMPORT_TYPE_UNDEFINED;
 
-	private $import_type = self::IMPORT_TYPE_UNDEFINED;
+    /**
+     * ilVedaImporter constructor.
+     */
+    public function __construct()
+    {
+        global $DIC;
 
-	/**
-	 * ilVedaImporter constructor.
-	 */
-	public function __construct()
-	{
-		global $DIC;
+        $this->logger = $DIC->logger()->vedaimp();
+        $this->settings = \ilVedaConnectorSettings::getInstance();
+        $this->plugin = \ilVedaConnectorPlugin::getInstance();
+    }
 
-		$this->logger = $DIC->logger()->vedaimp();
-		$this->settings = \ilVedaConnectorSettings::getInstance();
-		$this->plugin = \ilVedaConnectorPlugin::getInstance();
-	}
+    /**
+     * @return \ilVedaImporter
+     */
+    public static function getInstance() : \ilVedaImporter
+    {
+        if (!self::$instance instanceof \ilVedaImporter) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
 
-	/**
-	 * @return \ilVedaImporter
-	 */
-	public static function getInstance() : \ilVedaImporter
-	{
-		if(!self::$instance instanceof \ilVedaImporter) {
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
-
-	public function setImportType(int $type) : void
+    public function setImportType(int $type) : void
     {
         $this->import_type = $type;
     }
@@ -72,153 +71,171 @@ class ilVedaImporter
         return $this->import_type;
     }
 
-	/**
-	 * @param bool $all
-	 * @param array $types
-	 */
-	public function setImportMode(bool $all, array $types = null)
-	{
-		if($all) {
-			$this->import_modes = [
-				self::IMPORT_USR,
-				self::IMPORT_CRS,
-				self::IMPORT_MEM,
-			];
-		}
-		elseif(is_array($types)) {
-			$this->import_modes = $types;
-		}
-	}
+    /**
+     * @param bool  $all
+     * @param array $types
+     */
+    public function setImportMode(bool $all, array $types = null)
+    {
+        if ($all) {
+            $this->import_modes = [
+                self::IMPORT_USR,
+                self::IMPORT_CRS,
+                self::IMPORT_MEM,
+            ];
+        } elseif (is_array($types)) {
+            $this->import_modes = $types;
+        }
+    }
 
-	/**
-	 * @param string $mode
-	 * @return bool
-	 */
-	protected function isImportModeEnabled(string $mode)
-	{
-		return in_array($mode, $this->import_modes);
-	}
+    /**
+     * @param string $mode
+     * @return bool
+     */
+    protected function isImportModeEnabled(string $mode)
+    {
+        return in_array($mode, $this->import_modes);
+    }
 
-	/**
-	 * Import selected types
-	 *
-	 * @throws \ilVedaImporterLockedException
-	 * @throws \ilVedaConnectionException
-	 */
-	public function import()
-	{
-		if($this->settings->isLocked()) {
-			throw new \ilVedaImporterLockedException(
-				$this->plugin->txt('error_import_locked')
-			);
-		}
+    /**
+     * Import selected types
+     * @throws \ilVedaImporterLockedException
+     * @throws \ilVedaConnectionException
+     */
+    public function import()
+    {
+        if ($this->settings->isLocked()) {
+            throw new \ilVedaImporterLockedException(
+                $this->plugin->txt('error_import_locked')
+            );
+        }
 
-		$this->logger->info('Settings import lock');
-		$this->settings->enableLock(true);
-		$this->settings->save();
+        $this->logger->info('Settings import lock');
+        $this->settings->enableLock(true);
+        $this->settings->save();
 
-		try {
-		    if ($this->getImportType() == self::IMPORT_TYPE_SIFA) {
+        try {
+            if (
+                ($this->getImportType() === self::IMPORT_TYPE_UNDEFINED && $this->settings->isSifaActive()) ||
+                $this->getImportType() === self::IMPORT_TYPE_SIFA
+            ) {
                 $this->ensureClaimingPluginConfigured();
             }
-			if($this->isImportModeEnabled(self::IMPORT_USR)) {
-				$this->importUsers();
-			}
-			if($this->isImportModeEnabled(self::IMPORT_CRS)) {
-				$this->importCourses();
-			}
-			if($this->isImportModeEnabled(self::IMPORT_MEM)) {
-				$this->importMembers();
-			}
-		}
-		catch (ilVedaConnectionException $e) {
-			throw $e;
-		}
-
-		// no error release lock
-		$this->logger->info('Releasing import lock');
-		$this->settings->enableLock(false);
-		$this->settings->save();
-	}
-
-	/**
-	 *
-	 * @throws \ilVedaConnectionException
-	 */
-	protected function importUsers()
-	{
-		try {
-			$connector = \ilVedaConnector::getInstance();
-			$participants = $connector->getParticipants();
-			$this->logger->dump($participants, \ilLogLevel::DEBUG);
-
-			\ilVedaUserStatus::deleteDeprecated($participants);
-
-			$importer = new \ilVedaUserImportAdapter($participants);
-			$importer->import();
-
-		}
-		catch (ilVedaConnectionException $e) {
-			throw $e;
-		}
-		catch (ilVedaUserImporterException $e) {
+            if ($this->isImportModeEnabled(self::IMPORT_USR)) {
+                $this->importUsers();
+            }
+            if ($this->isImportModeEnabled(self::IMPORT_CRS)) {
+                $this->importCourses();
+            }
+            if ($this->isImportModeEnabled(self::IMPORT_MEM)) {
+                $this->importMembers();
+            }
+        } catch (ilVedaConnectionException $e) {
             throw $e;
         }
-	}
 
-	/**
-	 * @return bool
-	 */
-	protected function importCourses()
-	{
-		try {
-		    if ($this->getImportType() == self::IMPORT_TYPE_SIBE) {
+        // no error release lock
+        $this->logger->info('Releasing import lock');
+        $this->settings->enableLock(false);
+        $this->settings->save();
+    }
+
+    /**
+     * @throws \ilVedaConnectionException
+     */
+    protected function importUsers()
+    {
+        try {
+            $connector = \ilVedaConnector::getInstance();
+            $participants = $connector->getParticipants();
+            $this->logger->dump($participants, \ilLogLevel::DEBUG);
+
+            \ilVedaUserStatus::deleteDeprecated($participants);
+
+            $importer = new \ilVedaUserImportAdapter($participants);
+            $importer->import();
+
+        } catch (ilVedaConnectionException $e) {
+            throw $e;
+        } catch (ilVedaUserImporterException $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    protected function importCourses()
+    {
+        try {
+            if (
+                $this->getImportType() === self::IMPORT_TYPE_SIBE ||
+                (
+                    $this->getImportType() === self::IMPORT_TYPE_UNDEFINED && $this->settings->isSibeActive()
+                )
+            ) {
                 $importer = new \ilVedaCourseSibeImportAdapter();
-            } else {
-                $importer = new \ilVedaCourseImportAdapter();
+                $importer->import();
             }
-			$importer->import();
-		}
-		catch(\ilVedaConnectionException $e) {
-			throw $e;
-		}
-		catch(\ilVedaCourseImporterException $e) {
-			throw $e;
-		}
-		return true;
-	}
+            if (
+                $this->getImportType() === self::IMPORT_TYPE_SIFA ||
+                (
+                    $this->getImportType() === self::IMPORT_TYPE_UNDEFINED && $this->settings->isSifaActive()
+                )
+            ) {
+                $importer = new ilVedaCourseImportAdapter();
+                $importer->import();
+            }
+        } catch (\ilVedaConnectionException $e) {
+            throw $e;
+        } catch (\ilVedaCourseImporterException $e) {
+            throw $e;
+        }
+        return true;
+    }
 
+    /**
+     * @throws \ilVedaClaimingMissingException
+     */
+    protected function ensureClaimingPluginConfigured()
+    {
+        if (!$this->plugin->isClaimingPluginAvailable()) {
+            throw new \ilVedaClaimingMissingException('', \ilVedaClaimingMissingException::ERR_MISSING);
+        }
+        if (!$this->plugin->isUDFClaimingPluginAvailable()) {
+            throw new \ilVedaClaimingMissingException('', \ilVedaClaimingMissingException::ERR_MISSING_UDF);
+        }
+    }
 
-	/**
-	 * @throws \ilVedaClaimingMissingException
-	 */
-	protected function ensureClaimingPluginConfigured()
-	{
-		if(!$this->plugin->isClaimingPluginAvailable()) {
-			throw new \ilVedaClaimingMissingException('', \ilVedaClaimingMissingException::ERR_MISSING);
-		}
-		if(!$this->plugin->isUDFClaimingPluginAvailable()) {
-			throw new \ilVedaClaimingMissingException('', \ilVedaClaimingMissingException::ERR_MISSING_UDF);
-		}
-	}
-
-	/**
-	 * Import membership assignments
-	 */
-	protected function importMembers()
-	{
-		try {
-		    if ($this->getImportType() == self::IMPORT_TYPE_SIFA) {
+    /**
+     * Import membership assignments
+     */
+    protected function importMembers()
+    {
+        try {
+            if (
+                $this->getImportType() === self::IMPORT_TYPE_SIFA ||
+                (
+                    $this->getImportType() === self::IMPORT_TYPE_UNDEFINED && $this->settings->isSifaActive()
+                )
+            ) {
                 $importer = new ilVedaMemberImportAdapter();
-            } else {
-		        $importer = new \ilVedaMemberSibeImportAdapter();
+                $importer->import();
             }
-			$importer->import();
-		}
-		catch(\ilVedaConnectionException $e) {
-			throw $e;
-		}
-	}
+            if (
+                $this->getImportType() === self::IMPORT_TYPE_SIBE ||
+                (
+                    $this->getImportType() === self::IMPORT_TYPE_UNDEFINED && $this->settings->isSibeActive()
+                )
+            ) {
+                $importer = new ilVedaMemberSibeImportAdapter();
+                $importer->import();
+            }
+        } catch (\ilVedaConnectionException $e) {
+            throw $e;
+        }
+    }
+
     public function handleCloningFailed()
     {
         $failed = \ilVedaCourseStatus::getProbablyFailed();
@@ -248,6 +265,5 @@ class ilVedaImporter
             $status->save();
         }
     }
-
 
 }
