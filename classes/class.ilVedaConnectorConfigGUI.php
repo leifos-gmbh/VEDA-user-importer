@@ -326,12 +326,12 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
                 $settings->setSibeParticipantRole($form->getInput('sibe_participant_role'));
 				$settings->enableLock($form->getInput('lock'));
 
-				$category_ref_ids = $form->getInput('sifa_crs_import');
-				$settings->setSifaImportDirectory((int) end($category_ref_ids));
+                $category_ref_ids = $form->getInput('sifa_crs_import');
+                $settings->setSifaImportDirectory((int) end($category_ref_ids));
                 $category_ref_ids = $form->getInput('sibe_crs_import');
                 $settings->setSibeImportDirectory((int) end($category_ref_ids));
-				$settings->setPermanentSwitchRole($form->getInput('switch_permanent'));
-				$settings->setTemporarySwitchRole($form->getInput('switch_temp'));
+                $settings->setPermanentSwitchRole((int) $form->getInput('switch_permanent'));
+                $settings->setTemporarySwitchRole((int) $form->getInput('switch_temp'));
 
 				$settings->setSibeActive($form->getInput('sibe_active'));
                 $settings->setSiFaActive($form->getInput('sifa_active'));
