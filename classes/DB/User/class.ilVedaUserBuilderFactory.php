@@ -13,7 +13,7 @@ class ilVedaUserBuilderFactory implements ilVedaUserBuilderFactoryInterface
         $this->veda_logger = $veda_logger;
     }
 
-    public function buildUser(): ilVedaUserBuilderInterface
+    public function buildUser() : ilVedaUserBuilderInterface
     {
         return new ilVedaUserBuilder($this->usr_repo, $this->veda_logger);
     }

@@ -14,7 +14,7 @@ class ilVedaMailSegmentRepository implements ilVedaMailSegmentRepositoryInterfac
         $this->veda_logger = $veda_logger;
     }
 
-    public function lookupMailSegments(): ilVedaMailSegmentCollection
+    public function lookupMailSegments() : ilVedaMailSegmentCollection
     {
         $this->veda_logger->debug('Looking up mail segments.');
 
@@ -32,7 +32,7 @@ class ilVedaMailSegmentRepository implements ilVedaMailSegmentRepositoryInterfac
         return new ilVedaMailSegmentCollection($mail_segments);
     }
 
-    public function addMailSegment(ilVedaMailSegmentInterface $mail_segment): void
+    public function addMailSegment(ilVedaMailSegmentInterface $mail_segment) : void
     {
         $id = $this->il_db->nextId(self::TABLE_NAME);
         $date_time_immutable = new DateTimeImmutable('now', new DateTimeZone('Utc'));
@@ -57,7 +57,7 @@ class ilVedaMailSegmentRepository implements ilVedaMailSegmentRepositoryInterfac
         $this->il_db->insert(self::TABLE_NAME, $values);
     }
 
-    public function deleteMailSegment(ilVedaMailSegmentInterface $mail_segment): void
+    public function deleteMailSegment(ilVedaMailSegmentInterface $mail_segment) : void
     {
         $this->veda_logger->debug('Deleting mail segment.');
         $query = 'DELETE FROM ' . self::TABLE_NAME . ' WHERE '
@@ -66,7 +66,7 @@ class ilVedaMailSegmentRepository implements ilVedaMailSegmentRepositoryInterfac
         $this->il_db->manipulate($query);
     }
 
-    public function deleteAllMailSegments(): void
+    public function deleteAllMailSegments() : void
     {
         $this->veda_logger->debug('Deleteing all mail segments');
         $query = 'DELETE FROM ' . self::TABLE_NAME;

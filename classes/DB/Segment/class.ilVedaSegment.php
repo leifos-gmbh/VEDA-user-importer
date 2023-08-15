@@ -46,22 +46,22 @@ class ilVedaSegment implements ilVedaSegmentInterface
         return $this->type === ilVedaSegmentType::SELF_LEARNING;
     }
 
-    public function setOID(string $oid): void
+    public function setOID(string $oid) : void
     {
         $this->oid = $oid;
     }
 
-    public function getOID(): string
+    public function getOID() : string
     {
         return $this->oid;
     }
 
-    public function setType(string $type): void
+    public function setType(string $type) : void
     {
         $this->type = $type;
     }
 
-    public function getType(): string
+    public function getType() : string
     {
         return $this->type;
     }

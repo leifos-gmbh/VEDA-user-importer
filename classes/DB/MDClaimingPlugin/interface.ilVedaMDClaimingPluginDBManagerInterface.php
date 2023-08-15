@@ -2,13 +2,13 @@
 
 interface ilVedaMDClaimingPluginDBManagerInterface
 {
-    public function lookupSegmentId(int $ref_id): string;
+    public function lookupSegmentId(int $ref_id) : string;
 
-    public function lookupTrainingCourseId(int $ref_id): string;
+    public function lookupTrainingCourseId(int $ref_id) : string;
 
-    public function deleteTrainingCourseSegmentId(int $ref_id): void;
+    public function deleteTrainingCourseSegmentId(int $ref_id) : void;
 
-    public function deleteTrainingCourseSegmentTrainId(int $ref_id): void;
+    public function deleteTrainingCourseSegmentTrainId(int $ref_id) : void;
 
     public function deleteTrainingCourseId(int $ref_id) : void;
 

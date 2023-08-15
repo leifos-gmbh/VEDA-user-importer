@@ -2,7 +2,7 @@
 
 class ilVedaApiFactory
 {
-    public function getVedaClientApi(): ilVedaApiInterface
+    public function getVedaClientApi() : ilVedaApiInterface
     {
         return new ilVedaOpenApi();
     }

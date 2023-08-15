@@ -14,15 +14,15 @@ interface ilVedaCourseInterface
 
     public function setType(int $type) : void;
 
-    public function setPermanentSwitchRole(int $role): void;
+    public function setPermanentSwitchRole(int $role) : void;
 
     public function getPermanentSwitchRole() : int;
 
-    public function setTemporarySwitchRole(int $role): void;
+    public function setTemporarySwitchRole(int $role) : void;
 
     public function getTemporarySwitchRole() : int;
 
-    public function setCreationStatus(int $status): void;
+    public function setCreationStatus(int $status) : void;
 
     public function getCreationStatus() : int;
 
@@ -30,9 +30,9 @@ interface ilVedaCourseInterface
 
     public function setObjId(int $obj_id) : void;
 
-    public function setDocumentSuccess(bool $value): void;
+    public function setDocumentSuccess(bool $value) : void;
 
-    public function getDocumentSuccess(): bool;
+    public function getDocumentSuccess() : bool;
 
-    public function toString(): string;
+    public function toString() : string;
 }

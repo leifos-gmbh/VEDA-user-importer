@@ -46,12 +46,12 @@ class ilVedaCourseStandardImportAdapter
     protected ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory;
 
     public function __construct(
-        ilObjUser                       $user,
-        ilObjectDefinition              $object_definition,
-        ilLogger                        $veda_logger,
-        ilVedaConnectorSettings         $veda_settings,
+        ilObjUser $user,
+        ilObjectDefinition $object_definition,
+        ilLogger $veda_logger,
+        ilVedaConnectorSettings $veda_settings,
         ilVedaCourseBuilderFactoryInterface $crs_builder_factory,
-        ilVedaConnector                 $veda_connector,
+        ilVedaConnector $veda_connector,
         ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory
     ) {
         $this->user = $user;

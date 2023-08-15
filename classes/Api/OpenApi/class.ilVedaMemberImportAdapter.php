@@ -56,7 +56,7 @@ class ilVedaMemberImportAdapter
         }
     }
 
-    public function handleTrackingEvent(int $obj_id, int $usr_id, int $status): void
+    public function handleTrackingEvent(int $obj_id, int $usr_id, int $status) : void
     {
         if ($status != ilLPStatus::LP_STATUS_COMPLETED_NUM) {
             $this->logger->debug('Ignoring non completed event.');

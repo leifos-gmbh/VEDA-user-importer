@@ -100,7 +100,7 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
         return $this->logger;
     }
 
-    protected function loadApiClasses(): void
+    protected function loadApiClasses() : void
     {
         /**
          * @var string[] $files
@@ -109,7 +109,7 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
         $lib_path = __DIR__ . '/../' . 'lib';
         $files = array_diff(scandir($lib_path), ['.', '..']);
         $this->logger->info('start loading api classes');
-        if(!is_array($files)) {
+        if (!is_array($files)) {
             $this->logger->info('lib folder does not exist');
             return;
         }
@@ -117,8 +117,8 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
         while (count($files) > 0) {
             $current_file = array_shift($files);
             $current_path = array_shift($paths);
-            $file_path = $current_path. '/' . $current_file;
-            if(is_dir($file_path)) {
+            $file_path = $current_path . '/' . $current_file;
+            if (is_dir($file_path)) {
                 // $this->logger->info('Found dir: ' . $current_file);
                 $additional_files = array_diff(scandir($file_path), ['.', '..']);
                 $additional_paths = array_fill(0, count($additional_files), $file_path);
@@ -126,7 +126,7 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
                 array_push($paths, ...$additional_paths);
                 continue;
             }
-            if(is_file($file_path) && str_ends_with($current_file, '.php')) {
+            if (is_file($file_path) && str_ends_with($current_file, '.php')) {
                 // $this->logger->info('Included: ' . $current_file);
                 include_once $file_path;
             }
@@ -238,7 +238,7 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
 
         $logger->info('Handling event : ' . $a_event . ' from ' . $a_component);
 
-        if(
+        if (
             (
                 $a_component == self::COURSE_SERVICE &&
                 $a_event == self::EVENT_ADD_PARTICIPANT

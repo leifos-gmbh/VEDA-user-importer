@@ -46,7 +46,7 @@ class ilVedaConnectorSettings
         return new self();
     }
 
-    public function hasSettingsForConnectionTest(): bool
+    public function hasSettingsForConnectionTest() : bool
     {
         return
             strlen($this->getRestUrl()) &&
@@ -54,7 +54,7 @@ class ilVedaConnectorSettings
             strlen($this->getPlatformId());
     }
 
-    public function setPermanentSwitchRole(int $role_id): void
+    public function setPermanentSwitchRole(int $role_id) : void
     {
         $this->storage->set(self::SETTING_PERMANENT_SWITCH_ROLE, $role_id);
     }
@@ -64,7 +64,7 @@ class ilVedaConnectorSettings
         return (int) $this->storage->get(self::SETTING_PERMANENT_SWITCH_ROLE, 0);
     }
 
-    public function setTemporarySwitchRole(int $role_id): void
+    public function setTemporarySwitchRole(int $role_id) : void
     {
         $this->storage->set(self::SETTING_TEMPORARY_SWITCH_ROLE, $role_id);
     }
@@ -89,22 +89,22 @@ class ilVedaConnectorSettings
         return $this->storage;
     }
 
-    public function isMailActive(): bool
+    public function isMailActive() : bool
     {
         return (bool) $this->storage->get(self::SETTING_MAIL_ACTIVE, false);
     }
 
-    public function setMailActive(bool $value): void
+    public function setMailActive(bool $value) : void
     {
         $this->storage->set(self::SETTING_MAIL_ACTIVE, $value);
     }
 
-    public function getMailTargets(): string
+    public function getMailTargets() : string
     {
         return $this->storage->get(self::SETTING_MAIL_TARGETS, '');
     }
 
-    public function setMailTargets(string $targets): void
+    public function setMailTargets(string $targets) : void
     {
         $this->storage->set(self::SETTING_MAIL_TARGETS, $targets);
     }
@@ -129,7 +129,7 @@ class ilVedaConnectorSettings
         $this->storage->set(self::SETTING_STANDARD_ACTIVE, $standard_active);
     }
 
-    public function setCronInterval(int $a_int): void
+    public function setCronInterval(int $a_int) : void
     {
         $this->storage->set(self::SETTING_CRON_INTERVALL, $a_int);
     }
@@ -174,7 +174,7 @@ class ilVedaConnectorSettings
         return $this->storage->get(self::SETTING_REST_PASSWORD, null);
     }
 
-    public function setAuthenticationToken(?string $token): void
+    public function setAuthenticationToken(?string $token) : void
     {
         $this->storage->set(self::SETTING_REST_TOKEN, $token);
     }
@@ -184,7 +184,7 @@ class ilVedaConnectorSettings
         return $this->storage->get(self::SETTING_REST_TOKEN, null);
     }
 
-    public function setPlatformId(?string $id): void
+    public function setPlatformId(?string $id) : void
     {
         $this->storage->set(self::SETTING_PLATTFORM_ID, $id);
     }
@@ -194,7 +194,7 @@ class ilVedaConnectorSettings
         return $this->storage->get(self::SETTING_PLATTFORM_ID, null);
     }
 
-    public function setActive(bool $active): void
+    public function setActive(bool $active) : void
     {
         $this->storage->set(self::SETTING_ACTIVE, $active);
     }
@@ -204,7 +204,7 @@ class ilVedaConnectorSettings
         return (bool) $this->storage->get(self::SETTING_ACTIVE, false);
     }
 
-    public function setLogLevel(int $loglevel): void
+    public function setLogLevel(int $loglevel) : void
     {
         $this->storage->set(self::SETTING_LOGLEVEL, $loglevel);
     }
@@ -214,7 +214,7 @@ class ilVedaConnectorSettings
         return (int) $this->storage->get(self::SETTING_LOGLEVEL, ilLogLevel::OFF);
     }
 
-    public function setLogFile(string $file): void
+    public function setLogFile(string $file) : void
     {
         $this->storage->set(self::SETTING_LOGIFLE, $file);
     }
@@ -243,7 +243,7 @@ class ilVedaConnectorSettings
         return (int) $this->storage->get(self::SETTING_STANDARD_PART_ROLE, 0);
     }
 
-    public function setSifaImportDirectory(int $ref_id): void
+    public function setSifaImportDirectory(int $ref_id) : void
     {
         $this->storage->set(self::SETTING_SIFA_IMPORT_REF_ID, $ref_id);
     }
@@ -253,7 +253,7 @@ class ilVedaConnectorSettings
         return (int) $this->storage->get(self::SETTING_SIFA_IMPORT_REF_ID, 0);
     }
 
-    public function setStandardImportDirectory(int $ref_id): void
+    public function setStandardImportDirectory(int $ref_id) : void
     {
         $this->storage->set(self::SETTING_STANDARD_IMPORT_REF_ID, $ref_id);
     }

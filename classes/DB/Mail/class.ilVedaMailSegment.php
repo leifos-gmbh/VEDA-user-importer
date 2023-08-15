@@ -19,32 +19,32 @@ class ilVedaMailSegment implements ilVedaMailSegmentInterface
         $this->modified = $modified;
     }
 
-    public function getID(): int
+    public function getID() : int
     {
         return $this->id;
     }
 
-    public function getMessage(): string
+    public function getMessage() : string
     {
         return $this->message;
     }
 
-    public function getType(): string
+    public function getType() : string
     {
         return $this->type;
     }
 
-    public function getLastModified(): DateTimeImmutable
+    public function getLastModified() : DateTimeImmutable
     {
         return $this->modified;
     }
 
-    public function setMessage(string $message): void
+    public function setMessage(string $message) : void
     {
         $this->message = $message;
     }
 
-    public function setType(string $type): void
+    public function setType(string $type) : void
     {
         $this->type = $type;
     }

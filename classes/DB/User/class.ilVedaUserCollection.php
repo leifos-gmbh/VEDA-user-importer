@@ -17,11 +17,11 @@ class ilVedaUserCollection implements ilVedaUserCollectionInterface
         $this->index = 0;
     }
 
-    public function getUsersWithPendingCreationStatus(): ilVedaUserCollectionInterface
+    public function getUsersWithPendingCreationStatus() : ilVedaUserCollectionInterface
     {
         $pending_participants = [];
         foreach ($this->veda_usrs as $veda_usr) {
-            if(
+            if (
                 $veda_usr->getCreationStatus() === ilVedaUserStatus::PENDING ||
                 (
                     $veda_usr->getCreationStatus() === ilVedaUserStatus::NONE &&
@@ -34,32 +34,32 @@ class ilVedaUserCollection implements ilVedaUserCollectionInterface
         return new ilVedaUserCollection($pending_participants);
     }
 
-    public function count(): int
+    public function count() : int
     {
         return count($this->veda_usrs);
     }
 
-    public function current(): ilVedaUserInterface
+    public function current() : ilVedaUserInterface
     {
         return $this->veda_usrs[$this->index];
     }
 
-    public function key(): int
+    public function key() : int
     {
         return $this->index;
     }
 
-    public function next(): void
+    public function next() : void
     {
         $this->index++;
     }
 
-    public function rewind(): void
+    public function rewind() : void
     {
         $this->index = 0;
     }
 
-    public function valid(): bool
+    public function valid() : bool
     {
         return 0 <= $this->index && $this->index < count($this->veda_usrs);
     }

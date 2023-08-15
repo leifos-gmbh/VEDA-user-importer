@@ -585,7 +585,7 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 
     protected function testConnection()
     {
-        if($this->veda_api->testConnection()) {
+        if ($this->veda_api->testConnection()) {
             ilUtil::sendSuccess($this->getPluginObject()->txt('success_api_connect'));
         } else {
             ilUtil::sendFailure('API Connection Failed');

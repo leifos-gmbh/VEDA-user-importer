@@ -2,5 +2,5 @@
 
 interface ilVedaMailSegmentBuilderFactoryInterface
 {
-    public function buildSegment(): ilVedaMailSegmentBuilderInterface;
+    public function buildSegment() : ilVedaMailSegmentBuilderInterface;
 }

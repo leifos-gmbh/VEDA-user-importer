@@ -16,7 +16,7 @@ class ilVedaMDClaimingPluginDBManager implements ilVedaMDClaimingPluginDBManager
         $this->claiming_plugin = $claiming_plugin;
     }
 
-    public function lookupSegmentId(int $ref_id): string
+    public function lookupSegmentId(int $ref_id) : string
     {
         $obj_id = ilObject::_lookupObjId($ref_id);
         $fields = $this->claiming_plugin->getFields();
@@ -31,7 +31,7 @@ class ilVedaMDClaimingPluginDBManager implements ilVedaMDClaimingPluginDBManager
         return '';
     }
 
-    public function lookupTrainingCourseId(int $ref_id): string
+    public function lookupTrainingCourseId(int $ref_id) : string
     {
         $obj_id = ilObject::_lookupObjId($ref_id);
         $fields = $this->claiming_plugin->getFields();
@@ -50,7 +50,7 @@ class ilVedaMDClaimingPluginDBManager implements ilVedaMDClaimingPluginDBManager
         return '';
     }
 
-    public function deleteTrainingCourseSegmentId(int $ref_id): void
+    public function deleteTrainingCourseSegmentId(int $ref_id) : void
     {
         $obj_id = ilObject::_lookupObjId($ref_id);
         $fields = $this->claiming_plugin->getFields();
@@ -63,7 +63,7 @@ class ilVedaMDClaimingPluginDBManager implements ilVedaMDClaimingPluginDBManager
         $this->il_db->manipulate($query);
     }
 
-    public function deleteTrainingCourseSegmentTrainId(int $ref_id): void
+    public function deleteTrainingCourseSegmentTrainId(int $ref_id) : void
     {
         $obj_id = ilObject::_lookupObjId($ref_id);
         $fields = $this->claiming_plugin->getFields();

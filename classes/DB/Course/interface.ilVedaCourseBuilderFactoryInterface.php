@@ -2,5 +2,5 @@
 
 interface ilVedaCourseBuilderFactoryInterface
 {
-    public function buildCourse(): ilVedaCourseBuilderInterface;
+    public function buildCourse() : ilVedaCourseBuilderInterface;
 }

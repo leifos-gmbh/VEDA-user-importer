@@ -100,7 +100,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
         );
     }
 
-    public function handleParticipantAssignedToCourse(int $obj_id, int $usr_id, int $role_id): void
+    public function handleParticipantAssignedToCourse(int $obj_id, int $usr_id, int $role_id) : void
     {
         $this->veda_logger->debug('Start handling participant assigned to course');
         $veda_crs = $this->crs_repo->lookupCourseByID($obj_id);
@@ -109,7 +109,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
             $this->veda_logger->debug('handleParticipantAssignedToCourse, null course or user');
             return;
         }
-        if(is_null($veda_crs->getOid()) || is_null($veda_usr->getOid())) {
+        if (is_null($veda_crs->getOid()) || is_null($veda_usr->getOid())) {
             $this->veda_logger->debug('handleParticipantAssignedToCourse, null course_oid or user_oid');
             return;
         }
@@ -117,14 +117,14 @@ class ilVedaOpenApi implements ilVedaApiInterface
             $this->veda_logger->debug('Ignore course without document success flag');
             return;
         }
-        $this->veda_logger-debug('Send assigned usr:' . $veda_usr->getOid() . 'to crs:' . $veda_crs->getOid());
+        $this->veda_logger - debug('Send assigned usr:' . $veda_usr->getOid() . 'to crs:' . $veda_crs->getOid());
         $this->veda_connector->sendParticipantAssignedToCourse(
             $veda_crs->getOid(),
             $veda_usr->getOid()
         );
     }
 
-    public function handleAfterCloningDependenciesSIFAEvent(int $source_id, int $target_id, int $copy_id): void
+    public function handleAfterCloningDependenciesSIFAEvent(int $source_id, int $target_id, int $copy_id) : void
     {
         $this->sifa_course_import_adapter->handleAfterCloningDependenciesEvent(
             $source_id,
@@ -133,7 +133,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
         );
     }
 
-    public function handleAfterCloningDependenciesStandardEvent(int $source_id, int $target_id, int $copy_id): void
+    public function handleAfterCloningDependenciesStandardEvent(int $source_id, int $target_id, int $copy_id) : void
     {
         $this->standard_course_import_adapter->handleAfterCloningDependenciesEvent(
             $source_id,
@@ -142,7 +142,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
         );
     }
 
-    public function handleAfterCloningSIFAEvent(int $a_source_id, int $a_target_id, int $a_copy_id): void
+    public function handleAfterCloningSIFAEvent(int $a_source_id, int $a_target_id, int $a_copy_id) : void
     {
         $this->sifa_course_import_adapter->handleAfterCloningEvent(
             $a_source_id,
@@ -151,7 +151,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
         );
     }
 
-    public function handleAfterCloningStandardEvent(int $a_source_id, int $a_target_id, int $a_copy_id): void
+    public function handleAfterCloningStandardEvent(int $a_source_id, int $a_target_id, int $a_copy_id) : void
     {
         $this->standard_course_import_adapter->handleAfterCloningEvent(
             $a_source_id,
@@ -208,7 +208,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
         }
     }
 
-    public function handleTrackingEvent(int $obj_id, int $usr_id, int $status): void
+    public function handleTrackingEvent(int $obj_id, int $usr_id, int $status) : void
     {
         $this->handleTrackingEventDokumentSuccess(
             $obj_id,
@@ -223,12 +223,12 @@ class ilVedaOpenApi implements ilVedaApiInterface
         );
     }
 
-    public function handlePasswordChanged(int $usr_id): void
+    public function handlePasswordChanged(int $usr_id) : void
     {
         $this->veda_connector->handlePasswordChange($usr_id);
     }
 
-    public function deleteDeprecatedILIASUsers(): void
+    public function deleteDeprecatedILIASUsers() : void
     {
         $user_db_manager = (new ilVedaRepositoryFactory())->getUserRepository();
         foreach ($this->user_repo->lookupAllUsers() as $user) {
@@ -244,7 +244,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
         }
     }
 
-    public function handleCloningFailed(): void
+    public function handleCloningFailed() : void
     {
         $failed = $this->crs_repo->lookupAllCourses()->getAsynchronusCourses();
         foreach ($failed as $fail) {
@@ -280,34 +280,34 @@ class ilVedaOpenApi implements ilVedaApiInterface
         }
     }
 
-    public function importILIASUsers(): void
+    public function importILIASUsers() : void
     {
         $participants = $this->veda_connector->getParticipants();
         $this->veda_logger->dump($participants, \ilLogLevel::DEBUG);
         $this->user_import_adapter->import($participants);
     }
 
-    public function importStandardCourses(): void
+    public function importStandardCourses() : void
     {
         $this->standard_course_import_adapter->import();
     }
 
-    public function importSIFACourses(): void
+    public function importSIFACourses() : void
     {
         $this->sifa_course_import_adapter->import();
     }
 
-    public function importSIFAMembers(): void
+    public function importSIFAMembers() : void
     {
         $this->sifa_member_import_adapter->import();
     }
 
-    public function importStandardMembers(): void
+    public function importStandardMembers() : void
     {
         $this->standard_member_import_adapter->import();
     }
 
-    public function isTrainingCourseValid($course_oid): bool
+    public function isTrainingCourseValid($course_oid) : bool
     {
         try {
             $training_course = $this->veda_connector->getTrainingCourse($course_oid);
@@ -318,7 +318,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
         return true;
     }
 
-    public function validateLocalSessions(array $sessions, string $course_oid): array
+    public function validateLocalSessions(array $sessions, string $course_oid) : array
     {
         $missing = [];
         $training_course = $this->veda_connector->getTrainingCourse($course_oid);
@@ -352,7 +352,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
         return $missing;
     }
 
-    public function validateRemoteSessions(array $sessions, string $course_oid): array
+    public function validateRemoteSessions(array $sessions, string $course_oid) : array
     {
         $missing = [];
         $training_course = $this->veda_connector->getTrainingCourse($course_oid);
@@ -382,7 +382,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
         return $missing;
     }
 
-    public function validateLocalExercises(array $exercises, string $course_oid): array
+    public function validateLocalExercises(array $exercises, string $course_oid) : array
     {
         $missing = [];
         $training_course = $this->veda_connector->getTrainingCourse($course_oid);
@@ -410,7 +410,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
         return $missing;
     }
 
-    public function validateRemoteExercises(array $exercises, string $course_oid): array
+    public function validateRemoteExercises(array $exercises, string $course_oid) : array
     {
         $missing = [];
         $training_course = $this->veda_connector->getTrainingCourse($course_oid);
@@ -441,7 +441,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
         return $missing;
     }
 
-    public function testConnection(): bool
+    public function testConnection() : bool
     {
         try {
             $response = $this->veda_connector->getParticipants();

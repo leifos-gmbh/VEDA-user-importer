@@ -7,7 +7,8 @@ class ilVedaMailManager
     protected ilLogger $veda_logger;
     protected ilVedaConnectorSettings $veda_settings;
 
-    public function __construct() {
+    public function __construct()
+    {
         global $DIC;
         $this->sender_factory = $DIC["mail.mime.sender.factory"];
         $this->veda_logger = $DIC->logger()->vedaimp();
@@ -15,7 +16,8 @@ class ilVedaMailManager
         $this->veda_settings = new ilVedaConnectorSettings();
     }
 
-    public function sendStatus(): void {
+    public function sendStatus() : void
+    {
         $this->veda_logger->debug('Sending Mail');
 
         $mail_segments = $this->mail_segment_repo->lookupMailSegments();
@@ -23,10 +25,10 @@ class ilVedaMailManager
         $body = '';
         $subject = 'ilVedaConnectorPlugin Status';
 
-        if(count($mail_segments_errors) === 0) {
+        if (count($mail_segments_errors) === 0) {
             $body .= 'Gesamtstatus erfolgreich!' . "\n\n";
         }
-        if(count($mail_segments_errors) > 0) {
+        if (count($mail_segments_errors) > 0) {
             $body .= 'Während der Aktualisierung sind Fehler aufgetreten:' . "\n\n";
             foreach ($mail_segments_errors as $error_segment) {
                 $body .= $error_segment->getMessage() . "\n";
@@ -60,7 +62,8 @@ class ilVedaMailManager
         $this->clearMailData();
     }
 
-    public function sendSIFACourseCompleted() {
+    public function sendSIFACourseCompleted()
+    {
         $this->veda_logger->debug('Sending Mail');
 
         $mail_segments = $this->mail_segment_repo->lookupMailSegments();
@@ -68,10 +71,10 @@ class ilVedaMailManager
         $body = '';
         $subject = 'ilVedaConnectorPlugin Status SIFA Kurs importiert';
 
-        if(count($mail_segments_errors) === 0) {
+        if (count($mail_segments_errors) === 0) {
             $body .= 'SIFA Kurs erfolgreich importiert!' . "\n\n";
         }
-        if(count($mail_segments_errors) > 0) {
+        if (count($mail_segments_errors) > 0) {
             $body .= 'Während der Aktualisierung sind Fehler aufgetreten:' . "\n\n";
             foreach ($mail_segments_errors as $error_segment) {
                 $body .= $error_segment->getMessage() . "\n";
@@ -106,14 +109,14 @@ class ilVedaMailManager
         $this->clearMailData();
     }
 
-    public function clearMailData(): void
+    public function clearMailData() : void
     {
         $this->mail_segment_repo->deleteAllMailSegments();
     }
 
     protected function dumpMail(
         ilMimeMail $mail
-    ): void {
+    ) : void {
         $this->veda_logger->debug('From:' . $mail->getFrom()->getFromAddress());
         $this->veda_logger->debug('Subject:' . $mail->getSubject());
         $this->veda_logger->debug('To: ' . implode(',', $mail->getTo()));

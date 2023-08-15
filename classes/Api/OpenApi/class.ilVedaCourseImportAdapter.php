@@ -27,12 +27,12 @@ class ilVedaCourseImportAdapter
     protected ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory;
 
     public function __construct(
-        ilObjUser                                $user,
-        ilObjectDefinition                       $object_definition,
-        ilRbacAdmin                              $rbac_admin,
-        ilRbacReview                             $rbac_review,
-        ilLogger                                 $veda_logger,
-        ilVedaConnector                          $veda_connector,
+        ilObjUser $user,
+        ilObjectDefinition $object_definition,
+        ilRbacAdmin $rbac_admin,
+        ilRbacReview $rbac_review,
+        ilLogger $veda_logger,
+        ilVedaConnector $veda_connector,
         ilVedaCourseBuilderFactoryInterface $crs_builder_factory,
         ilVedaSegmentRepositoryInterface $segment_repo,
         ilVedaMDClaimingPluginDBManagerInterface $md_db_manager,
@@ -398,7 +398,7 @@ class ilVedaCourseImportAdapter
         int $target_id,
         Ausbildungszug $train,
         ?string $training_course_id
-    ): void {
+    ) : void {
         $this->md_db_manager->deleteTrainingCourseSegmentId($target_id);
         $this->md_db_manager->deleteTrainingCourseSegmentTrainId($target_id);
 

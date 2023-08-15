@@ -16,7 +16,7 @@ class ilVedaCourseRepository implements ilVedaCourseRepositoryInterface
         $this->veda_logger = $il_logger;
     }
 
-    protected function refIDtoOID(int $ref_id): ?string
+    protected function refIDtoOID(int $ref_id) : ?string
     {
         $import_id = ilObjCourse::_lookupImportId($ref_id);
         if (!$import_id) {
@@ -26,7 +26,8 @@ class ilVedaCourseRepository implements ilVedaCourseRepositoryInterface
         return $import_id;
     }
 
-    public function updateCourse(ilVedaCourseInterface $course_status): void {
+    public function updateCourse(ilVedaCourseInterface $course_status) : void
+    {
         $this->veda_logger->debug('Updating course with oid: ' . $course_status->getOid());
         $query = 'INSERT INTO ' . self::TABLE_NAME
             . ' (oid, obj_id, switchp, switcht, status_created, modified, type, document_success) '
@@ -52,7 +53,7 @@ class ilVedaCourseRepository implements ilVedaCourseRepositoryInterface
         $this->il_db->manipulate($query);
     }
 
-    public function deleteCourseByOID(string $oid): void
+    public function deleteCourseByOID(string $oid) : void
     {
         $this->veda_logger->debug('Deleting course with oid: ' . $oid);
         $query = 'delete from ' . self::TABLE_NAME . ' '
@@ -61,7 +62,7 @@ class ilVedaCourseRepository implements ilVedaCourseRepositoryInterface
         $this->il_db->manipulate($query);
     }
 
-    public function lookupCourseByOID(string $oid): ?ilVedaCourseInterface
+    public function lookupCourseByOID(string $oid) : ?ilVedaCourseInterface
     {
         $this->veda_logger->debug('Looking up course by oid: ' . $oid);
         $query = 'select * from ' . self::TABLE_NAME . ' ' .
@@ -83,7 +84,7 @@ class ilVedaCourseRepository implements ilVedaCourseRepositoryInterface
         return null;
     }
 
-    public function lookupCourseByID(int $ref_id): ?ilVedaCourseInterface
+    public function lookupCourseByID(int $ref_id) : ?ilVedaCourseInterface
     {
         $this->veda_logger->debug('Lookup up course by ref_id: ' . $ref_id);
         $oid = $this->refIDtoOID($ref_id);
@@ -93,7 +94,7 @@ class ilVedaCourseRepository implements ilVedaCourseRepositoryInterface
         return $this->lookupCourseByOID($oid);
     }
 
-    public function lookupAllCourses(): ilVedaCourseCollectionInterface
+    public function lookupAllCourses() : ilVedaCourseCollectionInterface
     {
         $this->veda_logger->debug('Looking up all courses.');
         $query = 'select * from ' . self::TABLE_NAME;

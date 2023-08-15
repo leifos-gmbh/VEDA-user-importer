@@ -407,7 +407,7 @@ class ilVedaUserImportAdapter
 
     protected function storeUserStatusSuccess(TeilnehmerELearningPlattform $participant, int $usr_id) : void
     {
-        if(!$usr_id) {
+        if (!$usr_id) {
             $this->usr_builder_factory->buildUser()
                 ->withOID($participant->getTeilnehmer()->getOid())
                 ->withLogin($participant->getBenutzername())

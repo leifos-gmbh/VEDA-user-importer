@@ -17,7 +17,7 @@ class ilVedaCourseCollection implements ilVedaCourseCollectionInterface
         $this->index = 0;
     }
 
-    public function getCoursesWithStatusAndType(int $status, int $type): ilVedaCourseCollectionInterface
+    public function getCoursesWithStatusAndType(int $status, int $type) : ilVedaCourseCollectionInterface
     {
         $found_crss = [];
         foreach ($this->veda_crss as $veda_crs) {
@@ -31,7 +31,7 @@ class ilVedaCourseCollection implements ilVedaCourseCollectionInterface
         return new ilVedaCourseCollection($found_crss);
     }
 
-    public function getAsynchronusCourses(): ilVedaCourseCollectionInterface
+    public function getAsynchronusCourses() : ilVedaCourseCollectionInterface
     {
         $assumption_failed_seconds = 5400;
         $diff = time() - $assumption_failed_seconds;
@@ -47,32 +47,32 @@ class ilVedaCourseCollection implements ilVedaCourseCollectionInterface
         return new ilVedaCourseCollection($found_crss);
     }
 
-    public function count(): int
+    public function count() : int
     {
         return count($this->veda_crss);
     }
 
-    public function current(): ilVedaCourseInterface
+    public function current() : ilVedaCourseInterface
     {
         return $this->veda_crss[$this->index];
     }
 
-    public function key(): int
+    public function key() : int
     {
         return $this->index;
     }
 
-    public function next(): void
+    public function next() : void
     {
         $this->index++;
     }
 
-    public function rewind(): void
+    public function rewind() : void
     {
         $this->index = 0;
     }
 
-    public function valid(): bool
+    public function valid() : bool
     {
         return 0 <= $this->index && $this->index < count($this->veda_crss);
     }

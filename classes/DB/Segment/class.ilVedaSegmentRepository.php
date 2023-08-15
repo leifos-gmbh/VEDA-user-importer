@@ -14,7 +14,7 @@ class ilVedaSegmentRepository implements ilVedaSegmentRepositoryInterface
         $this->il_db = $il_db;
     }
 
-    public function updateSegmentInfo(ilVedaSegmentInterface $segment_status): void
+    public function updateSegmentInfo(ilVedaSegmentInterface $segment_status) : void
     {
         $this->deleteSegmentInfo($segment_status->getOID());
         $query = 'insert into ' . self::TABLE_NAME . ' ' .
@@ -26,14 +26,14 @@ class ilVedaSegmentRepository implements ilVedaSegmentRepositoryInterface
         $this->il_db->manipulate($query);
     }
 
-    public function deleteSegmentInfo(string $oid): void
+    public function deleteSegmentInfo(string $oid) : void
     {
         $query = 'delete from ' . self::TABLE_NAME . ' ' .
             'where oid = ' . $this->il_db->quote($oid, \ilDBConstants::T_TEXT);
         $this->il_db->manipulate($query);
     }
 
-    public function lookupSegmentInfo(string $oid): ?ilVedaSegmentInterface
+    public function lookupSegmentInfo(string $oid) : ?ilVedaSegmentInterface
     {
         $query = 'select type from ' . self::TABLE_NAME . ' ' .
             'where oid = ' . $this->il_db->quote($oid, \ilDBConstants::T_TEXT);
@@ -47,7 +47,7 @@ class ilVedaSegmentRepository implements ilVedaSegmentRepositoryInterface
         return null;
     }
 
-    public function createEmptySegment(string $oid): ilVedaSegment
+    public function createEmptySegment(string $oid) : ilVedaSegment
     {
         return new ilVedaSegment($oid);
     }

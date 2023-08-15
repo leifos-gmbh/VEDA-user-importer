@@ -16,7 +16,7 @@ class ilVedaUserRepository implements ilVedaUserRepositoryInterface
         $this->veda_logger = $il_logger;
     }
 
-    protected function refIDtoOID(int $ref_id): ?string
+    protected function refIDtoOID(int $ref_id) : ?string
     {
         $import_id = ilObjUser::_lookupImportId($ref_id);
         if (!$import_id) {
@@ -26,7 +26,7 @@ class ilVedaUserRepository implements ilVedaUserRepositoryInterface
         return $import_id;
     }
 
-    public function updateUser(ilVedaUserInterface $user_status): void
+    public function updateUser(ilVedaUserInterface $user_status) : void
     {
         $this->veda_logger->debug('Updating user with oid: ' . $user_status->getOid());
         $query = 'INSERT INTO ' . self::TABLE_NAME . ' (oid, login, status_pwd, status_created, import_failure)'
@@ -46,7 +46,7 @@ class ilVedaUserRepository implements ilVedaUserRepositoryInterface
         $this->il_db->manipulate($query);
     }
 
-    public function deleteUserByOID(string $oid): void
+    public function deleteUserByOID(string $oid) : void
     {
         $this->veda_logger->debug('Deleting user by oid: ' . $oid);
         $query = 'delete from ' . self::TABLE_NAME . ' ' .
@@ -55,7 +55,7 @@ class ilVedaUserRepository implements ilVedaUserRepositoryInterface
         $this->il_db->manipulate($query);
     }
 
-    public function deleteUserByID(int $usr_id): void
+    public function deleteUserByID(int $usr_id) : void
     {
         $this->veda_logger->debug('Deleting user by id: ' . $usr_id);
         $import_id = $this->refIDtoOID($usr_id);
@@ -64,7 +64,7 @@ class ilVedaUserRepository implements ilVedaUserRepositoryInterface
         }
     }
 
-    public function lookupUserByOID(string $oid): ?ilVedaUserInterface
+    public function lookupUserByOID(string $oid) : ?ilVedaUserInterface
     {
         $this->veda_logger->debug('Lookup user by oid: ' . $oid);
         $query = 'select * from ' . self::TABLE_NAME . ' ' .
@@ -83,17 +83,17 @@ class ilVedaUserRepository implements ilVedaUserRepositoryInterface
         return null;
     }
 
-    public function lookupUserByID(int $ref_id): ?ilVedaUserInterface
+    public function lookupUserByID(int $ref_id) : ?ilVedaUserInterface
     {
         $this->veda_logger->debug('Lookup user by ref_id: ' . $ref_id);
         $oid = $this->refIDtoOID($ref_id);
-        if(is_null($oid)) {
+        if (is_null($oid)) {
             return null;
         }
         return $this->lookupUserByOID($oid);
     }
 
-    public function lookupAllUsers(): ilVedaUserCollectionInterface
+    public function lookupAllUsers() : ilVedaUserCollectionInterface
     {
         $this->veda_logger->debug('Looking up all users.');
         $query = 'select * from ' . self::TABLE_NAME;

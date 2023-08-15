@@ -64,7 +64,7 @@ class ilVedaConnector
         ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory
     ) {
         $this->veda_logger = $veda_logger;
-        $this->settings =$settings;
+        $this->settings = $settings;
         $this->mail_segment_builder_factory = $mail_segment_builder_factory;
 
         $config = $this->createApiConfiguration();
@@ -103,7 +103,7 @@ class ilVedaConnector
         );
     }
 
-    protected function createApiConfiguration(): Configuration
+    protected function createApiConfiguration() : Configuration
     {
         $config = new Configuration();
         $config->setApiKey(
@@ -115,7 +115,7 @@ class ilVedaConnector
         return $config;
     }
 
-    public function sendCourseCreationFailed(string $oid): void
+    public function sendCourseCreationFailed(string $oid) : void
     {
         try {
             $error_message = new FehlermeldungApiDto();
@@ -134,7 +134,7 @@ class ilVedaConnector
      * @param string $oid
      * @throws ilVedaConnectionException
      */
-    public function sendStandardCourseCopyStarted(string $oid): void
+    public function sendStandardCourseCopyStarted(string $oid) : void
     {
         try {
             $this->api_elearning->meldeElearningkursExterneAnlageAngestossenUsingPOST(
@@ -150,7 +150,7 @@ class ilVedaConnector
     /**
      * @throws ilVedaConnectionException
      */
-    public function sendStandardCourseCreationFailed(string $oid, string $message): void
+    public function sendStandardCourseCreationFailed(string $oid, string $message) : void
     {
         try {
             $error_message = new FehlermeldungApiDto();
@@ -169,7 +169,7 @@ class ilVedaConnector
     /**
      * @throws ilVedaConnectionException
      */
-    public function sendStandardCourseCreated(string $oid): void
+    public function sendStandardCourseCreated(string $oid) : void
     {
         try {
             $this->api_elearning->meldeElearningkursExternExistierendUsingPOST(
@@ -185,7 +185,8 @@ class ilVedaConnector
     /**
      * @throws ilVedaConnectionException
      */
-    public function sendParticipantAssignedToCourse(string $crs_oid, string $usr_oid): void {
+    public function sendParticipantAssignedToCourse(string $crs_oid, string $usr_oid) : void
+    {
         try {
             $this->api_elearning->meldeBearbeitungsstartFuerTeilnehmerAufKursUsingPOST(
                 $this->settings->getPlatformId(),
@@ -201,7 +202,7 @@ class ilVedaConnector
     /**
      * @throws ilVedaConnectionException
      */
-    public function sendExerciseSubmissionConfirmed(string $segment_id, string $participant_id, DateTime $confirmed = null): void
+    public function sendExerciseSubmissionConfirmed(string $segment_id, string $participant_id, DateTime $confirmed = null) : void
     {
         try {
             $info = new PraktikumsberichtKorrigiertApiDto();
@@ -227,7 +228,7 @@ class ilVedaConnector
     /**
      * @throws ilVedaConnectionException
      */
-    public function sendExerciseSubmissionDate(string $segment_id, string $participant_id, ?DateTime $subdate = null): void
+    public function sendExerciseSubmissionDate(string $segment_id, string $participant_id, ?DateTime $subdate = null) : void
     {
         try {
             $info = new PraktikumsberichtEingegangenApiDto();
@@ -254,7 +255,7 @@ class ilVedaConnector
     /**
      * @throws ilVedaConnectionException
      */
-    public function sendExerciseSuccess(string $segment_id, string $participant_id, \DateTime $dt): void
+    public function sendExerciseSuccess(string $segment_id, string $participant_id, \DateTime $dt) : void
     {
         try {
             $info = new MeldeLernerfolgApiDto();
@@ -332,7 +333,7 @@ class ilVedaConnector
      * @return AusbildungszugDozent[]
      * @throws ilVedaConnectionException
      */
-    public function readTrainingCourseTrainTutors(?string $oid): array
+    public function readTrainingCourseTrainTutors(?string $oid) : array
     {
         try {
             return $this->api_training_course_train->getBeteiligteDozentenVonAusbildungszugUsingGET($oid);
@@ -360,7 +361,7 @@ class ilVedaConnector
      * @return AufsichtspersonKurszugriff[]
      * @throws ilVedaConnectionException
      */
-    public function readTrainingCourseTrainSupervisors(?string $oid): array
+    public function readTrainingCourseTrainSupervisors(?string $oid) : array
     {
         try {
             return $this->api_training_course_train->getAufsichtspersonenVonAusbildungszugUsingGET($oid);
@@ -374,7 +375,7 @@ class ilVedaConnector
      * @return AusbildungszugTeilnehmer[]
      * @throws ilVedaConnectionException
      */
-    public function readTrainingCourseTrainMembers(?string $oid): array
+    public function readTrainingCourseTrainMembers(?string $oid) : array
     {
         try {
             return $this->api_training_course_train->getTeilnehmerVonAusbildungszugUsingGET($oid);
@@ -387,7 +388,7 @@ class ilVedaConnector
     /**
      * @throws ilVedaConnectionException
      */
-    public function sendTrainingCourseTrainCreated(string $oid): void
+    public function sendTrainingCourseTrainCreated(string $oid) : void
     {
         try {
             $this->api_training_course_train->meldeAusbildungszugAlsExternExistierendUsingPOST($oid);
@@ -401,7 +402,7 @@ class ilVedaConnector
      * @param string $oid
      * @throws ilVedaConnectionException
      */
-    public function sendTrainingCourseTrainCopyStarted(string $oid): void
+    public function sendTrainingCourseTrainCopyStarted(string $oid) : void
     {
         try {
             $this->api_training_course_train->meldeExterneAnlageAngestossenUsingPOST($oid);
@@ -451,7 +452,7 @@ class ilVedaConnector
      * @return Organisation
      * @throws ilVedaConnectionException
      */
-    public function getOrganisation(string $orgr_oid): Organisation
+    public function getOrganisation(string $orgr_oid) : Organisation
     {
         try {
             $response = $this->api_organisation->getOrganisationUsingGET($orgr_oid);
@@ -470,7 +471,7 @@ class ilVedaConnector
      * @return Ausbildungsgang
      * @throws ilVedaConnectionException
      */
-    public function getTrainingCourse(string $training_course_id): Ausbildungsgang
+    public function getTrainingCourse(string $training_course_id) : Ausbildungsgang
     {
         try {
             return $this->api_training_course->getAusbildungsgangUsingGET($training_course_id);
@@ -532,7 +533,7 @@ class ilVedaConnector
         }
     }
 
-    public function sendCoursePassed(string $crs_oid, string $usr_oid): void
+    public function sendCoursePassed(string $crs_oid, string $usr_oid) : void
     {
         try {
             $this->api_elearning->meldeKursabschlussMitErfolgUsingPOST(
@@ -546,7 +547,7 @@ class ilVedaConnector
         }
     }
 
-    public function sendCourseFailed(string $crs_oid, string $usr_oid): void
+    public function sendCourseFailed(string $crs_oid, string $usr_oid) : void
     {
         try {
             $this->api_elearning->meldeKursabschlussOhneErfolgUsingPOST(
@@ -597,8 +598,8 @@ class ilVedaConnector
 
     protected function handleApiExceptions(
         string $api_call_name,
-        Exception  $e
-    ): void {
+        Exception $e
+    ) : void {
         $this->veda_logger->warning(ilVedaConnectorSettings::HEADER_TOKEN . ': ' . $this->settings->getAuthenticationToken());
         $this->veda_logger->warning($api_call_name . ' failed with message: ' . $e->getMessage());
         $this->veda_logger->dump($e->getResponseHeaders(), ilLogLevel::WARNING);

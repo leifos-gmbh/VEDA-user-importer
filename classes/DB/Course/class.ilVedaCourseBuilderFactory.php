@@ -13,7 +13,7 @@ class ilVedaCourseBuilderFactory implements ilVedaCourseBuilderFactoryInterface
         $this->veda_logger = $veda_logger;
     }
 
-    public function buildCourse(): ilVedaCourseBuilderInterface
+    public function buildCourse() : ilVedaCourseBuilderInterface
     {
         return new ilVedaCourseBuilder($this->crs_repo, $this->veda_logger);
     }

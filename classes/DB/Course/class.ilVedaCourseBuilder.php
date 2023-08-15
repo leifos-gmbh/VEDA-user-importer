@@ -16,7 +16,7 @@ class ilVedaCourseBuilder implements ilVedaCourseBuilderInterface
         $this->veda_logger = $veda_logger;
     }
 
-    public function withOID(string $oid, bool $load_from_db = true): ilVedaCourseBuilderInterface
+    public function withOID(string $oid, bool $load_from_db = true) : ilVedaCourseBuilderInterface
     {
         $new_builder = new ilVedaCourseBuilder($this->crs_repo, $this->veda_logger);
 
@@ -30,19 +30,19 @@ class ilVedaCourseBuilder implements ilVedaCourseBuilderInterface
             ? $this->crs_repo->lookupCourseByOID($oid)
             : null;
 
-        if(is_null($existing_crs)) {
+        if (is_null($existing_crs)) {
             $this->veda_logger->debug('Course with id does not exist, or data base lookup skipped.');
             $new_builder->veda_crs = $this->veda_crs;
             $new_builder->veda_crs->setOid($oid);
         }
-        if(!is_null($existing_crs)) {
+        if (!is_null($existing_crs)) {
             $this->veda_logger->debug('Course with id found');
             $new_builder->veda_crs = $existing_crs;
         }
         return $new_builder;
     }
 
-    public function withObjID(int $obj_id): ilVedaCourseBuilderInterface
+    public function withObjID(int $obj_id) : ilVedaCourseBuilderInterface
     {
         $new_builder = new ilVedaCourseBuilder($this->crs_repo, $this->veda_logger);
         $new_builder->veda_crs = $this->veda_crs;
@@ -50,7 +50,7 @@ class ilVedaCourseBuilder implements ilVedaCourseBuilderInterface
         return $new_builder;
     }
 
-    public function withSwitchPermanentRole(int $role_id): ilVedaCourseBuilderInterface
+    public function withSwitchPermanentRole(int $role_id) : ilVedaCourseBuilderInterface
     {
         $new_builder = new ilVedaCourseBuilder($this->crs_repo, $this->veda_logger);
         $new_builder->veda_crs = $this->veda_crs;
@@ -58,7 +58,7 @@ class ilVedaCourseBuilder implements ilVedaCourseBuilderInterface
         return $new_builder;
     }
 
-    public function withSwithTemporaryRole(int $role_id): ilVedaCourseBuilderInterface
+    public function withSwithTemporaryRole(int $role_id) : ilVedaCourseBuilderInterface
     {
         $new_builder = new ilVedaCourseBuilder($this->crs_repo, $this->veda_logger);
         $new_builder->veda_crs = $this->veda_crs;
@@ -66,7 +66,7 @@ class ilVedaCourseBuilder implements ilVedaCourseBuilderInterface
         return $new_builder;
     }
 
-    public function withStatusCreated(int $status): ilVedaCourseBuilderInterface
+    public function withStatusCreated(int $status) : ilVedaCourseBuilderInterface
     {
         $new_builder = new ilVedaCourseBuilder($this->crs_repo, $this->veda_logger);
         $new_builder->veda_crs = $this->veda_crs;
@@ -74,7 +74,7 @@ class ilVedaCourseBuilder implements ilVedaCourseBuilderInterface
         return $new_builder;
     }
 
-    public function withModified(int $modified): ilVedaCourseBuilderInterface
+    public function withModified(int $modified) : ilVedaCourseBuilderInterface
     {
         $new_builder = new ilVedaCourseBuilder($this->crs_repo, $this->veda_logger);
         $new_builder->veda_crs = $this->veda_crs;
@@ -82,7 +82,7 @@ class ilVedaCourseBuilder implements ilVedaCourseBuilderInterface
         return $new_builder;
     }
 
-    public function withType(int $type): ilVedaCourseBuilderInterface
+    public function withType(int $type) : ilVedaCourseBuilderInterface
     {
         $new_builder = new ilVedaCourseBuilder($this->crs_repo, $this->veda_logger);
         $new_builder->veda_crs = $this->veda_crs;
@@ -90,7 +90,7 @@ class ilVedaCourseBuilder implements ilVedaCourseBuilderInterface
         return $new_builder;
     }
 
-    public function withDocumentSuccess(bool $value): ilVedaCourseBuilderInterface
+    public function withDocumentSuccess(bool $value) : ilVedaCourseBuilderInterface
     {
         $new_builder = new ilVedaCourseBuilder($this->crs_repo, $this->veda_logger);
         $new_builder->veda_crs = $this->veda_crs;
@@ -98,17 +98,17 @@ class ilVedaCourseBuilder implements ilVedaCourseBuilderInterface
         return $new_builder;
     }
 
-    public function store(): void
+    public function store() : void
     {
         $this->veda_logger->debug('Updating veda course');
-        if($this->veda_crs->getOid() === self::NULL_OID) {
+        if ($this->veda_crs->getOid() === self::NULL_OID) {
             $this->veda_logger->debug('Cannot update veda course with null id');
             return;
         }
         $this->crs_repo->updateCourse($this->veda_crs);
     }
 
-    public function get(): ilVedaCourseInterface
+    public function get() : ilVedaCourseInterface
     {
         return $this->veda_crs;
     }

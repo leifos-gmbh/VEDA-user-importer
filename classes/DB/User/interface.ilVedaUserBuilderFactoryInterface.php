@@ -2,5 +2,5 @@
 
 interface ilVedaUserBuilderFactoryInterface
 {
-    public function buildUser(): ilVedaUserBuilderInterface;
+    public function buildUser() : ilVedaUserBuilderInterface;
 }

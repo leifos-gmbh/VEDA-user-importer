@@ -17,7 +17,7 @@ class ilVedaUserBuilder implements ilVedaUserBuilderInterface
         $this->veda_logger = $veda_logger;
     }
 
-    public function withOID(string $oid, bool $load_from_db = true): ilVedaUserBuilderInterface
+    public function withOID(string $oid, bool $load_from_db = true) : ilVedaUserBuilderInterface
     {
         $new_builder = new ilVedaUserBuilder($this->usr_repo, $this->veda_logger);
 
@@ -31,19 +31,19 @@ class ilVedaUserBuilder implements ilVedaUserBuilderInterface
             ? $this->usr_repo->lookupUserByOID($oid)
             : null;
 
-        if(is_null($existing_crs)) {
+        if (is_null($existing_crs)) {
             $this->veda_logger->debug('User with oid does not exist, or data base lookup skipped.');
             $new_builder->veda_usr = $this->veda_usr;
             $new_builder->veda_usr->setOid($oid);
         }
-        if(!is_null($existing_crs)) {
+        if (!is_null($existing_crs)) {
             $this->veda_logger->debug('User with oid found');
             $new_builder->veda_usr = $existing_crs;
         }
         return $new_builder;
     }
 
-    public function withLogin(string $login): ilVedaUserBuilderInterface
+    public function withLogin(string $login) : ilVedaUserBuilderInterface
     {
         $new_builder = new ilVedaUserBuilder($this->usr_repo, $this->veda_logger);
         $new_builder->veda_usr = $this->veda_usr;
@@ -51,7 +51,7 @@ class ilVedaUserBuilder implements ilVedaUserBuilderInterface
         return $new_builder;
     }
 
-    public function withPasswordStatus(int $status): ilVedaUserBuilderInterface
+    public function withPasswordStatus(int $status) : ilVedaUserBuilderInterface
     {
         $new_builder = new ilVedaUserBuilder($this->usr_repo, $this->veda_logger);
         $new_builder->veda_usr = $this->veda_usr;
@@ -59,7 +59,7 @@ class ilVedaUserBuilder implements ilVedaUserBuilderInterface
         return $new_builder;
     }
 
-    public function withCreationStatus(int $status): ilVedaUserBuilderInterface
+    public function withCreationStatus(int $status) : ilVedaUserBuilderInterface
     {
         $new_builder = new ilVedaUserBuilder($this->usr_repo, $this->veda_logger);
         $new_builder->veda_usr = $this->veda_usr;
@@ -67,7 +67,7 @@ class ilVedaUserBuilder implements ilVedaUserBuilderInterface
         return $new_builder;
     }
 
-    public function withImportFailure(bool $value): ilVedaUserBuilderInterface
+    public function withImportFailure(bool $value) : ilVedaUserBuilderInterface
     {
         $new_builder = new ilVedaUserBuilder($this->usr_repo, $this->veda_logger);
         $new_builder->veda_usr = $this->veda_usr;
@@ -75,12 +75,12 @@ class ilVedaUserBuilder implements ilVedaUserBuilderInterface
         return $new_builder;
     }
 
-    public function get(): ilVedaUserInterface
+    public function get() : ilVedaUserInterface
     {
         return $this->veda_usr;
     }
 
-    public function store(): void
+    public function store() : void
     {
         $this->usr_repo->updateUser($this->veda_usr);
     }

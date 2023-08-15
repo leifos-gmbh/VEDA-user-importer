@@ -18,36 +18,36 @@ class ilVedaMailSegmentCollection implements ilVedaMailSegmentCollectionInterfac
         $this->index = 0;
     }
 
-    public function current(): ilVedaMailSegmentInterface
+    public function current() : ilVedaMailSegmentInterface
     {
         return $this->mail_segments[$this->index];
     }
 
-    public function next(): void
+    public function next() : void
     {
         $this->index++;
     }
 
-    public function key(): int
+    public function key() : int
     {
         return $this->index;
     }
 
-    public function valid(): bool
+    public function valid() : bool
     {
         return 0 <= $this->index && $this->index < count($this->mail_segments);
     }
 
-    public function rewind(): void
+    public function rewind() : void
     {
         $this->index = 0;
     }
 
-    public function getMailSegmentsWithType(string $type): ilVedaMailSegmentCollectionInterface
+    public function getMailSegmentsWithType(string $type) : ilVedaMailSegmentCollectionInterface
     {
         $mail_segments = [];
-        foreach($this as $mail_segment) {
-            if($mail_segment->getType() === $type) {
+        foreach ($this as $mail_segment) {
+            if ($mail_segment->getType() === $type) {
                 $mail_segments[] = $mail_segment;
             }
         }
@@ -57,15 +57,15 @@ class ilVedaMailSegmentCollection implements ilVedaMailSegmentCollectionInterfac
     public function getMailSegmentsInDateRange(
         DateTimeImmutable $from,
         DateTimeImmutable $to
-    ): ilVedaMailSegmentCollectionInterface {
-        if($from > $to) {
+    ) : ilVedaMailSegmentCollectionInterface {
+        if ($from > $to) {
             $tmp = $from;
             $from = $to;
             $to = $tmp;
         }
         $mail_segments = [];
-        foreach($this as $mail_segment) {
-            if(
+        foreach ($this as $mail_segment) {
+            if (
                 $to <= $mail_segment->getLastModified() &&
                 $mail_segment->getLastModified() <= $from
             ) {
@@ -75,7 +75,7 @@ class ilVedaMailSegmentCollection implements ilVedaMailSegmentCollectionInterfac
         return new ilVedaMailSegmentCollection($mail_segments);
     }
 
-    public function count(): int
+    public function count() : int
     {
         return count($this->mail_segments);
     }

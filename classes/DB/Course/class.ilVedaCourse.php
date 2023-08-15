@@ -46,7 +46,7 @@ class ilVedaCourse implements ilVedaCourseInterface
         $this->modified = $modified;
     }
 
-    public function setOid(string $oid): void
+    public function setOid(string $oid) : void
     {
         $this->oid = $oid;
     }
@@ -66,7 +66,7 @@ class ilVedaCourse implements ilVedaCourseInterface
         $this->type = $type;
     }
 
-    public function setPermanentSwitchRole(int $role): void
+    public function setPermanentSwitchRole(int $role) : void
     {
         $this->switch_permanent_role = $role;
     }
@@ -76,7 +76,7 @@ class ilVedaCourse implements ilVedaCourseInterface
         return $this->switch_permanent_role;
     }
 
-    public function setTemporarySwitchRole(int $role): void
+    public function setTemporarySwitchRole(int $role) : void
     {
         $this->switch_temporary_role = $role;
     }
@@ -86,7 +86,7 @@ class ilVedaCourse implements ilVedaCourseInterface
         return $this->switch_temporary_role;
     }
 
-    public function setCreationStatus(int $status): void
+    public function setCreationStatus(int $status) : void
     {
         $this->status_created = $status;
     }
@@ -106,17 +106,17 @@ class ilVedaCourse implements ilVedaCourseInterface
         $this->obj_id = $obj_id;
     }
 
-    public function setDocumentSuccess(bool $value): void
+    public function setDocumentSuccess(bool $value) : void
     {
         $this->document_success = $value;
     }
 
-    public function getDocumentSuccess(): bool
+    public function getDocumentSuccess() : bool
     {
         return $this->document_success;
     }
 
-    public function toString(): string
+    public function toString() : string
     {
         return "Course with parameters: "
             . "\nOID: " . $this->oid
