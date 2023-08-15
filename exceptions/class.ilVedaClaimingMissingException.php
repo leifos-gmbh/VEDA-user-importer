@@ -55,7 +55,7 @@ class ilVedaClaimingMissingException extends ilException
 	 */
 	public static function translateExceptionCode(int $code) : string
 	{
-		$plugin = \ilVedaConnectorPlugin::getInstance();
+		$plugin = ilVedaConnectorPlugin::getInstance();
 		return $plugin->txt(self::getMessageForCode($code));
 	}
 

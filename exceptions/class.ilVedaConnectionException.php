@@ -44,7 +44,7 @@ class ilVedaConnectionException extends ilException
 	 */
 	public static function translateExceptionCode(int $code) : string
 	{
-		$plugin = \ilVedaConnectorPlugin::getInstance();
+		$plugin = ilVedaConnectorPlugin::getInstance();
 		return $plugin->txt(self::exceptionCodeToString($code));
 	}
 

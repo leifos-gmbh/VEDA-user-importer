@@ -5,7 +5,7 @@
  *
  * @author Stefan Meyer <smeyer.ilias@gmx.de>
  */
-class ilVedaImporterLockedException extends \ilException
+class ilVedaImporterLockedException extends ilException
 {
 
 }

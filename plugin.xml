@@ -4,5 +4,6 @@
       <event type="listen" id="Services/User" />
       <event type="listen" id="Services/Object" />
       <event type="listen" id="Services/Tracking" />
+      <event type="listen" id="Modules/Course" />
    </events>
 </plugin>

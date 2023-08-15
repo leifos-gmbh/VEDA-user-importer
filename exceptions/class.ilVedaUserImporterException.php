@@ -10,7 +10,7 @@
 * @author Stefan Meyer <smeyer.ilias@gmx.de>
 *
 */
-class ilVedaUserImporterException extends \ilException
+class ilVedaUserImporterException extends ilException
 {
 
 }
