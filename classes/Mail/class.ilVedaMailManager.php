@@ -82,16 +82,16 @@ class ilVedaMailManager
     protected function addImportInfoToBody(string $body, ilVedaMailSegmentCollection $mail_segments) : string
     {
         $segments_user_updated = $mail_segments->getMailSegmentsWithType(ilVedaMailSegmentType::USER_UPDATED);
-        $body .= 'Anzahl aktualisierter Nutzerkonten:' . count($segments_user_updated) . "\n";
+        $body .= 'Anzahl Aktualisierungen von Nutzerkonten: ' . count($segments_user_updated) . "\n";
 
         $segments_user_updated = $mail_segments->getMailSegmentsWithType(ilVedaMailSegmentType::USER_IMPORTED);
-        $body .= 'Anzahl neu importierter Nutzerkonten:' . count($segments_user_updated) . "\n";
+        $body .= 'Anzahl neu importierter Nutzerkonten: ' . count($segments_user_updated) . "\n";
 
         $segments_courses_updated = $mail_segments->getMailSegmentsWithType(ilVedaMailSegmentType::COURSE_UPDATED);
-        $body .= 'Anzahl neu importierter Kurse:' . count($segments_courses_updated) . "\n";
+        $body .= 'Anzahl neu importierter Kurse: ' . count($segments_courses_updated) . "\n";
 
         $segments_mmbrshp_updated = $mail_segments->getMailSegmentsWithType(ilVedaMailSegmentType::MEMBERSHIP_UPDATED);
-        $body .= 'Anzahl aktualisierter/importierter Midgliedschaften:' . count($segments_mmbrshp_updated) . "\n";
+        $body .= 'Anzahl Aktualisierungen von Midgliedschaften: ' . count($segments_mmbrshp_updated) . "\n";
 
         return $body;
     }
