@@ -25,7 +25,7 @@ class ilVedaMemberStandardImportAdapter
      * @var array
      */
     protected $new_assignments = [];
-    protected ilVedaConnector $veda_connecor;
+    protected ilVedaConnector $veda_connector;
     protected ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory;
 
     public function __construct(
@@ -36,7 +36,7 @@ class ilVedaMemberStandardImportAdapter
     ) {
         $this->logger = $veda_logger;
         $this->rbac_admin = $rbac_admin;
-        $this->veda_connecor = $veda_connector;
+        $this->veda_connector = $veda_connector;
         $this->mail_segment_builder_factory = $mail_segment_builder_factory;
     }
 
@@ -61,9 +61,10 @@ class ilVedaMemberStandardImportAdapter
 
     protected function synchronizeParticipants(string $oid, int $obj_id) : void
     {
-        $tutors = $this->veda_connecor->readStandardCourseTutors($oid);
-        $supervisors = $this->veda_connecor->readStandardCourseSupervisors($oid);
-        $members = $this->veda_connecor->readStandardCourseMembers($oid);
+        $elearning_api = $this->veda_connector->getElearningPlattformApi();
+        $tutors = $elearning_api->requestCourseTutors($oid);
+        $supervisors = $elearning_api->requestCourseSupervisors($oid);
+        $members = $elearning_api->requestCourseMembers($oid);
 
         $this->logger->dump(array_merge($tutors, $supervisors, $members), \ilLogLevel::DEBUG);
 

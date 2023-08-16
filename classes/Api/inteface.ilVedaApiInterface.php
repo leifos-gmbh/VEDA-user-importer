@@ -13,9 +13,7 @@ interface ilVedaApiInterface
     public function handleAfterCloningStandardEvent(int $a_source_id, int $a_target_id, int $a_copy_id) : void;
 
     public function handleTrackingEvent(int $obj_id, int $usr_id, int $status) : void;
-    /**
-     * VedaConnector/handlePasswordChange
-     */
+
     public function handlePasswordChanged(int $usr_id) : void;
 
     public function handleCloningFailed() : void;

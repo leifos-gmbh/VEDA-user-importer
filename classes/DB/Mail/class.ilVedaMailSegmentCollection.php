@@ -66,8 +66,8 @@ class ilVedaMailSegmentCollection implements ilVedaMailSegmentCollectionInterfac
         $mail_segments = [];
         foreach ($this as $mail_segment) {
             if (
-                $to <= $mail_segment->getLastModified() &&
-                $mail_segment->getLastModified() <= $from
+                $from <= $mail_segment->getLastModified() &&
+                $mail_segment->getLastModified() <= $to
             ) {
                 $mail_segments[] = $mail_segment;
             }

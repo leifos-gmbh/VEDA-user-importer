@@ -71,7 +71,7 @@ class ilVedaCourseStandardImportAdapter
     public function import() : void
     {
         $this->logger->debug('Trying to import standard courses...');
-        $standard_courses = $this->veda_connector->getStandardCourses();
+        $standard_courses = $this->veda_connector->getElearningPlattformApi()->requestCourses();
         $this->logger->dump($standard_courses);
         foreach ($standard_courses as $course) {
             $this->handleCourseUpdate($course);
@@ -93,9 +93,9 @@ class ilVedaCourseStandardImportAdapter
             }
         } catch (Exception $e) {
             $this->logger->debug('Exception occurred: ' . $e->getMessage());
-            $this->veda_connector->sendStandardCourseCreationFailed(
+            $this->veda_connector->getElearningPlattformApi()->sendCourseCreationFailed(
                 $course->getOid(),
-                ilVedaConnector::COURSE_CREATION_FAILED_MASTER_COURSE_MISSING
+                'Masterkurs-Id nicht vorhanden.'
             );
             $this->crs_builder_factory->buildCourse()
                 ->withOID($course->getOid())
@@ -222,7 +222,7 @@ class ilVedaCourseStandardImportAdapter
             // send copy start
             try {
                 $this->logger->debug('Send copy start');
-                $this->veda_connector->sendStandardCourseCopyStarted($course->getOid());
+                $this->veda_connector->getElearningPlattformApi()->sendCourseCopyStarted($course->getOid());
             } catch (Exception $e) {
                 $this->logger->error('Sending course copy start message failed with message: ' . $e->getMessage());
             }
@@ -273,7 +273,9 @@ class ilVedaCourseStandardImportAdapter
     protected function readTrainingCourseTrainFromCopyInfo(array $info) : ?Ausbildungszug
     {
         try {
-            $trains = $this->veda_connector->getTrainingCourseTrains($info[self::CP_INFO_AUSBILDUNGSGANG]);
+            $trains = $this->veda_connector->getElearningPlattformApi()->requestTrainingCourseTrains(
+                $info[self::CP_INFO_AUSBILDUNGSGANG]
+            );
             foreach ($trains as $train) {
                 if (ilVedaUtils::compareOidsEqual($train->getOid(), $info[self::CP_INFO_AUSBILDUNGSZUG])) {
                     return $train;
@@ -290,7 +292,7 @@ class ilVedaCourseStandardImportAdapter
     protected function updateCourseCreatedStatus(string $oid) : void
     {
         try {
-            $this->veda_connector->sendStandardCourseCreated($oid);
+            $this->veda_connector->getElearningPlattformApi()->sendCourseCreated($oid);
             $this->crs_builder_factory->buildCourse()
                 ->withOID($oid)
                 ->withType(ilVedaCourseType::STANDARD)

@@ -268,7 +268,7 @@ class ilVedaUserImportAdapter
         foreach ($pending_participants as $participant_status) {
             try {
                 $this->logger->debug('Marked user with oid ' . $participant_status->getOid() . ' as imported.');
-                $this->veda_connector->sendCreationMessage($participant_status->getOid());
+                $this->veda_connector->getElearningPlattformApi()->sendAccountCreated($participant_status->getOid());
                 $participant_status->setCreationStatus(ilVedaUserStatus::SYNCHRONIZED);
                 $this->logger->info('Update creation status');
                 $this->usr_repo->updateUser($participant_status);
@@ -326,7 +326,7 @@ class ilVedaUserImportAdapter
                 ->withMessage($message)
                 ->store();
             try {
-                $this->veda_connector->sendAccountCreationFailed(
+                $this->veda_connector->getElearningPlattformApi()->sendAccountCreationFailed(
                     $participant->getTeilnehmer()->getOid(),
                     sprintf(self::ERR_LOGIN_EXIST_MSG, $login)
                 );
@@ -374,7 +374,7 @@ class ilVedaUserImportAdapter
                 ->withType(ilVedaMailSegmentType::ERROR)
                 ->store();
             try {
-                $this->veda_connector->sendAccountCreationFailed(
+                $this->veda_connector->getElearningPlattformApi()->sendAccountCreationFailed(
                     $participant->getTeilnehmer()->getOid(),
                     sprintf(self::ERR_LOGIN_EXIST_MSG, $login)
                 );
@@ -415,6 +415,10 @@ class ilVedaUserImportAdapter
                 ->withCreationStatus(ilVedaUserStatus::NONE)
                 ->withImportFailure(false)
                 ->store();
+            $this->mail_segment_builder_factory->buildSegment()
+                ->withType(ilVedaMailSegmentType::USER_IMPORTED)
+                ->withMessage('Imported user with id: ' . $usr_id)
+                ->store();
         }
         if ($usr_id) {
             $this->usr_builder_factory->buildUser()
@@ -422,11 +426,11 @@ class ilVedaUserImportAdapter
                 ->withLogin($participant->getBenutzername())
                 ->withImportFailure(false)
                 ->store();
+            $this->mail_segment_builder_factory->buildSegment()
+                ->withType(ilVedaMailSegmentType::USER_UPDATED)
+                ->withMessage('Updated user with id: ' . $usr_id)
+                ->store();
         }
-        $this->mail_segment_builder_factory->buildSegment()
-            ->withType(ilVedaMailSegmentType::USER_UPDATED)
-            ->withMessage('Updated user with id: ' . $usr_id)
-            ->store();
     }
 
     protected function parseOrganisationInfo(?string $orgoid) : bool
@@ -441,7 +445,7 @@ class ilVedaUserImportAdapter
         }
 
         try {
-            $org = $this->veda_connector->getOrganisation($orgoid);
+            $org = $this->veda_connector->getOrganisationApi()->getOrganisation($orgoid);
             $this->organisations[$orgoid] = $org;
             $this->writeOrganisationInfo($this->organisations[$orgoid]);
         } catch (ilVedaConnectionException $e) {

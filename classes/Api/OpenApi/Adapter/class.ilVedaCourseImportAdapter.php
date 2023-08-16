@@ -70,7 +70,7 @@ class ilVedaCourseImportAdapter
     {
         $training_course_id = $this->md_db_manager->findTrainingCourseId($ref_id);
         $this->logger->debug('Importing ref_id: ' . $ref_id . ' with training course id: ' . $training_course_id);
-        $trains = $this->veda_connector->getTrainingCourseTrains($training_course_id);
+        $trains = $this->veda_connector->getElearningPlattformApi()->requestTrainingCourseTrains($training_course_id);
         foreach ($trains as $train) {
             $this->handleTrainingCourseTrainUpdate($ref_id, $train);
         }
@@ -195,7 +195,7 @@ class ilVedaCourseImportAdapter
 
             // send copy start
             try {
-                $this->veda_connector->sendTrainingCourseTrainCopyStarted($train->getOid());
+                $this->veda_connector->getEducationTrainApi()->sendCopyStarted($train->getOid());
             } catch (Exception $e) {
                 $this->logger->error('Sending course copy start message failed with message: ' . $e->getMessage());
             }
@@ -255,7 +255,9 @@ class ilVedaCourseImportAdapter
     protected function readTrainingCourseTrainFromCopyInfo(array $info) : ?Ausbildungszug
     {
         try {
-            $trains = $this->veda_connector->getTrainingCourseTrains($info[self::CP_INFO_AUSBILDUNGSGANG]);
+            $trains = $this->veda_connector->getElearningPlattformApi()->requestTrainingCourseTrains(
+                $info[self::CP_INFO_AUSBILDUNGSGANG]
+            );
             foreach ($trains as $train) {
                 if (ilVedaUtils::compareOidsEqual($train->getOid(), $info[self::CP_INFO_AUSBILDUNGSZUG])) {
                     return $train;
@@ -272,7 +274,7 @@ class ilVedaCourseImportAdapter
     protected function updateCourseCreatedStatus(string $oid)
     {
         try {
-            $this->veda_connector->sendTrainingCourseTrainCreated($oid);
+            $this->veda_connector->getEducationTrainApi()->sendCourseCreated($oid);
             $this->crs_builder_factory->buildCourse()
                 ->withOID($oid)
                 ->withType(ilVedaCourseType::SIFA)
@@ -413,7 +415,7 @@ class ilVedaCourseImportAdapter
         }
 
         try {
-            $training_course = $this->veda_connector->getTrainingCourse($training_course_id);
+            $training_course = $this->veda_connector->getTrainingCourseApi()->getCourse($training_course_id);
             foreach ($training_course->getAusbildungsgangabschnitte() as $training_course_segment) {
                 if (ilVedaUtils::compareOidsEqual($training_course_segment->getOid(), $course_segment_id)) {
                     $segment_status = $this->segment_repo->createEmptySegment($segment_train_id);

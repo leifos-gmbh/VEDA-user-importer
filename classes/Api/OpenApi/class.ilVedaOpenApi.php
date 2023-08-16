@@ -1,5 +1,7 @@
 <?php
 
+use OpenAPI\Client\Configuration;
+
 class ilVedaOpenApi implements ilVedaApiInterface
 {
     /**
@@ -25,6 +27,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
     protected ilVedaConnectorPlugin $veda_plugin;
     protected ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory;
     protected ilVedaCourseBuilderFactory $crs_builder_factory;
+    protected ilVedaUserBuilderFactoryInterface $usr_builder_factory;
 
     public function __construct()
     {
@@ -44,12 +47,14 @@ class ilVedaOpenApi implements ilVedaApiInterface
         $this->veda_logger = $DIC->logger()->vedaimp();
         $this->crs_builder_factory = new ilVedaCourseBuilderFactory($this->crs_repo, $this->veda_logger);
         $this->user_repo = $repo_factory->getUserRepository();
-        $usr_builder_factory = new ilVedaUserBuilderFactory($this->user_repo, $this->veda_logger);
+        $this->usr_builder_factory = new ilVedaUserBuilderFactory($this->user_repo, $this->veda_logger);
         $this->veda_settings = ilVedaConnectorSettings::getInstance();
+
         $this->veda_connector = new ilVedaConnector(
             $this->veda_logger,
             $this->veda_settings,
-            $this->mail_segment_builder_factory
+            $this->mail_segment_builder_factory,
+            $this->usr_builder_factory
         );
         $this->sifa_course_import_adapter = new ilVedaCourseImportAdapter(
             $user,
@@ -80,7 +85,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
             $this->veda_connector,
             $this->veda_plugin->getUDFClaimingPlugin(),
             $this->md_db_manager,
-            $usr_builder_factory,
+            $this->usr_builder_factory,
             $this->crs_builder_factory,
             $this->mail_segment_builder_factory
         );
@@ -93,7 +98,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
         $this->user_import_adapter = new ilVedaUserImportAdapter(
             $this->veda_logger,
             $this->veda_settings,
-            $usr_builder_factory,
+            $this->usr_builder_factory,
             $this->user_repo,
             $this->veda_connector,
             $this->mail_segment_builder_factory
@@ -117,8 +122,8 @@ class ilVedaOpenApi implements ilVedaApiInterface
             $this->veda_logger->debug('Ignore course without document success flag');
             return;
         }
-        $this->veda_logger - debug('Send assigned usr:' . $veda_usr->getOid() . 'to crs:' . $veda_crs->getOid());
-        $this->veda_connector->sendParticipantAssignedToCourse(
+        $this->veda_logger->debug('Send assigned usr:' . $veda_usr->getOid() . ' to crs:' . $veda_crs->getOid());
+        $this->veda_connector->getElearningPlattformApi()->sendParticipantAssignedToCourse(
             $veda_crs->getOid(),
             $veda_usr->getOid()
         );
@@ -197,14 +202,15 @@ class ilVedaOpenApi implements ilVedaApiInterface
             return;
         }
 
+        $elearning_api = $this->veda_connector->getElearningPlattformApi();
         if ($status === ilLPStatus::LP_STATUS_FAILED_NUM) {
             $this->veda_logger->debug('Sending course failed via api.');
-            $this->veda_connector->sendCourseFailed($crs_oid, $usr_oid);
+            $elearning_api->sendCourseFailed($crs_oid, $usr_oid);
         }
 
         if ($status === ilLPStatus::LP_STATUS_COMPLETED_NUM) {
             $this->veda_logger->debug('Sending course passed via api.');
-            $this->veda_connector->sendCoursePassed($crs_oid, $usr_oid);
+            $elearning_api->sendCoursePassed($crs_oid, $usr_oid);
         }
     }
 
@@ -225,15 +231,39 @@ class ilVedaOpenApi implements ilVedaApiInterface
 
     public function handlePasswordChanged(int $usr_id) : void
     {
-        $this->veda_connector->handlePasswordChange($usr_id);
+        $import_id = ilObjUser::_lookupImportId($usr_id);
+
+        if (!$import_id) {
+            $this->veda_logger->debug('No import id for user ' . $usr_id);
+            return;
+        }
+
+        $veda_user = $this->usr_builder_factory->buildUser()
+            ->withOID($import_id)
+            ->get();
+
+        if (
+            $veda_user->isImportFailure() ||
+            $veda_user->getPasswordStatus() != ilVedaUserStatus::PENDING
+        ) {
+            $this->veda_logger->debug('No password notification required.');
+        }
+
+        $this->veda_connector->getElearningPlattformApi()->sendFirstLoginSuccess($veda_user->getOid());
+
+        $this->usr_builder_factory->buildUser()
+            ->withOID($import_id)
+            ->withPasswordStatus(ilVedaUserStatus::SYNCHRONIZED)
+            ->store();
     }
 
     public function deleteDeprecatedILIASUsers() : void
     {
         $user_db_manager = (new ilVedaRepositoryFactory())->getUserRepository();
+        $elearning_api = $this->veda_connector->getElearningPlattformApi();
         foreach ($this->user_repo->lookupAllUsers() as $user) {
             $found_remote = false;
-            foreach ($this->veda_connector->getParticipants() as $participant) {
+            foreach ($elearning_api->requestParticipants() as $participant) {
                 if (ilVedaUtils::compareOidsEqual($user->getOid(), $participant->getTeilnehmer()->getOid())) {
                     $found_remote = true;
                 }
@@ -254,12 +284,12 @@ class ilVedaOpenApi implements ilVedaApiInterface
             try {
                 if ($fail->getType() == ilVedaCourseType::SIFA) {
                     $message = 'SIFA course cloning failed, course oid: ' . $fail->getOid();
-                    $this->veda_connector->sendCourseCreationFailed($oid);
+                    $this->veda_connector->getEducationTrainApi()->sendCourseCreationFailed($oid);
                 } elseif ($fail->getType() == ilVedaCourseType::STANDARD) {
                     $message = 'Standard course cloning failed, course oid: ' . $fail->getOid();
-                    $this->veda_connector->sendStandardCourseCreationFailed(
+                    $this->veda_connector->getElearningPlattformApi()->sendCourseCreationFailed(
                         $oid,
-                        $this->veda_connector::COURSE_CREATION_FAILED_ELARNING
+                        'Synchronisierung des ELearning-Kurses fehlgeschlagen.'
                     );
                 } else {
                     $message = 'Unknown course cloning failed, course oid: ' . $fail->getOid();
@@ -282,7 +312,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
 
     public function importILIASUsers() : void
     {
-        $participants = $this->veda_connector->getParticipants();
+        $participants = $this->veda_connector->getElearningPlattformApi()->requestParticipants();
         $this->veda_logger->dump($participants, \ilLogLevel::DEBUG);
         $this->user_import_adapter->import($participants);
     }
@@ -310,7 +340,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
     public function isTrainingCourseValid($course_oid) : bool
     {
         try {
-            $training_course = $this->veda_connector->getTrainingCourse($course_oid);
+            $training_course = $this->veda_connector->getTrainingCourseApi()->getCourse($course_oid);
             $this->veda_logger->dump($training_course);
         } catch (ilVedaConnectionException $e) {
             return false;
@@ -321,7 +351,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
     public function validateLocalSessions(array $sessions, string $course_oid) : array
     {
         $missing = [];
-        $training_course = $this->veda_connector->getTrainingCourse($course_oid);
+        $training_course = $this->veda_connector->getTrainingCourseApi()->getCourse($course_oid);
         foreach ($sessions as $index => $node) {
             if (!$node['vedaid']) {
                 continue;
@@ -355,7 +385,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
     public function validateRemoteSessions(array $sessions, string $course_oid) : array
     {
         $missing = [];
-        $training_course = $this->veda_connector->getTrainingCourse($course_oid);
+        $training_course = $this->veda_connector->getTrainingCourseApi()->getCourse($course_oid);
         foreach ($training_course->getAusbildungsgangabschnitte() as $segment) {
             if (!$segment->getAbbildungAufELearningPlattform()) {
                 $this->veda_logger->debug('Ignoring of type: !AbbildungAufELearningPlattform');
@@ -385,7 +415,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
     public function validateLocalExercises(array $exercises, string $course_oid) : array
     {
         $missing = [];
-        $training_course = $this->veda_connector->getTrainingCourse($course_oid);
+        $training_course = $this->veda_connector->getTrainingCourseApi()->getCourse($course_oid);
         foreach ($exercises as $index => $node) {
             if (!$node['vedaid']) {
                 continue;
@@ -413,7 +443,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
     public function validateRemoteExercises(array $exercises, string $course_oid) : array
     {
         $missing = [];
-        $training_course = $this->veda_connector->getTrainingCourse($course_oid);
+        $training_course = $this->veda_connector->getTrainingCourseApi()->getCourse($course_oid);
         foreach ($training_course->getAusbildungsgangabschnitte() as $segment) {
             if (!$segment->getAbbildungAufELearningPlattform()) {
                 $this->veda_logger->debug('Ignoring segment of type: !AbbildungAufELearningPlattform');
@@ -444,7 +474,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
     public function testConnection() : bool
     {
         try {
-            $response = $this->veda_connector->getParticipants();
+            $response = $this->veda_connector->getElearningPlattformApi()->requestParticipants();
             $id = $this->md_db_manager->findTrainingCourseId(70);
             $this->veda_logger->notice($id . ' is the training course id');
         } catch (\Exception $e) {

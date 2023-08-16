@@ -17,7 +17,7 @@ class ilVedaMailSegmentType
     /**
      * @var int
      */
-    public const USER_REMOVED = 3;
+    public const USER_IMPORTED = 3;
     /**
      * @var int
      */

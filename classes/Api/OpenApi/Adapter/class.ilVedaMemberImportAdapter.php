@@ -138,9 +138,10 @@ class ilVedaMemberImportAdapter
         if ($is_practical_training && $submission_date_str) {
             try {
                 $submission_date = new DateTime($submission_date_str);
-                $this->veda_connector->sendExerciseSubmissionDate($segment_id, $usr_oid, $submission_date);
-                $this->veda_connector->sendExerciseSubmissionConfirmed($segment_id, $usr_oid, new \DateTime());
-                $this->veda_connector->sendExerciseSuccess($segment_id, $usr_oid, new \DateTime());
+                $education_train_segment_api = $this->veda_connector->getEducationTrainSegmentApi();
+                $education_train_segment_api->sendExerciseSubmissionDate($segment_id, $usr_oid, $submission_date);
+                $education_train_segment_api->sendExerciseSubmissionConfirmed($segment_id, $usr_oid, new \DateTime());
+                $education_train_segment_api->sendExerciseSuccess($segment_id, $usr_oid, new \DateTime());
             } catch (ilVedaConnectionException $e) {
                 $this->logger->error('Send exercise success failed with message: ' . $e->getMessage());
             }
@@ -151,7 +152,8 @@ class ilVedaMemberImportAdapter
         }
         if ($is_self_learning) {
             try {
-                $this->veda_connector->sendExerciseSuccess($segment_id, $usr_oid, new \DateTime());
+                $education_train_segment_api = $this->veda_connector->getEducationTrainSegmentApi();
+                $education_train_segment_api->sendExerciseSuccess($segment_id, $usr_oid, new \DateTime());
             } catch (ilVedaConnectionException $e) {
                 $this->logger->error('Send exercise success for type "self training" failed with message: ' . $e->getMessage());
             }
@@ -165,7 +167,7 @@ class ilVedaMemberImportAdapter
     protected function importTrainingCourseTrain(?string $oid) : void
     {
         // read member info
-        $members = $this->veda_connector->readTrainingCourseTrainMembers($oid);
+        $members = $this->veda_connector->getEducationTrainApi()->requestMembers($oid);
 
         $course_ref_id = $this->md_db_manager->findTrainingCourseTrain($oid);
         $course = \ilObjectFactory::getInstanceByRefId($course_ref_id);
@@ -213,11 +215,11 @@ class ilVedaMemberImportAdapter
         ?string $oid
     ) : bool {
         $udffields = $this->udf_claiming_plugin->getFields();
-
         try {
-            $remote_tutors = $this->veda_connector->readTrainingCourseTrainTutors($oid);
-            $remote_companions = $this->veda_connector->readTrainingCourseTrainCompanions($oid);
-            $remote_supervisors = $this->veda_connector->readTrainingCourseTrainSupervisors($oid);
+            $education_train_api = $this->veda_connector->getEducationTrainApi();
+            $remote_tutors = $education_train_api->requestTutors($oid);
+            $remote_companions = $education_train_api->requestCompanions($oid);
+            $remote_supervisors = $education_train_api->requestSupervisors($oid);
             $this->logger->dump($remote_tutors, \ilLogLevel::DEBUG);
             $this->logger->dump($remote_companions, \ilLogLevel::DEBUG);
             $this->logger->dump($remote_supervisors, \ilLogLevel::DEBUG);
