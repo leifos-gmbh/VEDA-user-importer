@@ -5,9 +5,6 @@ use OpenAPI\Client\Model\Lernbegleiterkurszuordnung;
 use OpenAPI\Client\Model\AusbildungszugTeilnehmer;
 use OpenAPI\Client\Model\Teilnehmerkurszuordnung;
 
-/**
- * Class ilVedaMemberImportAdapter
- */
 class ilVedaMemberStandardImportAdapter
 {
     /**
@@ -26,25 +23,27 @@ class ilVedaMemberStandardImportAdapter
      */
     protected $new_assignments = [];
     protected ilVedaConnector $veda_connector;
-    protected ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory;
+    protected ilVedaCourseRepositoryInterface $crs_repo;
+    protected ilVedaRepositoryContentBuilderFactoryInterface $repo_content_builder_factory;
 
     public function __construct(
         ilLogger $veda_logger,
         ilRbacAdmin $rbac_admin,
         ilVedaConnector $veda_connector,
-        ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory
+        ilVedaCourseRepositoryInterface  $crs_repo,
+        ilVedaRepositoryContentBuilderFactoryInterface $repo_content_builder_factory
     ) {
         $this->logger = $veda_logger;
         $this->rbac_admin = $rbac_admin;
         $this->veda_connector = $veda_connector;
-        $this->mail_segment_builder_factory = $mail_segment_builder_factory;
+        $this->crs_repo = $crs_repo;
+        $this->repo_content_builder_factory = $repo_content_builder_factory;
     }
 
     public function import() : void
     {
         $this->logger->debug('Reading "ELearning-Kurse" ...');
-        $crs_repo = (new ilVedaRepositoryFactory())->getCourseRepository();
-        $standard_courses = $crs_repo->lookupAllCourses()->getCoursesWithStatusAndType(
+        $standard_courses = $this->crs_repo->lookupAllCourses()->getCoursesWithStatusAndType(
             ilVedaCourseStatus::SYNCHRONIZED,
             ilVedaCourseType::STANDARD
         );
@@ -105,7 +104,7 @@ class ilVedaMemberStandardImportAdapter
                     $course->getDefaultMemberRole(),
                     $user_id
                 );
-                $this->mail_segment_builder_factory->buildSegment()
+                $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                     ->withType(ilVedaMailSegmentType::MEMBERSHIP_UPDATED)
                     ->withMessage($message)
                     ->store();
@@ -151,7 +150,7 @@ class ilVedaMemberStandardImportAdapter
                     $course->getDefaultTutorRole(),
                     $user_id
                 );
-                $this->mail_segment_builder_factory->buildSegment()
+                $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                     ->withType(ilVedaMailSegmentType::MEMBERSHIP_UPDATED)
                     ->withMessage($message)
                     ->store();
@@ -232,7 +231,7 @@ class ilVedaMemberStandardImportAdapter
         $course = ilObjectFactory::getInstanceByRefId($ref_id, false);
         if (!$course instanceof ilObjCourse) {
             $message = 'Invalid course id given: ' . $obj_id;
-            $this->mail_segment_builder_factory->buildSegment()
+            $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withMessage($message)
                 ->withType(ilVedaMailSegmentType::ERROR)
                 ->store();
@@ -249,7 +248,7 @@ class ilVedaMemberStandardImportAdapter
         $participants = ilParticipants::getInstance($ref_id);
         if (!$participants instanceof ilCourseParticipants) {
             $message = 'Invalid participant id given: ' . $obj_id;
-            $this->mail_segment_builder_factory->buildSegment()
+            $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withMessage($message)
                 ->withType(ilVedaMailSegmentType::ERROR)
                 ->store();
@@ -293,7 +292,7 @@ class ilVedaMemberStandardImportAdapter
                 $course->getRefId()
             );
             $assigned[] = $user;
-            $this->mail_segment_builder_factory->buildSegment()
+            $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withType(ilVedaMailSegmentType::MEMBERSHIP_UPDATED)
                 ->withMessage('Adding new user with role_id ' . $role . ' user_id ' . $user . ' to course with ref_id ' . $course->getRefId())
                 ->store();

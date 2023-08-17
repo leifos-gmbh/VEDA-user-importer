@@ -1,6 +1,6 @@
 <?php
 
-class ilVedaRepositoryFactory
+class ilVedaRepositoryFactory implements ilVedaRepositoryFactoryInterface
 {
     protected ilDBInterface $il_db;
     protected ilLogger $veda_logger;
@@ -29,7 +29,7 @@ class ilVedaRepositoryFactory
 
     public function getSegmentRepository() : ilVedaSegmentRepositoryInterface
     {
-        return new ilVedaSegmentRepository($this->il_db);
+        return new ilVedaSegmentRepository($this->il_db, $this->veda_logger);
     }
 
     public function getMDClaimingPluginRepository() : ilVedaMDClaimingPluginDBManagerInterface

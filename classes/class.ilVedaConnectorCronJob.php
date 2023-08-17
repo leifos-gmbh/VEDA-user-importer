@@ -64,13 +64,10 @@ class ilVedaConnectorCronJob extends ilCronJob
 
         try {
             $importer = new ilVedaImporter();
-            $importer->setImportMode(true);
-            $importer->import();
+            $importer->import(ilVedaImporter::IMPORT_TYPE_UNDEFINED, true);
             $this->settings->updateLastCronExecution();
-
             $mail_manager = new ilVedaMailManager();
             $mail_manager->sendStatus();
-
             $result->setStatus(ilCronJobResult::STATUS_OK);
         } catch (Exception $e) {
             $result->setStatus(ilCronJobResult::STATUS_CRASHED);

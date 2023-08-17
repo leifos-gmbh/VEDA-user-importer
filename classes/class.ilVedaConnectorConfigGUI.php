@@ -514,15 +514,14 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
                     }
                 }
                 $importer = ilVedaImporter::getInstance();
-                $importer->setImportType($import_type);
                 $this->logger->dump($import_type, ilLogLevel::NOTICE);
                 $this->logger->dump($import_type_selection, ilLogLevel::NOTICE);
                 $this->logger->dump($modes, ilLogLevel::NOTICE);
-                $importer->setImportMode(
-                    ($import_type_selection == ilVedaImporter::IMPORT_ALL),
+                $importer->import(
+                    $import_type,
+                    ($import_type_selection === ilVedaImporter::IMPORT_ALL),
                     $modes
                 );
-                $importer->import();
             }
         } catch (Exception $e) {
             $this->logger->logStack(ilLogLevel::WARNING);
@@ -561,7 +560,7 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
         $table->init();
         $table->parse();
         $this->tpl->setContent($table->getHTML());
-        (new ilVedaMailManager())->sendStatus('ludolf@leifos.de');
+        (new ilVedaMailManager())->sendStatus();
     }
 
     protected function setSubTabs()

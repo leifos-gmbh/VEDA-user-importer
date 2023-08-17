@@ -37,16 +37,16 @@ class ilVedaConnector
 {
     protected ilLogger $veda_logger;
     protected Configuration $config;
-    protected ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory;
+    protected ilVedaRepositoryContentBuilderFactoryInterface $repo_content_builder_factory;
     protected string $plattform_id;
 
     public function __construct(
         ilLogger $veda_logger,
         ilVedaConnectorSettings $veda_settings,
-        ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory
+        ilVedaRepositoryContentBuilderFactory $repo_content_builder_factory
     ) {
         $this->veda_logger = $veda_logger;
-        $this->mail_segment_builder_factory = $mail_segment_builder_factory;
+        $this->repo_content_builder_factory = $repo_content_builder_factory;
         $this->config = new Configuration();
         $this->config->setApiKey(
             ilVedaConnectorSettings::HEADER_TOKEN,
@@ -62,7 +62,7 @@ class ilVedaConnector
         return new ilVedaTrainingCourseApi(
             $this->config,
             $this->veda_logger,
-            $this->mail_segment_builder_factory
+            $this->repo_content_builder_factory->getMailSegmentBuilder()
         );
     }
 
@@ -71,7 +71,7 @@ class ilVedaConnector
         return new ilVedaEducationTrainApi(
             $this->config,
             $this->veda_logger,
-            $this->mail_segment_builder_factory
+            $this->repo_content_builder_factory->getMailSegmentBuilder()
         );
     }
 
@@ -80,7 +80,7 @@ class ilVedaConnector
         return new ilVedaEducationTrainSegmentApi(
             $this->config,
             $this->veda_logger,
-            $this->mail_segment_builder_factory
+            $this->repo_content_builder_factory->getMailSegmentBuilder()
         );
     }
 
@@ -90,7 +90,7 @@ class ilVedaConnector
             $this->plattform_id,
             $this->config,
             $this->veda_logger,
-            $this->mail_segment_builder_factory
+            $this->repo_content_builder_factory->getMailSegmentBuilder()
         );
     }
 
@@ -99,7 +99,7 @@ class ilVedaConnector
         return new ilVedaOrganisationApi(
             $this->config,
             $this->veda_logger,
-            $this->mail_segment_builder_factory
+            $this->repo_content_builder_factory->getMailSegmentBuilder()
         );
     }
 }

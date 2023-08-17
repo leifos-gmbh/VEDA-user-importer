@@ -2,9 +2,6 @@
 
 use OpenApi\Client\Model\AusbildungszugTeilnehmer;
 
-/**
- * Class ilVedaMemberImportAdapter
- */
 class ilVedaMemberImportAdapter
 {
     /**
@@ -22,9 +19,7 @@ class ilVedaMemberImportAdapter
     protected ilVedaConnector $veda_connector;
     protected ilUDFClaimingPlugin $udf_claiming_plugin;
     protected ilVedaMDClaimingPluginDBManagerInterface $md_db_manager;
-    protected ilVedaUserBuilderFactoryInterface $usr_builder_factory;
-    protected ilVedaCourseBuilderFactoryInterface $crs_builder_factory;
-    protected ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory;
+    protected ilVedaRepositoryContentBuilderFactoryInterface $repo_content_builder_factory;
 
     public function __construct(
         ilLogger $veda_logger,
@@ -33,9 +28,7 @@ class ilVedaMemberImportAdapter
         ilVedaConnector $veda_connector,
         ilUDFClaimingPlugin $udf_claiming_plugin,
         ilVedaMDClaimingPluginDBManagerInterface $md_db_manager,
-        ilVedaUserBuilderFactoryInterface $usr_builder_factory,
-        ilVedaCourseBuilderFactoryInterface $crs_builder_factory,
-        ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory
+        ilVedaRepositoryContentBuilderFactoryInterface $repo_content_builder_factory
     ) {
         $this->rbac_admin = $rbac_admin;
         $this->rbac_review = $rbac_review;
@@ -43,9 +36,7 @@ class ilVedaMemberImportAdapter
         $this->veda_connector = $veda_connector;
         $this->udf_claiming_plugin = $udf_claiming_plugin;
         $this->md_db_manager = $md_db_manager;
-        $this->usr_builder_factory = $usr_builder_factory;
-        $this->crs_builder_factory = $crs_builder_factory;
-        $this->mail_segment_builder_factory = $mail_segment_builder_factory;
+        $this->repo_content_builder_factory = $repo_content_builder_factory;
     }
 
     public function import() : void
@@ -68,7 +59,7 @@ class ilVedaMemberImportAdapter
             return;
         }
         // additional check in user status table
-        $us = $this->usr_builder_factory->buildUser()->withOID($usr_oid)->get();
+        $us = $this->repo_content_builder_factory->getVedaUserBuilder()->buildUser()->withOID($usr_oid)->get();
         if ($us->getCreationStatus() != ilVedaUserStatus::SYNCHRONIZED) {
             $this->logger->info('Ignoring not synchronized user account: ' . $usr_oid);
             return;
@@ -115,7 +106,9 @@ class ilVedaMemberImportAdapter
         foreach ($refs as $tmp => $ref_id) {
             $segment_id = $this->md_db_manager->findTrainSegmentId($ref_id);
             $this->logger->debug('Current ref_id: ' . $ref_id . ' has segment_id: ' . $segment_id);
-            $segment_info = (new ilVedaRepositoryFactory())->getSegmentRepository()->lookupSegmentInfo($segment_id);
+            $segment_info = $this->repo_content_builder_factory->getVedaSegmentBuilder()->buildSegment()
+                ->withOID($segment_id)
+                ->get();
             if ($segment_info->isPracticalTraining()) {
                 $this->logger->info('Exercise of type "practical training"');
                 $is_practical_training = true;
@@ -146,6 +139,7 @@ class ilVedaMemberImportAdapter
                 $this->logger->error('Send exercise success failed with message: ' . $e->getMessage());
             }
         } elseif ($is_practical_training) {
+            $ref_id = (count($refs) > 0) ? ('' . $refs[count($refs) - 1]) : 'NOT FOUND';
             $this->logger->notice('Did not send exercise success messages for user without submission. ');
             $this->logger->notice('User id: ' . $usr_id);
             $this->logger->notice('Exercise ref_id: ' . $ref_id);
@@ -173,7 +167,7 @@ class ilVedaMemberImportAdapter
         $course = \ilObjectFactory::getInstanceByRefId($course_ref_id);
         if (!$course instanceof \ilObjCourse) {
             $message = 'Cannot find course for oid: ' . $oid;
-            $this->mail_segment_builder_factory->buildSegment()
+            $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withMessage($message)
                 ->withType(ilVedaMailSegmentType::ERROR)
                 ->store();
@@ -182,7 +176,7 @@ class ilVedaMemberImportAdapter
         $participants = \ilParticipants::getInstance($course_ref_id);
         if (!$participants instanceof \ilCourseParticipants) {
             $message = 'Cannot find course participants for oid: ' . $oid;
-            $this->mail_segment_builder_factory->buildSegment()
+            $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withMessage($message)
                 ->withType(ilVedaMailSegmentType::ERROR)
                 ->store();
@@ -192,7 +186,7 @@ class ilVedaMemberImportAdapter
         $this->logger->debug('Handling course: ' . $course->getTitle());
         $this->logger->dump($members, \ilLogLevel::DEBUG);
 
-        $veda_crs = $this->crs_builder_factory->buildCourse()
+        $veda_crs = $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
             ->withOID($oid)
             ->get();
 
@@ -292,7 +286,7 @@ class ilVedaMemberImportAdapter
                 $this->logger->info($message);
                 $this->rbac_admin->deassignUser($course->getDefaultTutorRole(), $tutor_id);
                 $participants->updateContact($tutor_id, false);
-                $this->mail_segment_builder_factory->buildSegment()
+                $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                     ->withMessage($message)
                     ->withType(ilVedaMailSegmentType::MEMBERSHIP_UPDATED)
                     ->store();
@@ -308,7 +302,7 @@ class ilVedaMemberImportAdapter
                 if (!in_array($uid, $participants->getTutors())) {
                     $this->rbac_admin->assignUser($course->getDefaultTutorRole(), $uid);
                     $participants->updateContact($uid, true);
-                    $this->mail_segment_builder_factory->buildSegment()
+                    $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                         ->withMessage('Remote tutor oid is: ' . $tutor_oid)
                         ->withType(ilVedaMailSegmentType::MEMBERSHIP_UPDATED)
                         ->store();
@@ -331,7 +325,7 @@ class ilVedaMemberImportAdapter
                     $this->logger->info($message);
                     $this->rbac_admin->assignUser($course->getDefaultTutorRole(), $uid);
                     $participants->updateContact($uid, true);
-                    $this->mail_segment_builder_factory->buildSegment()
+                    $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                         ->withMessage($message)
                         ->withType(ilVedaMailSegmentType::MEMBERSHIP_UPDATED)
                         ->store();
@@ -353,7 +347,7 @@ class ilVedaMemberImportAdapter
                     $this->logger->info($message);
                     $this->rbac_admin->assignUser($course->getDefaultTutorRole(), $uid);
                     $participants->updateContact($uid, true);
-                    $this->mail_segment_builder_factory->buildSegment()
+                    $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                         ->withMessage($message)
                         ->withType(ilVedaMailSegmentType::MEMBERSHIP_UPDATED)
                         ->store();
@@ -401,7 +395,7 @@ class ilVedaMemberImportAdapter
                     $course->getDefaultMemberRole(),
                     $participant
                 );
-                $this->mail_segment_builder_factory->buildSegment()
+                $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                     ->withMessage($message)
                     ->withType(ilVedaMailSegmentType::MEMBERSHIP_UPDATED)
                     ->store();
@@ -448,7 +442,7 @@ class ilVedaMemberImportAdapter
                     $status->getPermanentSwitchRole(),
                     $participant
                 );
-                $this->mail_segment_builder_factory->buildSegment()
+                $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                     ->withMessage($message)
                     ->withType(ilVedaMailSegmentType::MEMBERSHIP_UPDATED)
                     ->store();
@@ -490,7 +484,7 @@ class ilVedaMemberImportAdapter
                     $status->getTemporarySwitchRole(),
                     $participant
                 );
-                $this->mail_segment_builder_factory->buildSegment()
+                $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                     ->withMessage($message)
                     ->withType(ilVedaMailSegmentType::MEMBERSHIP_UPDATED)
                     ->store();
@@ -634,7 +628,7 @@ class ilVedaMemberImportAdapter
             );
             $message = 'Assigning user: ' . $user . ' with role id ' . $role . ' to course: ' . $course->getTitle();
             $assigned[] = $user;
-            $this->mail_segment_builder_factory->buildSegment()
+            $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withMessage($message)
                 ->withType(ilVedaMailSegmentType::MEMBERSHIP_UPDATED)
                 ->store();

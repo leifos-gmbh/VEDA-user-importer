@@ -19,15 +19,11 @@ class ilVedaOpenApi implements ilVedaApiInterface
     protected ilVedaMemberImportAdapter $sifa_member_import_adapter;
     protected ilVedaMemberStandardImportAdapter $standard_member_import_adapter;
     protected ilVedaUserImportAdapter $user_import_adapter;
-    protected ilVedaConnectorSettings $veda_settings;
     protected ilVedaUserRepositoryInterface $user_repo;
     protected ilVedaCourseRepositoryInterface $crs_repo;
     protected ilVedaMDClaimingPluginDBManagerInterface $md_db_manager;
     protected ilLogger $veda_logger;
-    protected ilVedaConnectorPlugin $veda_plugin;
-    protected ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory;
-    protected ilVedaCourseBuilderFactory $crs_builder_factory;
-    protected ilVedaUserBuilderFactoryInterface $usr_builder_factory;
+    protected ilVedaRepositoryContentBuilderFactoryInterface $repo_content_builder_factory;
 
     public function __construct()
     {
@@ -37,24 +33,24 @@ class ilVedaOpenApi implements ilVedaApiInterface
         $rbac_admin = $DIC->rbac()->admin();
         $rbac_review = $DIC->rbac()->review();
         $user = $DIC->user();
+
         $repo_factory = new ilVedaRepositoryFactory();
-        $segment_repo = $repo_factory->getSegmentRepository();
-        $mail_segment_repo = $repo_factory->getMailRepository();
-        $this->mail_segment_builder_factory = new ilVedaMailSegmentBuilderFactory($mail_segment_repo);
+        $veda_settings = new ilVedaConnectorSettings();
+
+        $this->veda_logger = $DIC->logger()->vedaimp();
         $this->crs_repo = $repo_factory->getCourseRepository();
         $this->md_db_manager = $repo_factory->getMDClaimingPluginRepository();
-        $this->veda_plugin = ilVedaConnectorPlugin::getInstance();
-        $this->veda_logger = $DIC->logger()->vedaimp();
-        $this->crs_builder_factory = new ilVedaCourseBuilderFactory($this->crs_repo, $this->veda_logger);
         $this->user_repo = $repo_factory->getUserRepository();
-        $this->usr_builder_factory = new ilVedaUserBuilderFactory($this->user_repo, $this->veda_logger);
-        $this->veda_settings = ilVedaConnectorSettings::getInstance();
+        $this->repo_content_builder_factory = new ilVedaRepositoryContentBuilderFactory(
+            $repo_factory,
+            $this->veda_logger
+        );
+        $sgmt_builder_factory = new ilVedaSegmentBuilderFactory($repo_factory->getSegmentRepository(), $this->veda_logger);
 
         $this->veda_connector = new ilVedaConnector(
             $this->veda_logger,
-            $this->veda_settings,
-            $this->mail_segment_builder_factory,
-            $this->usr_builder_factory
+            $veda_settings,
+            $this->repo_content_builder_factory
         );
         $this->sifa_course_import_adapter = new ilVedaCourseImportAdapter(
             $user,
@@ -63,45 +59,40 @@ class ilVedaOpenApi implements ilVedaApiInterface
             $rbac_review,
             $this->veda_logger,
             $this->veda_connector,
-            $this->crs_builder_factory,
-            $segment_repo,
             $this->md_db_manager,
-            $this->veda_settings,
-            $this->mail_segment_builder_factory
+            $veda_settings,
+            $this->repo_content_builder_factory
         );
         $this->standard_course_import_adapter = new ilVedaCourseStandardImportAdapter(
             $user,
             $object_definition,
             $this->veda_logger,
-            $this->veda_settings,
-            $this->crs_builder_factory,
+            $veda_settings,
             $this->veda_connector,
-            $this->mail_segment_builder_factory
+            $this->repo_content_builder_factory
         );
         $this->sifa_member_import_adapter = new ilVedaMemberImportAdapter(
             $this->veda_logger,
             $rbac_admin,
             $rbac_review,
             $this->veda_connector,
-            $this->veda_plugin->getUDFClaimingPlugin(),
+            ilVedaConnectorPlugin::getInstance()->getUDFClaimingPlugin(),
             $this->md_db_manager,
-            $this->usr_builder_factory,
-            $this->crs_builder_factory,
-            $this->mail_segment_builder_factory
+            $this->repo_content_builder_factory
         );
         $this->standard_member_import_adapter = new ilVedaMemberStandardImportAdapter(
             $this->veda_logger,
             $rbac_admin,
             $this->veda_connector,
-            $this->mail_segment_builder_factory
+            $this->crs_repo,
+            $this->repo_content_builder_factory
         );
         $this->user_import_adapter = new ilVedaUserImportAdapter(
             $this->veda_logger,
-            $this->veda_settings,
-            $this->usr_builder_factory,
+            $veda_settings,
             $this->user_repo,
             $this->veda_connector,
-            $this->mail_segment_builder_factory
+            $this->repo_content_builder_factory
         );
     }
 
@@ -193,7 +184,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
             return;
         }
 
-        $veda_crs = $this->crs_builder_factory->buildCourse()
+        $veda_crs = $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
             ->withOID($crs_oid)
             ->get();
 
@@ -238,7 +229,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
             return;
         }
 
-        $veda_user = $this->usr_builder_factory->buildUser()
+        $veda_user = $this->repo_content_builder_factory->getVedaUserBuilder()->buildUser()
             ->withOID($import_id)
             ->get();
 
@@ -251,7 +242,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
 
         $this->veda_connector->getElearningPlattformApi()->sendFirstLoginSuccess($veda_user->getOid());
 
-        $this->usr_builder_factory->buildUser()
+        $this->repo_content_builder_factory->getVedaUserBuilder()->buildUser()
             ->withOID($import_id)
             ->withPasswordStatus(ilVedaUserStatus::SYNCHRONIZED)
             ->store();
@@ -259,7 +250,6 @@ class ilVedaOpenApi implements ilVedaApiInterface
 
     public function deleteDeprecatedILIASUsers() : void
     {
-        $user_db_manager = (new ilVedaRepositoryFactory())->getUserRepository();
         $elearning_api = $this->veda_connector->getElearningPlattformApi();
         foreach ($this->user_repo->lookupAllUsers() as $user) {
             $found_remote = false;
@@ -269,7 +259,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
                 }
             }
             if (!$found_remote) {
-                $user_db_manager->deleteUserByOID($user->getOid());
+                $this->user_repo->deleteUserByOID($user->getOid());
             }
         }
     }
@@ -295,7 +285,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
                     $message = 'Unknown course cloning failed, course oid: ' . $fail->getOid();
                     $this->veda_logger->error('Unknown type given for oid ' . $fail->getOid());
                 }
-                $this->crs_builder_factory->buildCourse()
+                $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
                     ->withOID($fail->getOid())
                     ->withModified(time())
                     ->withStatusCreated(ilVedaCourseStatus::FAILED)
@@ -303,7 +293,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
             } catch (Exception $e) {
                 $this->veda_logger->error($e->getMessage());
             }
-            $this->mail_segment_builder_factory->buildSegment()
+            $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withMessage($message)
                 ->withType(ilVedaMailSegmentType::ERROR)
                 ->store();

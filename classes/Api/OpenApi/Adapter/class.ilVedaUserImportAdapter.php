@@ -5,8 +5,6 @@ use OpenApi\Client\Model\Organisation;
 use OpenApi\Client\Model\TeilnehmerELearningPlattform;
 
 /**
- * Class ilVedaUserImportAdapter
- *
  * @author Stefan Meyer <smeyer.ilias@gmx.de>
  */
 class ilVedaUserImportAdapter
@@ -27,26 +25,23 @@ class ilVedaUserImportAdapter
      */
     protected $organisations = [];
     protected ilXmlWriter $writer;
-    protected ilVedaUserBuilderFactoryInterface $usr_builder_factory;
     protected ilVedaConnector $veda_connector;
-    protected ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory;
     protected ilVedaUserRepositoryInterface $usr_repo;
+    protected ilVedaRepositoryContentBuilderFactoryInterface $repo_content_builder_factory;
 
     public function __construct(
         ilLogger $veda_logger,
         ilVedaConnectorSettings $veda_settings,
-        ilVedaUserBuilderFactoryInterface $usr_builder_factory,
         ilVedaUserRepositoryInterface $usr_repo,
         ilVedaConnector $veda_connector,
-        ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory
+        ilVedaRepositoryContentBuilderFactoryInterface $repo_content_builder_factory
     ) {
         $this->logger = $veda_logger;
         $this->settings = $veda_settings;
         $this->writer = new \ilXmlWriter();
-        $this->usr_builder_factory = $usr_builder_factory;
         $this->usr_repo = $usr_repo;
         $this->veda_connector = $veda_connector;
-        $this->mail_segment_builder_factory = $mail_segment_builder_factory;
+        $this->repo_content_builder_factory = $repo_content_builder_factory;
     }
 
     /**
@@ -321,7 +316,7 @@ class ilVedaUserImportAdapter
         if (strcmp($generated_login, $login) !== 0) {
             $message = 'User with login: ' . $login . ' already exists.';
             $this->logger->warning($message);
-            $this->mail_segment_builder_factory->buildSegment()
+            $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withType(ilVedaMailSegmentType::ERROR)
                 ->withMessage($message)
                 ->store();
@@ -334,7 +329,7 @@ class ilVedaUserImportAdapter
                 $this->logger->error('Sending creation feedback failed with message: ' . $e->getMessage());
             }
 
-            $this->usr_builder_factory->buildUser()
+            $this->repo_content_builder_factory->getVedaUserBuilder()->buildUser()
                 ->withOID($participant->getTeilnehmer()->getOid())
                 ->withLogin($participant->getBenutzername())
                 ->withCreationStatus(ilVedaUserStatus::NONE)
@@ -369,7 +364,7 @@ class ilVedaUserImportAdapter
         if (strcmp($generated_login, $login) !== 0) {
             $message = 'User with login: ' . $login . ' already exists.';
             $this->logger->warning($message);
-            $this->mail_segment_builder_factory->buildSegment()
+            $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withMessage($message)
                 ->withType(ilVedaMailSegmentType::ERROR)
                 ->store();
@@ -382,7 +377,7 @@ class ilVedaUserImportAdapter
                 $this->logger->error('Sending creation feedback failed with message: ' . $e->getMessage());
             }
 
-            $this->usr_builder_factory->buildUser()
+            $this->repo_content_builder_factory->getVedaUserBuilder()->buildUser()
                 ->withOID($participant->getTeilnehmer()->getOid())
                 ->withLogin($participant->getBenutzername())
                 ->withImportFailure(true)
@@ -408,25 +403,25 @@ class ilVedaUserImportAdapter
     protected function storeUserStatusSuccess(TeilnehmerELearningPlattform $participant, int $usr_id) : void
     {
         if (!$usr_id) {
-            $this->usr_builder_factory->buildUser()
+            $this->repo_content_builder_factory->getVedaUserBuilder()->buildUser()
                 ->withOID($participant->getTeilnehmer()->getOid())
                 ->withLogin($participant->getBenutzername())
                 ->withPasswordStatus(ilVedaUserStatus::NONE)
                 ->withCreationStatus(ilVedaUserStatus::NONE)
                 ->withImportFailure(false)
                 ->store();
-            $this->mail_segment_builder_factory->buildSegment()
+            $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withType(ilVedaMailSegmentType::USER_IMPORTED)
                 ->withMessage('Imported user with id: ' . $usr_id)
                 ->store();
         }
         if ($usr_id) {
-            $this->usr_builder_factory->buildUser()
+            $this->repo_content_builder_factory->getVedaUserBuilder()->buildUser()
                 ->withOID($participant->getTeilnehmer()->getOid())
                 ->withLogin($participant->getBenutzername())
                 ->withImportFailure(false)
                 ->store();
-            $this->mail_segment_builder_factory->buildSegment()
+            $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withType(ilVedaMailSegmentType::USER_UPDATED)
                 ->withMessage('Updated user with id: ' . $usr_id)
                 ->store();

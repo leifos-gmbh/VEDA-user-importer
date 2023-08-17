@@ -14,7 +14,6 @@ class ilVedaImporter
      * @var int
      */
     public const IMPORT_TYPE_STANDARD = 2;
-
     /**
      * @var string
      */
@@ -27,7 +26,6 @@ class ilVedaImporter
      * @var string
      */
     public const IMPORT_MEM = 'mem';
-
     /**
      * @var int
      */
@@ -46,11 +44,6 @@ class ilVedaImporter
     protected ilVedaConnectorSettings $settings;
     protected ilVedaConnectorPlugin $plugin;
     protected ilVedaApiInterface $my_api;
-    protected int $import_type = self::IMPORT_TYPE_UNDEFINED;
-    /**
-     * @var string[]
-     */
-    protected $import_modes = [];
 
     public function __construct()
     {
@@ -72,69 +65,89 @@ class ilVedaImporter
         return self::$instance;
     }
 
-    public function setImportType(int $type) : void
-    {
-        $this->import_type = $type;
-    }
-
-    public function getImportType() : int
-    {
-        return $this->import_type;
-    }
-
-    public function setImportMode(bool $all, array $types = null) : void
-    {
-        if ($all) {
-            $this->import_modes = [
-                self::IMPORT_USR,
-                self::IMPORT_CRS,
-                self::IMPORT_MEM,
-            ];
-        } elseif (is_array($types)) {
-            $this->import_modes = $types;
-        }
-    }
-
-    protected function isImportModeEnabled(string $mode) : bool
-    {
-        return in_array($mode, $this->import_modes);
-    }
-
     /**
      * Import selected types
      * @throws ilVedaImporterLockedException
      * @throws ilVedaConnectionException
      */
-    public function import() : void
+    public function import(int $import_type, bool $all, array $types = []) : void
     {
+        $modes = $this->getImportModes($all, $types);
         if ($this->settings->isLocked()) {
             throw new ilVedaImporterLockedException(
                 $this->plugin->txt('error_import_locked')
             );
         }
-
         $this->logger->info('Settings import lock');
         $this->settings->enableLock(true);
 
-        if (
-            ($this->getImportType() === self::IMPORT_TYPE_UNDEFINED && $this->settings->isSifaActive()) ||
-            $this->getImportType() === self::IMPORT_TYPE_SIFA
+        if(
+            $import_type === ilVedaImporter::IMPORT_TYPE_SIFA ||
+            (
+                $import_type === self::IMPORT_TYPE_UNDEFINED &&
+                $this->settings->isSifaActive()
+            )
         ) {
-            $this->ensureClaimingPluginConfigured();
+            $this->importSifa($modes);
         }
-        if ($this->isImportModeEnabled(self::IMPORT_USR)) {
-            $this->importUsers();
-        }
-        if ($this->isImportModeEnabled(self::IMPORT_CRS)) {
-            $this->importCourses();
-        }
-        if ($this->isImportModeEnabled(self::IMPORT_MEM)) {
-            $this->importMembers();
+        if(
+            $import_type === ilVedaImporter::IMPORT_TYPE_STANDARD ||
+            (
+                $import_type === self::IMPORT_TYPE_UNDEFINED &&
+                $this->settings->isStandardActive()
+            )
+        ) {
+            $this->importStandard($modes);
         }
 
         // no error release lock
         $this->logger->info('Releasing import lock');
         $this->settings->enableLock(false);
+    }
+
+    protected function importSifa(array $modes): void
+    {
+        $this->ensureClaimingPluginConfigured();
+        if ($this->isImportModeEnabled(self::IMPORT_USR, $modes)) {
+            $this->my_api->deleteDeprecatedILIASUsers();
+            $this->my_api->importILIASUsers();
+        }
+        if ($this->isImportModeEnabled(self::IMPORT_CRS, $modes)) {
+            $this->my_api->importSIFACourses();
+        }
+        if ($this->isImportModeEnabled(self::IMPORT_MEM, $modes)) {
+            $this->my_api->importSIFAMembers();
+        }
+    }
+
+    protected function importStandard(array $modes): void
+    {
+        if ($this->isImportModeEnabled(self::IMPORT_USR, $modes)) {
+            $this->my_api->deleteDeprecatedILIASUsers();
+            $this->my_api->importILIASUsers();
+        }
+        if ($this->isImportModeEnabled(self::IMPORT_CRS, $modes)) {
+            $this->my_api->importStandardCourses();
+        }
+        if ($this->isImportModeEnabled(self::IMPORT_MEM, $modes)) {
+            $this->my_api->importStandardMembers();
+        }
+    }
+
+    protected function getImportModes(bool $all, array $types = []): array
+    {
+        return $all ?
+            [
+                self::IMPORT_USR,
+                self::IMPORT_CRS,
+                self::IMPORT_MEM,
+            ]
+            : $types;
+    }
+
+    protected function isImportModeEnabled(string $mode, array $modes) : bool
+    {
+        return in_array($mode, $modes);
     }
 
     /**
@@ -148,33 +161,6 @@ class ilVedaImporter
     }
 
     /**
-     * @throws ilVedaConnectionException
-     * @throws ilVedaCourseImporterException
-     */
-    protected function importCourses() : bool
-    {
-        if (
-            $this->getImportType() === self::IMPORT_TYPE_STANDARD ||
-            (
-                $this->getImportType() === self::IMPORT_TYPE_UNDEFINED &&
-                $this->settings->isStandardActive()
-            )
-        ) {
-            $this->my_api->importStandardCourses();
-        }
-        if (
-            $this->getImportType() === self::IMPORT_TYPE_SIFA ||
-            (
-                $this->getImportType() === self::IMPORT_TYPE_UNDEFINED &&
-                $this->settings->isSifaActive()
-            )
-        ) {
-            $this->my_api->importSIFACourses();
-        }
-        return true;
-    }
-
-    /**
      * @throws ilVedaClaimingMissingException
      */
     protected function ensureClaimingPluginConfigured() : void
@@ -184,32 +170,6 @@ class ilVedaImporter
         }
         if (!$this->plugin->isUDFClaimingPluginAvailable()) {
             throw new ilVedaClaimingMissingException('', ilVedaClaimingMissingException::ERR_MISSING_UDF);
-        }
-    }
-
-    /**
-     * Import membership assignments
-     * @throws ilVedaConnectionException
-     */
-    protected function importMembers() : void
-    {
-        if (
-            $this->getImportType() === self::IMPORT_TYPE_SIFA ||
-            (
-                $this->getImportType() === self::IMPORT_TYPE_UNDEFINED &&
-                $this->settings->isSifaActive()
-            )
-        ) {
-            $this->my_api->importSIFAMembers();
-        }
-        if (
-            $this->getImportType() === self::IMPORT_TYPE_STANDARD ||
-            (
-                $this->getImportType() === self::IMPORT_TYPE_UNDEFINED &&
-                $this->settings->isStandardActive()
-            )
-        ) {
-            $this->my_api->importStandardMembers();
         }
     }
 }

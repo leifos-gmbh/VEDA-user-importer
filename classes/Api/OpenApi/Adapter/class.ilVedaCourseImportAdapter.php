@@ -2,9 +2,6 @@
 
 use OpenApi\Client\Model\Ausbildungszug;
 
-/**
- * Course import adapater
- */
 class ilVedaCourseImportAdapter
 {
     protected const CP_INFO_AUSBILDUNGSGANG = 1;
@@ -20,11 +17,9 @@ class ilVedaCourseImportAdapter
     protected ilObjectDefinition $object_definition;
     protected ilRbacAdmin $rbac_admin;
     protected ilRbacReview $rbac_review;
-    protected ilVedaCourseBuilderFactoryInterface $crs_builder_factory;
-    protected ilVedaSegmentRepositoryInterface $segment_repo;
     protected ilVedaMDClaimingPluginDBManagerInterface $md_db_manager;
     protected ilVedaConnector $veda_connector;
-    protected ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory;
+    protected ilVedaRepositoryContentBuilderFactoryInterface $repo_content_builder_factory;
 
     public function __construct(
         ilObjUser $user,
@@ -33,11 +28,9 @@ class ilVedaCourseImportAdapter
         ilRbacReview $rbac_review,
         ilLogger $veda_logger,
         ilVedaConnector $veda_connector,
-        ilVedaCourseBuilderFactoryInterface $crs_builder_factory,
-        ilVedaSegmentRepositoryInterface $segment_repo,
         ilVedaMDClaimingPluginDBManagerInterface $md_db_manager,
         ilVedaConnectorSettings $veda_settings,
-        ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory
+        ilVedaRepositoryContentBuilderFactoryInterface $repo_content_builder_factory
     ) {
         $this->user = $user;
         $this->object_definition = $object_definition;
@@ -45,11 +38,9 @@ class ilVedaCourseImportAdapter
         $this->rbac_review = $rbac_review;
         $this->logger = $veda_logger;
         $this->settings = $veda_settings;
-        $this->crs_builder_factory = $crs_builder_factory;
-        $this->segment_repo = $segment_repo;
         $this->md_db_manager = $md_db_manager;
         $this->veda_connector = $veda_connector;
-        $this->mail_segment_builder_factory = $mail_segment_builder_factory;
+        $this->repo_content_builder_factory = $repo_content_builder_factory;
     }
 
     /**
@@ -87,7 +78,7 @@ class ilVedaCourseImportAdapter
         $message = 'Creating new "Ausbildungszug with oid: ' . $train->getOid();
         $this->logger->info($message);
         $this->copyTrainingCourse($source_id, $train);
-        $this->mail_segment_builder_factory->buildSegment()
+        $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
             ->withType(ilVedaMailSegmentType::COURSE_UPDATED)
             ->withMessage($message)
             ->store();
@@ -186,7 +177,7 @@ class ilVedaCourseImportAdapter
             $soap_client->enableWSDL(true);
 
             // Add new entry for oid
-            $this->crs_builder_factory->buildCourse()
+            $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
                 ->withOID($train->getOid())
                 ->withType(ilVedaCourseType::SIFA)
                 ->withModified(time())
@@ -275,7 +266,7 @@ class ilVedaCourseImportAdapter
     {
         try {
             $this->veda_connector->getEducationTrainApi()->sendCourseCreated($oid);
-            $this->crs_builder_factory->buildCourse()
+            $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
                 ->withOID($oid)
                 ->withType(ilVedaCourseType::SIFA)
                 ->withStatusCreated(ilVedaCourseStatus::SYNCHRONIZED)
@@ -297,7 +288,7 @@ class ilVedaCourseImportAdapter
         ) {
             $message = 'Cannot instantiate participants for course: ' . $source->getRefId() . ' ' . $target->getRefId();
             $this->logger->warning($message);
-            $this->mail_segment_builder_factory->buildSegment()
+            $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withMessage($message)
                 ->withType(ilVedaMailSegmentType::ERROR)
                 ->store();
@@ -338,7 +329,7 @@ class ilVedaCourseImportAdapter
 
             $target = ilObjectFactory::getInstanceByRefId($a_target_id, false);
             if ($target instanceof ilObjCourse) {
-                $this->crs_builder_factory->buildCourse()
+                $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
                     ->withOID($train->getOid())
                     ->withType(ilVedaCourseType::SIFA)
                     ->withModified(time())
@@ -387,7 +378,7 @@ class ilVedaCourseImportAdapter
 
         $tc_oid = $train->getOid();
         $this->md_db_manager->writeTrainingCourseTrainId($target_id, $tc_oid);
-        $this->crs_builder_factory->buildCourse()
+        $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
             ->withOID($train->getOid())
             ->withType(ilVedaCourseType::SIFA)
             ->withModified(time())
@@ -418,13 +409,14 @@ class ilVedaCourseImportAdapter
             $training_course = $this->veda_connector->getTrainingCourseApi()->getCourse($training_course_id);
             foreach ($training_course->getAusbildungsgangabschnitte() as $training_course_segment) {
                 if (ilVedaUtils::compareOidsEqual($training_course_segment->getOid(), $course_segment_id)) {
-                    $segment_status = $this->segment_repo->createEmptySegment($segment_train_id);
-                    $segment_status->setType($training_course_segment->getAusbildungsgangabschnittsart());
-                    $this->segment_repo->updateSegmentInfo($segment_status);
+                    $this->repo_content_builder_factory->getVedaSegmentBuilder()->buildSegment()
+                        ->withOID($segment_train_id, false)
+                        ->withType($training_course_segment->getAusbildungsgangabschnittsart())
+                        ->store();
                 }
             }
         } catch (Exception $e) {
-            $this->mail_segment_builder_factory->buildSegment()
+            $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withMessage('Update of training course failed.')
                 ->withType(ilVedaMailSegmentType::ERROR)
                 ->store();
@@ -461,7 +453,7 @@ class ilVedaCourseImportAdapter
 
         switch ($rolt_id) {
             case $this->settings->getTemporarySwitchRole():
-                $this->crs_builder_factory->buildCourse()
+                $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
                     ->withOID($train->getOid())
                     ->withType(ilVedaCourseType::SIFA)
                     ->withModified(time())
@@ -470,7 +462,7 @@ class ilVedaCourseImportAdapter
                     ->store();
                 break;
             case $this->settings->getPermanentSwitchRole():
-                $this->crs_builder_factory->buildCourse()
+                $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
                     ->withOID($train->getOid())
                     ->withType(ilVedaCourseType::SIFA)
                     ->withModified(time())

@@ -3,9 +3,6 @@
 use OpenApi\Client\Model\Ausbildungszug;
 use OpenApi\Client\Model\Elearningkurs;
 
-/**
- * Standard Course import adapater
- */
 class ilVedaCourseStandardImportAdapter
 {
     /**
@@ -41,26 +38,23 @@ class ilVedaCourseStandardImportAdapter
     protected ilVedaConnectorSettings $settings;
     protected ilObjUser $user;
     protected ilObjectDefinition $object_definition;
-    protected ilVedaCourseBuilderFactoryInterface $crs_builder_factory;
     protected ilVedaConnector $veda_connector;
-    protected ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory;
+    protected ilVedaRepositoryContentBuilderFactoryInterface $repo_content_builder_factory;
 
     public function __construct(
         ilObjUser $user,
         ilObjectDefinition $object_definition,
         ilLogger $veda_logger,
         ilVedaConnectorSettings $veda_settings,
-        ilVedaCourseBuilderFactoryInterface $crs_builder_factory,
         ilVedaConnector $veda_connector,
-        ilVedaMailSegmentBuilderFactoryInterface $mail_segment_builder_factory
+        ilVedaRepositoryContentBuilderFactoryInterface $repo_content_builder_factory
     ) {
         $this->user = $user;
         $this->object_definition = $object_definition;
         $this->logger = $veda_logger;
         $this->settings = $veda_settings;
-        $this->crs_builder_factory = $crs_builder_factory;
         $this->veda_connector = $veda_connector;
-        $this->mail_segment_builder_factory = $mail_segment_builder_factory;
+        $this->repo_content_builder_factory = $repo_content_builder_factory;
     }
 
     /**
@@ -97,7 +91,7 @@ class ilVedaCourseStandardImportAdapter
                 $course->getOid(),
                 'Masterkurs-Id nicht vorhanden.'
             );
-            $this->crs_builder_factory->buildCourse()
+            $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
                 ->withOID($course->getOid())
                 ->withType(ilVedaCourseType::STANDARD)
                 ->withStatusCreated(ilVedaCourseStatus::FAILED)
@@ -113,7 +107,7 @@ class ilVedaCourseStandardImportAdapter
         $message = 'Creating new "ELearningkurs" with oid: ' . $course->getOid();
         $this->logger->info($message);
         $this->copyTrainingCourse($course);
-        $this->mail_segment_builder_factory->buildSegment()
+        $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
             ->withType(ilVedaMailSegmentType::COURSE_UPDATED)
             ->withMessage($message)
             ->store();
@@ -211,7 +205,7 @@ class ilVedaCourseStandardImportAdapter
             $soap_client->enableWSDL(true);
 
             // Add new entry for oid
-            $this->crs_builder_factory->buildCourse()
+            $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
                 ->withOID($course->getOid(), false)
                 ->withType(ilVedaCourseType::STANDARD)
                 ->withModified(time())
@@ -233,7 +227,7 @@ class ilVedaCourseStandardImportAdapter
             } else {
                 $message = 'Standard course copying failed: soap init failed';
                 $this->logger->error($message);
-                $this->mail_segment_builder_factory->buildSegment()
+                $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                     ->withMessage($message)
                     ->withType(ilVedaMailSegmentType::ERROR)
                     ->store();
@@ -293,7 +287,7 @@ class ilVedaCourseStandardImportAdapter
     {
         try {
             $this->veda_connector->getElearningPlattformApi()->sendCourseCreated($oid);
-            $this->crs_builder_factory->buildCourse()
+            $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
                 ->withOID($oid)
                 ->withType(ilVedaCourseType::STANDARD)
                 ->withStatusCreated(ilVedaCourseStatus::SYNCHRONIZED)
@@ -315,7 +309,7 @@ class ilVedaCourseStandardImportAdapter
         ) {
             $message = 'Cannot instantiate participants for course: ' . $source->getRefId() . ' ' . $target->getRefId();
             $this->logger->warning($message);
-            $this->mail_segment_builder_factory->buildSegment()
+            $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withMessage($message)
                 ->withType(ilVedaMailSegmentType::ERROR)
                 ->store();
@@ -350,7 +344,7 @@ class ilVedaCourseStandardImportAdapter
             if ($target instanceof ilObjCourse) {
                 $oid = $tc[self::CP_INFO_ELEARNING_COURSE];
 
-                $this->crs_builder_factory->buildCourse()
+                $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
                     ->withOID($oid)
                     ->withType(ilVedaCourseType::STANDARD)
                     ->withModified(time())
