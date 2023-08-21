@@ -88,6 +88,7 @@ class ilVedaImporter
                 $this->settings->isSifaActive()
             )
         ) {
+            $this->logger->debug('SIFA import startet.');
             $this->importSifa($modes);
         }
         if(
@@ -97,6 +98,7 @@ class ilVedaImporter
                 $this->settings->isStandardActive()
             )
         ) {
+            $this->logger->debug('Standard import startet.');
             $this->importStandard($modes);
         }
 
@@ -109,13 +111,16 @@ class ilVedaImporter
     {
         $this->ensureClaimingPluginConfigured();
         if ($this->isImportModeEnabled(self::IMPORT_USR, $modes)) {
+            $this->logger->debug('Importing users');
             $this->my_api->deleteDeprecatedILIASUsers();
             $this->my_api->importILIASUsers();
         }
         if ($this->isImportModeEnabled(self::IMPORT_CRS, $modes)) {
+            $this->logger->debug('Importing courses');
             $this->my_api->importSIFACourses();
         }
         if ($this->isImportModeEnabled(self::IMPORT_MEM, $modes)) {
+            $this->logger->debug('Importing memberships');
             $this->my_api->importSIFAMembers();
         }
     }
@@ -123,13 +128,16 @@ class ilVedaImporter
     protected function importStandard(array $modes): void
     {
         if ($this->isImportModeEnabled(self::IMPORT_USR, $modes)) {
+            $this->logger->debug('Importing users');
             $this->my_api->deleteDeprecatedILIASUsers();
             $this->my_api->importILIASUsers();
         }
         if ($this->isImportModeEnabled(self::IMPORT_CRS, $modes)) {
+            $this->logger->debug('Importing courses');
             $this->my_api->importStandardCourses();
         }
         if ($this->isImportModeEnabled(self::IMPORT_MEM, $modes)) {
+            $this->logger->debug('Importing memeberships');
             $this->my_api->importStandardMembers();
         }
     }

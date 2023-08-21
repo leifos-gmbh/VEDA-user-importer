@@ -77,11 +77,10 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
     public function requestCourseTutors(string $crs_oid) : array
     {
         try {
-            $response = $this->api_elearning->getVonDozentenDieAktivenKurszuordnungenUsingGET(
+            return $this->api_elearning->getVonDozentenDieAktivenKurszuordnungenUsingGET(
                 $this->plattform_id,
                 $crs_oid
             );
-            return $response;
         } catch (Exception $e) {
             $this->handleApiExceptions('getVonDozentenDieAktivenKurszuordnungenUsingGET', $e);
             throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);

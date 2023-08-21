@@ -81,6 +81,7 @@ class ilVedaMemberStandardImportAdapter
      */
     protected function removeDeprecatedMembers(ilCourseParticipants $part, ilObjCourse $course, array $members) : void
     {
+        $this->logger->debug('Removing deprecated members');
         foreach ($part->getMembers() as $user_id) {
             $import_id = \ilObject::_lookupImportId($user_id);
             if (!$import_id) {
@@ -122,6 +123,7 @@ class ilVedaMemberStandardImportAdapter
         array $tutors,
         array $supervisors
     ) : void {
+        $this->logger->debug('Removing deprecated tutors');
         $combined_tutors = array_merge(
             $tutors,
             $supervisors
@@ -163,6 +165,7 @@ class ilVedaMemberStandardImportAdapter
      */
     protected function addNewMembers(ilCourseParticipants $participants, ilObjCourse $course, array $members) : void
     {
+        $this->logger->debug('Adding new members');
         foreach ($members as $member) {
             $this->logger->debug('Validating ' . $member->getTeilnehmerId());
             $user_id = $this->getUserIdForImportId($member->getTeilnehmerId());
@@ -199,6 +202,7 @@ class ilVedaMemberStandardImportAdapter
         array $tutors,
         array $supervisors
     ) : void {
+        $this->logger->debug('Adding new tutors');
         $combined_tutors = array_merge($tutors, $supervisors);
 
         foreach ($combined_tutors as $tutor) {
