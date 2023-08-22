@@ -251,36 +251,18 @@ class ilVedaCourseStandardImportAdapter
         }
 
         $source = ilObjectFactory::getInstanceByRefId($source_id, false);
-        if ($source instanceof ilObjCourse) {
-            $target = ilObjectFactory::getInstanceByRefId($target_id, false);
-            if ($target instanceof ilObjCourse) {
-                $this->updateCourseCreatedStatus($tc[self::CP_INFO_ELEARNING_COURSE]);
-                $this->copyAdminsFromSourceToTarget($source, $target);
-            } else {
-                $this->logger->notice('Target should be course type: ' . $target_id);
-            }
+        $target = ilObjectFactory::getInstanceByRefId($target_id, false);
+        if (
+            $source instanceof ilObjCourse &&
+            $target instanceof ilObjCourse
+        ) {
+            $this->updateCourseCreatedStatus($tc[self::CP_INFO_ELEARNING_COURSE]);
+            $this->copyAdminsFromSourceToTarget($source, $target);
+        } elseif (!($target instanceof ilObjCourse)) {
+            $this->logger->notice('Target should be course type: ' . $target_id);
         } else {
             $this->logger->debug('Nothing todo for non-course copy.');
         }
-    }
-
-    protected function readTrainingCourseTrainFromCopyInfo(array $info) : ?Ausbildungszug
-    {
-        try {
-            $trains = $this->veda_connector->getElearningPlattformApi()->requestTrainingCourseTrains(
-                $info[self::CP_INFO_AUSBILDUNGSGANG]
-            );
-            foreach ($trains as $train) {
-                if (ilVedaUtils::compareOidsEqual($train->getOid(), $info[self::CP_INFO_AUSBILDUNGSZUG])) {
-                    return $train;
-                }
-            }
-            $this->logger->warning('Cannot read training course train for training course id: ' . $info[self::CP_INFO_AUSBILDUNGSZUG]);
-            return null;
-        } catch (ilVedaConnectionException $e) {
-            $this->logger->error('Cannot read training course train for training course id: ' . $info[self::CP_INFO_AUSBILDUNGSGANG]);
-        }
-        return null;
     }
 
     protected function updateCourseCreatedStatus(string $oid) : void
@@ -339,35 +321,33 @@ class ilVedaCourseStandardImportAdapter
         $this->logger->dump($tc);
 
         $source = ilObjectFactory::getInstanceByRefId($a_source_id, false);
-        if ($source instanceof ilObjCourse) {
-            $target = ilObjectFactory::getInstanceByRefId($a_target_id, false);
-            if ($target instanceof ilObjCourse) {
-                $oid = $tc[self::CP_INFO_ELEARNING_COURSE];
-
-                $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
-                    ->withOID($oid)
-                    ->withType(ilVedaCourseType::STANDARD)
-                    ->withModified(time())
-                    ->withObjID($target->getId())
-                    ->withStatusCreated(ilVedaCourseStatus::PENDING)
-                    ->store();
-
-                $this->logger->debug('Update title');
-                $target->setTitle($tc[self::CP_INFO_NAME]);
-                $target->setOfflineStatus(true);
-                $target->setImportId($oid);
-                $target->update();
-
-                // delete connection user from administrator role
-                $this->deleteAdministratorAssignments($target);
-            }
+        $target = ilObjectFactory::getInstanceByRefId($a_target_id, false);
+        if (
+            $source instanceof ilObjCourse &&
+            $target instanceof ilObjCourse
+        ) {
+            $oid = $tc[self::CP_INFO_ELEARNING_COURSE];
+            $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
+                ->withOID($oid)
+                ->withType(ilVedaCourseType::STANDARD)
+                ->withModified(time())
+                ->withObjID($target->getId())
+                ->withStatusCreated(ilVedaCourseStatus::PENDING)
+                ->store();
+            $this->logger->debug('Update title');
+            $target->setTitle($tc[self::CP_INFO_NAME]);
+            $target->setOfflineStatus(true);
+            $target->setImportId($oid);
+            $target->update();
+            // delete connection user from administrator role
+            $this->deleteAdministratorAssignments($target);
         }
-        if ($source instanceof ilObjGroup) {
-            $target = ilObjectFactory::getInstanceByRefId($a_target_id, false);
-            if ($target instanceof ilObjGroup) {
-                // delete connection user from administrator role
-                $this->deleteAdministratorAssignments($target);
-            }
+        if (
+            $source instanceof ilObjGroup &&
+            $target instanceof ilObjGroup
+        ) {
+            // delete connection user from administrator role
+            $this->deleteAdministratorAssignments($target);
         }
     }
 

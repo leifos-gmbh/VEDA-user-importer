@@ -391,8 +391,7 @@ class ilVedaUserImportAdapter
 
     protected function hasPasswordChanged(\ilObjUser $user) : bool
     {
-        $last_change = $user->getLastPasswordChangeTS();
-        return $last_change > 0;
+        return $user->getLastPasswordChangeTS() > 0;
     }
 
     protected function isGenderEmpty(\ilObjUser $user) : bool
@@ -538,12 +537,12 @@ class ilVedaUserImportAdapter
         $ilend = new \ilDate($end->format('Y-m-d'), IL_CAL_DATE);
 
         if (
-        \ilDateTime::_within(
-            $now,
-            $ilstart,
-            $ilend,
-            IL_CAL_DAY
-        )
+            \ilDateTime::_within(
+                $now,
+                $ilstart,
+                $ilend,
+                IL_CAL_DAY
+            )
         ) {
             return true;
         }

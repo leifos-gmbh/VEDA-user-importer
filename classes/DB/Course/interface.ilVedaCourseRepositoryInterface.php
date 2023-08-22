@@ -11,4 +11,6 @@ interface ilVedaCourseRepositoryInterface
     public function lookupCourseByID(int $ref_id) : ?ilVedaCourseInterface;
 
     public function lookupAllCourses() : ilVedaCourseCollectionInterface;
+
+    public function lookupCoursesWithStatusAndType(int $status, int $type) : ilVedaCourseCollectionInterface;
 }

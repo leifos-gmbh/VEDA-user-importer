@@ -18,13 +18,13 @@ class ilVedaMemberStandardImportAdapter
 
     protected ilLogger $logger;
     protected ilRbacAdmin $rbac_admin;
-    /**
-     * @var array
-     */
-    protected $new_assignments = [];
-    protected ilVedaConnector $veda_connector;
+    protected ilVedaELearningPlattformApiInterface $elearning_api;
     protected ilVedaCourseRepositoryInterface $crs_repo;
     protected ilVedaRepositoryContentBuilderFactoryInterface $repo_content_builder_factory;
+    /**
+     * @var int[]
+     */
+    protected array $new_assignments;
 
     public function __construct(
         ilLogger $veda_logger,
@@ -35,15 +35,16 @@ class ilVedaMemberStandardImportAdapter
     ) {
         $this->logger = $veda_logger;
         $this->rbac_admin = $rbac_admin;
-        $this->veda_connector = $veda_connector;
+        $this->elearning_api = $veda_connector->getElearningPlattformApi();
         $this->crs_repo = $crs_repo;
         $this->repo_content_builder_factory = $repo_content_builder_factory;
+        $this->new_assignments = [];
     }
 
     public function import() : void
     {
         $this->logger->debug('Reading "ELearning-Kurse" ...');
-        $standard_courses = $this->crs_repo->lookupAllCourses()->getCoursesWithStatusAndType(
+        $standard_courses = $this->crs_repo->lookupCoursesWithStatusAndType(
             ilVedaCourseStatus::SYNCHRONIZED,
             ilVedaCourseType::STANDARD
         );
@@ -60,10 +61,9 @@ class ilVedaMemberStandardImportAdapter
 
     protected function synchronizeParticipants(string $oid, int $obj_id) : void
     {
-        $elearning_api = $this->veda_connector->getElearningPlattformApi();
-        $tutors = $elearning_api->requestCourseTutors($oid);
-        $supervisors = $elearning_api->requestCourseSupervisors($oid);
-        $members = $elearning_api->requestCourseMembers($oid);
+        $tutors = $this->elearning_api->requestCourseTutors($oid);
+        $supervisors = $this->elearning_api->requestCourseSupervisors($oid);
+        $members = $this->elearning_api->requestCourseMembers($oid);
 
         $this->logger->dump(array_merge($tutors, $supervisors, $members), \ilLogLevel::DEBUG);
 
@@ -79,31 +79,36 @@ class ilVedaMemberStandardImportAdapter
     /**
      * @param Teilnehmerkurszuordnung[] $members
      */
-    protected function removeDeprecatedMembers(ilCourseParticipants $part, ilObjCourse $course, array $members) : void
+    protected function isValidMember(string $usr_oid, array $members) {
+        foreach ($members as $member) {
+            if (
+                !ilVedaUtils::compareOidsEqual($usr_oid, $member->getTeilnehmerId()) ||
+                !ilVedaUtils::isValidDate($member->getKursZugriffAb(), $member->getKursZugriffBis())
+            ) {
+                continue;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param Teilnehmerkurszuordnung[] $members
+     */
+    protected function removeDeprecatedMembers(ilCourseParticipants $part, ilObjCourse $crs, array $members) : void
     {
         $this->logger->debug('Removing deprecated members');
-        foreach ($part->getMembers() as $user_id) {
-            $import_id = \ilObject::_lookupImportId($user_id);
-            if (!$import_id) {
+        foreach ($part->getMembers() as $usr_id) {
+            $usr_oid = \ilObject::_lookupImportId($usr_id);
+            if (!$usr_oid) {
                 $this->logger->debug('Keep member assignment for non synchonised account.');
             }
-            $found = false;
-            foreach ($members as $member) {
-                if (
-                    !ilVedaUtils::compareOidsEqual($import_id, $member->getTeilnehmerId()) ||
-                    !ilVedaUtils::isValidDate($member->getKursZugriffAb(), $member->getKursZugriffBis())
-                ) {
-                    continue;
-                }
-                $found = true;
-                break;
-            }
-            if (!$found) {
-                $message = 'Deassigning user: ' . $user_id . ' with oid ' . $import_id . ' from course: ' . $course->getTitle();
+            if (!$this->isValidMember($usr_oid, $members)) {
+                $message = 'Deassigning user: ' . $usr_id . ' with oid ' . $usr_oid . ' from course: ' . $crs->getTitle();
                 $this->logger->info($message);
                 $this->rbac_admin->deassignUser(
-                    $course->getDefaultMemberRole(),
-                    $user_id
+                    $crs->getDefaultMemberRole(),
+                    $usr_id
                 );
                 $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                     ->withType(ilVedaMailSegmentType::MEMBERSHIP_UPDATED)
@@ -182,7 +187,6 @@ class ilVedaMemberStandardImportAdapter
                 $this->assignUserToRole(
                     $course->getDefaultMemberRole(),
                     $user_id,
-                    $this->new_assignments,
                     $participants,
                     $course
                 );
@@ -219,7 +223,6 @@ class ilVedaMemberStandardImportAdapter
                 $this->assignUserToRole(
                     $course->getDefaultTutorRole(),
                     $user_id,
-                    $this->new_assignments,
                     $participants,
                     $course
                 );
@@ -231,7 +234,6 @@ class ilVedaMemberStandardImportAdapter
     {
         $refs = \ilObject::_getAllReferences($obj_id);
         $ref_id = end($refs);
-        // throws
         $course = ilObjectFactory::getInstanceByRefId($ref_id, false);
         if (!$course instanceof ilObjCourse) {
             $message = 'Invalid course id given: ' . $obj_id;
@@ -248,7 +250,6 @@ class ilVedaMemberStandardImportAdapter
     {
         $refs = \ilObject::_getAllReferences($obj_id);
         $ref_id = end($refs);
-        // throws
         $participants = ilParticipants::getInstance($ref_id);
         if (!$participants instanceof ilCourseParticipants) {
             $message = 'Invalid participant id given: ' . $obj_id;
@@ -276,18 +277,14 @@ class ilVedaMemberStandardImportAdapter
         return false;
     }
 
-    /**
-     * @param int[] $assigned
-     */
     protected function assignUserToRole(
         int $role,
         int $user,
-        array &$assigned,
         \ilCourseParticipants $part,
         \ilObjCourse $course
     ) : void {
         $this->rbac_admin->assignUser($role, $user);
-        if (!in_array($user, $assigned)) {
+        if (!in_array($user, $this->new_assignments)) {
             $this->logger->debug('Adding new user sending mail notification...');
             $part->sendNotification($part->NOTIFY_ACCEPT_USER, $user);
             $favourites = new ilFavouritesManager();
@@ -295,7 +292,7 @@ class ilVedaMemberStandardImportAdapter
                 $user,
                 $course->getRefId()
             );
-            $assigned[] = $user;
+            $this->new_assignments[] = $user;
             $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withType(ilVedaMailSegmentType::MEMBERSHIP_UPDATED)
                 ->withMessage('Adding new user with role_id ' . $role . ' user_id ' . $user . ' to course with ref_id ' . $course->getRefId())

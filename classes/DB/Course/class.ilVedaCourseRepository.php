@@ -116,4 +116,29 @@ class ilVedaCourseRepository implements ilVedaCourseRepositoryInterface
         $this->veda_logger->debug('Found ' . count($courses));
         return new ilVedaCourseCollection($courses);
     }
+
+    public function lookupCoursesWithStatusAndType(int $status, int $type): ilVedaCourseCollectionInterface
+    {
+        $this->veda_logger->debug('Looking up all courses.');
+        $query = 'select * from ' . self::TABLE_NAME . ' where'
+            . ' type = ' . $this->il_db->quote($type, ilDBConstants::T_INTEGER)
+            . ' and status_created = ' . $this->il_db->quote($status, ilDBConstants::T_INTEGER);
+        $this->veda_logger->debug($query);
+        $res = $this->il_db->query($query);
+        $courses = [];
+        while ($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
+            $courses[] = new ilVedaCourse(
+                $row->oid,
+                (int) $row->obj_id,
+                (int) $row->modified,
+                (int) $row->type,
+                (int) $row->switchp,
+                (int) $row->switcht,
+                (int) $row->status_created,
+                (bool) $row->document_success
+            );
+        }
+        $this->veda_logger->debug('Found ' . count($courses));
+        return new ilVedaCourseCollection($courses);
+    }
 }
