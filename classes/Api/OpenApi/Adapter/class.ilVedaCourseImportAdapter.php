@@ -245,21 +245,19 @@ class ilVedaCourseImportAdapter
      */
     protected function readTrainingCourseTrainFromCopyInfo(array $info) : ?Ausbildungszug
     {
+        $train = null;
         try {
             $trains = $this->veda_connector->getElearningPlattformApi()->requestTrainingCourseTrains(
                 $info[self::CP_INFO_AUSBILDUNGSGANG]
             );
-            foreach ($trains as $train) {
-                if (ilVedaUtils::compareOidsEqual($train->getOid(), $info[self::CP_INFO_AUSBILDUNGSZUG])) {
-                    return $train;
-                }
-            }
-            $this->logger->warning('Cannot read training course train for training course id: ' . $info[self::CP_INFO_AUSBILDUNGSZUG]);
-            return null;
+            $train = $trains->getByOID($info[self::CP_INFO_AUSBILDUNGSZUG]);
         } catch (ilVedaConnectionException $e) {
-            $this->logger->error('Cannot read training course train for training course id: ' . $info[self::CP_INFO_AUSBILDUNGSGANG]);
         }
-        return null;
+        if (is_null($train)) {
+            $this->logger->warning(
+                'Cannot read training course train for training course id: ' . $info[self::CP_INFO_AUSBILDUNGSZUG]);
+        }
+        return $train;
     }
 
     protected function updateCourseCreatedStatus(string $oid)

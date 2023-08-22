@@ -7,25 +7,13 @@ use OpenAPI\Client\Model\AusbildungszugTeilnehmer;
 
 interface ilVedaEducationTrainApiInterface
 {
-    /**
-     * @return AusbildungszugDozent[]
-     */
-    public function requestTutors(?string $oid) : array;
+    public function requestTutors(?string $oid) : ilVedaEducationTrainTutorCollectionInterface;
 
-    /**
-     * @return AusbildungszugLernbegleiter[]
-     */
-    public function requestCompanions(?string $oid) : array;
+    public function requestCompanions(?string $oid) : ilVedaEducationTrainCompanionCollectionInterface;
 
-    /**
-     * @return AufsichtspersonKurszugriff[]
-     */
-    public function requestSupervisors(?string $oid) : array;
+    public function requestSupervisors(?string $oid) : ilVedaEducationTrainSupervisorCollectionInterface;
 
-    /**
-     * @return AusbildungszugTeilnehmer[]
-     */
-    public function requestMembers(?string $oid) : array;
+    public function requestMembers(?string $oid) : ilVedaEducationTrainMemberCollectionInterface;
 
     public function sendCourseCreationFailed(string $oid) : void;
 

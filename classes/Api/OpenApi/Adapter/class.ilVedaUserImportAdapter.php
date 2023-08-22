@@ -45,10 +45,9 @@ class ilVedaUserImportAdapter
     }
 
     /**
-     * @param TeilnehmerELearningPlattform[] $participants
      * @throws ilVedaUserImporterException
      */
-    public function import(array $participants) : void
+    public function import(ilVedaELearningParticipantsCollectionInterface $participants) : void
     {
         $this->transformParticipantsToXml($participants);
         $this->importXml();
@@ -57,10 +56,9 @@ class ilVedaUserImportAdapter
 
     /**
      * Transform API participants to xml
-     * @param TeilnehmerELearningPlattform[] $participants
      * @throws ilVedaUserImporterException
      */
-    protected function transformParticipantsToXml(array $participants) : void
+    protected function transformParticipantsToXml(ilVedaELearningParticipantsCollectionInterface $participants) : void
     {
         $this->writer->xmlStartTag('Users');
 

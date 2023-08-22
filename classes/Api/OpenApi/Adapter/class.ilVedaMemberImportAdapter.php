@@ -184,7 +184,7 @@ class ilVedaMemberImportAdapter
         }
 
         $this->logger->debug('Handling course: ' . $course->getTitle());
-        $this->logger->dump($members, \ilLogLevel::DEBUG);
+        $members->logContent($this->logger);
 
         $veda_crs = $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
             ->withOID($oid)
@@ -214,9 +214,9 @@ class ilVedaMemberImportAdapter
             $remote_tutors = $education_train_api->requestTutors($oid);
             $remote_companions = $education_train_api->requestCompanions($oid);
             $remote_supervisors = $education_train_api->requestSupervisors($oid);
-            $this->logger->dump($remote_tutors, \ilLogLevel::DEBUG);
-            $this->logger->dump($remote_companions, \ilLogLevel::DEBUG);
-            $this->logger->dump($remote_supervisors, \ilLogLevel::DEBUG);
+            $remote_tutors->logContent($this->logger);
+            $remote_companions->logContent($this->logger);
+            $remote_supervisors->logContent($this->logger);
             $this->logger->debug('For course: ' . $course->getTitle());
         } catch (ilVedaConnectionException $e) {
             $this->logger->warning('Reading assigned tutors failed. Aborting tutor update');
@@ -358,13 +358,12 @@ class ilVedaMemberImportAdapter
     }
 
     /**
-     * @param AusbildungszugTeilnehmer[] $members
      * @param int[] $assigned
      */
     protected function removeInvalidRegularMembers(
         \ilObjCourse $course,
         \ilCourseParticipants $part,
-        array $members,
+        ilVedaEducationTrainMemberCollectionInterface $members,
         ilVedaCourse $status,
         array $assigned
     ) : void {
@@ -404,13 +403,12 @@ class ilVedaMemberImportAdapter
     }
 
     /**
-     * @param AusbildungszugTeilnehmer[] $members
      * @param int[] $assigned
      */
     protected function removeInvalidPermanentSwitchMembers(
         \ilObjCourse $course,
         \ilCourseParticipants $part,
-        array $members,
+        ilVedaEducationTrainMemberCollectionInterface $members,
         ilVedaCourse $status,
         array $assigned
     ) : void {
@@ -451,13 +449,12 @@ class ilVedaMemberImportAdapter
     }
 
     /**
-     * @param AusbildungszugTeilnehmer[] $members
      * @param int[] $assigned
      */
     protected function removeInvalidTemporarySwitchMembers(
         \ilObjCourse $course,
         \ilCourseParticipants $part,
-        array $members,
+        ilVedaEducationTrainMemberCollectionInterface $members,
         ilVedaCourse $status,
         array $assigned
     ) {
@@ -493,13 +490,12 @@ class ilVedaMemberImportAdapter
     }
 
     /**
-     * @param AusbildungszugTeilnehmer[] $members
      * @param int[] $assigned
      */
     protected function addRegularMembers(
         \ilObjCourse $course,
         \ilCourseParticipants $part,
-        array $members,
+        ilVedaEducationTrainMemberCollectionInterface $members,
         ilVedaCourse $status,
         array $assigned
     ) : void {
@@ -533,13 +529,12 @@ class ilVedaMemberImportAdapter
     }
 
     /**
-     * @param AusbildungszugTeilnehmer[] $members
      * @param int[] $assigned
      */
     protected function addPermanentSwitchMembers(
         \ilObjCourse $course,
         \ilCourseParticipants $part,
-        array $members,
+        ilVedaEducationTrainMemberCollectionInterface $members,
         ilVedaCourse $status,
         array $assigned
     ) : void {
@@ -573,13 +568,12 @@ class ilVedaMemberImportAdapter
     }
 
     /**
-     * @param AusbildungszugTeilnehmer[] $members
      * @param int[] $assigned
      */
     protected function addTemporarySwitchMembers(
         \ilObjCourse $course,
         \ilCourseParticipants $part,
-        array $members,
+        ilVedaEducationTrainMemberCollectionInterface $members,
         ilVedaCourse $status,
         array $assigned
     ) : void {

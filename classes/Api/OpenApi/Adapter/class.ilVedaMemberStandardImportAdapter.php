@@ -65,7 +65,9 @@ class ilVedaMemberStandardImportAdapter
         $supervisors = $this->elearning_api->requestCourseSupervisors($oid);
         $members = $this->elearning_api->requestCourseMembers($oid);
 
-        $this->logger->dump(array_merge($tutors, $supervisors, $members), \ilLogLevel::DEBUG);
+        $tutors->logContent($this->logger);
+        $supervisors->logContent($this->logger);
+        $members->logContent($this->logger);
 
         $participants = $this->initParticipants($obj_id);
         $course = $this->initCourse($obj_id);
@@ -76,34 +78,18 @@ class ilVedaMemberStandardImportAdapter
         $this->addNewTutors($participants, $course, $tutors, $supervisors);
     }
 
-    /**
-     * @param Teilnehmerkurszuordnung[] $members
-     */
-    protected function isValidMember(string $usr_oid, array $members) {
-        foreach ($members as $member) {
-            if (
-                !ilVedaUtils::compareOidsEqual($usr_oid, $member->getTeilnehmerId()) ||
-                !ilVedaUtils::isValidDate($member->getKursZugriffAb(), $member->getKursZugriffBis())
-            ) {
-                continue;
-            }
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @param Teilnehmerkurszuordnung[] $members
-     */
-    protected function removeDeprecatedMembers(ilCourseParticipants $part, ilObjCourse $crs, array $members) : void
-    {
+    protected function removeDeprecatedMembers(
+        ilCourseParticipants $part,
+        ilObjCourse $crs,
+        ilVedaCourseMemberCollection $members
+    ) : void {
         $this->logger->debug('Removing deprecated members');
         foreach ($part->getMembers() as $usr_id) {
             $usr_oid = \ilObject::_lookupImportId($usr_id);
             if (!$usr_oid) {
                 $this->logger->debug('Keep member assignment for non synchonised account.');
             }
-            if (!$this->isValidMember($usr_oid, $members)) {
+            if (!$members->containsMemberWithOID($usr_oid)) {
                 $message = 'Deassigning user: ' . $usr_id . ' with oid ' . $usr_oid . ' from course: ' . $crs->getTitle();
                 $this->logger->info($message);
                 $this->rbac_admin->deassignUser(
@@ -118,39 +104,23 @@ class ilVedaMemberStandardImportAdapter
         }
     }
 
-    /**
-     * @param Lernbegleiterkurszuordnung[] $supervisors
-     * @param Dozentenkurszuordnung[] $tutors
-     */
     protected function removeDeprecatedTutors(
         ilCourseParticipants $part,
         ilObjCourse $course,
-        array $tutors,
-        array $supervisors
+        ilVedaCourseTutorsCollectionInterface $tutors,
+        ilVedaCourseSupervisorCollectionInterface $supervisors
     ) : void {
         $this->logger->debug('Removing deprecated tutors');
-        $combined_tutors = array_merge(
-            $tutors,
-            $supervisors
-        );
 
         foreach ($part->getTutors() as $user_id) {
             $import_id = \ilObject::_lookupImportId($user_id);
             if (!$import_id) {
                 $this->logger->debug('Keep member assignment for non synchonised account.');
             }
-            $found = false;
-            foreach ($combined_tutors as $tutor) {
-                if (
-                    !ilVedaUtils::compareOidsEqual($import_id, $tutor->getElearningbenutzeraccountId()) ||
-                    !ilVedaUtils::isValidDate($tutor->getKursZugriffAb(), $tutor->getKursZugriffBis())
-                ) {
-                    continue;
-                }
-                $found = true;
-                break;
-            }
-            if (!$found) {
+            if (
+                !$tutors->containsTutorWithOID($import_id) &&
+                !$supervisors->containsSupervisorWithOID($import_id)
+            ) {
                 $message = 'Deassigning tutor: ' . $user_id . ' with oid ' . $import_id . ' from course: ' . $course->getTitle();
                 $this->logger->info($message);
                 $this->rbac_admin->deassignUser(
@@ -165,11 +135,11 @@ class ilVedaMemberStandardImportAdapter
         }
     }
 
-    /**
-     * @param Teilnehmerkurszuordnung[] $members
-     */
-    protected function addNewMembers(ilCourseParticipants $participants, ilObjCourse $course, array $members) : void
-    {
+    protected function addNewMembers(
+        ilCourseParticipants $participants,
+        ilObjCourse $course,
+        ilVedaCourseMemberCollectionInterface $members
+    ) : void {
         $this->logger->debug('Adding new members');
         foreach ($members as $member) {
             $this->logger->debug('Validating ' . $member->getTeilnehmerId());
@@ -196,23 +166,18 @@ class ilVedaMemberStandardImportAdapter
         }
     }
 
-    /**
-     * @param Dozentenkurszuordnung[] $tutors
-     * @param Lernbegleiterkurszuordnung[] $supervisors
-     */
     protected function addNewTutors(
         ilCourseParticipants $participants,
         ilObjCourse $course,
-        array $tutors,
-        array $supervisors
+        ilVedaCourseTutorsCollectionInterface $tutors,
+        ilVedaCourseSupervisorCollectionInterface $supervisors
     ) : void {
         $this->logger->debug('Adding new tutors');
-        $combined_tutors = array_merge($tutors, $supervisors);
 
-        foreach ($combined_tutors as $tutor) {
+        foreach ($tutors as $tutor) {
             $user_id = $this->getUserIdForImportId($tutor->getElearningbenutzeraccountId());
             if (!$user_id) {
-                //$this->logger->warning('Cannot find user id for import_id: ' . $tutors->getElearningbenutzeraccountId());
+                $this->logger->warning('Cannot find user id for import_id: ' . $tutor->getElearningbenutzeraccountId());
                 continue;
             }
             if ($participants->isMember($user_id)) {
@@ -228,7 +193,28 @@ class ilVedaMemberStandardImportAdapter
                 );
             }
         }
+
+        foreach ($supervisors as $supervisor) {
+            $user_id = $this->getUserIdForImportId($supervisor->getElearningbenutzeraccountId());
+            if (!$user_id) {
+                $this->logger->warning('Cannot find user id for import_id: ' . $supervisor->getElearningbenutzeraccountId());
+                continue;
+            }
+            if ($participants->isMember($user_id)) {
+                $this->logger->debug('User with id: ' . $user_id . ' is already assigned to course: ' . $course->getTitle());
+                continue;
+            }
+            if (ilVedaUtils::isValidDate($supervisor->getKursZugriffAb(), $supervisor->getKursZugriffBis())) {
+                $this->assignUserToRole(
+                    $course->getDefaultTutorRole(),
+                    $user_id,
+                    $participants,
+                    $course
+                );
+            }
+        }
     }
+
 
     protected function initCourse(int $obj_id) : ilObjCourse
     {

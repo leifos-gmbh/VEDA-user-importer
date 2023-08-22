@@ -1,43 +1,22 @@
 <?php
 
 use OpenAPI\Client\Model\Ausbildungszug;
-use OpenAPI\Client\Model\Dozentenkurszuordnung;
 use OpenAPI\Client\Model\Elearningkurs;
-use OpenAPI\Client\Model\Lernbegleiterkurszuordnung;
 use OpenAPI\Client\Model\TeilnehmerELearningPlattform;
-use OpenAPI\Client\Model\Teilnehmerkurszuordnung;
 
 interface ilVedaELearningPlattformApiInterface
 {
-    /**
-     * @return Teilnehmerkurszuordnung[]
-     */
-    public function requestCourseMembers(string $crs_oid) : array;
+    public function requestCourseMembers(string $crs_oid) : ilVedaCourseMemberCollectionInterface;
 
-    /**
-     * @return Lernbegleiterkurszuordnung[]
-     */
-    public function requestCourseSupervisors(string $crs_oid) : array;
+    public function requestCourseSupervisors(string $crs_oid) : ilVedaCourseSupervisorCollectionInterface;
 
-    /**
-     * @return Dozentenkurszuordnung[]
-     */
-    public function requestCourseTutors(string $crs_oid) : array;
+    public function requestCourseTutors(string $crs_oid) : ilVedaCourseTutorsCollectionInterface;
 
-    /**
-     * @return Elearningkurs[]
-     */
-    public function requestCourses() : array;
+    public function requestCourses() : ilVedaELearningCourseCollectionInterface;
 
-    /**
-     * @return Ausbildungszug[]
-     */
-    public function requestTrainingCourseTrains(string $training_course_id) : array;
+    public function requestTrainingCourseTrains(string $training_course_id) : ilVedaEducationTrainCourseCollectionInterface;
 
-    /**
-     * @return TeilnehmerELearningPlattform[]
-     */
-    public function requestParticipants() : array;
+    public function requestParticipants() : ilVedaELearningParticipantsCollectionInterface;
 
     public function sendCourseCopyStarted(string $crs_oid) : void;
 

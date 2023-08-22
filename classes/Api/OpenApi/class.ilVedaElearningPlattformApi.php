@@ -48,12 +48,14 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             ->store();
     }
 
-    public function requestCourseMembers(string $crs_oid) : array
+    public function requestCourseMembers(string $crs_oid) : ilVedaCourseMemberCollectionInterface
     {
         try {
-            return $this->api_elearning->getVonTeilnehmernDieAktivenKurszuordnungenUsingGET(
-                $this->plattform_id,
-                $crs_oid
+            return new ilVedaCourseMemberCollection(
+                $this->api_elearning->getVonTeilnehmernDieAktivenKurszuordnungenUsingGET(
+                    $this->plattform_id,
+                    $crs_oid
+                )
             );
         } catch (Exception $e) {
             $this->handleApiExceptions('getVonTeilnehmernDieAktivenKurszuordnungenUsingGET', $e);
@@ -61,12 +63,14 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
         }
     }
 
-    public function requestCourseSupervisors(string $crs_oid) : array
+    public function requestCourseSupervisors(string $crs_oid) : ilVedaCourseSupervisorCollectionInterface
     {
         try {
-            return $this->api_elearning->getVonLernbegleiternDieAktivenKurszuordnungenUsingGET(
-                $this->plattform_id,
-                $crs_oid
+            return new ilVedaCourseSupervisorCollection(
+                $this->api_elearning->getVonLernbegleiternDieAktivenKurszuordnungenUsingGET(
+                    $this->plattform_id,
+                    $crs_oid
+                )
             );
         } catch (Exception $e) {
             $this->handleApiExceptions('getVonLernbegleiternDieAktivenKurszuordnungenUsingGET', $e);
@@ -74,12 +78,14 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
         }
     }
 
-    public function requestCourseTutors(string $crs_oid) : array
+    public function requestCourseTutors(string $crs_oid) : ilVedaCourseTutorsCollectionInterface
     {
         try {
-            return $this->api_elearning->getVonDozentenDieAktivenKurszuordnungenUsingGET(
-                $this->plattform_id,
-                $crs_oid
+            return new ilVedaCourseTutorCollection(
+                $this->api_elearning->getVonDozentenDieAktivenKurszuordnungenUsingGET(
+                    $this->plattform_id,
+                    $crs_oid
+                )
             );
         } catch (Exception $e) {
             $this->handleApiExceptions('getVonDozentenDieAktivenKurszuordnungenUsingGET', $e);
@@ -87,37 +93,41 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
         }
     }
 
-    public function requestCourses() : array
+    public function requestCourses() : ilVedaELearningCourseCollectionInterface
     {
         try {
-            $response = $this->api_elearning->getAktiveELearningKurseUsingGET(
-                $this->plattform_id
+            return new ilVedaELearningCourseCollection(
+                $this->api_elearning->getAktiveELearningKurseUsingGET(
+                    $this->plattform_id
+                )
             );
-            return $response;
         } catch (Exception $e) {
             $this->handleApiExceptions('getAktiveELearningKurseUsingGET', $e);
             throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
         }
     }
 
-    public function requestTrainingCourseTrains(string $training_course_id) : array
+    public function requestTrainingCourseTrains(string $training_course_id) : ilVedaEducationTrainCourseCollectionInterface
     {
         try {
-            $response = $this->api_elearning->getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET(
-                $this->plattform_id,
-                $training_course_id
+            return new ilVedaEducationTrainCourseCollection(
+                $this->api_elearning->getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET(
+                    $this->plattform_id,
+                    $training_course_id
+                )
             );
-            return $response;
         } catch (Exception $e) {
             $this->handleApiExceptions('getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET', $e);
             throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
         }
     }
 
-    public function requestParticipants() : array
+    public function requestParticipants() : ilVedaELearningParticipantsCollectionInterface
     {
         try {
-            return $this->api_elearning->getTeilnehmerELearningPlattformUsingGET($this->plattform_id);
+            return new ilVedaELearningParticipantsCollection(
+                $this->api_elearning->getTeilnehmerELearningPlattformUsingGET($this->plattform_id)
+            );
         } catch (Exception $e) {
             $this->handleApiExceptions('getTeilnehmerELearningPlattformUsingGET', $e);
             throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);

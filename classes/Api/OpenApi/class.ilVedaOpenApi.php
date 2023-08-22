@@ -464,7 +464,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
     public function testConnection() : bool
     {
         try {
-            $response = $this->veda_connector->getElearningPlattformApi()->requestParticipants();
+            $this->veda_connector->getElearningPlattformApi()->requestParticipants();
             $id = $this->md_db_manager->findTrainingCourseId(70);
             $this->veda_logger->notice($id . ' is the training course id');
         } catch (\Exception $e) {
