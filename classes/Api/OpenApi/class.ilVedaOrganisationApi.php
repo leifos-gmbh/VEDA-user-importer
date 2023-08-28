@@ -2,6 +2,7 @@
 
 use OpenAPI\Client\Api\OrganisationenApi;
 use OpenAPI\Client\Configuration;
+use OpenAPI\Client\Model\Organisation;
 use GuzzleHttp\Client as GClient;
 
 class ilVedaOrganisationApi implements ilVedaOrganisationApiInterface
@@ -24,7 +25,7 @@ class ilVedaOrganisationApi implements ilVedaOrganisationApiInterface
         $this->mail_segment_builder_factory = $mail_segment_builder_factory;
     }
 
-    public function getOrganisation(string $orgr_oid) : \OpenAPI\Client\Model\Organisation
+    public function getOrganisation(string $orgr_oid) : Organisation
     {
         try {
             $response = $this->api_organisation->getOrganisationUsingGET($orgr_oid);

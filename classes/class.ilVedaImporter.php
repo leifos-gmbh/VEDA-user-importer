@@ -81,7 +81,7 @@ class ilVedaImporter
         $this->logger->info('Settings import lock');
         $this->settings->enableLock(true);
 
-        if(
+        if (
             $import_type === ilVedaImporter::IMPORT_TYPE_SIFA ||
             (
                 $import_type === self::IMPORT_TYPE_UNDEFINED &&
@@ -91,7 +91,7 @@ class ilVedaImporter
             $this->logger->debug('SIFA import startet.');
             $this->importSifa($modes);
         }
-        if(
+        if (
             $import_type === ilVedaImporter::IMPORT_TYPE_STANDARD ||
             (
                 $import_type === self::IMPORT_TYPE_UNDEFINED &&
@@ -107,7 +107,7 @@ class ilVedaImporter
         $this->settings->enableLock(false);
     }
 
-    protected function importSifa(array $modes): void
+    protected function importSifa(array $modes) : void
     {
         $this->ensureClaimingPluginConfigured();
         if ($this->isImportModeEnabled(self::IMPORT_USR, $modes)) {
@@ -125,7 +125,7 @@ class ilVedaImporter
         }
     }
 
-    protected function importStandard(array $modes): void
+    protected function importStandard(array $modes) : void
     {
         if ($this->isImportModeEnabled(self::IMPORT_USR, $modes)) {
             $this->logger->debug('Importing users');
@@ -142,7 +142,7 @@ class ilVedaImporter
         }
     }
 
-    protected function getImportModes(bool $all, array $types = []): array
+    protected function getImportModes(bool $all, array $types = []) : array
     {
         return $all ?
             [

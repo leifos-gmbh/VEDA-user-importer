@@ -1,6 +1,7 @@
 <?php
 
 use OpenAPI\Client\Api\AusbildungsgngeApi;
+use OpenAPI\Client\Model\Ausbildungsgang;
 use OpenAPI\Client\Configuration;
 use GuzzleHttp\Client as GClient;
 
@@ -24,7 +25,7 @@ class ilVedaTrainingCourseApi implements ilVedaTrainingCourseApiInterface
         $this->mail_segment_builder_factory = $mail_segment_builder_factory;
     }
 
-    public function getCourse(string $training_course_id) : \OpenAPI\Client\Model\Ausbildungsgang
+    public function getCourse(string $training_course_id) : Ausbildungsgang
     {
         try {
             return $this->api_training_course->getAusbildungsgangUsingGET($training_course_id);

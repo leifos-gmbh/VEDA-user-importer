@@ -53,9 +53,10 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
     public function requestTutors(?string $oid) : ilVedaEducationTrainTutorCollectionInterface
     {
         try {
-            return new ilVedaEducationTrainTutorCollection(
-                $this->api_training_course_train->getBeteiligteDozentenVonAusbildungszugUsingGET($oid)
-            );
+            $result = $this->api_training_course_train->getBeteiligteDozentenVonAusbildungszugUsingGET($oid);
+            $this->veda_logger->debug('Reveived tutors of education train with id: ' . $oid);
+            $this->veda_logger->dump($result);
+            return new ilVedaEducationTrainTutorCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getBeteiligteDozentenVonAusbildungszugUsingGET', $e);
             throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
@@ -65,9 +66,10 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
     public function requestCompanions(?string $oid) : ilVedaEducationTrainCompanionCollectionInterface
     {
         try {
-            return new ilVedaEducationTrainCompanionCollection(
-                $this->api_training_course_train->getLernbegleiterVonAusbildungszugUsingGET($oid)
-            );
+            $result = $this->api_training_course_train->getLernbegleiterVonAusbildungszugUsingGET($oid);
+            $this->veda_logger->debug('Received companions of education train with id: ' . $oid);
+            $this->veda_logger->dump($result);
+            return new ilVedaEducationTrainCompanionCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getLernbegleiterVonAusbildungszugUsingGET', $e);
             throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
@@ -77,9 +79,10 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
     public function requestSupervisors(?string $oid) : ilVedaEducationTrainSupervisorCollectionInterface
     {
         try {
-            return new ilVedaEducationTrainSupervisorCollection(
-                $this->api_training_course_train->getAufsichtspersonenVonAusbildungszugUsingGET($oid)
-            );
+            $result = $this->api_training_course_train->getAufsichtspersonenVonAusbildungszugUsingGET($oid);
+            $this->veda_logger->debug('Received supervisors of education train with id: ' . $oid);
+            $this->veda_logger->dump($result);
+            return new ilVedaEducationTrainSupervisorCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getAufsichtspersonenVonAusbildungszugUsingGET', $e);
             throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
@@ -89,9 +92,10 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
     public function requestMembers(?string $oid) : ilVedaEducationTrainMemberCollectionInterface
     {
         try {
-            return new ilVedaEducationTrainMemberCollection(
-                $this->api_training_course_train->getTeilnehmerVonAusbildungszugUsingGET($oid)
-            );
+            $result = $this->api_training_course_train->getTeilnehmerVonAusbildungszugUsingGET($oid);
+            $this->veda_logger->debug('Received members of education train with id: ' . $oid);
+            $this->veda_logger->dump($result);
+            return new ilVedaEducationTrainMemberCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getTeilnehmerVonAusbildungszugUsingGET', $e);
             throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);

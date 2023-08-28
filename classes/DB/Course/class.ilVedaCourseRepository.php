@@ -117,7 +117,7 @@ class ilVedaCourseRepository implements ilVedaCourseRepositoryInterface
         return new ilVedaCourseCollection($courses);
     }
 
-    public function lookupCoursesWithStatusAndType(int $status, int $type): ilVedaCourseCollectionInterface
+    public function lookupCoursesWithStatusAndType(int $status, int $type) : ilVedaCourseCollectionInterface
     {
         $this->veda_logger->debug('Looking up all courses.');
         $query = 'select * from ' . self::TABLE_NAME . ' where'

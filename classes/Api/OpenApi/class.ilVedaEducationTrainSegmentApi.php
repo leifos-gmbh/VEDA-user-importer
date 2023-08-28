@@ -47,8 +47,11 @@ class ilVedaEducationTrainSegmentApi implements ilVedaEducationTrainSegmentApiIn
             ->store();
     }
 
-    public function sendExerciseSubmissionConfirmed(string $segment_oid, string $participant_oid, DateTime $confirmed = null) : void
-    {
+    public function sendExerciseSubmissionConfirmed(
+        string $segment_oid,
+        string $participant_oid,
+        DateTime $confirmed = null
+    ) : void {
         try {
             $info = new PraktikumsberichtKorrigiertApiDto();
             if ($confirmed) {
@@ -69,8 +72,11 @@ class ilVedaEducationTrainSegmentApi implements ilVedaEducationTrainSegmentApiIn
         }
     }
 
-    public function sendExerciseSubmissionDate(string $segment_oid, string $participant_oid, ?DateTime $subdate = null) : void
-    {
+    public function sendExerciseSubmissionDate(
+        string $segment_oid,
+        string $participant_oid,
+        ?DateTime $subdate = null
+    ) : void {
         try {
             $info = new PraktikumsberichtEingegangenApiDto();
             if ($subdate) {
@@ -93,8 +99,11 @@ class ilVedaEducationTrainSegmentApi implements ilVedaEducationTrainSegmentApiIn
         }
     }
 
-    public function sendExerciseSuccess(string $segment_oid, string $participant_oid, DateTime $dt) : void
-    {
+    public function sendExerciseSuccess(
+        string $segment_oid,
+        string $participant_oid,
+        DateTime $dt
+    ) : void {
         try {
             $info = new MeldeLernerfolgApiDto();
             $info->setLernerfolg(true);

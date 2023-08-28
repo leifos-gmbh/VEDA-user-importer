@@ -22,7 +22,8 @@ class ilVedaMailSegmentBuilder implements ilVedaMailSegmentBuilderInterface
 
     public function withType(string $type) : ilVedaMailSegmentBuilderInterface
     {
-        $this->veda_logger->debug('Adding type: "' . $type . '", to mail segment with id: '
+        $this->veda_logger->debug(
+            'Adding type: "' . $type . '", to mail segment with id: '
             . $this->mail_segment->getID()
         );
         $builder = new ilVedaMailSegmentBuilder($this->mail_segment_repo, $this->veda_logger);
@@ -33,7 +34,8 @@ class ilVedaMailSegmentBuilder implements ilVedaMailSegmentBuilderInterface
 
     public function withMessage(string $message) : ilVedaMailSegmentBuilderInterface
     {
-        $this->veda_logger->debug('Adding message: "'. $message .'", to mail segment with id: '
+        $this->veda_logger->debug(
+            'Adding message: "' . $message . '", to mail segment with id: '
             . $this->mail_segment->getID()
         );
         $builder = new ilVedaMailSegmentBuilder($this->mail_segment_repo, $this->veda_logger);

@@ -255,7 +255,8 @@ class ilVedaCourseImportAdapter
         }
         if (is_null($train)) {
             $this->logger->warning(
-                'Cannot read training course train for training course id: ' . $info[self::CP_INFO_AUSBILDUNGSZUG]);
+                'Cannot read training course train for training course id: ' . $info[self::CP_INFO_AUSBILDUNGSZUG]
+            );
         }
         return $train;
     }

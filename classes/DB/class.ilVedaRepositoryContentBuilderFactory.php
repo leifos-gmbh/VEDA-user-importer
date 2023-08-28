@@ -27,22 +27,22 @@ class ilVedaRepositoryContentBuilderFactory implements ilVedaRepositoryContentBu
         );
     }
 
-    public function getVedaSegmentBuilder(): ilVedaSegmentBuilderFactoryInterface
+    public function getVedaSegmentBuilder() : ilVedaSegmentBuilderFactoryInterface
     {
         return $this->sgmt_builder_factory;
     }
 
-    public function getMailSegmentBuilder(): ilVedaMailSegmentBuilderFactoryInterface
+    public function getMailSegmentBuilder() : ilVedaMailSegmentBuilderFactoryInterface
     {
         return $this->ml_sgmt_builder_factory;
     }
 
-    public function getVedaCourseBuilder(): ilVedaCourseBuilderFactoryInterface
+    public function getVedaCourseBuilder() : ilVedaCourseBuilderFactoryInterface
     {
         return $this->crs_builder_factory;
     }
 
-    public function getVedaUserBuilder(): ilVedaUserBuilderFactoryInterface
+    public function getVedaUserBuilder() : ilVedaUserBuilderFactoryInterface
     {
         return $this->usr_builder_factory;
     }

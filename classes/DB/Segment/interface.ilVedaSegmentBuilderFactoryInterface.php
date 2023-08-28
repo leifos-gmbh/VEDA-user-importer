@@ -2,5 +2,5 @@
 
 interface ilVedaSegmentBuilderFactoryInterface
 {
-    public function buildSegment(): ilVedaSegmentBuilderInterface;
+    public function buildSegment() : ilVedaSegmentBuilderInterface;
 }

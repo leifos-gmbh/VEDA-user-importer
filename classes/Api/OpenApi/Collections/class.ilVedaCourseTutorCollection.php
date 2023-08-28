@@ -19,7 +19,7 @@ class ilVedaCourseTutorCollection implements ilVedaCourseTutorsCollectionInterfa
         $this->index = 0;
     }
 
-    public function containsTutorWithOID(string $oid): bool
+    public function containsTutorWithOID(string $oid) : bool
     {
         foreach ($this->crs_tutors as $tutor) {
             if (

@@ -66,7 +66,6 @@ class ilVedaCourseStandardImportAdapter
     {
         $this->logger->debug('Trying to import standard courses...');
         $standard_courses = $this->veda_connector->getElearningPlattformApi()->requestCourses();
-        $this->logger->dump($standard_courses);
         foreach ($standard_courses as $course) {
             $this->handleCourseUpdate($course);
         }

@@ -303,7 +303,6 @@ class ilVedaOpenApi implements ilVedaApiInterface
     public function importILIASUsers() : void
     {
         $participants = $this->veda_connector->getElearningPlattformApi()->requestParticipants();
-        $this->veda_logger->dump($participants, \ilLogLevel::DEBUG);
         $this->user_import_adapter->import($participants);
     }
 

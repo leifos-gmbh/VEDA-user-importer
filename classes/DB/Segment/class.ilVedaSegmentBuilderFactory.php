@@ -12,7 +12,7 @@ class ilVedaSegmentBuilderFactory implements ilVedaSegmentBuilderFactoryInterfac
         $this->sgmt_repo = $sgmt_repo;
     }
 
-    public function buildSegment(): ilVedaSegmentBuilderInterface
+    public function buildSegment() : ilVedaSegmentBuilderInterface
     {
         return new ilVedaSegmentBuilder($this->sgmt_repo, $this->veda_logger);
     }

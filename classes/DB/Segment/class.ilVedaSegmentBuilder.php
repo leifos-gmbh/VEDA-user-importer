@@ -17,7 +17,7 @@ class ilVedaSegmentBuilder implements ilVedaSegmentBuilderInterface
         $this->veda_sgmt = new ilVedaSegment(self::NULL_OID);
     }
 
-    public function withOID(string $oid, bool $load_from_db = true): ilVedaSegmentBuilderInterface
+    public function withOID(string $oid, bool $load_from_db = true) : ilVedaSegmentBuilderInterface
     {
         $new_builder = new ilVedaSegmentBuilder($this->sgmt_repo, $this->veda_logger);
 
@@ -43,7 +43,7 @@ class ilVedaSegmentBuilder implements ilVedaSegmentBuilderInterface
         return $new_builder;
     }
 
-    public function withType(string $type): ilVedaSegmentBuilderInterface
+    public function withType(string $type) : ilVedaSegmentBuilderInterface
     {
         $new_builder = new ilVedaSegmentBuilder($this->sgmt_repo, $this->veda_logger);
         $new_builder->veda_sgmt = $this->veda_sgmt;
@@ -51,12 +51,12 @@ class ilVedaSegmentBuilder implements ilVedaSegmentBuilderInterface
         return $new_builder;
     }
 
-    public function get(): ilVedaSegmentInterface
+    public function get() : ilVedaSegmentInterface
     {
         return $this->veda_sgmt;
     }
 
-    public function store(): void
+    public function store() : void
     {
         $this->sgmt_repo->updateSegmentInfo($this->veda_sgmt);
     }

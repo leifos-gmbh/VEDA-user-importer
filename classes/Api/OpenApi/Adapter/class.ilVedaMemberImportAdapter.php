@@ -184,7 +184,6 @@ class ilVedaMemberImportAdapter
         }
 
         $this->logger->debug('Handling course: ' . $course->getTitle());
-        $members->logContent($this->logger);
 
         $veda_crs = $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
             ->withOID($oid)
@@ -214,9 +213,6 @@ class ilVedaMemberImportAdapter
             $remote_tutors = $education_train_api->requestTutors($oid);
             $remote_companions = $education_train_api->requestCompanions($oid);
             $remote_supervisors = $education_train_api->requestSupervisors($oid);
-            $remote_tutors->logContent($this->logger);
-            $remote_companions->logContent($this->logger);
-            $remote_supervisors->logContent($this->logger);
             $this->logger->debug('For course: ' . $course->getTitle());
         } catch (ilVedaConnectionException $e) {
             $this->logger->warning('Reading assigned tutors failed. Aborting tutor update');

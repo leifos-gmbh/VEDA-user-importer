@@ -19,32 +19,32 @@ class ilVedaELearningParticipantsCollection implements ilVedaELearningParticipan
         $this->index = 0;
     }
 
-    public function current(): TeilnehmerELearningPlattform
+    public function current() : TeilnehmerELearningPlattform
     {
         return $this->elearning_participants[$this->index];
     }
 
-    public function key(): int
+    public function key() : int
     {
         return $this->index;
     }
 
-    public function next(): void
+    public function next() : void
     {
         $this->index++;
     }
 
-    public function rewind(): void
+    public function rewind() : void
     {
         $this->index = 0;
     }
 
-    public function valid(): bool
+    public function valid() : bool
     {
         return 0 <= $this->index && $this->index < count($this->elearning_participants);
     }
 
-    public function count(): int
+    public function count() : int
     {
         return count($this->elearning_participants);
     }

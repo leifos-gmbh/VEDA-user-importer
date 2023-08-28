@@ -51,12 +51,13 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
     public function requestCourseMembers(string $crs_oid) : ilVedaCourseMemberCollectionInterface
     {
         try {
-            return new ilVedaCourseMemberCollection(
-                $this->api_elearning->getVonTeilnehmernDieAktivenKurszuordnungenUsingGET(
-                    $this->plattform_id,
-                    $crs_oid
-                )
+            $result = $this->api_elearning->getVonTeilnehmernDieAktivenKurszuordnungenUsingGET(
+                $this->plattform_id,
+                $crs_oid
             );
+            $this->veda_logger->debug('Received course members of course with oid: ' . $crs_oid);
+            $this->veda_logger->dump($result);
+            return new ilVedaCourseMemberCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getVonTeilnehmernDieAktivenKurszuordnungenUsingGET', $e);
             throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
@@ -66,12 +67,13 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
     public function requestCourseSupervisors(string $crs_oid) : ilVedaCourseSupervisorCollectionInterface
     {
         try {
-            return new ilVedaCourseSupervisorCollection(
-                $this->api_elearning->getVonLernbegleiternDieAktivenKurszuordnungenUsingGET(
-                    $this->plattform_id,
-                    $crs_oid
-                )
+            $result = $this->api_elearning->getVonLernbegleiternDieAktivenKurszuordnungenUsingGET(
+                $this->plattform_id,
+                $crs_oid
             );
+            $this->veda_logger->debug('Received course supervisors of course with oid: ' . $crs_oid);
+            $this->veda_logger->dump($result);
+            return new ilVedaCourseSupervisorCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getVonLernbegleiternDieAktivenKurszuordnungenUsingGET', $e);
             throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
@@ -81,12 +83,13 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
     public function requestCourseTutors(string $crs_oid) : ilVedaCourseTutorsCollectionInterface
     {
         try {
-            return new ilVedaCourseTutorCollection(
-                $this->api_elearning->getVonDozentenDieAktivenKurszuordnungenUsingGET(
-                    $this->plattform_id,
-                    $crs_oid
-                )
+            $result = $this->api_elearning->getVonDozentenDieAktivenKurszuordnungenUsingGET(
+                $this->plattform_id,
+                $crs_oid
             );
+            $this->veda_logger->debug('Received course tutors of course with oid: ' . $crs_oid);
+            $this->veda_logger->dump($result);
+            return new ilVedaCourseTutorCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getVonDozentenDieAktivenKurszuordnungenUsingGET', $e);
             throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
@@ -96,11 +99,12 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
     public function requestCourses() : ilVedaELearningCourseCollectionInterface
     {
         try {
-            return new ilVedaELearningCourseCollection(
-                $this->api_elearning->getAktiveELearningKurseUsingGET(
-                    $this->plattform_id
-                )
+            $result = $this->api_elearning->getAktiveELearningKurseUsingGET(
+                $this->plattform_id
             );
+            $this->veda_logger->debug('Received e-learning courses.');
+            $this->veda_logger->dump($result);
+            return new ilVedaELearningCourseCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getAktiveELearningKurseUsingGET', $e);
             throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
@@ -110,12 +114,13 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
     public function requestTrainingCourseTrains(string $training_course_id) : ilVedaEducationTrainCourseCollectionInterface
     {
         try {
-            return new ilVedaEducationTrainCourseCollection(
-                $this->api_elearning->getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET(
-                    $this->plattform_id,
-                    $training_course_id
-                )
+            $result = $this->api_elearning->getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET(
+                $this->plattform_id,
+                $training_course_id
             );
+            $this->veda_logger->debug('Received education trains with training course id: ' . $training_course_id);
+            $this->veda_logger->dump($result);
+            return new ilVedaEducationTrainCourseCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET', $e);
             throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
@@ -125,9 +130,10 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
     public function requestParticipants() : ilVedaELearningParticipantsCollectionInterface
     {
         try {
-            return new ilVedaELearningParticipantsCollection(
-                $this->api_elearning->getTeilnehmerELearningPlattformUsingGET($this->plattform_id)
-            );
+            $result = $this->api_elearning->getTeilnehmerELearningPlattformUsingGET($this->plattform_id);
+            $this->veda_logger->debug('Received all participants.');
+            $this->veda_logger->dump($result);
+            return new ilVedaELearningParticipantsCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getTeilnehmerELearningPlattformUsingGET', $e);
             throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);

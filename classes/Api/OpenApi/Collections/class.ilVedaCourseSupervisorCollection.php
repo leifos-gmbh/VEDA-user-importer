@@ -19,7 +19,7 @@ class ilVedaCourseSupervisorCollection implements ilVedaCourseSupervisorCollecti
         $this->index = 0;
     }
 
-    public function containsSupervisorWithOID(string $oid): bool
+    public function containsSupervisorWithOID(string $oid) : bool
     {
         foreach ($this->crs_supervisors as $supervisor) {
             if (

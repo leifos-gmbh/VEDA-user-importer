@@ -30,7 +30,7 @@ class ilVedaMemberStandardImportAdapter
         ilLogger $veda_logger,
         ilRbacAdmin $rbac_admin,
         ilVedaConnector $veda_connector,
-        ilVedaCourseRepositoryInterface  $crs_repo,
+        ilVedaCourseRepositoryInterface $crs_repo,
         ilVedaRepositoryContentBuilderFactoryInterface $repo_content_builder_factory
     ) {
         $this->logger = $veda_logger;
@@ -64,14 +64,8 @@ class ilVedaMemberStandardImportAdapter
         $tutors = $this->elearning_api->requestCourseTutors($oid);
         $supervisors = $this->elearning_api->requestCourseSupervisors($oid);
         $members = $this->elearning_api->requestCourseMembers($oid);
-
-        $tutors->logContent($this->logger);
-        $supervisors->logContent($this->logger);
-        $members->logContent($this->logger);
-
         $participants = $this->initParticipants($obj_id);
         $course = $this->initCourse($obj_id);
-
         $this->removeDeprecatedMembers($participants, $course, $members);
         $this->removeDeprecatedTutors($participants, $course, $tutors, $supervisors);
         $this->addNewMembers($participants, $course, $members);
