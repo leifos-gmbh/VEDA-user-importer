@@ -551,7 +551,7 @@ class Elearningkurs implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function getMasterkurs()
     {
-        return 82; // $this->container['masterkurs'];
+        return $this->container['masterkurs'];
     }
 
     /**

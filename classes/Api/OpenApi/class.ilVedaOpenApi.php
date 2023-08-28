@@ -96,30 +96,6 @@ class ilVedaOpenApi implements ilVedaApiInterface
         );
     }
 
-    public function handleParticipantAssignedToCourse(int $obj_id, int $usr_id, int $role_id) : void
-    {
-        $this->veda_logger->debug('Start handling participant assigned to course');
-        $veda_crs = $this->crs_repo->lookupCourseByID($obj_id);
-        $veda_usr = $this->user_repo->lookupUserByID($usr_id);
-        if (is_null($veda_crs) || is_null($veda_usr)) {
-            $this->veda_logger->debug('handleParticipantAssignedToCourse, null course or user');
-            return;
-        }
-        if (is_null($veda_crs->getOid()) || is_null($veda_usr->getOid())) {
-            $this->veda_logger->debug('handleParticipantAssignedToCourse, null course_oid or user_oid');
-            return;
-        }
-        if (!$veda_crs->getDocumentSuccess()) {
-            $this->veda_logger->debug('Ignore course without document success flag');
-            return;
-        }
-        $this->veda_logger->debug('Send assigned usr:' . $veda_usr->getOid() . ' to crs:' . $veda_crs->getOid());
-        $this->veda_connector->getElearningPlattformApi()->sendParticipantAssignedToCourse(
-            $veda_crs->getOid(),
-            $veda_usr->getOid()
-        );
-    }
-
     public function handleAfterCloningDependenciesSIFAEvent(int $source_id, int $target_id, int $copy_id) : void
     {
         $this->sifa_course_import_adapter->handleAfterCloningDependenciesEvent(
@@ -174,6 +150,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
             $this->veda_logger->debug('Ignoring every learning progress status except failed and completed.');
             return;
         }
+
         if (
             !ilObjCourse::_exists($obj_id) ||
             !ilObjUser::_exists($usr_id) ||
@@ -183,6 +160,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
             $this->veda_logger->debug('Course or user with given ids do not exist or import id is missing.');
             return;
         }
+
 
         $veda_crs = $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
             ->withOID($crs_oid)
@@ -205,9 +183,51 @@ class ilVedaOpenApi implements ilVedaApiInterface
         }
     }
 
+    protected function handleTrackingEventStartCourseWork(int $obj_id, int $usr_id, int $status)
+    {
+        $this->veda_logger->debug('Start handling participant started working on course (obj_id, user_id, status): ('
+            . $obj_id . ', '
+            . $usr_id . ', '
+            . $status . ')'
+        );
+
+        if (
+            $status != ilLPStatus::LP_STATUS_IN_PROGRESS_NUM
+        ) {
+            $this->veda_logger->debug('Ignore status.');
+            return;
+        }
+
+        $veda_crs = $this->crs_repo->lookupCourseByID($obj_id);
+        $veda_usr = $this->user_repo->lookupUserByID($usr_id);
+        if (is_null($veda_crs) || is_null($veda_usr)) {
+            $this->veda_logger->debug('handleParticipantAssignedToCourse, null course or user');
+            return;
+        }
+        if (is_null($veda_crs->getOid()) || is_null($veda_usr->getOid())) {
+            $this->veda_logger->debug('handleParticipantAssignedToCourse, null course_oid or user_oid');
+            return;
+        }
+        if (!$veda_crs->getDocumentSuccess()) {
+            $this->veda_logger->debug('Ignore course without document success flag');
+            return;
+        }
+        $this->veda_logger->debug('Send usr:' . $veda_usr->getOid() . ' started working on crs:' . $veda_crs->getOid());
+        $this->veda_connector->getElearningPlattformApi()->sendParticipantStartedCourseWork(
+            $veda_crs->getOid(),
+            $veda_usr->getOid()
+        );
+    }
+
     public function handleTrackingEvent(int $obj_id, int $usr_id, int $status) : void
     {
         $this->handleTrackingEventDokumentSuccess(
+            $obj_id,
+            $usr_id,
+            $status
+        );
+
+        $this->handleTrackingEventStartCourseWork(
             $obj_id,
             $usr_id,
             $status

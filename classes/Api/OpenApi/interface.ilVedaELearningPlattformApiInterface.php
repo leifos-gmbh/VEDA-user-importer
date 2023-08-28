@@ -24,7 +24,7 @@ interface ilVedaELearningPlattformApiInterface
 
     public function sendCourseCreated(string $crs_oid) : void;
 
-    public function sendParticipantAssignedToCourse(string $crs_oid, string $usr_oid) : void;
+    public function sendParticipantStartedCourseWork(string $crs_oid, string $usr_oid) : void;
 
     public function sendAccountCreated(string $participant_id) : void;
 

@@ -409,7 +409,7 @@ class ilVedaUserImportAdapter
                 ->store();
             $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withType(ilVedaMailSegmentType::USER_IMPORTED)
-                ->withMessage('Imported user with id: ' . $usr_id)
+                ->withMessage('Imported user with oid: ' . $participant->getTeilnehmer()->getOid())
                 ->store();
         }
         if ($usr_id) {
@@ -420,7 +420,7 @@ class ilVedaUserImportAdapter
                 ->store();
             $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withType(ilVedaMailSegmentType::USER_UPDATED)
-                ->withMessage('Updated user with id: ' . $usr_id)
+                ->withMessage('Updated user with oid: ' . $participant->getTeilnehmer()->getOid())
                 ->store();
         }
     }

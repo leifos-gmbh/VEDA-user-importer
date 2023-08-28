@@ -182,7 +182,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
         }
     }
 
-    public function sendParticipantAssignedToCourse(string $crs_oid, string $usr_oid) : void
+    public function sendParticipantStartedCourseWork(string $crs_oid, string $usr_oid) : void
     {
         try {
             $this->api_elearning->meldeBearbeitungsstartFuerTeilnehmerAufKursUsingPOST(

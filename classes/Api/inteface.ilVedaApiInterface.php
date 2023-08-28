@@ -2,8 +2,6 @@
 
 interface ilVedaApiInterface
 {
-    public function handleParticipantAssignedToCourse(int $obj_id, int $usr_id, int $role_id) : void;
-
     public function handleAfterCloningDependenciesSIFAEvent(int $source_id, int $target_id, int $copy_id) : void;
 
     public function handleAfterCloningDependenciesStandardEvent(int $source_id, int $target_id, int $copy_id) : void;

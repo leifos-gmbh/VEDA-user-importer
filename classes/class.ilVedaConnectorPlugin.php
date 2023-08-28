@@ -119,7 +119,6 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
             $current_path = array_shift($paths);
             $file_path = $current_path . '/' . $current_file;
             if (is_dir($file_path)) {
-                // $this->logger->info('Found dir: ' . $current_file);
                 $additional_files = array_diff(scandir($file_path), ['.', '..']);
                 $additional_paths = array_fill(0, count($additional_files), $file_path);
                 array_push($files, ...$additional_files);
@@ -127,7 +126,6 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
                 continue;
             }
             if (is_file($file_path) && str_ends_with($current_file, '.php')) {
-                // $this->logger->info('Included: ' . $current_file);
                 include_once $file_path;
             }
         }
@@ -238,21 +236,6 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
 
         $logger->info('Handling event : ' . $a_event . ' from ' . $a_component);
 
-        if (
-            (
-                $a_component == self::COURSE_SERVICE &&
-                $a_event == self::EVENT_ADD_PARTICIPANT
-            ) || (
-                $a_component == self::ACCESS_CONTROL_SERVICE &&
-                $a_event == self::EVENT_ASSIGN_USER
-            )
-        ) {
-            $my_api->handleParticipantAssignedToCourse(
-                $a_parameter['obj_id'],
-                $a_parameter['usr_id'],
-                $a_parameter['role_id']
-            );
-        }
         if (
             $a_component == self::USER_SERVICE &&
             $a_event == self::EVENT_UPDATE_PASSWORD
