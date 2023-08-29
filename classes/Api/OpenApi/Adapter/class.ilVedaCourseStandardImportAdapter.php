@@ -59,7 +59,6 @@ class ilVedaCourseStandardImportAdapter
 
     /**
      * Import "trains"
-     * @throws ilVedaConnectionException
      * @throws ilVedaCourseImporterException
      */
     public function import() : void

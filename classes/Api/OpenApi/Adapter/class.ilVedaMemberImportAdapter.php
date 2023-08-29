@@ -153,7 +153,6 @@ class ilVedaMemberImportAdapter
     }
 
     /**
-     * @throws ilVedaConnectionException
      * @throws ilVedaMemberImportException
      */
     protected function importTrainingCourseTrain(?string $oid) : void

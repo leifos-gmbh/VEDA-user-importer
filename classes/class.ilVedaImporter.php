@@ -68,7 +68,6 @@ class ilVedaImporter
     /**
      * Import selected types
      * @throws ilVedaImporterLockedException
-     * @throws ilVedaConnectionException
      */
     public function import(int $import_type, bool $all, array $types = []) : void
     {

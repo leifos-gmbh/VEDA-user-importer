@@ -45,7 +45,6 @@ class ilVedaCourseImportAdapter
 
     /**
      * Import "trains"
-     * @throws ilVedaConnectionException
      */
     public function import() : void
     {
@@ -54,9 +53,6 @@ class ilVedaCourseImportAdapter
         }
     }
 
-    /**
-     * @throws ilVedaConnectionException
-     */
     protected function importTrainingCourse(int $ref_id) : void
     {
         $training_course_id = $this->md_db_manager->findTrainingCourseId($ref_id);
