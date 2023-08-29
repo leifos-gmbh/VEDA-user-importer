@@ -12,7 +12,6 @@ interface ilVedaUserBuilderInterface
 
     public function withImportFailure(bool $value) : ilVedaUserBuilderInterface;
 
-
     public function get() : ilVedaUserInterface;
 
     public function store() : void;

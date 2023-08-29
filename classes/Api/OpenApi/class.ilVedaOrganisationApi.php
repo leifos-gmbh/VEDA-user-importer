@@ -25,7 +25,7 @@ class ilVedaOrganisationApi implements ilVedaOrganisationApiInterface
         $this->mail_segment_builder_factory = $mail_segment_builder_factory;
     }
 
-    public function getOrganisation(string $orgr_oid) : Organisation
+    public function getOrganisation(string $orgr_oid) : ?Organisation
     {
         try {
             $response = $this->api_organisation->getOrganisationUsingGET($orgr_oid);
@@ -33,8 +33,8 @@ class ilVedaOrganisationApi implements ilVedaOrganisationApiInterface
             return $response;
         } catch (Exception $e) {
             $this->handleApiExceptions('getOrganisationUsingGET', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
         }
+        return null;
     }
 
     protected function handleApiExceptions(

@@ -9,6 +9,8 @@ use OpenApi\Client\Model\TeilnehmerELearningPlattform;
  */
 class ilVedaUserImportAdapter
 {
+    public const IMPORT_MODE_STANDARD = 0;
+    public const IMPORT_MODE_SIFA = 1;
     /**
      * @var string
      */
@@ -47,10 +49,12 @@ class ilVedaUserImportAdapter
     /**
      * @throws ilVedaUserImporterException
      */
-    public function import(ilVedaELearningParticipantsCollectionInterface $participants) : void
-    {
-        $this->transformParticipantsToXml($participants);
-        $this->importXml();
+    public function import(
+        ilVedaELearningParticipantsCollectionInterface $participants,
+        int $import_mode
+    ) : void {
+        $this->transformParticipantsToXml($participants, $import_mode);
+        $this->importXml($import_mode);
         $this->updateCreationFeedback();
     }
 
@@ -58,8 +62,10 @@ class ilVedaUserImportAdapter
      * Transform API participants to xml
      * @throws ilVedaUserImporterException
      */
-    protected function transformParticipantsToXml(ilVedaELearningParticipantsCollectionInterface $participants) : void
-    {
+    protected function transformParticipantsToXml(
+        ilVedaELearningParticipantsCollectionInterface $participants,
+        int $import_mode
+    ) : void {
         $this->writer->xmlStartTag('Users');
 
         $this->logger->info('Starting update of ' . count($participants) . ' participants. ');
@@ -182,7 +188,10 @@ class ilVedaUserImportAdapter
 
 
             // Role assignment
-            $long_role_id = ('il_' . IL_INST_ID . '_role_' . $this->settings->getSifaParticipantRole());
+            $participant_role = ($import_mode === self::IMPORT_MODE_SIFA)
+                ? $this->settings->getSifaParticipantRole()
+                : $this->settings->getStandardParticipantRole();
+            $long_role_id = ('il_' . IL_INST_ID . '_role_' . $participant_role);
             $this->writer->xmlElement(
                 'Role',
                 [
@@ -231,15 +240,18 @@ class ilVedaUserImportAdapter
         }
     }
 
-    protected function importXml() : void
+    protected function importXml(int $import_mode) : void
     {
+        $participant_role = ($import_mode === self::IMPORT_MODE_SIFA)
+            ? $this->settings->getSifaParticipantRole()
+            : $this->settings->getStandardParticipantRole();
         $this->logger->info('Starting user update');
         $importParser = new ilUserImportParser();
         $importParser->setUserMappingMode(IL_USER_MAPPING_ID);
         $importParser->setXMLContent($this->writer->xmlDumpMem(false));
         $importParser->setRoleAssignment(
             [
-                $this->settings->getSifaParticipantRole() => $this->settings->getSifaParticipantRole()
+                $participant_role => $participant_role
             ]
         );
         $importParser->setFolderId(USER_FOLDER_ID);
@@ -259,14 +271,12 @@ class ilVedaUserImportAdapter
     {
         $pending_participants = $this->usr_repo->lookupAllUsers()->getUsersWithPendingCreationStatus();
         foreach ($pending_participants as $participant_status) {
-            try {
+            if ($this->veda_connector->getElearningPlattformApi()->sendAccountCreated($participant_status->getOid())) {
                 $this->logger->debug('Marked user with oid ' . $participant_status->getOid() . ' as imported.');
-                $this->veda_connector->getElearningPlattformApi()->sendAccountCreated($participant_status->getOid());
                 $participant_status->setCreationStatus(ilVedaUserStatus::SYNCHRONIZED);
                 $this->logger->info('Update creation status');
                 $this->usr_repo->updateUser($participant_status);
-            } catch (ilVedaConnectionException $e) {
-            }
+            };
         }
     }
 
@@ -318,15 +328,10 @@ class ilVedaUserImportAdapter
                 ->withType(ilVedaMailSegmentType::ERROR)
                 ->withMessage($message)
                 ->store();
-            try {
-                $this->veda_connector->getElearningPlattformApi()->sendAccountCreationFailed(
-                    $participant->getTeilnehmer()->getOid(),
-                    sprintf(self::ERR_LOGIN_EXIST_MSG, $login)
-                );
-            } catch (Exception $e) {
-                $this->logger->error('Sending creation feedback failed with message: ' . $e->getMessage());
-            }
-
+            $this->veda_connector->getElearningPlattformApi()->sendAccountCreationFailed(
+                $participant->getTeilnehmer()->getOid(),
+                sprintf(self::ERR_LOGIN_EXIST_MSG, $login)
+            );
             $this->repo_content_builder_factory->getVedaUserBuilder()->buildUser()
                 ->withOID($participant->getTeilnehmer()->getOid())
                 ->withLogin($participant->getBenutzername())
@@ -366,15 +371,10 @@ class ilVedaUserImportAdapter
                 ->withMessage($message)
                 ->withType(ilVedaMailSegmentType::ERROR)
                 ->store();
-            try {
-                $this->veda_connector->getElearningPlattformApi()->sendAccountCreationFailed(
-                    $participant->getTeilnehmer()->getOid(),
-                    sprintf(self::ERR_LOGIN_EXIST_MSG, $login)
-                );
-            } catch (Exception $e) {
-                $this->logger->error('Sending creation feedback failed with message: ' . $e->getMessage());
-            }
-
+            $this->veda_connector->getElearningPlattformApi()->sendAccountCreationFailed(
+                $participant->getTeilnehmer()->getOid(),
+                sprintf(self::ERR_LOGIN_EXIST_MSG, $login)
+            );
             $this->repo_content_builder_factory->getVedaUserBuilder()->buildUser()
                 ->withOID($participant->getTeilnehmer()->getOid())
                 ->withLogin($participant->getBenutzername())
@@ -436,11 +436,13 @@ class ilVedaUserImportAdapter
             return true;
         }
 
-        try {
-            $org = $this->veda_connector->getOrganisationApi()->getOrganisation($orgoid);
+        $org = $this->veda_connector->getOrganisationApi()->getOrganisation($orgoid);
+
+        if (!is_null($org)) {
             $this->organisations[$orgoid] = $org;
             $this->writeOrganisationInfo($this->organisations[$orgoid]);
-        } catch (ilVedaConnectionException $e) {
+        }
+        if (is_null($org)) {
             $this->logger->warning('Cannot read organisation info for org oid: ' . $orgoid);
         }
         return true;

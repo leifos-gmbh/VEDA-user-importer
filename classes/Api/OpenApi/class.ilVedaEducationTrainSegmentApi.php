@@ -51,7 +51,7 @@ class ilVedaEducationTrainSegmentApi implements ilVedaEducationTrainSegmentApiIn
         string $segment_oid,
         string $participant_oid,
         DateTime $confirmed = null
-    ) : void {
+    ) : bool {
         try {
             $info = new PraktikumsberichtKorrigiertApiDto();
             if ($confirmed) {
@@ -66,9 +66,10 @@ class ilVedaEducationTrainSegmentApi implements ilVedaEducationTrainSegmentApiIn
                 $participant_oid,
                 $info
             );
+            return true;
         } catch (Exception $e) {
             $this->handleApiExceptions('meldePraktikumsberichtKorrigiertUsingPUT', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return false;
         }
     }
 
@@ -76,7 +77,7 @@ class ilVedaEducationTrainSegmentApi implements ilVedaEducationTrainSegmentApiIn
         string $segment_oid,
         string $participant_oid,
         ?DateTime $subdate = null
-    ) : void {
+    ) : bool {
         try {
             $info = new PraktikumsberichtEingegangenApiDto();
             if ($subdate) {
@@ -85,17 +86,16 @@ class ilVedaEducationTrainSegmentApi implements ilVedaEducationTrainSegmentApiIn
             } else {
                 $info->setPraktikumsberichtEingegangen(false);
             }
-
             $this->veda_logger->dump($info);
-
             $this->api_training_course_train_segment->meldePraktikumsberichtEingegangenUsingPUT(
                 $segment_oid,
                 $participant_oid,
                 $info
             );
+            return true;
         } catch (Exception $e) {
             $this->handleApiExceptions('meldePraktikumsberichtEingegangenUsingPUT', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return false;
         }
     }
 
@@ -103,7 +103,7 @@ class ilVedaEducationTrainSegmentApi implements ilVedaEducationTrainSegmentApiIn
         string $segment_oid,
         string $participant_oid,
         DateTime $dt
-    ) : void {
+    ) : bool {
         try {
             $info = new MeldeLernerfolgApiDto();
             $info->setLernerfolg(true);
@@ -114,9 +114,10 @@ class ilVedaEducationTrainSegmentApi implements ilVedaEducationTrainSegmentApiIn
                 $participant_oid,
                 $info
             );
+            return true;
         } catch (Exception $e) {
             $this->handleApiExceptions('MeldeLernerfolgApiDto', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return false;
         }
     }
 }

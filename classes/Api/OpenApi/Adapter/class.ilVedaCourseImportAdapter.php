@@ -62,6 +62,9 @@ class ilVedaCourseImportAdapter
         $training_course_id = $this->md_db_manager->findTrainingCourseId($ref_id);
         $this->logger->debug('Importing ref_id: ' . $ref_id . ' with training course id: ' . $training_course_id);
         $trains = $this->veda_connector->getElearningPlattformApi()->requestTrainingCourseTrains($training_course_id);
+        if (is_null($trains)) {
+            return;
+        }
         foreach ($trains as $train) {
             $this->handleTrainingCourseTrainUpdate($ref_id, $train);
         }
@@ -185,10 +188,8 @@ class ilVedaCourseImportAdapter
                 ->store();
 
             // send copy start
-            try {
-                $this->veda_connector->getEducationTrainApi()->sendCopyStarted($train->getOid());
-            } catch (Exception $e) {
-                $this->logger->error('Sending course copy start message failed with message: ' . $e->getMessage());
+            if (!$this->veda_connector->getEducationTrainApi()->sendCopyStarted($train->getOid())) {
+                $this->logger->error('Sending course copy start message failed');
             }
 
             if ($soap_client->init()) {
@@ -246,13 +247,13 @@ class ilVedaCourseImportAdapter
     protected function readTrainingCourseTrainFromCopyInfo(array $info) : ?Ausbildungszug
     {
         $train = null;
-        try {
-            $trains = $this->veda_connector->getElearningPlattformApi()->requestTrainingCourseTrains(
-                $info[self::CP_INFO_AUSBILDUNGSGANG]
-            );
-            $train = $trains->getByOID($info[self::CP_INFO_AUSBILDUNGSZUG]);
-        } catch (ilVedaConnectionException $e) {
+        $trains = $this->veda_connector->getElearningPlattformApi()->requestTrainingCourseTrains(
+            $info[self::CP_INFO_AUSBILDUNGSGANG]
+        );
+        if (is_null($trains)) {
+            return null;
         }
+        $train = $trains->getByOID($info[self::CP_INFO_AUSBILDUNGSZUG]);
         if (is_null($train)) {
             $this->logger->warning(
                 'Cannot read training course train for training course id: ' . $info[self::CP_INFO_AUSBILDUNGSZUG]
@@ -263,15 +264,14 @@ class ilVedaCourseImportAdapter
 
     protected function updateCourseCreatedStatus(string $oid)
     {
-        try {
-            $this->veda_connector->getEducationTrainApi()->sendCourseCreated($oid);
+        if ($this->veda_connector->getEducationTrainApi()->sendCourseCreated($oid)) {
             $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
                 ->withOID($oid)
                 ->withType(ilVedaCourseType::SIFA)
                 ->withStatusCreated(ilVedaCourseStatus::SYNCHRONIZED)
                 ->withModified(time())
                 ->store();
-        } catch (ilVedaConnectionException $e) {
+        } else {
             $this->logger->error('Cannot send course creation status');
         }
     }
@@ -404,8 +404,17 @@ class ilVedaCourseImportAdapter
             }
         }
 
-        try {
-            $training_course = $this->veda_connector->getTrainingCourseApi()->getCourse($training_course_id);
+        $training_course = $this->veda_connector->getTrainingCourseApi()->getCourse($training_course_id);
+
+        if (is_null($training_course)) {
+            $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
+                ->withMessage('Update of training course failed.')
+                ->withType(ilVedaMailSegmentType::ERROR)
+                ->store();
+            $this->logger->error('Update of getAusbildungsgangabschnittsart failed.');
+        }
+
+        if (!is_null($training_course)) {
             foreach ($training_course->getAusbildungsgangabschnitte() as $training_course_segment) {
                 if (ilVedaUtils::compareOidsEqual($training_course_segment->getOid(), $course_segment_id)) {
                     $this->repo_content_builder_factory->getVedaSegmentBuilder()->buildSegment()
@@ -414,12 +423,6 @@ class ilVedaCourseImportAdapter
                         ->store();
                 }
             }
-        } catch (Exception $e) {
-            $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
-                ->withMessage('Update of training course failed.')
-                ->withType(ilVedaMailSegmentType::ERROR)
-                ->store();
-            $this->logger->error('Update of getAusbildungsgangabschnittsart failed with message: ' . $e->getMessage());
         }
     }
 

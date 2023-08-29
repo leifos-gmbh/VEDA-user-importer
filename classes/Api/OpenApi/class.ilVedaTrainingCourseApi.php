@@ -25,14 +25,14 @@ class ilVedaTrainingCourseApi implements ilVedaTrainingCourseApiInterface
         $this->mail_segment_builder_factory = $mail_segment_builder_factory;
     }
 
-    public function getCourse(string $training_course_id) : Ausbildungsgang
+    public function getCourse(string $training_course_id) : ?Ausbildungsgang
     {
         try {
             return $this->api_training_course->getAusbildungsgangUsingGET($training_course_id);
         } catch (Exception $e) {
             $this->handleApiExceptions('getAusbildungsgangUsingGET', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
         }
+        return null;
     }
 
     protected function handleApiExceptions(

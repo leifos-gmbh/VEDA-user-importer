@@ -113,7 +113,7 @@ class ilVedaImporter
         if ($this->isImportModeEnabled(self::IMPORT_USR, $modes)) {
             $this->logger->debug('Importing users');
             $this->my_api->deleteDeprecatedILIASUsers();
-            $this->my_api->importILIASUsers();
+            $this->my_api->importILIASUsersSIFA();
         }
         if ($this->isImportModeEnabled(self::IMPORT_CRS, $modes)) {
             $this->logger->debug('Importing courses');
@@ -130,7 +130,7 @@ class ilVedaImporter
         if ($this->isImportModeEnabled(self::IMPORT_USR, $modes)) {
             $this->logger->debug('Importing users');
             $this->my_api->deleteDeprecatedILIASUsers();
-            $this->my_api->importILIASUsers();
+            $this->my_api->importILIASUsersStandard();
         }
         if ($this->isImportModeEnabled(self::IMPORT_CRS, $modes)) {
             $this->logger->debug('Importing courses');
@@ -156,16 +156,6 @@ class ilVedaImporter
     protected function isImportModeEnabled(string $mode, array $modes) : bool
     {
         return in_array($mode, $modes);
-    }
-
-    /**
-     * @throws ilVedaConnectionException
-     * @throws ilVedaUserImporterException
-     */
-    protected function importUsers() : void
-    {
-        $this->my_api->deleteDeprecatedILIASUsers();
-        $this->my_api->importILIASUsers();
     }
 
     /**

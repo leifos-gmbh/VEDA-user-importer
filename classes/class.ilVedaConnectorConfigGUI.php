@@ -590,20 +590,6 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
             ilUtil::sendFailure('API Connection Failed');
         }
         $this->credentials();
-        /*
-        try {
-            $settings = \ilVedaConnectorSettings::getInstance();
-            $connection = \ilVedaConnector::getInstance();
-            $response = $connection->getParticipants();
-            $helper = \ilVedaMDHelper::getInstance();
-            $id = $helper->findTrainingCourseId(70);
-            $this->logger->notice($id . ' is the training course id');
-            ilUtil::sendSuccess($this->getPluginObject()->txt('success_api_connect'));
-        } catch (\Exception $e) {
-            $this->logger->warning('Connection test failed with message: ' . $e->getMessage());
-            ilUtil::sendFailure($e->getMessage());
-        }*/
-        $this->credentials();
     }
 
     /**

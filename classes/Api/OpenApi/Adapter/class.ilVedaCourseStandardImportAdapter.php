@@ -66,6 +66,9 @@ class ilVedaCourseStandardImportAdapter
     {
         $this->logger->debug('Trying to import standard courses...');
         $standard_courses = $this->veda_connector->getElearningPlattformApi()->requestCourses();
+        if (is_null($standard_courses)) {
+            return;
+        }
         foreach ($standard_courses as $course) {
             $this->handleCourseUpdate($course);
         }
@@ -111,7 +114,6 @@ class ilVedaCourseStandardImportAdapter
             ->withMessage($message)
             ->store();
     }
-
 
     /**
      * @throws ilDatabaseException
@@ -213,11 +215,9 @@ class ilVedaCourseStandardImportAdapter
                 ->store();
 
             // send copy start
-            try {
-                $this->logger->debug('Send copy start');
-                $this->veda_connector->getElearningPlattformApi()->sendCourseCopyStarted($course->getOid());
-            } catch (Exception $e) {
-                $this->logger->error('Sending course copy start message failed with message: ' . $e->getMessage());
+            $this->logger->debug('Send copy start');
+            if (!$this->veda_connector->getElearningPlattformApi()->sendCourseCopyStarted($course->getOid())) {
+                $this->logger->error('Sending course copy start message failed.');
             }
             if ($soap_client->init()) {
                 $this->logger->debug('Soap clone method called');
@@ -266,15 +266,14 @@ class ilVedaCourseStandardImportAdapter
 
     protected function updateCourseCreatedStatus(string $oid) : void
     {
-        try {
-            $this->veda_connector->getElearningPlattformApi()->sendCourseCreated($oid);
+        if ($this->veda_connector->getElearningPlattformApi()->sendCourseCreated($oid)) {
             $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
                 ->withOID($oid)
                 ->withType(ilVedaCourseType::STANDARD)
                 ->withStatusCreated(ilVedaCourseStatus::SYNCHRONIZED)
                 ->withModified(time())
                 ->store();
-        } catch (ilVedaConnectionException $e) {
+        } else {
             $this->logger->error('Cannot send course creation status');
         }
     }

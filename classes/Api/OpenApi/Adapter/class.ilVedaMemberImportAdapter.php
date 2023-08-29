@@ -129,14 +129,14 @@ class ilVedaMemberImportAdapter
         }
 
         if ($is_practical_training && $submission_date_str) {
-            try {
-                $submission_date = new DateTime($submission_date_str);
-                $education_train_segment_api = $this->veda_connector->getEducationTrainSegmentApi();
-                $education_train_segment_api->sendExerciseSubmissionDate($segment_id, $usr_oid, $submission_date);
-                $education_train_segment_api->sendExerciseSubmissionConfirmed($segment_id, $usr_oid, new \DateTime());
-                $education_train_segment_api->sendExerciseSuccess($segment_id, $usr_oid, new \DateTime());
-            } catch (ilVedaConnectionException $e) {
-                $this->logger->error('Send exercise success failed with message: ' . $e->getMessage());
+            $submission_date = new DateTime($submission_date_str);
+            $education_train_segment_api = $this->veda_connector->getEducationTrainSegmentApi();
+            if (
+                !$education_train_segment_api->sendExerciseSubmissionDate($segment_id, $usr_oid, $submission_date) ||
+                !$education_train_segment_api->sendExerciseSubmissionConfirmed($segment_id, $usr_oid, new \DateTime()) ||
+                !$education_train_segment_api->sendExerciseSuccess($segment_id, $usr_oid, new \DateTime())
+            ) {
+                $this->logger->error('Send exercise success failed');
             }
         } elseif ($is_practical_training) {
             $ref_id = (count($refs) > 0) ? ('' . $refs[count($refs) - 1]) : 'NOT FOUND';
@@ -145,11 +145,9 @@ class ilVedaMemberImportAdapter
             $this->logger->notice('Exercise ref_id: ' . $ref_id);
         }
         if ($is_self_learning) {
-            try {
-                $education_train_segment_api = $this->veda_connector->getEducationTrainSegmentApi();
-                $education_train_segment_api->sendExerciseSuccess($segment_id, $usr_oid, new \DateTime());
-            } catch (ilVedaConnectionException $e) {
-                $this->logger->error('Send exercise success for type "self training" failed with message: ' . $e->getMessage());
+            $education_train_segment_api = $this->veda_connector->getEducationTrainSegmentApi();
+            if (!$education_train_segment_api->sendExerciseSuccess($segment_id, $usr_oid, new \DateTime())) {
+                $this->logger->error('Send exercise success for type "self training" failed');
             }
         }
     }
@@ -208,16 +206,20 @@ class ilVedaMemberImportAdapter
         ?string $oid
     ) : bool {
         $udffields = $this->udf_claiming_plugin->getFields();
-        try {
-            $education_train_api = $this->veda_connector->getEducationTrainApi();
-            $remote_tutors = $education_train_api->requestTutors($oid);
-            $remote_companions = $education_train_api->requestCompanions($oid);
-            $remote_supervisors = $education_train_api->requestSupervisors($oid);
-            $this->logger->debug('For course: ' . $course->getTitle());
-        } catch (ilVedaConnectionException $e) {
+        $education_train_api = $this->veda_connector->getEducationTrainApi();
+        $remote_tutors = $education_train_api->requestTutors($oid);
+        $remote_companions = $education_train_api->requestCompanions($oid);
+        $remote_supervisors = $education_train_api->requestSupervisors($oid);
+
+        if (
+            is_null($remote_tutors) ||
+            is_null($remote_companions) ||
+            is_null($remote_supervisors)
+        ) {
             $this->logger->warning('Reading assigned tutors failed. Aborting tutor update');
             return false;
         }
+
         // deassign deprecated tutors
         foreach ($participants->getTutors() as $tutor_id) {
             $tutor = \ilObjectFactory::getInstanceByObjId($tutor_id, false);

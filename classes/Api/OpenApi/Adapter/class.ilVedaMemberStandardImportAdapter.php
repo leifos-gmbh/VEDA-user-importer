@@ -64,6 +64,16 @@ class ilVedaMemberStandardImportAdapter
         $tutors = $this->elearning_api->requestCourseTutors($oid);
         $supervisors = $this->elearning_api->requestCourseSupervisors($oid);
         $members = $this->elearning_api->requestCourseMembers($oid);
+
+        if (
+            is_null($tutors) ||
+            is_null($supervisors) ||
+            is_null($members)
+        ) {
+            $this->logger->warning('Api connection failed');
+            return;
+        }
+
         $participants = $this->initParticipants($obj_id);
         $course = $this->initCourse($obj_id);
         $this->removeDeprecatedMembers($participants, $course, $members);

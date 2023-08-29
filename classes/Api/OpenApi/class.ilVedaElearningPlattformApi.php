@@ -48,7 +48,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             ->store();
     }
 
-    public function requestCourseMembers(string $crs_oid) : ilVedaCourseMemberCollectionInterface
+    public function requestCourseMembers(string $crs_oid) : ?ilVedaCourseMemberCollectionInterface
     {
         try {
             $result = $this->api_elearning->getVonTeilnehmernDieAktivenKurszuordnungenUsingGET(
@@ -60,11 +60,11 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             return new ilVedaCourseMemberCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getVonTeilnehmernDieAktivenKurszuordnungenUsingGET', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return null;
         }
     }
 
-    public function requestCourseSupervisors(string $crs_oid) : ilVedaCourseSupervisorCollectionInterface
+    public function requestCourseSupervisors(string $crs_oid) : ?ilVedaCourseSupervisorCollectionInterface
     {
         try {
             $result = $this->api_elearning->getVonLernbegleiternDieAktivenKurszuordnungenUsingGET(
@@ -76,11 +76,11 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             return new ilVedaCourseSupervisorCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getVonLernbegleiternDieAktivenKurszuordnungenUsingGET', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return null;
         }
     }
 
-    public function requestCourseTutors(string $crs_oid) : ilVedaCourseTutorsCollectionInterface
+    public function requestCourseTutors(string $crs_oid) : ?ilVedaCourseTutorsCollectionInterface
     {
         try {
             $result = $this->api_elearning->getVonDozentenDieAktivenKurszuordnungenUsingGET(
@@ -92,11 +92,11 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             return new ilVedaCourseTutorCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getVonDozentenDieAktivenKurszuordnungenUsingGET', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return null;
         }
     }
 
-    public function requestCourses() : ilVedaELearningCourseCollectionInterface
+    public function requestCourses() : ?ilVedaELearningCourseCollectionInterface
     {
         try {
             $result = $this->api_elearning->getAktiveELearningKurseUsingGET(
@@ -107,11 +107,11 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             return new ilVedaELearningCourseCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getAktiveELearningKurseUsingGET', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return null;
         }
     }
 
-    public function requestTrainingCourseTrains(string $training_course_id) : ilVedaEducationTrainCourseCollectionInterface
+    public function requestTrainingCourseTrains(string $training_course_id) : ?ilVedaEducationTrainCourseCollectionInterface
     {
         try {
             $result = $this->api_elearning->getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET(
@@ -123,11 +123,11 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             return new ilVedaEducationTrainCourseCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return null;
         }
     }
 
-    public function requestParticipants() : ilVedaELearningParticipantsCollectionInterface
+    public function requestParticipants() : ?ilVedaELearningParticipantsCollectionInterface
     {
         try {
             $result = $this->api_elearning->getTeilnehmerELearningPlattformUsingGET($this->plattform_id);
@@ -136,24 +136,25 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             return new ilVedaELearningParticipantsCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getTeilnehmerELearningPlattformUsingGET', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return null;
         }
     }
 
-    public function sendCourseCopyStarted(string $crs_oid) : void
+    public function sendCourseCopyStarted(string $crs_oid) : bool
     {
         try {
             $this->api_elearning->meldeElearningkursExterneAnlageAngestossenUsingPOST(
                 $this->plattform_id,
                 $crs_oid
             );
+            return true;
         } catch (Exception $e) {
             $this->handleApiExceptions('meldeElearningkursExterneAnlageAngestossenUsingPOST', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return false;
         }
     }
 
-    public function sendCourseCreationFailed(string $crs_oid, string $message) : void
+    public function sendCourseCreationFailed(string $crs_oid, string $message) : bool
     {
         try {
             $error_message = new FehlermeldungApiDto();
@@ -163,26 +164,28 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
                 $crs_oid,
                 $error_message
             );
+            return true;
         } catch (Exception $e) {
             $this->handleApiExceptions('meldeElearningkursExterneAnlageFehlgeschlagenUsingPOST', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return false;
         }
     }
 
-    public function sendCourseCreated(string $crs_oid) : void
+    public function sendCourseCreated(string $crs_oid) : bool
     {
         try {
             $this->api_elearning->meldeElearningkursExternExistierendUsingPOST(
                 $this->plattform_id,
                 $crs_oid
             );
+            return true;
         } catch (Exception $e) {
             $this->handleApiExceptions('meldeElearningkursExternExistierendUsingPOST', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return false;
         }
     }
 
-    public function sendParticipantStartedCourseWork(string $crs_oid, string $usr_oid) : void
+    public function sendParticipantStartedCourseWork(string $crs_oid, string $usr_oid) : bool
     {
         try {
             $this->api_elearning->meldeBearbeitungsstartFuerTeilnehmerAufKursUsingPOST(
@@ -190,31 +193,28 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
                 $crs_oid,
                 $usr_oid
             );
-        } catch (ApiException $e) {
-            $this->handleApiExceptions('meldeBearbeitungsstartFuerTeilnehmerAufKursUsingPOST', $e);
-            if ($e->getCode() !== 422) {
-                throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
-            }
+            return true;
         } catch (Exception $e) {
             $this->handleApiExceptions('meldeBearbeitungsstartFuerTeilnehmerAufKursUsingPOST', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return false;
         }
     }
 
-    public function sendAccountCreated(string $participant_id) : void
+    public function sendAccountCreated(string $participant_id) : bool
     {
         try {
             $this->api_elearning->meldeElearningaccountAlsExternExistierendUsingPOST(
                 $this->plattform_id,
                 $participant_id
             );
+            return true;
         } catch (Exception $e) {
             $this->handleApiExceptions('meldeElearningaccountAlsExternExistierendUsingPOST', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return false;
         }
     }
 
-    public function sendAccountCreationFailed(string $usr_oid, string $message) : void
+    public function sendAccountCreationFailed(string $usr_oid, string $message) : bool
     {
         try {
             $error_message = new FehlermeldungApiDto();
@@ -225,13 +225,14 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
                 $error_message
             );
             $this->veda_logger->info('Send message: ' . $error_message->getFehlermeldung());
+            return true;
         } catch (Exception $e) {
             $this->handleApiExceptions('meldeElearningaccountAnlageAlsFehlgeschlagen', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return false;
         }
     }
 
-    public function sendCoursePassed(string $crs_oid, string $usr_oid) : void
+    public function sendCoursePassed(string $crs_oid, string $usr_oid) : bool
     {
         try {
             $this->api_elearning->meldeKursabschlussMitErfolgUsingPOST(
@@ -239,18 +240,14 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
                 $crs_oid,
                 $usr_oid,
             );
-        } catch (ApiException $e) {
-            $this->handleApiExceptions('meldeKursabschlussMitErfolgUsingPOST', $e);
-            if ($e->getCode() !== 422) {
-                throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
-            }
+            return true;
         } catch (Exception $e) {
             $this->handleApiExceptions('meldeKursabschlussMitErfolgUsingPOST', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return false;
         }
     }
 
-    public function sendCourseFailed(string $crs_oid, string $usr_oid) : void
+    public function sendCourseFailed(string $crs_oid, string $usr_oid) : bool
     {
         try {
             $this->api_elearning->meldeKursabschlussOhneErfolgUsingPOST(
@@ -258,18 +255,14 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
                 $crs_oid,
                 $usr_oid
             );
-        } catch (ApiException $e) {
-            $this->handleApiExceptions('meldeKursabschlussOhneErfolgUsingPOST', $e);
-            if ($e->getCode() !== 422) {
-                throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
-            }
+            return true;
         } catch (Exception $e) {
             $this->handleApiExceptions('meldeKursabschlussOhneErfolgUsingPOST', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return false;
         }
     }
 
-    public function sendFirstLoginSuccess(string $usr_oid) : void
+    public function sendFirstLoginSuccess(string $usr_oid) : bool
     {
         try {
             $this->api_elearning->meldeErstmaligErfolgreichEingeloggtUsingPOST(
@@ -277,8 +270,10 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
                 $usr_oid
             );
             $this->veda_logger->info('Password notification sent.');
+            return true;
         } catch (Exception $e) {
             $this->handleApiExceptions('meldeErstmaligErfolgreichEingeloggt', $e);
+            return false;
         }
     }
 }

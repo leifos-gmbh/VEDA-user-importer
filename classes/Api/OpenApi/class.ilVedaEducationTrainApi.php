@@ -50,7 +50,7 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
             ->store();
     }
 
-    public function requestTutors(?string $oid) : ilVedaEducationTrainTutorCollectionInterface
+    public function requestTutors(?string $oid) : ?ilVedaEducationTrainTutorCollectionInterface
     {
         try {
             $result = $this->api_training_course_train->getBeteiligteDozentenVonAusbildungszugUsingGET($oid);
@@ -59,11 +59,11 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
             return new ilVedaEducationTrainTutorCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getBeteiligteDozentenVonAusbildungszugUsingGET', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return null;
         }
     }
 
-    public function requestCompanions(?string $oid) : ilVedaEducationTrainCompanionCollectionInterface
+    public function requestCompanions(?string $oid) : ?ilVedaEducationTrainCompanionCollectionInterface
     {
         try {
             $result = $this->api_training_course_train->getLernbegleiterVonAusbildungszugUsingGET($oid);
@@ -72,11 +72,11 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
             return new ilVedaEducationTrainCompanionCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getLernbegleiterVonAusbildungszugUsingGET', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return null;
         }
     }
 
-    public function requestSupervisors(?string $oid) : ilVedaEducationTrainSupervisorCollectionInterface
+    public function requestSupervisors(?string $oid) : ?ilVedaEducationTrainSupervisorCollectionInterface
     {
         try {
             $result = $this->api_training_course_train->getAufsichtspersonenVonAusbildungszugUsingGET($oid);
@@ -85,11 +85,11 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
             return new ilVedaEducationTrainSupervisorCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getAufsichtspersonenVonAusbildungszugUsingGET', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return null;
         }
     }
 
-    public function requestMembers(?string $oid) : ilVedaEducationTrainMemberCollectionInterface
+    public function requestMembers(?string $oid) : ?ilVedaEducationTrainMemberCollectionInterface
     {
         try {
             $result = $this->api_training_course_train->getTeilnehmerVonAusbildungszugUsingGET($oid);
@@ -98,11 +98,11 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
             return new ilVedaEducationTrainMemberCollection($result);
         } catch (Exception $e) {
             $this->handleApiExceptions('getTeilnehmerVonAusbildungszugUsingGET', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return null;
         }
     }
 
-    public function sendCourseCreationFailed(string $oid) : void
+    public function sendCourseCreationFailed(string $oid) : bool
     {
         try {
             $error_message = new FehlermeldungApiDto();
@@ -111,29 +111,32 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
                 $oid,
                 $error_message
             );
+            return true;
         } catch (Exception $e) {
             $this->handleApiExceptions('meldeAusbildungszugAnlageFehlgeschlagenUsingPOST', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return false;
         }
     }
 
-    public function sendCourseCreated(string $oid) : void
+    public function sendCourseCreated(string $oid) : bool
     {
         try {
             $this->api_training_course_train->meldeAusbildungszugAlsExternExistierendUsingPOST($oid);
+            return true;
         } catch (Exception $e) {
             $this->handleApiExceptions('meldeAusbildungszugAlsExternExistierendUsingPOST', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return false;
         }
     }
 
-    public function sendCopyStarted(string $oid) : void
+    public function sendCopyStarted(string $oid) : bool
     {
         try {
             $this->api_training_course_train->meldeExterneAnlageAngestossenUsingPOST($oid);
+            return true;
         } catch (Exception $e) {
             $this->handleApiExceptions('meldeExterneAnlageAngestossenUsingPOST', $e);
-            throw new ilVedaConnectionException($e->getMessage(), ilVedaConnectionException::ERR_API);
+            return false;
         }
     }
 }

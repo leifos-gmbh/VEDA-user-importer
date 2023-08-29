@@ -147,25 +147,43 @@ class ilVedaOpenApi implements ilVedaApiInterface
             $status !== ilLPStatus::LP_STATUS_COMPLETED_NUM &&
             $status !== ilLPStatus::LP_STATUS_FAILED_NUM
         ) {
-            $this->veda_logger->debug('Ignoring every learning progress status except failed and completed.');
+            $this->veda_logger->debug('Ignoring every learning progress status except: failed, completed');
             return;
         }
-
+        if (!ilObjCourse::_exists($obj_id)) {
+            $this->veda_logger->debug('Course with id does not exist: ' . $obj_id);
+            return;
+        }
+        if (!ilObjUser::_exists($usr_id)) {
+            $this->veda_logger->debug('User with id does not exist: ' . $usr_id);
+            return;
+        }
         if (
-            !ilObjCourse::_exists($obj_id) ||
-            !ilObjUser::_exists($usr_id) ||
             is_null(($usr_oid = ilObjUser::_lookupImportId($usr_id))) ||
-            is_null(($crs_oid = ilObjCourse::_lookupImportId($obj_id)))
+            $usr_oid = ''
         ) {
-            $this->veda_logger->debug('Course or user with given ids do not exist or import id is missing.');
+            $this->veda_logger->debug('User oid is null or empty.');
+            return;
+        }
+        if (
+            is_null(($crs_oid = ilObjCourse::_lookupImportId($obj_id))) ||
+            $crs_oid = ''
+        ) {
+            $this->veda_logger->debug('Course oid is null or empty.');
             return;
         }
 
+        $veda_usr = $this->user_repo->lookupUserByOID($usr_oid);
+        $veda_crs = $this->crs_repo->lookupCourseByOID($crs_oid);
 
-        $veda_crs = $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
-            ->withOID($crs_oid)
-            ->get();
-
+        if (is_null($veda_usr)) {
+            $this->veda_logger->debug('User with oid does not exist: ' . $crs_oid);
+            return;
+        }
+        if (is_null($veda_crs)) {
+            $this->veda_logger->debug('Course with oid does not exist: ' . $crs_oid);
+            return;
+        }
         if (!$veda_crs->getDocumentSuccess()) {
             $this->veda_logger->debug('Document success is not enabled for course with oid:' . $crs_oid);
             return;
@@ -173,33 +191,35 @@ class ilVedaOpenApi implements ilVedaApiInterface
 
         $elearning_api = $this->veda_connector->getElearningPlattformApi();
         if ($status === ilLPStatus::LP_STATUS_FAILED_NUM) {
-            $this->veda_logger->debug('Sending course failed via api.');
+            $this->veda_logger->debug('Send usr: ' . $usr_oid . ' failed crs: ' . $crs_oid);
             $elearning_api->sendCourseFailed($crs_oid, $usr_oid);
+            return;
         }
 
         if ($status === ilLPStatus::LP_STATUS_COMPLETED_NUM) {
-            $this->veda_logger->debug('Sending course passed via api.');
+            $this->veda_logger->debug('Send usr: ' . $usr_oid . ' passed crs: ' . $crs_oid);
             $elearning_api->sendCoursePassed($crs_oid, $usr_oid);
+            return;
         }
     }
 
     protected function handleTrackingEventStartCourseWork(int $obj_id, int $usr_id, int $status)
     {
-        $this->veda_logger->debug('Start handling participant started working on course (obj_id, user_id, status): ('
+        $this->veda_logger->debug(
+            'Start handling participant started working on course (obj_id, user_id, status): ('
             . $obj_id . ', '
             . $usr_id . ', '
             . $status . ')'
         );
 
-        if (
-            $status != ilLPStatus::LP_STATUS_IN_PROGRESS_NUM
-        ) {
-            $this->veda_logger->debug('Ignore status.');
+        if ($status != ilLPStatus::LP_STATUS_IN_PROGRESS_NUM) {
+            $this->veda_logger->debug('Ignoring every learning progress status except: in progress');
             return;
         }
 
         $veda_crs = $this->crs_repo->lookupCourseByID($obj_id);
         $veda_usr = $this->user_repo->lookupUserByID($usr_id);
+
         if (is_null($veda_crs) || is_null($veda_usr)) {
             $this->veda_logger->debug('handleParticipantAssignedToCourse, null course or user');
             return;
@@ -212,6 +232,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
             $this->veda_logger->debug('Ignore course without document success flag');
             return;
         }
+
         $this->veda_logger->debug('Send usr:' . $veda_usr->getOid() . ' started working on crs:' . $veda_crs->getOid());
         $this->veda_connector->getElearningPlattformApi()->sendParticipantStartedCourseWork(
             $veda_crs->getOid(),
@@ -221,13 +242,13 @@ class ilVedaOpenApi implements ilVedaApiInterface
 
     public function handleTrackingEvent(int $obj_id, int $usr_id, int $status) : void
     {
-        $this->handleTrackingEventDokumentSuccess(
+        $this->handleTrackingEventStartCourseWork(
             $obj_id,
             $usr_id,
             $status
         );
 
-        $this->handleTrackingEventStartCourseWork(
+        $this->handleTrackingEventDokumentSuccess(
             $obj_id,
             $usr_id,
             $status
@@ -273,6 +294,10 @@ class ilVedaOpenApi implements ilVedaApiInterface
         $elearning_api = $this->veda_connector->getElearningPlattformApi();
         foreach ($this->user_repo->lookupAllUsers() as $user) {
             $found_remote = false;
+            $participants = $elearning_api->requestParticipants();
+            if (is_null($participants)) {
+                continue;
+            }
             foreach ($elearning_api->requestParticipants() as $participant) {
                 if (ilVedaUtils::compareOidsEqual($user->getOid(), $participant->getTeilnehmer()->getOid())) {
                     $found_remote = true;
@@ -291,28 +316,29 @@ class ilVedaOpenApi implements ilVedaApiInterface
             $oid = $fail->getOid();
             $message = '';
             $this->veda_logger->notice('Handling failed clone event for oid: ' . $fail->getOid());
-            try {
-                if ($fail->getType() == ilVedaCourseType::SIFA) {
-                    $message = 'SIFA course cloning failed, course oid: ' . $fail->getOid();
-                    $this->veda_connector->getEducationTrainApi()->sendCourseCreationFailed($oid);
-                } elseif ($fail->getType() == ilVedaCourseType::STANDARD) {
-                    $message = 'Standard course cloning failed, course oid: ' . $fail->getOid();
-                    $this->veda_connector->getElearningPlattformApi()->sendCourseCreationFailed(
-                        $oid,
-                        'Synchronisierung des ELearning-Kurses fehlgeschlagen.'
-                    );
-                } else {
-                    $message = 'Unknown course cloning failed, course oid: ' . $fail->getOid();
-                    $this->veda_logger->error('Unknown type given for oid ' . $fail->getOid());
-                }
-                $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
-                    ->withOID($fail->getOid())
-                    ->withModified(time())
-                    ->withStatusCreated(ilVedaCourseStatus::FAILED)
-                    ->store();
-            } catch (Exception $e) {
-                $this->veda_logger->error($e->getMessage());
+            if (
+                $fail->getType() == ilVedaCourseType::SIFA
+            ) {
+                $this->veda_connector->getEducationTrainApi()->sendCourseCreationFailed($oid);
+                $message = 'SIFA course cloning failed, course oid: ' . $fail->getOid();
+            } elseif (
+                $fail->getType() == ilVedaCourseType::STANDARD
+            ) {
+                $this->veda_connector->getElearningPlattformApi()->sendCourseCreationFailed(
+                    $oid,
+                    'Synchronisierung des ELearning-Kurses fehlgeschlagen.'
+                );
+                $message = 'Standard course cloning failed, course oid: ' . $fail->getOid();
+            } else {
+                $message = 'Unknown course cloning failed, course oid: ' . $fail->getOid();
+                $this->veda_logger->error('Unknown type given for oid ' . $fail->getOid());
             }
+            $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
+                ->withOID($fail->getOid())
+                ->withModified(time())
+                ->withStatusCreated(ilVedaCourseStatus::FAILED)
+                ->store();
+
             $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withMessage($message)
                 ->withType(ilVedaMailSegmentType::ERROR)
@@ -320,10 +346,22 @@ class ilVedaOpenApi implements ilVedaApiInterface
         }
     }
 
-    public function importILIASUsers() : void
+    public function importILIASUsersStandard() : void
     {
         $participants = $this->veda_connector->getElearningPlattformApi()->requestParticipants();
-        $this->user_import_adapter->import($participants);
+        if (is_null($participants)) {
+            return;
+        }
+        $this->user_import_adapter->import($participants, ilVedaUserImportAdapter::IMPORT_MODE_STANDARD);
+    }
+
+    public function importILIASUsersSIFA() : void
+    {
+        $participants = $this->veda_connector->getElearningPlattformApi()->requestParticipants();
+        if (is_null($participants)) {
+            return;
+        }
+        $this->user_import_adapter->import($participants, ilVedaUserImportAdapter::IMPORT_MODE_SIFA);
     }
 
     public function importStandardCourses() : void
@@ -348,19 +386,22 @@ class ilVedaOpenApi implements ilVedaApiInterface
 
     public function isTrainingCourseValid($course_oid) : bool
     {
-        try {
-            $training_course = $this->veda_connector->getTrainingCourseApi()->getCourse($course_oid);
+        $training_course = $this->veda_connector->getTrainingCourseApi()->getCourse($course_oid);
+        if (!is_null($training_course)) {
             $this->veda_logger->dump($training_course);
-        } catch (ilVedaConnectionException $e) {
-            return false;
         }
-        return true;
+        return !is_null($training_course);
     }
 
     public function validateLocalSessions(array $sessions, string $course_oid) : array
     {
         $missing = [];
         $training_course = $this->veda_connector->getTrainingCourseApi()->getCourse($course_oid);
+
+        if (is_null($training_course)) {
+            return $missing;
+        }
+
         foreach ($sessions as $index => $node) {
             if (!$node['vedaid']) {
                 continue;
@@ -395,6 +436,11 @@ class ilVedaOpenApi implements ilVedaApiInterface
     {
         $missing = [];
         $training_course = $this->veda_connector->getTrainingCourseApi()->getCourse($course_oid);
+
+        if (is_null($training_course)) {
+            return $missing;
+        }
+
         foreach ($training_course->getAusbildungsgangabschnitte() as $segment) {
             if (!$segment->getAbbildungAufELearningPlattform()) {
                 $this->veda_logger->debug('Ignoring of type: !AbbildungAufELearningPlattform');
@@ -425,6 +471,11 @@ class ilVedaOpenApi implements ilVedaApiInterface
     {
         $missing = [];
         $training_course = $this->veda_connector->getTrainingCourseApi()->getCourse($course_oid);
+
+        if (is_null($training_course)) {
+            return $missing;
+        }
+
         foreach ($exercises as $index => $node) {
             if (!$node['vedaid']) {
                 continue;
@@ -453,6 +504,11 @@ class ilVedaOpenApi implements ilVedaApiInterface
     {
         $missing = [];
         $training_course = $this->veda_connector->getTrainingCourseApi()->getCourse($course_oid);
+
+        if (is_null($training_course)) {
+            return $missing;
+        }
+
         foreach ($training_course->getAusbildungsgangabschnitte() as $segment) {
             if (!$segment->getAbbildungAufELearningPlattform()) {
                 $this->veda_logger->debug('Ignoring segment of type: !AbbildungAufELearningPlattform');
@@ -482,14 +538,11 @@ class ilVedaOpenApi implements ilVedaApiInterface
 
     public function testConnection() : bool
     {
-        try {
-            $this->veda_connector->getElearningPlattformApi()->requestParticipants();
+        if (!is_null($this->veda_connector->getElearningPlattformApi()->requestParticipants())) {
             $id = $this->md_db_manager->findTrainingCourseId(70);
             $this->veda_logger->notice($id . ' is the training course id');
-        } catch (\Exception $e) {
-            $this->veda_logger->warning('Connection test failed with message: ' . $e->getMessage());
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 }

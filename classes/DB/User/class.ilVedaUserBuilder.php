@@ -24,7 +24,6 @@ class ilVedaUserBuilder implements ilVedaUserBuilderInterface
         $message = $load_from_db
             ? 'Looking for existing veda user with oid: ' . $oid
             : 'Skip looking for an existing veda user with oid: ' . $oid;
-
         $this->veda_logger->debug($message);
 
         $existing_crs = $load_from_db

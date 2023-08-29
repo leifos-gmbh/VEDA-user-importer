@@ -6,13 +6,17 @@ interface ilVedaEducationTrainSegmentApiInterface
         string $segment_oid,
         string $participant_oid,
         DateTime $confirmed = null
-    ) : void;
+    ) : bool;
 
     public function sendExerciseSubmissionDate(
         string $segment_oid,
         string $participant_oid,
         ?DateTime $subdate = null
-    ) : void;
+    ) : bool;
 
-    public function sendExerciseSuccess(string $segment_oid, string $participant_oid, \DateTime $dt) : void;
+    public function sendExerciseSuccess(
+        string $segment_oid,
+        string $participant_oid,
+        \DateTime $dt
+    ) : bool;
 }
