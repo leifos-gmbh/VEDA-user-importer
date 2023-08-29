@@ -22,18 +22,20 @@ class ilVedaMailManager
         $mail_segments = $this->mail_segment_repo->lookupMailSegments();
         $mail_segments_errors = $mail_segments->getMailSegmentsWithType(ilVedaMailSegmentType::ERROR);
         $body = '';
+        $subject = '';
         if (count($mail_segments_errors) === 0) {
             $body .= 'Gesamtstatus erfolgreich!' . "\n\n";
+            $subject = 'ERFOLG ilVedaConnectorPlugin import';
         }
         if (count($mail_segments_errors) > 0) {
             $body .= 'Während der Aktualisierung sind Fehler aufgetreten:' . "\n\n";
             $body = $this->addSegmentMessagesToBody($body, $mail_segments_errors);
             $body .= "\n";
+            $subject = 'FEHLER ilVedaConnectorPlugin import';
         }
         $body = $this->addImportInfoToBody($body, $mail_segments);
         $body .= "\n" . 'Diese Email wurde automatisch generiert.';
-
-        $this->send('ilVedaConnectorPlugin Status', $body);
+        $this->send($subject, $body);
         $this->clearMailData();
     }
 
@@ -43,18 +45,20 @@ class ilVedaMailManager
         $mail_segments = $this->mail_segment_repo->lookupMailSegments();
         $mail_segments_errors = $mail_segments->getMailSegmentsWithType(ilVedaMailSegmentType::ERROR);
         $body = '';
+        $subject = '';
         if (count($mail_segments_errors) === 0) {
             $body .= 'SIFA Kurs erfolgreich importiert!' . "\n\n";
+            $subject = 'ERFOLG ilVedaConnectorPlugin SIFA Kurs import';
         }
         if (count($mail_segments_errors) > 0) {
             $body .= 'Während der Aktualisierung sind Fehler aufgetreten:' . "\n\n";
             $body = $this->addSegmentMessagesToBody($body, $mail_segments_errors);
             $body .= "\n";
+            $subject = 'FEHLER ilVedaConnectorPlugin SIFA Kurs import';
         }
         $body = $this->addImportInfoToBody($body, $mail_segments);
         $body .= "\n" . 'Diese Email wurde automatisch generiert.';
-
-        $this->send('ilVedaConnectorPlugin Status SIFA Kurs importiert', $body);
+        $this->send($subject, $body);
         $this->clearMailData();
     }
 
