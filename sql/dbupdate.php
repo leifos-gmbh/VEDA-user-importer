@@ -181,3 +181,60 @@ if ($ilDB->tableExists('adv_md_values_text') &&
     ");
 }
 ?>
+<#10>
+<?php
+// Creates column document success to save the 'kursabschlussAlsErfolgDokumentieren' state.
+if (
+        $ilDB->tableExists('cron_crnhk_vedaimp_crs') &&
+        !$ilDB->tableColumnExists('cron_crnhk_vedaimp_crs', 'document_success')
+) {
+    $ilDB->addTableColumn(
+        'cron_crnhk_vedaimp_crs',
+        'document_success',
+        [
+            "type" => ilDBConstants::T_INTEGER,
+            "notnull" => true,
+            "length" => 2,
+            "default" => 0
+        ]
+    );
+}
+?>
+<#11>
+<?php
+if (
+    !$ilDB->tableExists('cron_crnhk_vedaimp_ml')
+) {
+    $ilDB->createTable(
+        'cron_crnhk_vedaimp_ml',
+        [
+            'id' =>
+                [
+                    'type' => ilDBConstants::T_INTEGER,
+                    'length' => 4,
+                    'notnull' => false
+                ],
+            'msg' =>
+                [
+                    'type' => ilDBConstants::T_TEXT,
+                    'length' => 128,
+                    'notnull' => false
+                ],
+            'type' =>
+                [
+                    "type" => ilDBConstants::T_INTEGER,
+                    "notnull" => true,
+                    "length" => 4,
+                    "default" => 0
+                ],
+            'modified' =>
+                [
+                    "type" => ilDBConstants::T_TIMESTAMP,
+                    "notnull" => false
+                ]
+        ]
+    );
+    $ilDB->addPrimaryKey('cron_crnhk_vedaimp_ml',['id']);
+    $ilDB->createSequence('cron_crnhk_vedaimp_ml');
+}
+?>

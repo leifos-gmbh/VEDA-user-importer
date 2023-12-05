@@ -9,7 +9,7 @@ class ilVedaUtils
     /**
      * Compare two oid (case insensitive)
      */
-    public static function compareOidsEqual(string $first = null, string $second = null) :bool
+    public static function compareOidsEqual(string $first = null, string $second = null) : bool
     {
         return strcmp(
             strtolower($first),
@@ -17,17 +17,13 @@ class ilVedaUtils
         ) === 0;
     }
 
-    /**
-     * @param \DateTime|null $start
-     * @param \DateTime|null $end
-     */
-    public static function isValidDate(?DateTime $start, ?DateTime $end)
+    public static function isValidDate(?DateTime $start, ?DateTime $end) : bool
     {
         global $DIC;
 
-        $logger = \ilVedaConnectorPlugin::getInstance()->getLogger();
+        $logger = ilVedaConnectorPlugin::getInstance()->getLogger();
 
-        if($start == null && $end == null) {
+        if ($start == null && $end == null) {
             return true;
         }
 
@@ -46,11 +42,11 @@ class ilVedaUtils
             return false;
         }
 
-        if($end == null) {
-            $ilstart = new \ilDate($start->format('Y-m-d'),IL_CAL_DATE);
+        if ($end == null) {
+            $ilstart = new \ilDate($start->format('Y-m-d'), IL_CAL_DATE);
             // check starting time <= now
-            if(
-                \ilDateTime::_before($ilstart, $now , IL_CAL_DAY) ||
+            if (
+                \ilDateTime::_before($ilstart, $now, IL_CAL_DAY) ||
                 \ilDateTime::_equals($ilstart, $now, IL_CAL_DAY)
             ) {
                 $logger->debug('Starting date is valid');
@@ -60,10 +56,10 @@ class ilVedaUtils
             return false;
         }
 
-        $ilstart = new \ilDate($start->format('Y-m-d'),IL_CAL_DATE);
+        $ilstart = new \ilDate($start->format('Y-m-d'), IL_CAL_DATE);
         $ilend = new \ilDate($end->format('Y-m-d'), IL_CAL_DATE);
 
-        if(
+        if (
             \ilDateTime::_within(
                 $now,
                 $ilstart,
@@ -80,5 +76,4 @@ class ilVedaUtils
         }
         return false;
     }
-
 }
