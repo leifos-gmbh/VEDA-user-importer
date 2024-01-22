@@ -160,14 +160,14 @@ class ilVedaOpenApi implements ilVedaApiInterface
         }
         if (
             is_null(($usr_oid = ilObjUser::_lookupImportId($usr_id))) ||
-            $usr_oid = ''
+            $usr_oid == ''
         ) {
             $this->veda_logger->debug('User oid is null or empty.');
             return;
         }
         if (
             is_null(($crs_oid = ilObjCourse::_lookupImportId($obj_id))) ||
-            $crs_oid = ''
+            $crs_oid == ''
         ) {
             $this->veda_logger->debug('Course oid is null or empty.');
             return;
