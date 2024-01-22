@@ -213,9 +213,6 @@ class ilVedaCourseImportAdapter
             return;
         }
 
-        $mail_manager = new ilVedaMailManager();
-        $mail_manager->sendSIFACourseCompleted();
-
         $train = $this->readTrainingCourseTrainFromCopyInfo($tc);
         if (!$train instanceof Ausbildungszug) {
             $this->logger->notice('Reading remote info failed.');
@@ -229,6 +226,8 @@ class ilVedaCourseImportAdapter
             if ($target instanceof ilObjCourse) {
                 $this->updateCourseCreatedStatus($train->getOid());
                 $this->copyAdminsFromSourceToTarget($source, $target);
+                $mail_manager = new ilVedaMailManager();
+                $mail_manager->sendSIFACourseCompleted();
             } else {
                 $this->logger->notice('Target should be course type: ' . $target_id);
             }
