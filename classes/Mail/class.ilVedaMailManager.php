@@ -18,14 +18,14 @@ class ilVedaMailManager
 
     public function sendStatus() : void
     {
-        $this->veda_logger->debug('Sending Mail');
+        $this->veda_logger->debug('Sending Status Mail');
         $mail_segments = $this->mail_segment_repo->lookupMailSegments();
         $mail_segments_errors = $mail_segments->getMailSegmentsWithType(ilVedaMailSegmentType::ERROR);
         $body = '';
         $subject = '';
         if (count($mail_segments_errors) === 0) {
-            $body .= 'Gesamtstatus erfolgreich!' . "\n\n";
-            $subject = 'ERFOLG ilVedaConnectorPlugin import';
+            $this->veda_logger->debug('Status Mail NOT send, no errors to report');
+            return;
         }
         if (count($mail_segments_errors) > 0) {
             $body .= 'Während der Aktualisierung sind Fehler aufgetreten:' . "\n\n";
