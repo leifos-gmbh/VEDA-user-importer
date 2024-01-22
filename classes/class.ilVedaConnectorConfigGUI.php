@@ -560,7 +560,6 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
         $table->init();
         $table->parse();
         $this->tpl->setContent($table->getHTML());
-        (new ilVedaMailManager())->sendStatus();
     }
 
     protected function setSubTabs()
