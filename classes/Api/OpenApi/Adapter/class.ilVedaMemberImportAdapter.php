@@ -12,14 +12,34 @@ class ilVedaMemberImportAdapter
      * @var string
      */
     protected const TEMPORARY = 'TEMPORAER';
-
-    protected ?ilLogger $logger;
-    protected ilRbacAdmin $rbac_admin;
-    protected ilRbacReview $rbac_review;
-    protected ilVedaConnector $veda_connector;
-    protected ilUDFClaimingPlugin $udf_claiming_plugin;
-    protected ilVedaMDClaimingPluginDBManagerInterface $md_db_manager;
-    protected ilVedaRepositoryContentBuilderFactoryInterface $repo_content_builder_factory;
+    /**
+     * @var ilLogger|null
+     */
+    protected $logger;
+    /**
+     * @var ilRbacAdmin
+     */
+    protected $rbac_admin;
+    /**
+     * @var ilRbacReview
+     */
+    protected $rbac_review;
+    /**
+     * @var ilVedaConnector
+     */
+    protected $veda_connector;
+    /**
+     * @var ilUDFClaimingPlugin
+     */
+    protected $udf_claiming_plugin;
+    /**
+     * @var ilVedaMDClaimingPluginDBManagerInterface
+     */
+    protected $md_db_manager;
+    /**
+     * @var ilVedaRepositoryContentBuilderFactoryInterface
+     */
+    protected $repo_content_builder_factory;
 
     public function __construct(
         ilLogger $veda_logger,
@@ -188,14 +208,16 @@ class ilVedaMemberImportAdapter
 
         $currently_assigned = $participants->getParticipants();
 
+        if (is_null($members)) {
+            return;
+        }
+
         $this->removeInvalidRegularMembers($course, $participants, $members, $veda_crs, $currently_assigned);
         $this->removeInvalidPermanentSwitchMembers($course, $participants, $members, $veda_crs, $currently_assigned);
         $this->removeInvalidTemporarySwitchMembers($course, $participants, $members, $veda_crs, $currently_assigned);
-
         $this->addRegularMembers($course, $participants, $members, $veda_crs, $currently_assigned);
         $this->addPermanentSwitchMembers($course, $participants, $members, $veda_crs, $currently_assigned);
         $this->addTemporarySwitchMembers($course, $participants, $members, $veda_crs, $currently_assigned);
-
         $this->handleTutorAssignments($course, $participants, $oid);
     }
 

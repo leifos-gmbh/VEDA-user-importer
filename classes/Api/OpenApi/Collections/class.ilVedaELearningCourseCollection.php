@@ -48,4 +48,14 @@ class ilVedaELearningCourseCollection implements ilVedaELearningCourseCollection
     {
         return count($this->elearning_courses);
     }
+
+    public function getCourseByOId(string $oid): ?Elearningkurs
+    {
+        foreach ($this->elearning_courses as $elearning_cours) {
+            if ($elearning_cours->getOid() === $oid) {
+                return $elearning_cours;
+            }
+        }
+        return null;
+    }
 }

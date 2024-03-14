@@ -306,7 +306,6 @@ class ilVedaCourseStandardImportAdapter
             'Handling afterCloning event for for source_id: ' . $a_source_id .
             ' of type: ' . ilObject::_lookupType($a_source_id, true)
         );
-
         $options = ilCopyWizardOptions::_getInstance($a_copy_id);
         $tc = $options->getTrainingCourseInfo();
 
@@ -314,16 +313,16 @@ class ilVedaCourseStandardImportAdapter
             $this->logger->debug('Ignoring non "ElearningKurs".');
             return;
         }
-
+        $oid = $tc[self::CP_INFO_ELEARNING_COURSE];
         $this->logger->dump($tc);
-
         $source = ilObjectFactory::getInstanceByRefId($a_source_id, false);
         $target = ilObjectFactory::getInstanceByRefId($a_target_id, false);
+        $standard_courses = $this->veda_connector->getElearningPlattformApi()->requestCourses();
+        $elearning_course = $standard_courses->getCourseByOId($oid);
         if (
             $source instanceof ilObjCourse &&
             $target instanceof ilObjCourse
         ) {
-            $oid = $tc[self::CP_INFO_ELEARNING_COURSE];
             $this->repo_content_builder_factory->getVedaCourseBuilder()->buildCourse()
                 ->withOID($oid)
                 ->withType(ilVedaCourseType::STANDARD)
@@ -331,10 +330,12 @@ class ilVedaCourseStandardImportAdapter
                 ->withObjID($target->getId())
                 ->withStatusCreated(ilVedaCourseStatus::PENDING)
                 ->store();
-            $this->logger->debug('Update title');
-            $target->setTitle($tc[self::CP_INFO_NAME]);
             $target->setOfflineStatus(true);
             $target->setImportId($oid);
+            $target->setTitle($elearning_course->getBezeichnung());
+            $target->setDescription($elearning_course->getBeschreibung());
+            $target = $this->updateCourseAvailability($target, $elearning_course);
+            $target = $this->updateCourseEventPeriod($target, $elearning_course);
             $target->update();
             // delete connection user from administrator role
             $this->deleteAdministratorAssignments($target);
@@ -346,6 +347,57 @@ class ilVedaCourseStandardImportAdapter
             // delete connection user from administrator role
             $this->deleteAdministratorAssignments($target);
         }
+    }
+
+    protected function updateCourseAvailability(
+        ilObjCourse $target,
+        Elearningkurs $elearning_course
+    ): ilObjCourse {
+        $course_start = $elearning_course->getBeginn();
+        $course_end = $elearning_course->getEnde();
+        if(is_null($course_start) || is_null($course_end)) {
+            return $target;
+        }
+        $target->setActivationStart($course_start->setTime(0,0)->getTimestamp());
+        $target->setActivationEnd($course_end->setTime(20,0)->getTimestamp());
+        $target->setOfflineStatus(false);
+        return $target;
+    }
+
+    protected function updateCourseEventPeriod(
+        ilObjCourse $target,
+        Elearningkurs $elearning_course
+    ): ilObjCourse {
+        $appointments = $elearning_course->getTermine();
+        $appointment_collection = $elearning_course->getTerminreihen();
+        $course_period_start = null;
+        $course_period_end = null;
+        if (is_null($appointments) && is_null($appointment_collection)) {
+            return $target;
+        }
+        if (
+            !is_null($appointments) &&
+            count($appointments) > 0
+        ) {
+            $course_period_start = $appointments[0]->getTerminVon();
+            $course_period_end = $appointments[0]->getTerminBis();
+        }
+        if (
+            is_null($course_period_start) &&
+            is_null($course_period_end) &&
+            !is_null($appointment_collection) &&
+            count($appointment_collection) > 0
+        ) {
+            $course_period_start = $appointment_collection[0]->getTerminVon();
+            $course_period_end = $appointment_collection[0]->getTerminBis();
+        }
+        $course_period_start->setTime(0,0);
+        $course_period_end->setTime(20,0);
+        $target->setCoursePeriod(
+            new ilDateTime($course_period_start->format(DateTimeInterface::RFC3339), IL_CAL_DATETIME),
+            new ilDateTime($course_period_end->format(DateTimeInterface::RFC3339), IL_CAL_DATETIME),
+        );
+        return $target;
     }
 
     protected function deleteAdministratorAssignments(ilObject $target) : void

@@ -15,4 +15,6 @@ interface ilVedaELearningCourseCollectionInterface extends Iterator, Countable
     public function valid() : bool;
 
     public function count() : int;
+
+    public function getCourseByOId(string $oid): ?Elearningkurs;
 }

@@ -85,7 +85,8 @@ class ilVedaOpenApi implements ilVedaApiInterface
             $rbac_admin,
             $this->veda_connector,
             $this->crs_repo,
-            $this->repo_content_builder_factory
+            $this->repo_content_builder_factory,
+            ilVedaConnectorPlugin::getInstance()->getUDFClaimingPlugin()
         );
         $this->user_import_adapter = new ilVedaUserImportAdapter(
             $this->veda_logger,
