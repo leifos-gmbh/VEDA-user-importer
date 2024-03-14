@@ -61,12 +61,15 @@ class Elearningkurs implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPITypes = [
         'oid' => 'string',
         'beginn' => '\DateTime',
+        'beschreibung' => 'string',
         'bezeichnung' => 'string',
         'ende' => '\DateTime',
         'kapazitaet' => 'int',
         'kursabschluss_als_erfolg_dokumentieren' => 'bool',
         'links' => '\OpenAPI\Client\Model\Link[]',
-        'masterkurs' => 'string'
+        'masterkurs' => 'string',
+        'termine' => '\OpenAPI\Client\Model\ElearningkursZugeordneterTerminReihe[]',
+        'terminreihen' => '\OpenAPI\Client\Model\ElearningkursZugeordneterTerminReihe[]'
     ];
 
     /**
@@ -79,12 +82,15 @@ class Elearningkurs implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPIFormats = [
         'oid' => null,
         'beginn' => 'date',
+        'beschreibung' => null,
         'bezeichnung' => null,
         'ende' => 'date',
         'kapazitaet' => null,
         'kursabschluss_als_erfolg_dokumentieren' => null,
         'links' => null,
-        'masterkurs' => null
+        'masterkurs' => null,
+        'termine' => null,
+        'terminreihen' => null
     ];
 
     /**
@@ -95,12 +101,15 @@ class Elearningkurs implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static array $openAPINullables = [
         'oid' => false,
 		'beginn' => false,
+		'beschreibung' => false,
 		'bezeichnung' => false,
 		'ende' => false,
 		'kapazitaet' => false,
 		'kursabschluss_als_erfolg_dokumentieren' => false,
 		'links' => false,
-		'masterkurs' => false
+		'masterkurs' => false,
+		'termine' => false,
+		'terminreihen' => false
     ];
 
     /**
@@ -191,12 +200,15 @@ class Elearningkurs implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $attributeMap = [
         'oid' => 'oid',
         'beginn' => 'beginn',
+        'beschreibung' => 'beschreibung',
         'bezeichnung' => 'bezeichnung',
         'ende' => 'ende',
         'kapazitaet' => 'kapazitaet',
         'kursabschluss_als_erfolg_dokumentieren' => 'kursabschlussAlsErfolgDokumentieren',
         'links' => 'links',
-        'masterkurs' => 'masterkurs'
+        'masterkurs' => 'masterkurs',
+        'termine' => 'termine',
+        'terminreihen' => 'terminreihen'
     ];
 
     /**
@@ -207,12 +219,15 @@ class Elearningkurs implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $setters = [
         'oid' => 'setOid',
         'beginn' => 'setBeginn',
+        'beschreibung' => 'setBeschreibung',
         'bezeichnung' => 'setBezeichnung',
         'ende' => 'setEnde',
         'kapazitaet' => 'setKapazitaet',
         'kursabschluss_als_erfolg_dokumentieren' => 'setKursabschlussAlsErfolgDokumentieren',
         'links' => 'setLinks',
-        'masterkurs' => 'setMasterkurs'
+        'masterkurs' => 'setMasterkurs',
+        'termine' => 'setTermine',
+        'terminreihen' => 'setTerminreihen'
     ];
 
     /**
@@ -223,12 +238,15 @@ class Elearningkurs implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $getters = [
         'oid' => 'getOid',
         'beginn' => 'getBeginn',
+        'beschreibung' => 'getBeschreibung',
         'bezeichnung' => 'getBezeichnung',
         'ende' => 'getEnde',
         'kapazitaet' => 'getKapazitaet',
         'kursabschluss_als_erfolg_dokumentieren' => 'getKursabschlussAlsErfolgDokumentieren',
         'links' => 'getLinks',
-        'masterkurs' => 'getMasterkurs'
+        'masterkurs' => 'getMasterkurs',
+        'termine' => 'getTermine',
+        'terminreihen' => 'getTerminreihen'
     ];
 
     /**
@@ -290,12 +308,15 @@ class Elearningkurs implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $this->setIfExists('oid', $data ?? [], null);
         $this->setIfExists('beginn', $data ?? [], null);
+        $this->setIfExists('beschreibung', $data ?? [], null);
         $this->setIfExists('bezeichnung', $data ?? [], null);
         $this->setIfExists('ende', $data ?? [], null);
         $this->setIfExists('kapazitaet', $data ?? [], null);
         $this->setIfExists('kursabschluss_als_erfolg_dokumentieren', $data ?? [], null);
         $this->setIfExists('links', $data ?? [], null);
         $this->setIfExists('masterkurs', $data ?? [], null);
+        $this->setIfExists('termine', $data ?? [], null);
+        $this->setIfExists('terminreihen', $data ?? [], null);
     }
 
     /**
@@ -410,6 +431,33 @@ class Elearningkurs implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
+     * Gets beschreibung
+     *
+     * @return string|null
+     */
+    public function getBeschreibung()
+    {
+        return $this->container['beschreibung'];
+    }
+
+    /**
+     * Sets beschreibung
+     *
+     * @param string|null $beschreibung Beschreibung des E-Learning-Kurses.
+     *
+     * @return self
+     */
+    public function setBeschreibung($beschreibung)
+    {
+        if (is_null($beschreibung)) {
+            throw new \InvalidArgumentException('non-nullable beschreibung cannot be null');
+        }
+        $this->container['beschreibung'] = $beschreibung;
+
+        return $this;
+    }
+
+    /**
      * Gets bezeichnung
      *
      * @return string
@@ -422,7 +470,7 @@ class Elearningkurs implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets bezeichnung
      *
-     * @param string $bezeichnung Eindeutige Bezeichnung des E-Learning-Kurses.
+     * @param string $bezeichnung Eindeutige Bezeichnung des E-Learning-Kurses. Hinweis: Das Format kann versionsabhängig variieren. Zur Ermittlung der einzelnen Werte (insb. Beginn Datum der Veranstaltung) bitte die entsprechend vorgesehenen Felder verwenden.
      *
      * @return self
      */
@@ -567,6 +615,60 @@ class Elearningkurs implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable masterkurs cannot be null');
         }
         $this->container['masterkurs'] = $masterkurs;
+
+        return $this;
+    }
+
+    /**
+     * Gets termine
+     *
+     * @return \OpenAPI\Client\Model\ElearningkursZugeordneterTerminReihe[]|null
+     */
+    public function getTermine()
+    {
+        return $this->container['termine'];
+    }
+
+    /**
+     * Sets termine
+     *
+     * @param \OpenAPI\Client\Model\ElearningkursZugeordneterTerminReihe[]|null $termine Gibt Informationen zu den zugeordneten Terminen an.
+     *
+     * @return self
+     */
+    public function setTermine($termine)
+    {
+        if (is_null($termine)) {
+            throw new \InvalidArgumentException('non-nullable termine cannot be null');
+        }
+        $this->container['termine'] = $termine;
+
+        return $this;
+    }
+
+    /**
+     * Gets terminreihen
+     *
+     * @return \OpenAPI\Client\Model\ElearningkursZugeordneterTerminReihe[]|null
+     */
+    public function getTerminreihen()
+    {
+        return $this->container['terminreihen'];
+    }
+
+    /**
+     * Sets terminreihen
+     *
+     * @param \OpenAPI\Client\Model\ElearningkursZugeordneterTerminReihe[]|null $terminreihen Gibt Informationen zu den zugeordneten Terminreihen an.
+     *
+     * @return self
+     */
+    public function setTerminreihen($terminreihen)
+    {
+        if (is_null($terminreihen)) {
+            throw new \InvalidArgumentException('non-nullable terminreihen cannot be null');
+        }
+        $this->container['terminreihen'] = $terminreihen;
 
         return $this;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * AusbildungszugTeilnehmer
+ * ElearningkursZugeordneterTerminReihe
  *
  * PHP version 7.4
  *
@@ -33,16 +33,16 @@ use \ArrayAccess;
 use \OpenAPI\Client\ObjectSerializer;
 
 /**
- * AusbildungszugTeilnehmer Class Doc Comment
+ * ElearningkursZugeordneterTerminReihe Class Doc Comment
  *
  * @category Class
- * @description Teilnehmer eines Ausbildungszugs mit Informationen über die Mitgliedschaft.
+ * @description Gibt Informationen zu den des Elearningkurses zugeordneten Terminen und Reihen an.
  * @package  OpenAPI\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class AusbildungszugTeilnehmer implements ModelInterface, ArrayAccess, \JsonSerializable
+class ElearningkursZugeordneterTerminReihe implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class AusbildungszugTeilnehmer implements ModelInterface, ArrayAccess, \JsonSeri
       *
       * @var string
       */
-    protected static $openAPIModelName = 'AusbildungszugTeilnehmer';
+    protected static $openAPIModelName = 'ElearningkursZugeordneterTerminReihe';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -59,15 +59,10 @@ class AusbildungszugTeilnehmer implements ModelInterface, ArrayAccess, \JsonSeri
       * @var string[]
       */
     protected static $openAPITypes = [
-        'beginn' => '\DateTime',
-        'ende' => '\DateTime',
-        'kurs_zugriff_ab' => '\DateTime',
-        'kurs_zugriff_bis' => '\DateTime',
+        'oid' => 'string',
         'links' => '\OpenAPI\Client\Model\Link[]',
-        'mitgliedschaftsart' => 'string',
-        'obsolet' => 'bool',
-        'teilnehmer_id' => 'string',
-        'wechsel' => 'bool'
+        'termin_bis' => '\DateTime',
+        'termin_von' => '\DateTime'
     ];
 
     /**
@@ -78,15 +73,10 @@ class AusbildungszugTeilnehmer implements ModelInterface, ArrayAccess, \JsonSeri
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'beginn' => 'date',
-        'ende' => 'date',
-        'kurs_zugriff_ab' => 'date',
-        'kurs_zugriff_bis' => 'date',
+        'oid' => null,
         'links' => null,
-        'mitgliedschaftsart' => null,
-        'obsolet' => null,
-        'teilnehmer_id' => null,
-        'wechsel' => null
+        'termin_bis' => 'date',
+        'termin_von' => 'date'
     ];
 
     /**
@@ -95,15 +85,10 @@ class AusbildungszugTeilnehmer implements ModelInterface, ArrayAccess, \JsonSeri
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'beginn' => false,
-		'ende' => false,
-		'kurs_zugriff_ab' => false,
-		'kurs_zugriff_bis' => false,
+        'oid' => false,
 		'links' => false,
-		'mitgliedschaftsart' => false,
-		'obsolet' => false,
-		'teilnehmer_id' => false,
-		'wechsel' => false
+		'termin_bis' => false,
+		'termin_von' => false
     ];
 
     /**
@@ -192,15 +177,10 @@ class AusbildungszugTeilnehmer implements ModelInterface, ArrayAccess, \JsonSeri
      * @var string[]
      */
     protected static $attributeMap = [
-        'beginn' => 'beginn',
-        'ende' => 'ende',
-        'kurs_zugriff_ab' => 'kursZugriffAb',
-        'kurs_zugriff_bis' => 'kursZugriffBis',
+        'oid' => 'oid',
         'links' => 'links',
-        'mitgliedschaftsart' => 'mitgliedschaftsart',
-        'obsolet' => 'obsolet',
-        'teilnehmer_id' => 'teilnehmerID',
-        'wechsel' => 'wechsel'
+        'termin_bis' => 'terminBis',
+        'termin_von' => 'terminVon'
     ];
 
     /**
@@ -209,15 +189,10 @@ class AusbildungszugTeilnehmer implements ModelInterface, ArrayAccess, \JsonSeri
      * @var string[]
      */
     protected static $setters = [
-        'beginn' => 'setBeginn',
-        'ende' => 'setEnde',
-        'kurs_zugriff_ab' => 'setKursZugriffAb',
-        'kurs_zugriff_bis' => 'setKursZugriffBis',
+        'oid' => 'setOid',
         'links' => 'setLinks',
-        'mitgliedschaftsart' => 'setMitgliedschaftsart',
-        'obsolet' => 'setObsolet',
-        'teilnehmer_id' => 'setTeilnehmerId',
-        'wechsel' => 'setWechsel'
+        'termin_bis' => 'setTerminBis',
+        'termin_von' => 'setTerminVon'
     ];
 
     /**
@@ -226,15 +201,10 @@ class AusbildungszugTeilnehmer implements ModelInterface, ArrayAccess, \JsonSeri
      * @var string[]
      */
     protected static $getters = [
-        'beginn' => 'getBeginn',
-        'ende' => 'getEnde',
-        'kurs_zugriff_ab' => 'getKursZugriffAb',
-        'kurs_zugriff_bis' => 'getKursZugriffBis',
+        'oid' => 'getOid',
         'links' => 'getLinks',
-        'mitgliedschaftsart' => 'getMitgliedschaftsart',
-        'obsolet' => 'getObsolet',
-        'teilnehmer_id' => 'getTeilnehmerId',
-        'wechsel' => 'getWechsel'
+        'termin_bis' => 'getTerminBis',
+        'termin_von' => 'getTerminVon'
     ];
 
     /**
@@ -278,21 +248,6 @@ class AusbildungszugTeilnehmer implements ModelInterface, ArrayAccess, \JsonSeri
         return self::$openAPIModelName;
     }
 
-    public const MITGLIEDSCHAFTSART_REGULAER = 'REGULAER';
-    public const MITGLIEDSCHAFTSART_TEMPORAER = 'TEMPORAER';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public function getMitgliedschaftsartAllowableValues()
-    {
-        return [
-            self::MITGLIEDSCHAFTSART_REGULAER,
-            self::MITGLIEDSCHAFTSART_TEMPORAER,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -309,15 +264,10 @@ class AusbildungszugTeilnehmer implements ModelInterface, ArrayAccess, \JsonSeri
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('beginn', $data ?? [], null);
-        $this->setIfExists('ende', $data ?? [], null);
-        $this->setIfExists('kurs_zugriff_ab', $data ?? [], null);
-        $this->setIfExists('kurs_zugriff_bis', $data ?? [], null);
+        $this->setIfExists('oid', $data ?? [], null);
         $this->setIfExists('links', $data ?? [], null);
-        $this->setIfExists('mitgliedschaftsart', $data ?? [], null);
-        $this->setIfExists('obsolet', $data ?? [], null);
-        $this->setIfExists('teilnehmer_id', $data ?? [], null);
-        $this->setIfExists('wechsel', $data ?? [], null);
+        $this->setIfExists('termin_bis', $data ?? [], null);
+        $this->setIfExists('termin_von', $data ?? [], null);
     }
 
     /**
@@ -347,23 +297,14 @@ class AusbildungszugTeilnehmer implements ModelInterface, ArrayAccess, \JsonSeri
     {
         $invalidProperties = [];
 
-        if ($this->container['kurs_zugriff_ab'] === null) {
-            $invalidProperties[] = "'kurs_zugriff_ab' can't be null";
+        if ($this->container['oid'] === null) {
+            $invalidProperties[] = "'oid' can't be null";
         }
-        if ($this->container['kurs_zugriff_bis'] === null) {
-            $invalidProperties[] = "'kurs_zugriff_bis' can't be null";
+        if ($this->container['termin_bis'] === null) {
+            $invalidProperties[] = "'termin_bis' can't be null";
         }
-        $allowedValues = $this->getMitgliedschaftsartAllowableValues();
-        if (!is_null($this->container['mitgliedschaftsart']) && !in_array($this->container['mitgliedschaftsart'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'mitgliedschaftsart', must be one of '%s'",
-                $this->container['mitgliedschaftsart'],
-                implode("', '", $allowedValues)
-            );
-        }
-
-        if ($this->container['teilnehmer_id'] === null) {
-            $invalidProperties[] = "'teilnehmer_id' can't be null";
+        if ($this->container['termin_von'] === null) {
+            $invalidProperties[] = "'termin_von' can't be null";
         }
         return $invalidProperties;
     }
@@ -381,109 +322,28 @@ class AusbildungszugTeilnehmer implements ModelInterface, ArrayAccess, \JsonSeri
 
 
     /**
-     * Gets beginn
+     * Gets oid
      *
-     * @return \DateTime|null
+     * @return string
      */
-    public function getBeginn()
+    public function getOid()
     {
-        return $this->container['beginn'];
+        return $this->container['oid'];
     }
 
     /**
-     * Sets beginn
+     * Sets oid
      *
-     * @param \DateTime|null $beginn Das Tagesdatum, an dem die Mitgliedschaft beginnt.
+     * @param string $oid UUID des Datensatzes
      *
      * @return self
      */
-    public function setBeginn($beginn)
+    public function setOid($oid)
     {
-        if (is_null($beginn)) {
-            throw new \InvalidArgumentException('non-nullable beginn cannot be null');
+        if (is_null($oid)) {
+            throw new \InvalidArgumentException('non-nullable oid cannot be null');
         }
-        $this->container['beginn'] = $beginn;
-
-        return $this;
-    }
-
-    /**
-     * Gets ende
-     *
-     * @return \DateTime|null
-     */
-    public function getEnde()
-    {
-        return $this->container['ende'];
-    }
-
-    /**
-     * Sets ende
-     *
-     * @param \DateTime|null $ende Das Tagesdatum (einschließlich), an dem die Mitgliedschaft endet.
-     *
-     * @return self
-     */
-    public function setEnde($ende)
-    {
-        if (is_null($ende)) {
-            throw new \InvalidArgumentException('non-nullable ende cannot be null');
-        }
-        $this->container['ende'] = $ende;
-
-        return $this;
-    }
-
-    /**
-     * Gets kurs_zugriff_ab
-     *
-     * @return \DateTime
-     */
-    public function getKursZugriffAb()
-    {
-        return $this->container['kurs_zugriff_ab'];
-    }
-
-    /**
-     * Sets kurs_zugriff_ab
-     *
-     * @param \DateTime $kurs_zugriff_ab Das Tagesdatum, an dem der Kurszugriff beginnt.
-     *
-     * @return self
-     */
-    public function setKursZugriffAb($kurs_zugriff_ab)
-    {
-        if (is_null($kurs_zugriff_ab)) {
-            throw new \InvalidArgumentException('non-nullable kurs_zugriff_ab cannot be null');
-        }
-        $this->container['kurs_zugriff_ab'] = $kurs_zugriff_ab;
-
-        return $this;
-    }
-
-    /**
-     * Gets kurs_zugriff_bis
-     *
-     * @return \DateTime
-     */
-    public function getKursZugriffBis()
-    {
-        return $this->container['kurs_zugriff_bis'];
-    }
-
-    /**
-     * Sets kurs_zugriff_bis
-     *
-     * @param \DateTime $kurs_zugriff_bis Das Tagesdatum (einschließlich), an dem der Kurszugriff endet.
-     *
-     * @return self
-     */
-    public function setKursZugriffBis($kurs_zugriff_bis)
-    {
-        if (is_null($kurs_zugriff_bis)) {
-            throw new \InvalidArgumentException('non-nullable kurs_zugriff_bis cannot be null');
-        }
-        $this->container['kurs_zugriff_bis'] = $kurs_zugriff_bis;
+        $this->container['oid'] = $oid;
 
         return $this;
     }
@@ -516,119 +376,55 @@ class AusbildungszugTeilnehmer implements ModelInterface, ArrayAccess, \JsonSeri
     }
 
     /**
-     * Gets mitgliedschaftsart
+     * Gets termin_bis
      *
-     * @return string|null
+     * @return \DateTime
      */
-    public function getMitgliedschaftsart()
+    public function getTerminBis()
     {
-        return $this->container['mitgliedschaftsart'];
+        return $this->container['termin_bis'];
     }
 
     /**
-     * Sets mitgliedschaftsart
+     * Sets termin_bis
      *
-     * @param string|null $mitgliedschaftsart Die Art der Mitgliedschaft des Teilnehmers zum Ausbildungszug.
+     * @param \DateTime $termin_bis Das Tagesdatum, an dem der Termin oder die Reihe endet.
      *
      * @return self
      */
-    public function setMitgliedschaftsart($mitgliedschaftsart)
+    public function setTerminBis($termin_bis)
     {
-        if (is_null($mitgliedschaftsart)) {
-            throw new \InvalidArgumentException('non-nullable mitgliedschaftsart cannot be null');
+        if (is_null($termin_bis)) {
+            throw new \InvalidArgumentException('non-nullable termin_bis cannot be null');
         }
-        $allowedValues = $this->getMitgliedschaftsartAllowableValues();
-        if (!in_array($mitgliedschaftsart, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'mitgliedschaftsart', must be one of '%s'",
-                    $mitgliedschaftsart,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
-        $this->container['mitgliedschaftsart'] = $mitgliedschaftsart;
+        $this->container['termin_bis'] = $termin_bis;
 
         return $this;
     }
 
     /**
-     * Gets obsolet
+     * Gets termin_von
      *
-     * @return bool|null
+     * @return \DateTime
      */
-    public function getObsolet()
+    public function getTerminVon()
     {
-        return $this->container['obsolet'];
+        return $this->container['termin_von'];
     }
 
     /**
-     * Sets obsolet
+     * Sets termin_von
      *
-     * @param bool|null $obsolet Gibt an, ob diese Mitgliedschaft obsolet ist.
+     * @param \DateTime $termin_von Das Tagesdatum, an dem der Termin oder die Reihe beginnt.
      *
      * @return self
      */
-    public function setObsolet($obsolet)
+    public function setTerminVon($termin_von)
     {
-        if (is_null($obsolet)) {
-            throw new \InvalidArgumentException('non-nullable obsolet cannot be null');
+        if (is_null($termin_von)) {
+            throw new \InvalidArgumentException('non-nullable termin_von cannot be null');
         }
-        $this->container['obsolet'] = $obsolet;
-
-        return $this;
-    }
-
-    /**
-     * Gets teilnehmer_id
-     *
-     * @return string
-     */
-    public function getTeilnehmerId()
-    {
-        return $this->container['teilnehmer_id'];
-    }
-
-    /**
-     * Sets teilnehmer_id
-     *
-     * @param string $teilnehmer_id Der Teilnehmer, der Mitglied im Ausbildungszug ist.
-     *
-     * @return self
-     */
-    public function setTeilnehmerId($teilnehmer_id)
-    {
-        if (is_null($teilnehmer_id)) {
-            throw new \InvalidArgumentException('non-nullable teilnehmer_id cannot be null');
-        }
-        $this->container['teilnehmer_id'] = $teilnehmer_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets wechsel
-     *
-     * @return bool|null
-     */
-    public function getWechsel()
-    {
-        return $this->container['wechsel'];
-    }
-
-    /**
-     * Sets wechsel
-     *
-     * @param bool|null $wechsel Gibt an, ob diese Mitgliedschaft durch einen Wechsel in diesen Ausbildungszug entstanden ist.
-     *
-     * @return self
-     */
-    public function setWechsel($wechsel)
-    {
-        if (is_null($wechsel)) {
-            throw new \InvalidArgumentException('non-nullable wechsel cannot be null');
-        }
-        $this->container['wechsel'] = $wechsel;
+        $this->container['termin_von'] = $termin_von;
 
         return $this;
     }
