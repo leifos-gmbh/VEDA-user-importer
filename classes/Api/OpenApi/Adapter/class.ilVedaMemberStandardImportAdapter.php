@@ -277,7 +277,8 @@ class ilVedaMemberStandardImportAdapter
                     $this->logger->debug('Ignoring supervisor outside time frame: ' . $remote_supervisor->getLernbegleiterId());
                     continue;
                 }
-                if (ilVedaUtils::compareOidsEqual($remote_supervisor->getLernbegleiterId(), $supervisor_oid)) {
+                // fix mixed companion and supervisor
+                if (ilVedaUtils::compareOidsEqual($remote_supervisor->getLernbegleiterId(), $companion_oid)) {
                     $found = true;
                     break;
                 }
@@ -424,6 +425,7 @@ class ilVedaMemberStandardImportAdapter
                 $this->logger->info('Outside time frame: Ignoring supervisor with id: ' . $supervisor_id);
                 continue;
             }
+            // fix mixed companion / supervisor id
             foreach ($this->udf_claiming_plugin->getUsersForCompanionId($supervisor_id) as $uid) {
                 if (!in_array($uid, $participants->getTutors())) {
                     $message = 'Assigning new course supervisor with id: ' . $supervisor_id . ' ILIAS id: ' . $uid;
