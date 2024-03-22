@@ -418,12 +418,13 @@ class ilVedaMemberStandardImportAdapter
         foreach ($remote_supervisors as $remote_supervisor) {
             $supervisor_id = $remote_supervisor->getLernbegleiterId();
             $this->logger->debug('Remote supervisor oid is: ' . $supervisor_id);
-            $this->logger->dump($this->udf_claiming_plugin->getUsersForSupervisorId($supervisor_id));
+            #$this->logger->dump($this->udf_claiming_plugin->getUsersForSupervisorId($supervisor_id));
+            $this->logger->dump($this->udf_claiming_plugin->getUsersForCompanionId($supervisor_id));
             if (!$this->isValidDate($remote_supervisor->getKursZugriffAb(), $remote_supervisor->getKursZugriffBis())) {
                 $this->logger->info('Outside time frame: Ignoring supervisor with id: ' . $supervisor_id);
                 continue;
             }
-            foreach ($this->udf_claiming_plugin->getUsersForSupervisorId($supervisor_id) as $uid) {
+            foreach ($this->udf_claiming_plugin->getUsersForCompanionId($supervisor_id) as $uid) {
                 if (!in_array($uid, $participants->getTutors())) {
                     $message = 'Assigning new course supervisor with id: ' . $supervisor_id . ' ILIAS id: ' . $uid;
                     $this->logger->info($message);
