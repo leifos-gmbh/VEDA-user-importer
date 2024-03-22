@@ -358,8 +358,8 @@ class ilVedaCourseStandardImportAdapter
         if(is_null($course_start) || is_null($course_end)) {
             return $target;
         }
-        $target->setActivationStart($course_start->setTime(0,0)->getTimestamp());
-        $target->setActivationEnd($course_end->setTime(20,0)->getTimestamp());
+        $target->setActivationStart($course_start->getTimestamp());
+        $target->setActivationEnd($course_end->getTimestamp());
         $target->setOfflineStatus(false);
         return $target;
     }
@@ -391,8 +391,6 @@ class ilVedaCourseStandardImportAdapter
             $course_period_start = $appointment_collection[0]->getTerminVon();
             $course_period_end = $appointment_collection[0]->getTerminBis();
         }
-        $course_period_start->setTime(0,0);
-        $course_period_end->setTime(20,0);
         $target->setCoursePeriod(
             new ilDateTime($course_period_start->format(DateTimeInterface::RFC3339), IL_CAL_DATETIME),
             new ilDateTime($course_period_end->format(DateTimeInterface::RFC3339), IL_CAL_DATETIME),
