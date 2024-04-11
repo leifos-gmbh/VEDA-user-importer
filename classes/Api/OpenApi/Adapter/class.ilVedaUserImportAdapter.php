@@ -25,7 +25,7 @@ class ilVedaUserImportAdapter
     /**
      * @var Organisation[]
      */
-    protected $organisations = [];
+    protected array $organisations = [];
     protected ilXmlWriter $writer;
     protected ilVedaConnector $veda_connector;
     protected ilVedaUserRepositoryInterface $usr_repo;
@@ -40,13 +40,17 @@ class ilVedaUserImportAdapter
     ) {
         $this->logger = $veda_logger;
         $this->settings = $veda_settings;
-        $this->writer = new \ilXmlWriter();
+        $this->writer = new ilXmlWriter();
         $this->usr_repo = $usr_repo;
         $this->veda_connector = $veda_connector;
         $this->repo_content_builder_factory = $repo_content_builder_factory;
     }
 
     /**
+     * @throws ilDatabaseException
+     * @throws ilDateTimeException
+     * @throws ilObjectNotFoundException
+     * @throws ilSaxParserException
      * @throws ilVedaUserImporterException
      */
     public function import(
@@ -61,6 +65,9 @@ class ilVedaUserImportAdapter
     /**
      * Transform API participants to xml
      * @throws ilVedaUserImporterException
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
+     * @throws ilDateTimeException
      */
     protected function transformParticipantsToXml(
         ilVedaELearningParticipantsCollectionInterface $participants,
@@ -79,8 +86,8 @@ class ilVedaUserImportAdapter
             $user = null;
             if ($usr_id) {
                 try {
-                    $user = \ilObjectFactory::getInstanceByObjId($usr_id);
-                } catch (\ilObjectNotFoundException $e) {
+                    $user = ilObjectFactory::getInstanceByObjId($usr_id);
+                } catch (ilObjectNotFoundException $e) {
                     $this->logger->warning('Cannot create user instance for: ' . $usr_id);
                     continue;
                 }
@@ -105,7 +112,7 @@ class ilVedaUserImportAdapter
                     $participant_container->getBenutzername()
                 );
 
-                if (!$this->hasPasswordChanged($user)) {
+                if ($user instanceof ilObjUser && !$this->hasPasswordChanged($user)) {
                     $this->writer->xmlElement(
                         'Password',
                         [
@@ -114,7 +121,7 @@ class ilVedaUserImportAdapter
                         $participant_container->getInitialesPasswort()
                     );
                 }
-                if ($this->isGenderEmpty($user)) {
+                if ($user instanceof ilObjUser && $this->isGenderEmpty($user)) {
                     $this->writer->xmlElement(
                         'Gender',
                         [],
@@ -169,8 +176,7 @@ class ilVedaUserImportAdapter
                 'AuthMode',
                 [
                     'type' => self::AUTH_MODE
-                ],
-                null
+                ]
             );
             $this->writer->xmlElement(
                 'Active',
@@ -198,8 +204,7 @@ class ilVedaUserImportAdapter
                     'Id' => $long_role_id,
                     'Type' => 'Global',
                     'Action' => 'Assign'
-                ],
-                null
+                ]
             );
 
             $this->writer->xmlElement('Firstname', [], $participant_container->getTeilnehmer()->getVorname());
@@ -240,6 +245,9 @@ class ilVedaUserImportAdapter
         }
     }
 
+    /**
+     * @throws ilSaxParserException
+     */
     protected function importXml(int $import_mode) : void
     {
         $participant_role = ($import_mode === self::IMPORT_MODE_SIFA)
@@ -261,7 +269,7 @@ class ilVedaUserImportAdapter
         $message = 'Finished update users, with protocol message.';
         $this->logger->info($message);
         $this->logger->dump($debug);
-        $this->logger->debug($this->writer->xmlDumpMem(true));
+        $this->logger->debug($this->writer->xmlDumpMem());
     }
 
     /**
@@ -276,18 +284,20 @@ class ilVedaUserImportAdapter
                 $participant_status->setCreationStatus(ilVedaUserStatus::SYNCHRONIZED);
                 $this->logger->info('Update creation status');
                 $this->usr_repo->updateUser($participant_status);
-            };
+            }
         }
     }
 
     /**
      * Fetch user id of already created user account
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
      * @throws ilVedaUserImporterException
      */
     protected function fetchUserId(TeilnehmerELearningPlattform $participant) : int
     {
         $import_id = $participant->getTeilnehmer()->getOid();
-        $obj_id = \ilObject::_lookupObjIdByImportId($import_id);
+        $obj_id = ilObject::_lookupObjIdByImportId($import_id);
         if (!$obj_id) {
             return 0;
         }
@@ -297,8 +307,8 @@ class ilVedaUserImportAdapter
             throw new ilVedaUserImporterException('Invalid db structure. Check log file. Aborting');
         }
 
-        $user = \ilObjectFactory::getInstanceByObjId($obj_id, false);
-        if (!$user instanceof \ilObjUser) {
+        $user = ilObjectFactory::getInstanceByObjId($obj_id, false);
+        if (!$user instanceof ilObjUser) {
             $this->logger->error('Found invalid obj_data entry for import_id: ' . $import_id);
             throw new ilVedaUserImporterException('Invalid db structure. Check log file. Aborting');
         }
@@ -319,7 +329,7 @@ class ilVedaUserImportAdapter
 
         // no usr_id given => usr is valid if login does not exist
         $login = $participant->getBenutzername();
-        $generated_login = \ilAuthUtils::_generateLogin($login);
+        $generated_login = ilAuthUtils::_generateLogin($login);
 
         if (strcmp($generated_login, $login) !== 0) {
             $message = 'User with login: ' . $login . ' already exists.';
@@ -345,13 +355,13 @@ class ilVedaUserImportAdapter
     }
 
     /**
-     * @throws \ilDatabaseException
-     * @throws \ilObjectNotFoundException
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
      */
     protected function updateLogin(int $usr_id, TeilnehmerELearningPlattform $participant, string &$new_login) : bool
     {
-        $user = \ilObjectFactory::getInstanceByObjId($usr_id, false);
-        if (!$user instanceof \ilObjUser) {
+        $user = ilObjectFactory::getInstanceByObjId($usr_id, false);
+        if (!$user instanceof ilObjUser) {
             $this->logger->warning('Cannot find existing user with id: ' . $usr_id);
             return false;
         }
@@ -363,7 +373,7 @@ class ilVedaUserImportAdapter
             return true;
         }
 
-        $generated_login = \ilAuthUtils::_generateLogin($login);
+        $generated_login = ilAuthUtils::_generateLogin($login);
         if (strcmp($generated_login, $login) !== 0) {
             $message = 'User with login: ' . $login . ' already exists.';
             $this->logger->warning($message);
@@ -387,12 +397,12 @@ class ilVedaUserImportAdapter
         return true;
     }
 
-    protected function hasPasswordChanged(\ilObjUser $user) : bool
+    protected function hasPasswordChanged(ilObjUser $user) : bool
     {
         return $user->getLastPasswordChangeTS() > 0;
     }
 
-    protected function isGenderEmpty(\ilObjUser $user) : bool
+    protected function isGenderEmpty(ilObjUser $user) : bool
     {
         return $user->getGender() == '';
     }
@@ -515,20 +525,23 @@ class ilVedaUserImportAdapter
         }
     }
 
+    /**
+     * @throws ilDateTimeException
+     */
     protected function isValidDate(?DateTime $start, ?DateTime $end) : bool
     {
         if ($start == null) {
             return true;
         }
-        $now = new \ilDate(time(), IL_CAL_UNIX);
-        $ilstart = new \ilDate($start->format('Y-m-d'), IL_CAL_DATE);
+        $now = new ilDate(time(), IL_CAL_UNIX);
+        $ilstart = new ilDate($start->format('Y-m-d'), IL_CAL_DATE);
 
         if ($end == null) {
 
             // check starting time <= now
             if (
-                \ilDateTime::_before($ilstart, $now, IL_CAL_DAY)
-                || \ilDateTime::_equals($ilstart, $now, IL_CAL_DAY)
+                ilDateTime::_before($ilstart, $now, IL_CAL_DAY)
+                || ilDateTime::_equals($ilstart, $now, IL_CAL_DAY)
             ) {
                 $this->logger->debug('Starting date is valid');
                 return true;
@@ -537,10 +550,10 @@ class ilVedaUserImportAdapter
             return false;
         }
 
-        $ilend = new \ilDate($end->format('Y-m-d'), IL_CAL_DATE);
+        $ilend = new ilDate($end->format('Y-m-d'), IL_CAL_DATE);
 
         if (
-            \ilDateTime::_within(
+            ilDateTime::_within(
                 $now,
                 $ilstart,
                 $ilend,

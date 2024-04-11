@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection GrazieInspection */
 
 /**
  * This file is part of ILIAS, a powerful learning management system
@@ -16,11 +16,12 @@
  *
  *********************************************************************/
 
+use ILIAS\HTTP\Services;
 use ILIAS\Refinery\Factory as RefineryFactory;
 
 /**
+ * @ilCtrl_isCalledBy ilVedaConnectorConfigGUI: ilObjComponentSettingsGUI
  * @author Stefan Meyer <smeyer.ilias@gmx.de>
- * @ilCtrl_Calls ilVedaConnectorConfigGUI: ilPropertyFormGUI
  */
 class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 {
@@ -37,10 +38,10 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
     private ilLanguage $lng;
     private ilCtrl $ctrl;
     private ilTabsGUI $il_tabs;
-    private ilGlobalPageTemplate $tpl;
+    private ilGlobalTemplateInterface $tpl;
     private ilRbacReview $il_rbac_review;
     protected RefineryFactory $refinery;
-    protected \ILIAS\DI\HTTPServices $http;
+    protected Services $http;
     protected ilVedaApiInterface $veda_api;
 
     /**
@@ -63,24 +64,23 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 
     /**
      * Forward to property form gui
+     * @throws ilCtrlException
      */
     public function executeCommand() : void
     {
         $next_class = $this->ctrl->getNextClass();
         $this->logger->info($next_class);
-
-        if (strtolower($next_class) === strtolower(\ilPropertyFormGUI::class)) {
+        if (strtolower($next_class) === strtolower(ilPropertyFormGUI::class)) {
             $form = $this->initConfigurationForm();
             $this->ctrl->forwardCommand($form);
         }
-
         parent::executeCommand();
     }
 
     /**
-     * @inheritdoc
+     * @throws ilCtrlException
      */
-    public function performCommand($cmd)
+    public function performCommand(string $cmd): void
     {
         $this->il_tabs->addTab(
             self::TAB_CREDENTIALS,
@@ -97,12 +97,11 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
             ilVedaConnectorPlugin::getInstance()->txt('tab_import'),
             $this->ctrl->getLinkTarget($this, 'import')
         );
-
         $this->$cmd();
     }
 
     /**
-     * @inheritdoc
+     * @throws ilCtrlException
      */
     protected function configure(ilPropertyFormGUI $form = null) : void
     {
@@ -114,19 +113,19 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
     }
 
     /**
-     * @return \ilPropertyFormGUI
+     * @throws ilCtrlException
      */
     protected function initConfigurationForm() : ilPropertyFormGUI
     {
         $settings = ilVedaConnectorSettings::getInstance();
 
-        $form = new \ilPropertyFormGUI();
+        $form = new ilPropertyFormGUI();
         $form->setTitle($this->getPluginObject()->txt('tbl_settings'));
         $form->setFormAction($this->ctrl->getFormAction($this));
         $form->addCommandButton('save', $this->lng->txt('save'));
         $form->setShowTopButtons(false);
 
-        $lock = new \ilCheckboxInputGUI($this->getPluginObject()->txt('tbl_veda_settings_active'), 'active');
+        $lock = new ilCheckboxInputGUI($this->getPluginObject()->txt('tbl_veda_settings_active'), 'active');
         $lock->setValue(1);
         $lock->setChecked($settings->isActive());
         $form->addItem($lock);
@@ -140,12 +139,12 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 
         $this->lng->loadLanguageModule('log');
         $level = new ilSelectInputGUI($this->getPluginObject()->txt('tbl_veda_settings_loglevel'), 'log_level');
-        $level->setHideSubForm($settings->getLogLevel() == \ilLogLevel::OFF, '< 1000');
-        $level->setOptions(\ilLogLevel::getLevelOptions());
+        $level->setHideSubForm($settings->getLogLevel() == ilLogLevel::OFF, '< 1000');
+        $level->setOptions(ilLogLevel::getLevelOptions());
         $level->setValue($settings->getLogLevel());
         $form->addItem($level);
 
-        $log_file = new \ilTextInputGUI($this->getPluginObject()->txt('tbl_veda_settings_logfile'), 'log_file');
+        $log_file = new ilTextInputGUI($this->getPluginObject()->txt('tbl_veda_settings_logfile'), 'log_file');
         $log_file->setValue($settings->getLogFile());
         $log_file->setInfo($this->getPluginObject()->txt('tbl_veda_settings_logfile_info'));
         $level->addSubItem($log_file);
@@ -176,11 +175,11 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
         $mail_targets->setRequired(true);
         $mail_active->addSubItem($mail_targets);
 
-        $sifa_sync = new \ilFormSectionHeaderGUI();
+        $sifa_sync = new ilFormSectionHeaderGUI();
         $sifa_sync->setTitle($this->getPluginObject()->txt('tbl_settings_section_sifa_sync'));
         $form->addItem($sifa_sync);
 
-        $sifa_active = new \ilCheckboxInputGUI(
+        $sifa_active = new ilCheckboxInputGUI(
             $this->getPluginObject()->txt('tbl_settings_sifa_active'),
             'sifa_active'
         );
@@ -197,7 +196,7 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
         $roles->setRequired(true);
         $sifa_active->addSubItem($roles);
 
-        $import_dir = new \ilRepositorySelector2InputGUI(
+        $import_dir = new ilRepositorySelector2InputGUI(
             $this->getPluginObject()->txt('tbl_settings_course_import'),
             'sifa_crs_import',
             true
@@ -209,35 +208,35 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
         $import_dir->setValue($settings->getSifaImportDirectory());
         $sifa_active->addSubItem($import_dir);
 
-        $switch = new \ilNumberInputGUI(
+        $switch = new ilNumberInputGUI(
             $this->getPluginObject()->txt('tbl_settings_switch_permanent_role'),
             'switch_permanent'
         );
         $switch->setRequired(true);
         if ($settings->getPermanentSwitchRole()) {
             $switch->setValue($settings->getPermanentSwitchRole());
-            $switch->setSuffix(\ilObject::_lookupTitle($settings->getPermanentSwitchRole()));
+            $switch->setSuffix(ilObject::_lookupTitle($settings->getPermanentSwitchRole()));
         }
         $switch->setInfo($this->getPluginObject()->txt('tbl_settings_switch_permanent_role_info'));
         $sifa_active->addSubItem($switch);
 
-        $switcht = new \ilNumberInputGUI(
+        $switcht = new ilNumberInputGUI(
             $this->getPluginObject()->txt('tbl_settings_switch_temp_role'),
             'switch_temp'
         );
         $switcht->setRequired(true);
         if ($settings->getTemporarySwitchRole()) {
             $switcht->setValue($settings->getTemporarySwitchRole());
-            $switcht->setSuffix(\ilObject::_lookupTitle($settings->getTemporarySwitchRole()));
+            $switcht->setSuffix(ilObject::_lookupTitle($settings->getTemporarySwitchRole()));
         }
         $switcht->setInfo($this->getPluginObject()->txt('tbl_settings_switch_temp_role_info'));
         $sifa_active->addSubItem($switcht);
 
-        $standard_sync = new \ilFormSectionHeaderGUI();
+        $standard_sync = new ilFormSectionHeaderGUI();
         $standard_sync->setTitle($this->getPluginObject()->txt('tbl_settings_section_standard_sync'));
         $form->addItem($standard_sync);
 
-        $standard_active = new \ilCheckboxInputGUI(
+        $standard_active = new ilCheckboxInputGUI(
             $this->getPluginObject()->txt('tbl_settings_standard_active'),
             'standard_active'
         );
@@ -254,7 +253,7 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
         $roles->setRequired(true);
         $standard_active->addSubItem($roles);
 
-        $import_dir = new \ilRepositorySelector2InputGUI(
+        $import_dir = new ilRepositorySelector2InputGUI(
             $this->getPluginObject()->txt('tbl_settings_course_import'),
             'standard_crs_import',
             true
@@ -269,6 +268,9 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
         return $form;
     }
 
+    /**
+     * @throws ilCtrlException
+     */
     protected function save() : void
     {
         $form = $this->initConfigurationForm();
@@ -296,7 +298,11 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
                 $settings->setMailActive($form->getInput('mail_active'));
                 $settings->setMailTargets($form->getInput('mail_targets'));
 
-                ilUtil::sendSuccess($this->lng->txt('settings_saved'), true);
+                $this->tpl->setOnScreenMessage(
+                    ilGlobalTemplateInterface::MESSAGE_TYPE_SUCCESS,
+                    $this->lng->txt('settings_saved'),
+                    true
+                );
                 $this->ctrl->redirect($this, 'configure');
             }
             $error = $this->lng->txt('err_check_input');
@@ -305,10 +311,13 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
             $this->logger->error('Configuration error: ' . $error);
         }
         $form->setValuesByPost();
-        ilUtil::sendFailure($error);
+        $this->tpl->setOnScreenMessage(ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE, $error);
         $this->configure($form);
     }
 
+    /**
+     * @throws ilCtrlException
+     */
     protected function credentials(?ilPropertyFormGUI $form = null) : void
     {
         $this->il_tabs->activateTab(self::TAB_CREDENTIALS);
@@ -327,6 +336,9 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
         $this->tpl->setContent($form->getHTML());
     }
 
+    /**
+     * @throws ilCtrlException
+     */
     protected function initCredentialsForm() : ilPropertyFormGUI
     {
         $settings = ilVedaConnectorSettings::getInstance();
@@ -390,8 +402,11 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
                 $settings->setAddHeaderAuth((bool) $form->getInput('add_header_auth'));
                 $settings->setAddHeaderName($form->getInput('add_header_name'));
                 $settings->setAddHeaderValue($form->getInput('add_header_value'));
-
-                ilUtil::sendSuccess($this->lng->txt('settings_saved'), true);
+                $this->tpl->setOnScreenMessage(
+                    ilGlobalTemplateInterface::MESSAGE_TYPE_SUCCESS,
+                    $this->lng->txt('settings_saved'),
+                    true
+                );
                 $this->ctrl->redirect($this, 'credentials');
             }
             $error = $this->lng->txt('err_check_input');
@@ -400,10 +415,13 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
             ilVedaConnectorPlugin::getInstance()->getLogger()->error('Error saving credentials: ' . $error);
         }
         $form->setValuesByPost();
-        ilUtil::sendFailure($error);
+        $this->tpl->setOnScreenMessage(ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE, $error);
         $this->credentials($form);
     }
 
+    /**
+     * @throws ilCtrlException
+     */
     protected function import(?ilPropertyFormGUI $form = null) : void
     {
         $this->setSubTabs();
@@ -416,6 +434,9 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
         $this->tpl->setContent($form->getHTML());
     }
 
+    /**
+     * @throws ilCtrlException
+     */
     protected function initImportForm() : ilPropertyFormGUI
     {
         $form = new ilPropertyFormGUI();
@@ -494,7 +515,10 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
     {
         $form = $this->initImportForm();
         if (!$form->checkInput()) {
-            ilUtil::sendFailure($this->lng->txt('err_check_input'));
+            $this->tpl->setOnScreenMessage(
+                ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE,
+                $this->lng->txt('err_check_input')
+            );
             $this->import($form);
         }
 
@@ -525,17 +549,23 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
             }
         } catch (Exception $e) {
             $this->logger->logStack(ilLogLevel::WARNING);
-            ilUtil::sendFailure('Import failed with message: ' . $e->getMessage());
+            $this->tpl->setOnScreenMessage(
+                ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE,
+                'Import failed with message: ' . $e->getMessage()
+            );
             $this->import($form);
         }
-
-        ilUtil::sendSuccess($this->getPluginObject()->txt('success_import'));
+        $this->tpl->setOnScreenMessage(
+            ilGlobalTemplateInterface::MESSAGE_TYPE_SUCCESS,
+            $this->getPluginObject()->txt('success_import')
+        );
         $form->setValuesByPost();
         $this->import($form);
     }
 
     /**
      * show user import result
+     * @throws ilException
      */
     protected function importResultUser() : void
     {
@@ -549,7 +579,8 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
     }
 
     /**
-     * @throws \ilDatabaseException
+     * @throws ilDatabaseException
+     * @throws ilException
      */
     protected function importResultCourse()
     {
@@ -562,6 +593,9 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
         $this->tpl->setContent($table->getHTML());
     }
 
+    /**
+     * @throws ilCtrlException
+     */
     protected function setSubTabs()
     {
         $this->il_tabs->addSubTab(
@@ -584,9 +618,15 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
     protected function testConnection()
     {
         if ($this->veda_api->testConnection()) {
-            ilUtil::sendSuccess($this->getPluginObject()->txt('success_api_connect'));
+            $this->tpl->setOnScreenMessage(
+                ilGlobalTemplateInterface::MESSAGE_TYPE_SUCCESS,
+                $this->getPluginObject()->txt('success_api_connect')
+            );
         } else {
-            ilUtil::sendFailure('API Connection Failed');
+            $this->tpl->setOnScreenMessage(
+                ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE,
+                'API Connection Failed'
+            );
         }
         $this->credentials();
     }
@@ -615,32 +655,50 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
         return $select;
     }
 
+    /**
+     * @throws ilCtrlException
+     */
     protected function migrateUser()
     {
-        $oid = $this->http->request()->getQueryParams()['oid'] ?? '';
-        $login = urldecode($this->http->request()->getQueryParams()['login'] ?? '');
+        $oid = $this->http->wrapper()->post()->retrieve('oid', $this->refinery->kindlyTo()->string()) ?? '';
+        $login = urldecode($this->http->wrapper()->query()->retrieve('login', $this->refinery->kindlyTo()->string()) ?? '');
         if ($oid === '' || $login === '') {
-            ilUtil::sendFailure($this->lng->txt('err_check_input'), true);
+            $this->tpl->setOnScreenMessage(
+                ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE,
+                $this->lng->txt('err_check_input'),
+                true
+            );
             $this->ctrl->redirect($this, 'importResultUser');
         }
         $obj_id_from_oid = ilObjUser::_getImportedUserId($oid);
-        $type_from_oid = ilObject::_lookupType($obj_id_from_oid);
         $obj_id_from_login = ilObjUser::_loginExists($login);
         $import_id_from_login = ilObject::_lookupImportId($obj_id_from_login);
 
         if ($import_id_from_login != '') {
             $this->logger->warning('Migration failed: user already imported');
-            ilUtil::sendFailure($this->lng->txt('err_check_input'), true);
+            $this->tpl->setOnScreenMessage(
+                ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE,
+                $this->lng->txt('err_check_input'),
+                true
+            );
             $this->ctrl->redirect($this, 'importResultUser');
         }
         if (!$obj_id_from_login) {
             $this->logger->warning('Migration failed: user does not exist');
-            ilUtil::sendFailure($this->lng->txt('err_check_input'), true);
+            $this->tpl->setOnScreenMessage(
+                ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE,
+                $this->lng->txt('err_check_input'),
+                true
+            );
             $this->ctrl->redirect($this, 'importResultUser');
         }
         if ($obj_id_from_oid > 0) {
             $this->logger->warning('Migration failed: user already imported');
-            ilUtil::sendFailure($this->lng->txt('err_check_input'), true);
+            $this->tpl->setOnScreenMessage(
+                ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE,
+                $this->lng->txt('err_check_input'),
+                true
+            );
             $this->ctrl->redirect($this, 'importResultUser');
         }
         ilObjUser::_writeImportId($obj_id_from_login, $oid);
@@ -650,8 +708,11 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
         $status = is_null($status) ? $user_repo->createEmptyUser($oid) : $status;
         $status->setImportFailure(false);
         $user_repo->updateUser($status);
-
-        ilUtil::sendSuccess(ilVedaConnectorPlugin::getInstance()->txt('migrated_account'), true);
+        $this->tpl->setOnScreenMessage(
+            ilGlobalTemplateInterface::MESSAGE_TYPE_SUCCESS,
+            ilVedaConnectorPlugin::getInstance()->txt('migrated_account'),
+            true
+        );
         $this->ctrl->redirect($this, 'importResultUser');
     }
 }

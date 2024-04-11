@@ -6,6 +6,9 @@ class ilVedaMailSegmentBuilder implements ilVedaMailSegmentBuilderInterface
     protected ilVedaMailSegmentRepositoryInterface $mail_segment_repo;
     protected ilLogger $veda_logger;
 
+    /**
+     * @throws Exception
+     */
     public function __construct(
         ilVedaMailSegmentRepositoryInterface $mail_segment_repo,
         ilLogger $veda_logger

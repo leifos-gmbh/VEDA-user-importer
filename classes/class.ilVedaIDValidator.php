@@ -41,6 +41,7 @@ class ilVedaIDValidator
 
     /**
      * Validate id settings for subtree
+     * @throws ilTemplateException
      */
     public function validate() : bool
     {
@@ -97,6 +98,9 @@ class ilVedaIDValidator
         return $exercises;
     }
 
+    /**
+     * @throws ilTemplateException
+     */
     protected function validateLocalSessions(array $sessions, string $course_id) : bool
     {
         $missing = $this->my_api->validateLocalSessions($sessions, $course_id);
@@ -115,6 +119,9 @@ class ilVedaIDValidator
         return true;
     }
 
+    /**
+     * @throws ilTemplateException
+     */
     protected function validateLocalExercises(array $exercises, string $course_id) : bool
     {
         $missing = $this->my_api->validateLocalExercises($exercises, $course_id);
@@ -133,6 +140,9 @@ class ilVedaIDValidator
         return true;
     }
 
+    /**
+     * @throws ilTemplateException
+     */
     protected function validateRemoteSessions(array $sessions, string $course_oid) : bool
     {
         $missing = $this->my_api->validateRemoteSessions($sessions, $course_oid);
@@ -151,6 +161,9 @@ class ilVedaIDValidator
         return true;
     }
 
+    /**
+     * @throws ilTemplateException
+     */
     protected function validateRemoteExercises(array $exercises, string $course_oid) : bool
     {
         $missing = $this->my_api->validateRemoteExercises($exercises, $course_oid);
@@ -169,6 +182,9 @@ class ilVedaIDValidator
         return true;
     }
 
+    /**
+     * @throws ilTemplateException
+     */
     public function getErrorMessage() : string
     {
         return $this->err_template->get();

@@ -17,6 +17,6 @@ interface ilVedaEducationTrainSegmentApiInterface
     public function sendExerciseSuccess(
         string $segment_oid,
         string $participant_oid,
-        \DateTime $dt
+        DateTime $dt
     ) : bool;
 }

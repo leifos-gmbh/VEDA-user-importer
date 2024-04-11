@@ -53,6 +53,11 @@ class ilVedaCourseImportAdapter
         }
     }
 
+    /**
+     * @throws ilObjectNotFoundException
+     * @throws ilDatabaseException
+     * @throws ilSaxParserException
+     */
     protected function importTrainingCourse(int $ref_id) : void
     {
         $training_course_id = $this->md_db_manager->findTrainingCourseId($ref_id);
@@ -66,6 +71,11 @@ class ilVedaCourseImportAdapter
         }
     }
 
+    /**
+     * @throws ilObjectNotFoundException
+     * @throws ilDatabaseException
+     * @throws ilSaxParserException
+     */
     protected function handleTrainingCourseTrainUpdate(int $source_id, Ausbildungszug $train) : void
     {
         // check if alread imported
@@ -84,8 +94,6 @@ class ilVedaCourseImportAdapter
     }
 
     /**
-     * @param $crs_info
-     * @param $parent_id
      * @return bool|int|mixed
      * @throws ilDatabaseException
      * @throws ilObjectNotFoundException
@@ -198,6 +206,10 @@ class ilVedaCourseImportAdapter
         return 0;
     }
 
+    /**
+     * @throws ilObjectNotFoundException
+     * @throws ilDatabaseException
+     */
     public function handleAfterCloningDependenciesEvent(int $source_id, int $target_id, int $copy_id) : void
     {
         $this->logger->debug(
@@ -294,6 +306,12 @@ class ilVedaCourseImportAdapter
         }
     }
 
+    /**
+     * @throws ilDatabaseException
+     * @throws ilDateTimeException
+     * @throws ilExcUnknownAssignmentTypeException
+     * @throws ilObjectNotFoundException
+     */
     public function handleAfterCloningEvent(int $a_source_id, int $a_target_id, int $a_copy_id) : void
     {
         $this->logger->debug(
@@ -429,7 +447,7 @@ class ilVedaCourseImportAdapter
 
         $this->logger->debug('Created new local role');
 
-        $this->rbac_admin->assignRoleToFolder($role->getId(), $course->getRefId(), 'y');
+        $this->rbac_admin->assignRoleToFolder($role->getId(), $course->getRefId());
         $this->rbac_admin->copyRoleTemplatePermissions(
             $rolt_id,
             ROLE_FOLDER_ID,
@@ -482,6 +500,11 @@ class ilVedaCourseImportAdapter
         }
     }
 
+    /**
+     * @throws ilObjectNotFoundException
+     * @throws ilDateTimeException
+     * @throws ilDatabaseException
+     */
     protected function migrateSessionAppointments(int $target_id, Ausbildungszug $train) : void
     {
         $session = ilObjectFactory::getInstanceByRefId($target_id, false);
@@ -517,6 +540,12 @@ class ilVedaCourseImportAdapter
         }
     }
 
+    /**
+     * @throws ilObjectNotFoundException
+     * @throws ilDatabaseException
+     * @throws ilExcUnknownAssignmentTypeException
+     * @throws ilDateTimeException
+     */
     protected function migrateExerciseAppointments(int $target_id, Ausbildungszug $train) : void
     {
         $exercise = ilObjectFactory::getInstanceByRefId($target_id, false);

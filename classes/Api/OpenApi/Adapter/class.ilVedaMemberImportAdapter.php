@@ -12,41 +12,20 @@ class ilVedaMemberImportAdapter
      * @var string
      */
     protected const TEMPORARY = 'TEMPORAER';
-    /**
-     * @var ilLogger|null
-     */
-    protected $logger;
-    /**
-     * @var ilRbacAdmin
-     */
-    protected $rbac_admin;
-    /**
-     * @var ilRbacReview
-     */
-    protected $rbac_review;
-    /**
-     * @var ilVedaConnector
-     */
-    protected $veda_connector;
-    /**
-     * @var ilUDFClaimingPlugin
-     */
-    protected $udf_claiming_plugin;
-    /**
-     * @var ilVedaMDClaimingPluginDBManagerInterface
-     */
-    protected $md_db_manager;
-    /**
-     * @var ilVedaRepositoryContentBuilderFactoryInterface
-     */
-    protected $repo_content_builder_factory;
+    protected ?ilLogger $logger;
+    protected ilRbacAdmin $rbac_admin;
+    protected ilRbacReview $rbac_review;
+    protected ilVedaConnector $veda_connector;
+    protected ilVedaUDFClaimingPlugin $udf_claiming_plugin;
+    protected ilVedaMDClaimingPluginDBManagerInterface $md_db_manager;
+    protected ilVedaRepositoryContentBuilderFactoryInterface $repo_content_builder_factory;
 
     public function __construct(
         ilLogger $veda_logger,
         ilRbacAdmin $rbac_admin,
         ilRbacReview $rbac_review,
         ilVedaConnector $veda_connector,
-        ilUDFClaimingPlugin $udf_claiming_plugin,
+        ilVedaUDFClaimingPlugin $udf_claiming_plugin,
         ilVedaMDClaimingPluginDBManagerInterface $md_db_manager,
         ilVedaRepositoryContentBuilderFactoryInterface $repo_content_builder_factory
     ) {
@@ -59,6 +38,12 @@ class ilVedaMemberImportAdapter
         $this->repo_content_builder_factory = $repo_content_builder_factory;
     }
 
+    /**
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
+     * @throws ilVedaMemberImportException
+     * @throws ilDateTimeException
+     */
     public function import() : void
     {
         $this->logger->debug('Reading "Ausbildungszüge" ...');
@@ -67,13 +52,18 @@ class ilVedaMemberImportAdapter
         }
     }
 
+    /**
+     * @throws ilDatabaseException
+     * @throws ilExcUnknownAssignmentTypeException
+     * @throws ilObjectNotFoundException
+     */
     public function handleTrackingEvent(int $obj_id, int $usr_id, int $status) : void
     {
         if ($status != ilLPStatus::LP_STATUS_COMPLETED_NUM) {
             $this->logger->debug('Ignoring non completed event.');
             return;
         }
-        $usr_oid = \ilObjUser::_lookupImportId($usr_id);
+        $usr_oid = ilObjUser::_lookupImportId($usr_id);
         if (!$usr_oid) {
             $this->logger->debug('Not imported user.');
             return;
@@ -84,7 +74,7 @@ class ilVedaMemberImportAdapter
             $this->logger->info('Ignoring not synchronized user account: ' . $usr_oid);
             return;
         }
-        if (\ilObject::_lookupType($obj_id) != 'exc') {
+        if (ilObject::_lookupType($obj_id) != 'exc') {
             $this->logger->debug('Ignoring non session event');
             return;
         }
@@ -103,6 +93,9 @@ class ilVedaMemberImportAdapter
 
     /**
      * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
+     * @throws ilExcUnknownAssignmentTypeException
+     * @throws Exception
      */
     protected function sendExerciseSuccessInformation(
         int $obj_id,
@@ -111,14 +104,14 @@ class ilVedaMemberImportAdapter
         string $segment_id
     ) : void {
         // find parent courses
-        $exercise = \ilObjectFactory::getInstanceByObjId($obj_id, false);
-        if (!$exercise instanceof \ilObjExercise) {
+        $exercise = ilObjectFactory::getInstanceByObjId($obj_id, false);
+        if (!$exercise instanceof ilObjExercise) {
             $this->logger->warning('Cannot create exercise instance');
             return;
         }
 
         // find ref_ids for exercise
-        $refs = \ilObject::_getAllReferences($exercise->getId());
+        $refs = ilObject::_getAllReferences($exercise->getId());
 
         $is_practical_training = false;
         $is_self_learning = false;
@@ -139,9 +132,9 @@ class ilVedaMemberImportAdapter
                 $this->logger->info('No practical training type, no self learning type');
                 break;
             }
-            $assignments = \ilExAssignment::getInstancesByExercise($exercise->getId());
+            $assignments = ilExAssignment::getInstancesByExercise($exercise->getId());
             foreach ($assignments as $assignment) {
-                $submission = new \ilExSubmission($assignment, $usr_id);
+                $submission = new ilExSubmission($assignment, $usr_id);
                 $submission_date_str = $submission->getLastSubmission();
                 $this->logger->notice('Last submission is: ' . $submission_date_str);
             }
@@ -153,8 +146,8 @@ class ilVedaMemberImportAdapter
             $education_train_segment_api = $this->veda_connector->getEducationTrainSegmentApi();
             if (
                 !$education_train_segment_api->sendExerciseSubmissionDate($segment_id, $usr_oid, $submission_date) ||
-                !$education_train_segment_api->sendExerciseSubmissionConfirmed($segment_id, $usr_oid, new \DateTime()) ||
-                !$education_train_segment_api->sendExerciseSuccess($segment_id, $usr_oid, new \DateTime())
+                !$education_train_segment_api->sendExerciseSubmissionConfirmed($segment_id, $usr_oid, new DateTime()) ||
+                !$education_train_segment_api->sendExerciseSuccess($segment_id, $usr_oid, new DateTime())
             ) {
                 $this->logger->error('Send exercise success failed');
             }
@@ -166,14 +159,17 @@ class ilVedaMemberImportAdapter
         }
         if ($is_self_learning) {
             $education_train_segment_api = $this->veda_connector->getEducationTrainSegmentApi();
-            if (!$education_train_segment_api->sendExerciseSuccess($segment_id, $usr_oid, new \DateTime())) {
+            if (!$education_train_segment_api->sendExerciseSuccess($segment_id, $usr_oid, new DateTime())) {
                 $this->logger->error('Send exercise success for type "self training" failed');
             }
         }
     }
 
     /**
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
      * @throws ilVedaMemberImportException
+     * @throws ilDateTimeException
      */
     protected function importTrainingCourseTrain(?string $oid) : void
     {
@@ -181,8 +177,8 @@ class ilVedaMemberImportAdapter
         $members = $this->veda_connector->getEducationTrainApi()->requestMembers($oid);
 
         $course_ref_id = $this->md_db_manager->findTrainingCourseTrain($oid);
-        $course = \ilObjectFactory::getInstanceByRefId($course_ref_id);
-        if (!$course instanceof \ilObjCourse) {
+        $course = ilObjectFactory::getInstanceByRefId($course_ref_id);
+        if (!$course instanceof ilObjCourse) {
             $message = 'Cannot find course for oid: ' . $oid;
             $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withMessage($message)
@@ -190,8 +186,8 @@ class ilVedaMemberImportAdapter
                 ->store();
             throw new ilVedaMemberImportException($message);
         }
-        $participants = \ilParticipants::getInstance($course_ref_id);
-        if (!$participants instanceof \ilCourseParticipants) {
+        $participants = ilParticipants::getInstance($course_ref_id);
+        if (!$participants instanceof ilCourseParticipants) {
             $message = 'Cannot find course participants for oid: ' . $oid;
             $this->repo_content_builder_factory->getMailSegmentBuilder()->buildSegment()
                 ->withMessage($message)
@@ -212,18 +208,23 @@ class ilVedaMemberImportAdapter
             return;
         }
 
-        $this->removeInvalidRegularMembers($course, $participants, $members, $veda_crs, $currently_assigned);
-        $this->removeInvalidPermanentSwitchMembers($course, $participants, $members, $veda_crs, $currently_assigned);
-        $this->removeInvalidTemporarySwitchMembers($course, $participants, $members, $veda_crs, $currently_assigned);
-        $this->addRegularMembers($course, $participants, $members, $veda_crs, $currently_assigned);
+        $this->removeInvalidRegularMembers($course, $members);
+        $this->removeInvalidPermanentSwitchMembers($course, $members, $veda_crs);
+        $this->removeInvalidTemporarySwitchMembers($course, $members, $veda_crs);
+        $this->addRegularMembers($course, $participants, $members, $currently_assigned);
         $this->addPermanentSwitchMembers($course, $participants, $members, $veda_crs, $currently_assigned);
         $this->addTemporarySwitchMembers($course, $participants, $members, $veda_crs, $currently_assigned);
         $this->handleTutorAssignments($course, $participants, $oid);
     }
 
+    /**
+     * @throws ilObjectNotFoundException
+     * @throws ilDatabaseException
+     * @throws ilDateTimeException
+     */
     protected function handleTutorAssignments(
-        \ilObjCourse $course,
-        \ilCourseParticipants $participants,
+        ilObjCourse $course,
+        ilCourseParticipants $participants,
         ?string $oid
     ) : bool {
         $udffields = $this->udf_claiming_plugin->getFields();
@@ -243,23 +244,23 @@ class ilVedaMemberImportAdapter
 
         // deassign deprecated tutors
         foreach ($participants->getTutors() as $tutor_id) {
-            $tutor = \ilObjectFactory::getInstanceByObjId($tutor_id, false);
-            if (!$tutor instanceof \ilObjUser) {
+            $tutor = ilObjectFactory::getInstanceByObjId($tutor_id, false);
+            if (!$tutor instanceof ilObjUser) {
                 $this->logger->warning('Found invalid tutor: ' . $tutor_id);
                 continue;
             }
             $udf_data = $tutor->getUserDefinedData();
             $tutor_oid = '';
-            if (isset($udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_TUTOR_ID]])) {
-                $tutor_oid = $udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_TUTOR_ID]];
+            if (isset($udf_data['f_' . $udffields[ilVedaUDFClaimingPlugin::FIELD_TUTOR_ID]])) {
+                $tutor_oid = $udf_data['f_' . $udffields[ilVedaUDFClaimingPlugin::FIELD_TUTOR_ID]];
             }
             $companion_oid = '';
-            if (isset($udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_COMPANION_ID]])) {
-                $companion_oid = $udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_COMPANION_ID]];
+            if (isset($udf_data['f_' . $udffields[ilVedaUDFClaimingPlugin::FIELD_COMPANION_ID]])) {
+                $companion_oid = $udf_data['f_' . $udffields[ilVedaUDFClaimingPlugin::FIELD_COMPANION_ID]];
             }
             $supervisor_oid = '';
-            if (isset($udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_SUPERVISOR_ID]])) {
-                $supervisor_oid = $udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_SUPERVISOR_ID]];
+            if (isset($udf_data['f_' . $udffields[ilVedaUDFClaimingPlugin::FIELD_SUPERVISOR_ID]])) {
+                $supervisor_oid = $udf_data['f_' . $udffields[ilVedaUDFClaimingPlugin::FIELD_SUPERVISOR_ID]];
             }
             if (!$tutor_oid && !$companion_oid && !$supervisor_oid) {
                 $this->logger->debug('Ignoring tutor without tutor_oid: ' . $tutor->getLogin());
@@ -377,17 +378,14 @@ class ilVedaMemberImportAdapter
     }
 
     /**
-     * @param int[] $assigned
+     * @throws ilDateTimeException
      */
     protected function removeInvalidRegularMembers(
-        \ilObjCourse $course,
-        \ilCourseParticipants $part,
-        ilVedaEducationTrainMemberCollectionInterface $members,
-        ilVedaCourse $status,
-        array $assigned
+        ilObjCourse $course,
+        ilVedaEducationTrainMemberCollectionInterface $members
     ) : void {
         foreach ($this->rbac_review->assignedUsers($course->getDefaultMemberRole()) as $participant) {
-            $oid = \ilObjUser::_lookupImportId($participant);
+            $oid = ilObjUser::_lookupImportId($participant);
             if (!$oid) {
                 continue;
             }
@@ -422,17 +420,15 @@ class ilVedaMemberImportAdapter
     }
 
     /**
-     * @param int[] $assigned
+     * @throws ilDateTimeException
      */
     protected function removeInvalidPermanentSwitchMembers(
-        \ilObjCourse $course,
-        \ilCourseParticipants $part,
+        ilObjCourse $course,
         ilVedaEducationTrainMemberCollectionInterface $members,
-        ilVedaCourse $status,
-        array $assigned
+        ilVedaCourse $status
     ) : void {
         foreach ($this->rbac_review->assignedUsers($status->getPermanentSwitchRole()) as $participant) {
-            $oid = \ilObjUser::_lookupImportId($participant);
+            $oid = ilObjUser::_lookupImportId($participant);
             if (!$oid) {
                 $this->logger->debug('Ignoring non imported user.');
                 continue;
@@ -467,18 +463,13 @@ class ilVedaMemberImportAdapter
         }
     }
 
-    /**
-     * @param int[] $assigned
-     */
     protected function removeInvalidTemporarySwitchMembers(
-        \ilObjCourse $course,
-        \ilCourseParticipants $part,
+        ilObjCourse $course,
         ilVedaEducationTrainMemberCollectionInterface $members,
-        ilVedaCourse $status,
-        array $assigned
+        ilVedaCourse $status
     ) {
         foreach ($this->rbac_review->assignedUsers($status->getTemporarySwitchRole()) as $participant) {
-            $oid = \ilObjUser::_lookupImportId($participant);
+            $oid = ilObjUser::_lookupImportId($participant);
             if (!$oid) {
                 continue;
             }
@@ -508,14 +499,10 @@ class ilVedaMemberImportAdapter
         }
     }
 
-    /**
-     * @param int[] $assigned
-     */
     protected function addRegularMembers(
-        \ilObjCourse $course,
-        \ilCourseParticipants $part,
+        ilObjCourse $course,
+        ilCourseParticipants $part,
         ilVedaEducationTrainMemberCollectionInterface $members,
-        ilVedaCourse $status,
         array $assigned
     ) : void {
         foreach ($members as $member) {
@@ -548,11 +535,12 @@ class ilVedaMemberImportAdapter
     }
 
     /**
+     * @throws ilDateTimeException
      * @param int[] $assigned
      */
     protected function addPermanentSwitchMembers(
-        \ilObjCourse $course,
-        \ilCourseParticipants $part,
+        ilObjCourse $course,
+        ilCourseParticipants $part,
         ilVedaEducationTrainMemberCollectionInterface $members,
         ilVedaCourse $status,
         array $assigned
@@ -588,10 +576,11 @@ class ilVedaMemberImportAdapter
 
     /**
      * @param int[] $assigned
+     * @throws ilDateTimeException
      */
     protected function addTemporarySwitchMembers(
-        \ilObjCourse $course,
-        \ilCourseParticipants $part,
+        ilObjCourse $course,
+        ilCourseParticipants $part,
         ilVedaEducationTrainMemberCollectionInterface $members,
         ilVedaCourse $status,
         array $assigned
@@ -627,13 +616,13 @@ class ilVedaMemberImportAdapter
         int $role,
         int $user,
         array &$assigned,
-        \ilCourseParticipants $part,
-        \ilObjCourse $course
+        ilCourseParticipants $part,
+        ilObjCourse $course
     ) : void {
         $this->rbac_admin->assignUser($role, $user);
         if (!in_array($user, $assigned)) {
             $this->logger->debug('Adding new user sending mail notification...');
-            $part->sendNotification($part->NOTIFY_ACCEPT_USER, $user);
+            $part->sendNotification(ilCourseMembershipMailNotification::TYPE_ADMISSION_MEMBER, $user);
             $favourites = new ilFavouritesManager();
             $favourites->add(
                 $user,
@@ -648,19 +637,22 @@ class ilVedaMemberImportAdapter
         }
     }
 
+    /**
+     * @throws ilDateTimeException
+     */
     protected function isValidDate(?DateTime $start, ?DateTime $end) : bool
     {
         if ($start == null && $end == null) {
             return true;
         }
 
-        $now = new \ilDate(time(), IL_CAL_UNIX);
+        $now = new ilDate(time(), IL_CAL_UNIX);
         if ($start == null) {
-            $ilend = new \ilDateTime($end->format('Y-m-d'), IL_CAL_DATE);
+            $ilend = new ilDateTime($end->format('Y-m-d'), IL_CAL_DATE);
             // check ending time > now
             if (
-                \ilDateTime::_after($ilend, $now, IL_CAL_DAY) ||
-                \ilDateTime::_equals($ilend, $now, IL_CAL_DAY)
+                ilDateTime::_after($ilend, $now, IL_CAL_DAY) ||
+                ilDateTime::_equals($ilend, $now, IL_CAL_DAY)
             ) {
                 $this->logger->debug('Ending date is valid');
                 return true;
@@ -669,12 +661,12 @@ class ilVedaMemberImportAdapter
             return false;
         }
 
+        $ilstart = new ilDate($start->format('Y-m-d'), IL_CAL_DATE);
         if ($end == null) {
-            $ilstart = new \ilDate($start->format('Y-m-d'), IL_CAL_DATE);
             // check starting time <= now
             if (
-                \ilDateTime::_before($ilstart, $now, IL_CAL_DAY) ||
-                \ilDateTime::_equals($ilstart, $now, IL_CAL_DAY)
+                ilDateTime::_before($ilstart, $now, IL_CAL_DAY) ||
+                ilDateTime::_equals($ilstart, $now, IL_CAL_DAY)
             ) {
                 $this->logger->debug('Starting date is valid');
                 return true;
@@ -683,12 +675,11 @@ class ilVedaMemberImportAdapter
             return false;
         }
 
-        $ilstart = new \ilDate($start->format('Y-m-d'), IL_CAL_DATE);
-        $ilend = new \ilDate($end->format('Y-m-d'), IL_CAL_DATE);
+        $ilend = new ilDate($end->format('Y-m-d'), IL_CAL_DATE);
 
         if (
-            \ilDateTime::_within($now, $ilstart, $ilend, IL_CAL_DAY) ||
-            \ilDateTime::_equals($now, $ilend, \ilDateTime::DAY)
+            ilDateTime::_within($now, $ilstart, $ilend, IL_CAL_DAY) ||
+            ilDateTime::_equals($now, $ilend, ilDateTime::DAY)
         ) {
             return true;
         }

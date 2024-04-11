@@ -2,6 +2,7 @@
 
 use GuzzleHttp\Client as GClient;
 use OpenAPI\Client\Api\AusbildungszgeApi;
+use OpenAPI\Client\ApiException;
 use OpenAPI\Client\Configuration;
 use OpenAPI\Client\Model\FehlermeldungApiDto;
 
@@ -31,23 +32,15 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
         $this->mail_segment_builder_factory = $mail_segment_builder_factory;
     }
 
-    protected function handleApiExceptions(
-        string $api_call_name,
-        Exception $e
-    ) : void {
-        $this->veda_logger->warning(
-            ilVedaConnectorSettings::HEADER_TOKEN
-            . ': '
-            . $this->api_training_course_train->getConfig()->getAccessToken()
+    protected function handleException(string $api_call_name, Exception $e): void
+    {
+        $exception_handler = new ilVedaApiExceptionHandler(
+            $api_call_name,
+            $this->api_training_course_train->getConfig()->getAccessToken(),
+            $e
         );
-        $this->veda_logger->warning($api_call_name . ' failed with message: ' . $e->getMessage());
-        $this->veda_logger->dump($e->getResponseHeaders(), ilLogLevel::WARNING);
-        $this->veda_logger->dump($e->getTraceAsString(), ilLogLevel::WARNING);
-        $this->veda_logger->warning($e->getResponseBody());
-        $this->mail_segment_builder_factory->buildSegment()
-            ->withType(ilVedaMailSegmentType::ERROR)
-            ->withMessage('Verbindungsfehler beim Aufuf von: ' . $api_call_name)
-            ->store();
+        $exception_handler->writeToLog($this->veda_logger);
+        $exception_handler->storeAsMailSegment($this->mail_segment_builder_factory);
     }
 
     public function requestTutors(?string $oid) : ?ilVedaEducationTrainTutorCollectionInterface
@@ -58,7 +51,7 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
             $this->veda_logger->dump($result);
             return new ilVedaEducationTrainTutorCollection($result);
         } catch (Exception $e) {
-            $this->handleApiExceptions('getBeteiligteDozentenVonAusbildungszugUsingGET', $e);
+            $this->handleException('getBeteiligteDozentenVonAusbildungszugUsingGET', $e);
             return null;
         }
     }
@@ -71,7 +64,7 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
             $this->veda_logger->dump($result);
             return new ilVedaEducationTrainCompanionCollection($result);
         } catch (Exception $e) {
-            $this->handleApiExceptions('getLernbegleiterVonAusbildungszugUsingGET', $e);
+            $this->handleException('getLernbegleiterVonAusbildungszugUsingGET', $e);
             return null;
         }
     }
@@ -84,7 +77,7 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
             $this->veda_logger->dump($result);
             return new ilVedaEducationTrainSupervisorCollection($result);
         } catch (Exception $e) {
-            $this->handleApiExceptions('getAufsichtspersonenVonAusbildungszugUsingGET', $e);
+            $this->handleException('getAufsichtspersonenVonAusbildungszugUsingGET', $e);
             return null;
         }
     }
@@ -97,7 +90,7 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
             $this->veda_logger->dump($result);
             return new ilVedaEducationTrainMemberCollection($result);
         } catch (Exception $e) {
-            $this->handleApiExceptions('getTeilnehmerVonAusbildungszugUsingGET', $e);
+            $this->handleException('getTeilnehmerVonAusbildungszugUsingGET', $e);
             return null;
         }
     }
@@ -113,7 +106,7 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
             );
             return true;
         } catch (Exception $e) {
-            $this->handleApiExceptions('meldeAusbildungszugAnlageFehlgeschlagenUsingPOST', $e);
+            $this->handleException('meldeAusbildungszugAnlageFehlgeschlagenUsingPOST', $e);
             return false;
         }
     }
@@ -124,7 +117,7 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
             $this->api_training_course_train->meldeAusbildungszugAlsExternExistierendUsingPOST($oid);
             return true;
         } catch (Exception $e) {
-            $this->handleApiExceptions('meldeAusbildungszugAlsExternExistierendUsingPOST', $e);
+            $this->handleException('meldeAusbildungszugAlsExternExistierendUsingPOST', $e);
             return false;
         }
     }
@@ -135,7 +128,7 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
             $this->api_training_course_train->meldeExterneAnlageAngestossenUsingPOST($oid);
             return true;
         } catch (Exception $e) {
-            $this->handleApiExceptions('meldeExterneAnlageAngestossenUsingPOST', $e);
+            $this->handleException('meldeExterneAnlageAngestossenUsingPOST', $e);
             return false;
         }
     }

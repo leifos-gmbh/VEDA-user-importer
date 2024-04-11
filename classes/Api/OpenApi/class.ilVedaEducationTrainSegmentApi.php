@@ -1,6 +1,7 @@
 <?php
 
 use OpenAPI\Client\Api\AusbildungszugabschnitteApi;
+use OpenAPI\Client\ApiException;
 use OpenAPI\Client\Configuration;
 use GuzzleHttp\Client as GClient;
 use OpenAPI\Client\Model\MeldeLernerfolgApiDto;
@@ -28,23 +29,15 @@ class ilVedaEducationTrainSegmentApi implements ilVedaEducationTrainSegmentApiIn
         $this->mail_segment_builder_factory = $mail_segment_builder_factory;
     }
 
-    protected function handleApiExceptions(
-        string $api_call_name,
-        Exception $e
-    ) : void {
-        $this->veda_logger->warning(
-            ilVedaConnectorSettings::HEADER_TOKEN
-            . ': '
-            . $this->api_training_course_train_segment->getConfig()->getAccessToken()
+    protected function handleException(string $api_call_name, Exception $e): void
+    {
+        $exception_handler = new ilVedaApiExceptionHandler(
+            $api_call_name,
+            $this->api_training_course_train_segment->getConfig()->getAccessToken(),
+            $e
         );
-        $this->veda_logger->warning($api_call_name . ' failed with message: ' . $e->getMessage());
-        $this->veda_logger->dump($e->getResponseHeaders(), ilLogLevel::WARNING);
-        $this->veda_logger->dump($e->getTraceAsString(), ilLogLevel::WARNING);
-        $this->veda_logger->warning($e->getResponseBody());
-        $this->mail_segment_builder_factory->buildSegment()
-            ->withType(ilVedaMailSegmentType::ERROR)
-            ->withMessage('Verbindungsfehler beim Aufuf von: ' . $api_call_name)
-            ->store();
+        $exception_handler->writeToLog($this->veda_logger);
+        $exception_handler->storeAsMailSegment($this->mail_segment_builder_factory);
     }
 
     public function sendExerciseSubmissionConfirmed(
@@ -68,7 +61,7 @@ class ilVedaEducationTrainSegmentApi implements ilVedaEducationTrainSegmentApiIn
             );
             return true;
         } catch (Exception $e) {
-            $this->handleApiExceptions('meldePraktikumsberichtKorrigiertUsingPUT', $e);
+            $this->handleException('meldePraktikumsberichtKorrigiertUsingPUT', $e);
             return false;
         }
     }
@@ -94,7 +87,7 @@ class ilVedaEducationTrainSegmentApi implements ilVedaEducationTrainSegmentApiIn
             );
             return true;
         } catch (Exception $e) {
-            $this->handleApiExceptions('meldePraktikumsberichtEingegangenUsingPUT', $e);
+            $this->handleException('meldePraktikumsberichtEingegangenUsingPUT', $e);
             return false;
         }
     }
@@ -116,7 +109,7 @@ class ilVedaEducationTrainSegmentApi implements ilVedaEducationTrainSegmentApiIn
             );
             return true;
         } catch (Exception $e) {
-            $this->handleApiExceptions('MeldeLernerfolgApiDto', $e);
+            $this->handleException('MeldeLernerfolgApiDto', $e);
             return false;
         }
     }

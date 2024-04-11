@@ -1,13 +1,14 @@
 <?php
 
 /**
+ * @ilCtrl_isCalledBy ilVedaConnectorCronJob: ilObjComponentSettingsGUI
  * VEDA user importer plugin cron job class
  * @author Stefan Meyer <smeyer.ilias@gmx.de>
  */
 class ilVedaConnectorCronJob extends ilCronJob
 {
-    private ?ilVedaConnectorSettings $settings = null; // [ilCronHookPlugin]
-    private ?ilLogger $logger = null;
+    private ?ilVedaConnectorSettings $settings;
+    private ?ilLogger $logger;
 
     /**
      * ilVedaConnectorCronJob constructor.

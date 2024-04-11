@@ -19,6 +19,9 @@ class ilVedaCourseSupervisorCollection implements ilVedaCourseSupervisorCollecti
         $this->index = 0;
     }
 
+    /**
+     * @throws ilDateTimeException
+     */
     public function containsSupervisorWithOID(string $oid) : bool
     {
         foreach ($this->crs_supervisors as $supervisor) {
@@ -35,7 +38,7 @@ class ilVedaCourseSupervisorCollection implements ilVedaCourseSupervisorCollecti
 
     public function logContent(ilLogger $logger)
     {
-        $logger->dump($this->crs_supervisors, \ilLogLevel::DEBUG);
+        $logger->dump($this->crs_supervisors, ilLogLevel::DEBUG);
     }
 
     public function current() : Lernbegleiterkurszuordnung

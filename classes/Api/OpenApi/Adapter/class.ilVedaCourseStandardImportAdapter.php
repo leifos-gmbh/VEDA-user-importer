@@ -59,7 +59,10 @@ class ilVedaCourseStandardImportAdapter
 
     /**
      * Import "trains"
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
      * @throws ilVedaCourseImporterException
+     * @throws ilSaxParserException
      */
     public function import() : void
     {
@@ -77,6 +80,7 @@ class ilVedaCourseStandardImportAdapter
      * @throws ilDatabaseException
      * @throws ilObjectNotFoundException
      * @throws ilVedaCourseImporterException
+     * @throws ilSaxParserException
      */
     protected function handleCourseUpdate(Elearningkurs $course) : void
     {
@@ -100,7 +104,7 @@ class ilVedaCourseStandardImportAdapter
                 ->store();
             throw $e;
         }
-        $obj_id = \ilObject::_getIdForImportId($course->getOid());
+        $obj_id = ilObject::_getIdForImportId($course->getOid());
         if ($obj_id) {
             $this->logger->info('Ignoring oid ' . $course->getOid() . ' => ELearningkurs already imported.');
             return;
@@ -233,6 +237,10 @@ class ilVedaCourseStandardImportAdapter
         }
     }
 
+    /**
+     * @throws ilObjectNotFoundException
+     * @throws ilDatabaseException
+     */
     public function handleAfterCloningDependenciesEvent(int $source_id, int $target_id, int $copy_id) : void
     {
         $this->logger->debug(
@@ -300,6 +308,11 @@ class ilVedaCourseStandardImportAdapter
         }
     }
 
+    /**
+     * @throws ilObjectNotFoundException
+     * @throws ilDatabaseException
+     * @throws ilDateTimeException
+     */
     public function handleAfterCloningEvent(int $a_source_id, int $a_target_id, int $a_copy_id) : void
     {
         $this->logger->debug(
@@ -364,6 +377,9 @@ class ilVedaCourseStandardImportAdapter
         return $target;
     }
 
+    /**
+     * @throws ilDateTimeException
+     */
     protected function updateCourseEventPeriod(
         ilObjCourse $target,
         Elearningkurs $elearning_course

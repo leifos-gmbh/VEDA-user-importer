@@ -29,23 +29,15 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
         $this->plattform_id = $plattform_id;
     }
 
-    protected function handleApiExceptions(
-        string $api_call_name,
-        Exception $e
-    ) : void {
-        $this->veda_logger->warning(
-            ilVedaConnectorSettings::HEADER_TOKEN
-            . ': '
-            . $this->api_elearning->getConfig()->getAccessToken()
+    protected function handleException(string $api_call_name, Exception $e): void
+    {
+        $exception_handler = new ilVedaApiExceptionHandler(
+            $api_call_name,
+            $this->api_elearning->getConfig()->getAccessToken(),
+            $e
         );
-        $this->veda_logger->warning($api_call_name . ' failed with message: ' . $e->getMessage());
-        $this->veda_logger->dump($e->getResponseHeaders(), ilLogLevel::WARNING);
-        $this->veda_logger->dump($e->getTraceAsString(), ilLogLevel::WARNING);
-        $this->veda_logger->warning($e->getResponseBody());
-        $this->mail_segment_builder_factory->buildSegment()
-            ->withType(ilVedaMailSegmentType::ERROR)
-            ->withMessage('Verbindungsfehler beim Aufuf von: ' . $api_call_name)
-            ->store();
+        $exception_handler->writeToLog($this->veda_logger);
+        $exception_handler->storeAsMailSegment($this->mail_segment_builder_factory);
     }
 
     public function requestCourseMembers(string $crs_oid) : ?ilVedaCourseMemberCollectionInterface
@@ -59,7 +51,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             $this->veda_logger->dump($result);
             return new ilVedaCourseMemberCollection($result);
         } catch (Exception $e) {
-            $this->handleApiExceptions('getVonTeilnehmernDieAktivenKurszuordnungenUsingGET', $e);
+            $this->handleException('getVonTeilnehmernDieAktivenKurszuordnungenUsingGET', $e);
             return null;
         }
     }
@@ -75,7 +67,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             $this->veda_logger->dump($result);
             return new ilVedaCourseSupervisorCollection($result);
         } catch (Exception $e) {
-            $this->handleApiExceptions('getVonLernbegleiternDieAktivenKurszuordnungenUsingGET', $e);
+            $this->handleException('getVonLernbegleiternDieAktivenKurszuordnungenUsingGET', $e);
             return null;
         }
     }
@@ -91,7 +83,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             $this->veda_logger->dump($result);
             return new ilVedaCourseTutorCollection($result);
         } catch (Exception $e) {
-            $this->handleApiExceptions('getVonDozentenDieAktivenKurszuordnungenUsingGET', $e);
+            $this->handleException('getVonDozentenDieAktivenKurszuordnungenUsingGET', $e);
             return null;
         }
     }
@@ -106,7 +98,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             $this->veda_logger->dump($result);
             return new ilVedaELearningCourseCollection($result);
         } catch (Exception $e) {
-            $this->handleApiExceptions('getAktiveELearningKurseUsingGET', $e);
+            $this->handleException('getAktiveELearningKurseUsingGET', $e);
             return null;
         }
     }
@@ -122,7 +114,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             $this->veda_logger->dump($result);
             return new ilVedaEducationTrainCourseCollection($result);
         } catch (Exception $e) {
-            $this->handleApiExceptions('getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET', $e);
+            $this->handleException('getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET', $e);
             return null;
         }
     }
@@ -135,7 +127,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             $this->veda_logger->dump($result);
             return new ilVedaELearningParticipantsCollection($result);
         } catch (Exception $e) {
-            $this->handleApiExceptions('getTeilnehmerELearningPlattformUsingGET', $e);
+            $this->handleException('getTeilnehmerELearningPlattformUsingGET', $e);
             return null;
         }
     }
@@ -149,7 +141,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             );
             return true;
         } catch (Exception $e) {
-            $this->handleApiExceptions('meldeElearningkursExterneAnlageAngestossenUsingPOST', $e);
+            $this->handleException('meldeElearningkursExterneAnlageAngestossenUsingPOST', $e);
             return false;
         }
     }
@@ -166,7 +158,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             );
             return true;
         } catch (Exception $e) {
-            $this->handleApiExceptions('meldeElearningkursExterneAnlageFehlgeschlagenUsingPOST', $e);
+            $this->handleException('meldeElearningkursExterneAnlageFehlgeschlagenUsingPOST', $e);
             return false;
         }
     }
@@ -180,7 +172,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             );
             return true;
         } catch (Exception $e) {
-            $this->handleApiExceptions('meldeElearningkursExternExistierendUsingPOST', $e);
+            $this->handleException('meldeElearningkursExternExistierendUsingPOST', $e);
             return false;
         }
     }
@@ -195,7 +187,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             );
             return true;
         } catch (Exception $e) {
-            $this->handleApiExceptions('meldeBearbeitungsstartFuerTeilnehmerAufKursUsingPOST', $e);
+            $this->handleException('meldeBearbeitungsstartFuerTeilnehmerAufKursUsingPOST', $e);
             return false;
         }
     }
@@ -209,7 +201,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             );
             return true;
         } catch (Exception $e) {
-            $this->handleApiExceptions('meldeElearningaccountAlsExternExistierendUsingPOST', $e);
+            $this->handleException('meldeElearningaccountAlsExternExistierendUsingPOST', $e);
             return false;
         }
     }
@@ -227,7 +219,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             $this->veda_logger->info('Send message: ' . $error_message->getFehlermeldung());
             return true;
         } catch (Exception $e) {
-            $this->handleApiExceptions('meldeElearningaccountAnlageAlsFehlgeschlagen', $e);
+            $this->handleException('meldeElearningaccountAnlageAlsFehlgeschlagen', $e);
             return false;
         }
     }
@@ -242,7 +234,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             );
             return true;
         } catch (Exception $e) {
-            $this->handleApiExceptions('meldeKursabschlussMitErfolgUsingPOST', $e);
+            $this->handleException('meldeKursabschlussMitErfolgUsingPOST', $e);
             return false;
         }
     }
@@ -257,7 +249,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             );
             return true;
         } catch (Exception $e) {
-            $this->handleApiExceptions('meldeKursabschlussOhneErfolgUsingPOST', $e);
+            $this->handleException('meldeKursabschlussOhneErfolgUsingPOST', $e);
             return false;
         }
     }
@@ -272,7 +264,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
             $this->veda_logger->info('Password notification sent.');
             return true;
         } catch (Exception $e) {
-            $this->handleApiExceptions('meldeErstmaligErfolgreichEingeloggt', $e);
+            $this->handleException('meldeErstmaligErfolgreichEingeloggt', $e);
             return false;
         }
     }

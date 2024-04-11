@@ -102,7 +102,7 @@ class ilVedaMDClaimingPluginDBManager implements ilVedaMDClaimingPluginDBManager
 
     public function deleteTrainingCourseId(int $ref_id) : void
     {
-        $obj_id = \ilObject::_lookupObjId($ref_id);
+        $obj_id = ilObject::_lookupObjId($ref_id);
         $fields = $this->claiming_plugin->getFields();
         $query = 'delete from adv_md_values_ltext ' .
             'where field_id = ' . $this->il_db->quote(
@@ -116,7 +116,7 @@ class ilVedaMDClaimingPluginDBManager implements ilVedaMDClaimingPluginDBManager
 
     public function deleteTrainingCourseTrainId(int $ref_id) : void
     {
-        $obj_id = \ilObject::_lookupObjId($ref_id);
+        $obj_id = ilObject::_lookupObjId($ref_id);
         $fields = $this->claiming_plugin->getFields();
         $query = 'delete from adv_md_values_ltext ' .
             'where field_id = ' . $this->il_db->quote(
@@ -129,7 +129,7 @@ class ilVedaMDClaimingPluginDBManager implements ilVedaMDClaimingPluginDBManager
 
     public function writeTrainingCourseTrainId(int $target_id, string $tc_oid) : void
     {
-        $obj_id = \ilObject::_lookupObjId($target_id);
+        $obj_id = ilObject::_lookupObjId($target_id);
         $fields = $this->claiming_plugin->getFields();
 
         $query = 'insert into adv_md_values_ltext (obj_id, field_id, value, disabled) ' .
@@ -217,13 +217,12 @@ class ilVedaMDClaimingPluginDBManager implements ilVedaMDClaimingPluginDBManager
         $this->logger->alert($query);
         $res = $this->il_db->query($query);
 
-        $ref_id = 0;
         while ($row = $res->fetchRow(ilDBConstants::FETCHMODE_OBJECT)) {
             // find ref_id
-            $refs = \ilObject::_getAllReferences($row->obj_id);
+            $refs = ilObject::_getAllReferences($row->obj_id);
             $ref = end($refs);
-            $object = \ilObjectFactory::getInstanceByRefId($ref, false);
-            if (!$object instanceof \ilObjCourse) {
+            $object = ilObjectFactory::getInstanceByRefId($ref, false);
+            if (!$object instanceof ilObjCourse) {
                 $this->logger->error('Found invalid "Ausbildungszug" with obj_id: ' . $row->obj_id);
                 continue;
             }
@@ -235,6 +234,7 @@ class ilVedaMDClaimingPluginDBManager implements ilVedaMDClaimingPluginDBManager
     /**
      * @return int[]
      * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
      */
     public function findTrainingCourseTemplates() : array
     {

@@ -151,7 +151,7 @@ class ilVedaConnectorSettings
 
     public function getRestUser() : ?string
     {
-        return $this->storage->get(self::SETTING_REST_USER, null);
+        return $this->storage->get(self::SETTING_REST_USER);
     }
 
     public function setRestUrl(?string $a_rest_url) : void
@@ -161,7 +161,7 @@ class ilVedaConnectorSettings
 
     public function getRestUrl() : ?string
     {
-        return $this->storage->get(self::SETTING_REST_URL, null);
+        return $this->storage->get(self::SETTING_REST_URL);
     }
 
     public function setRestPassword(?string $a_pass) : void
@@ -171,7 +171,7 @@ class ilVedaConnectorSettings
 
     public function getRestPassword() : ?string
     {
-        return $this->storage->get(self::SETTING_REST_PASSWORD, null);
+        return $this->storage->get(self::SETTING_REST_PASSWORD);
     }
 
     public function setAuthenticationToken(?string $token) : void
@@ -181,7 +181,7 @@ class ilVedaConnectorSettings
 
     public function getAuthenticationToken() : ?string
     {
-        return $this->storage->get(self::SETTING_REST_TOKEN, null);
+        return $this->storage->get(self::SETTING_REST_TOKEN);
     }
 
     public function setPlatformId(?string $id) : void
@@ -189,9 +189,9 @@ class ilVedaConnectorSettings
         $this->storage->set(self::SETTING_PLATTFORM_ID, $id);
     }
 
-    public function getPlatformId() : ?string
+    public function getPlatformId() : string
     {
-        return $this->storage->get(self::SETTING_PLATTFORM_ID, null);
+        return $this->storage->get(self::SETTING_PLATTFORM_ID, '');
     }
 
     public function setActive(bool $active) : void

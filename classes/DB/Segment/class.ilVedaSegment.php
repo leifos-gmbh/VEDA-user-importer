@@ -24,17 +24,11 @@ class ilVedaSegment implements ilVedaSegmentInterface
         $this->oid = $oid;
     }
 
-    /**
-     * @throws ilDatabaseException
-     */
     public function isPracticalTraining() : bool
     {
         return $this->type === ilVedaSegmentType::PRAKTIKUM;
     }
 
-    /**
-     * @throws ilDatabaseException
-     */
     public function isSelfLearning() : bool
     {
         return $this->type === ilVedaSegmentType::SELF_LEARNING;

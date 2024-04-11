@@ -200,7 +200,6 @@ class ilVedaOpenApi implements ilVedaApiInterface
         if ($status === ilLPStatus::LP_STATUS_COMPLETED_NUM) {
             $this->veda_logger->debug('Send usr: ' . $usr_oid . ' passed crs: ' . $crs_oid);
             $elearning_api->sendCoursePassed($crs_oid, $usr_oid);
-            return;
         }
     }
 
@@ -347,6 +346,13 @@ class ilVedaOpenApi implements ilVedaApiInterface
         }
     }
 
+    /**
+     * @throws ilDatabaseException
+     * @throws ilDateTimeException
+     * @throws ilObjectNotFoundException
+     * @throws ilSaxParserException
+     * @throws ilVedaUserImporterException
+     */
     public function importILIASUsersStandard() : void
     {
         $participants = $this->veda_connector->getElearningPlattformApi()->requestParticipants();
@@ -356,6 +362,13 @@ class ilVedaOpenApi implements ilVedaApiInterface
         $this->user_import_adapter->import($participants, ilVedaUserImportAdapter::IMPORT_MODE_STANDARD);
     }
 
+    /**
+     * @throws ilDatabaseException
+     * @throws ilDateTimeException
+     * @throws ilObjectNotFoundException
+     * @throws ilSaxParserException
+     * @throws ilVedaUserImporterException
+     */
     public function importILIASUsersSIFA() : void
     {
         $participants = $this->veda_connector->getElearningPlattformApi()->requestParticipants();
@@ -365,6 +378,12 @@ class ilVedaOpenApi implements ilVedaApiInterface
         $this->user_import_adapter->import($participants, ilVedaUserImportAdapter::IMPORT_MODE_SIFA);
     }
 
+    /**
+     * @throws ilObjectNotFoundException
+     * @throws ilDatabaseException
+     * @throws ilVedaCourseImporterException
+     * @throws ilSaxParserException
+     */
     public function importStandardCourses() : void
     {
         $this->standard_course_import_adapter->import();

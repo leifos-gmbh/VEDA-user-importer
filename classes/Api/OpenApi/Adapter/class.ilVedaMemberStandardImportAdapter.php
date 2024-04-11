@@ -25,8 +25,7 @@ class ilVedaMemberStandardImportAdapter
      * @var int[]
      */
     protected array $new_assignments;
-    protected ilUDFClaimingPlugin $udf_claiming_plugin;
-    protected ilVedaConnector $veda_connector;
+    protected ilVedaUDFClaimingPlugin $udf_claiming_plugin;
 
     public function __construct(
         ilLogger $veda_logger,
@@ -34,7 +33,7 @@ class ilVedaMemberStandardImportAdapter
         ilVedaConnector $veda_connector,
         ilVedaCourseRepositoryInterface $crs_repo,
         ilVedaRepositoryContentBuilderFactoryInterface $repo_content_builder_factory,
-        ilUDFClaimingPlugin $udf_claiming_plugin
+        ilVedaUDFClaimingPlugin $udf_claiming_plugin
     ) {
         $this->logger = $veda_logger;
         $this->rbac_admin = $rbac_admin;
@@ -92,7 +91,7 @@ class ilVedaMemberStandardImportAdapter
     ) : void {
         $this->logger->debug('Removing deprecated members');
         foreach ($part->getMembers() as $usr_id) {
-            $usr_oid = \ilObject::_lookupImportId($usr_id);
+            $usr_oid = ilObject::_lookupImportId($usr_id);
             if (!$usr_oid) {
                 $this->logger->debug('Keep member assignment for non synchonised account.');
             }
@@ -111,6 +110,9 @@ class ilVedaMemberStandardImportAdapter
         }
     }
 
+    /**
+     * @throws ilDateTimeException
+     */
     protected function addNewMembers(
         ilCourseParticipants $participants,
         ilObjCourse $course,
@@ -142,9 +144,13 @@ class ilVedaMemberStandardImportAdapter
         }
     }
 
+    /**
+     * @throws ilObjectNotFoundException
+     * @throws ilDatabaseException
+     */
     protected function initCourse(int $obj_id) : ilObjCourse
     {
-        $refs = \ilObject::_getAllReferences($obj_id);
+        $refs = ilObject::_getAllReferences($obj_id);
         $ref_id = end($refs);
         $course = ilObjectFactory::getInstanceByRefId($ref_id, false);
         if (!$course instanceof ilObjCourse) {
@@ -153,14 +159,14 @@ class ilVedaMemberStandardImportAdapter
                 ->withMessage($message)
                 ->withType(ilVedaMailSegmentType::ERROR)
                 ->store();
-            throw new \InvalidArgumentException($message);
+            throw new InvalidArgumentException($message);
         }
         return $course;
     }
 
     protected function initParticipants(int $obj_id) : ilCourseParticipants
     {
-        $refs = \ilObject::_getAllReferences($obj_id);
+        $refs = ilObject::_getAllReferences($obj_id);
         $ref_id = end($refs);
         $participants = ilParticipants::getInstance($ref_id);
         if (!$participants instanceof ilCourseParticipants) {
@@ -169,17 +175,17 @@ class ilVedaMemberStandardImportAdapter
                 ->withMessage($message)
                 ->withType(ilVedaMailSegmentType::ERROR)
                 ->store();
-            throw new \InvalidArgumentException($message);
+            throw new InvalidArgumentException($message);
         }
         return $participants;
     }
 
     protected function ensureCourseExists(int $obj_id) : bool
     {
-        $refs = \ilObject::_getAllReferences($obj_id);
+        $refs = ilObject::_getAllReferences($obj_id);
         $ref_id = end($refs);
         try {
-            $course = \ilObjectFactory::getInstanceByRefId($ref_id, false);
+            $course = ilObjectFactory::getInstanceByRefId($ref_id, false);
             if ($course instanceof ilObjCourse) {
                 return true;
             }
@@ -192,13 +198,13 @@ class ilVedaMemberStandardImportAdapter
     protected function assignUserToRole(
         int $role,
         int $user,
-        \ilCourseParticipants $part,
-        \ilObjCourse $course
+        ilCourseParticipants $part,
+        ilObjCourse $course
     ) : void {
         $this->rbac_admin->assignUser($role, $user);
         if (!in_array($user, $this->new_assignments)) {
             $this->logger->debug('Adding new user sending mail notification...');
-            $part->sendNotification($part->NOTIFY_ACCEPT_USER, $user);
+            $part->sendNotification(ilCourseMembershipMailNotification::TYPE_ADMISSION_MEMBER, $user);
             $favourites = new ilFavouritesManager();
             $favourites->add(
                 $user,
@@ -217,6 +223,11 @@ class ilVedaMemberStandardImportAdapter
         return ilObject::_lookupObjIdByImportId($oid);
     }
 
+    /**
+     * @throws ilObjectNotFoundException
+     * @throws ilDatabaseException
+     * @throws ilDateTimeException
+     */
     protected function handleRemoveDeprecatedTutorsAndSupervisors(
         ilObjCourse $course,
         ilCourseParticipants $participants,
@@ -225,33 +236,26 @@ class ilVedaMemberStandardImportAdapter
     ) : void
     {
         $udffields = $this->udf_claiming_plugin->getFields();
-        if (
-            is_null($remote_tutors) ||
-            is_null($remote_supervisors)
-        ) {
-            $this->logger->warning('Reading assigned tutors failed. Aborting tutor update');
-            return;
-        }
         $valid_tutor_import_ids_with_udf_field_entry = [];
         $this->logger->info("Removing tutors with udf field entries that are not within a valid date range.");
         foreach ($participants->getTutors() as $tutor_id) {
-            $tutor = \ilObjectFactory::getInstanceByObjId($tutor_id, false);
-            if (!$tutor instanceof \ilObjUser) {
+            $tutor = ilObjectFactory::getInstanceByObjId($tutor_id, false);
+            if (!$tutor instanceof ilObjUser) {
                 $this->logger->warning('Found invalid tutor: ' . $tutor_id);
                 continue;
             }
             $udf_data = $tutor->getUserDefinedData();
             $tutor_oid = '';
-            if (isset($udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_TUTOR_ID]])) {
-                $tutor_oid = $udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_TUTOR_ID]];
+            if (isset($udf_data['f_' . $udffields[ilVedaUDFClaimingPlugin::FIELD_TUTOR_ID]])) {
+                $tutor_oid = $udf_data['f_' . $udffields[ilVedaUDFClaimingPlugin::FIELD_TUTOR_ID]];
             }
             $companion_oid = '';
-            if (isset($udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_COMPANION_ID]])) {
-                $companion_oid = $udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_COMPANION_ID]];
+            if (isset($udf_data['f_' . $udffields[ilVedaUDFClaimingPlugin::FIELD_COMPANION_ID]])) {
+                $companion_oid = $udf_data['f_' . $udffields[ilVedaUDFClaimingPlugin::FIELD_COMPANION_ID]];
             }
             $supervisor_oid = '';
-            if (isset($udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_SUPERVISOR_ID]])) {
-                $supervisor_oid = $udf_data['f_' . $udffields[\ilVedaUDFClaimingPlugin::FIELD_SUPERVISOR_ID]];
+            if (isset($udf_data['f_' . $udffields[ilVedaUDFClaimingPlugin::FIELD_SUPERVISOR_ID]])) {
+                $supervisor_oid = $udf_data['f_' . $udffields[ilVedaUDFClaimingPlugin::FIELD_SUPERVISOR_ID]];
             }
             if (!$tutor_oid && !$companion_oid && !$supervisor_oid) {
                 $this->logger->warning('Ignoring tutor without tutor_oid: ' . $tutor->getLogin());
@@ -300,7 +304,7 @@ class ilVedaMemberStandardImportAdapter
 
         $this->logger->debug('Removing tutors without remote');
         foreach ($participants->getTutors() as $user_id) {
-            $import_id = \ilObject::_lookupImportId($user_id);
+            $import_id = ilObject::_lookupImportId($user_id);
             if (!$import_id) {
                 $this->logger->debug('Keep member assignment for non synchonised account.');
                 continue;
@@ -328,17 +332,14 @@ class ilVedaMemberStandardImportAdapter
         }
     }
 
+    /**
+     * @throws ilDateTimeException
+     */
     protected function handleTutorAssignments(
         ilObjCourse $course,
         ilCourseParticipants $participants,
         ilVedaCourseTutorsCollectionInterface $remote_tutors
     ) : void {
-        if (
-            is_null($remote_tutors)
-        ) {
-            $this->logger->warning('Reading assigned tutors failed. Aborting tutor update');
-            return;
-        }
         $this->logger->info("Assigning tutors to course " . $course->getTitle() . " by elearningbenutzeraccountid");
         foreach ($remote_tutors as $tutor) {
             $user_id = $this->getUserIdForImportId($tutor->getElearningbenutzeraccountId());
@@ -384,17 +385,14 @@ class ilVedaMemberStandardImportAdapter
         }
     }
 
+    /**
+     * @throws ilDateTimeException
+     */
     protected function handleSupervisorAssignments(
         ilObjCourse $course,
         ilCourseParticipants $participants,
         ilVedaCourseSupervisorCollectionInterface $remote_supervisors
     ) : void {
-        if (
-            is_null($remote_supervisors)
-        ) {
-            $this->logger->warning('Reading assigned tutors failed. Aborting tutor update');
-            return;
-        }
         $this->logger->info("Assigning supervisors to course " . $course->getTitle() . "by elearningbenutzeraccountid.");
         foreach ($remote_supervisors as $supervisor) {
             $user_id = $this->getUserIdForImportId($supervisor->getElearningbenutzeraccountId());
@@ -441,19 +439,22 @@ class ilVedaMemberStandardImportAdapter
         }
     }
 
+    /**
+     * @throws ilDateTimeException
+     */
     protected function isValidDate(?DateTime $start, ?DateTime $end) : bool
     {
         if ($start == null && $end == null) {
             return true;
         }
 
-        $now = new \ilDate(time(), IL_CAL_UNIX);
+        $now = new ilDate(time(), IL_CAL_UNIX);
         if ($start == null) {
-            $ilend = new \ilDateTime($end->format('Y-m-d'), IL_CAL_DATE);
+            $ilend = new ilDateTime($end->format('Y-m-d'), IL_CAL_DATE);
             // check ending time > now
             if (
-                \ilDateTime::_after($ilend, $now, IL_CAL_DAY) ||
-                \ilDateTime::_equals($ilend, $now, IL_CAL_DAY)
+                ilDateTime::_after($ilend, $now, IL_CAL_DAY) ||
+                ilDateTime::_equals($ilend, $now, IL_CAL_DAY)
             ) {
                 $this->logger->debug('Ending date is valid');
                 return true;
@@ -462,12 +463,12 @@ class ilVedaMemberStandardImportAdapter
             return false;
         }
 
+        $ilstart = new ilDate($start->format('Y-m-d'), IL_CAL_DATE);
         if ($end == null) {
-            $ilstart = new \ilDate($start->format('Y-m-d'), IL_CAL_DATE);
             // check starting time <= now
             if (
-                \ilDateTime::_before($ilstart, $now, IL_CAL_DAY) ||
-                \ilDateTime::_equals($ilstart, $now, IL_CAL_DAY)
+                ilDateTime::_before($ilstart, $now, IL_CAL_DAY) ||
+                ilDateTime::_equals($ilstart, $now, IL_CAL_DAY)
             ) {
                 $this->logger->debug('Starting date is valid');
                 return true;
@@ -476,12 +477,11 @@ class ilVedaMemberStandardImportAdapter
             return false;
         }
 
-        $ilstart = new \ilDate($start->format('Y-m-d'), IL_CAL_DATE);
-        $ilend = new \ilDate($end->format('Y-m-d'), IL_CAL_DATE);
+        $ilend = new ilDate($end->format('Y-m-d'), IL_CAL_DATE);
 
         if (
-            \ilDateTime::_within($now, $ilstart, $ilend, IL_CAL_DAY) ||
-            \ilDateTime::_equals($now, $ilend, \ilDateTime::DAY)
+            ilDateTime::_within($now, $ilstart, $ilend, IL_CAL_DAY) ||
+            ilDateTime::_equals($now, $ilend, ilDateTime::DAY)
         ) {
             return true;
         }

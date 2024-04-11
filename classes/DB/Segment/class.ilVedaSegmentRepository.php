@@ -23,8 +23,8 @@ class ilVedaSegmentRepository implements ilVedaSegmentRepositoryInterface
         $query = 'insert into ' . self::TABLE_NAME . ' ' .
             '(oid, type) ' .
             'values( ' .
-            $this->il_db->quote($veda_sgmt->getOID(), \ilDBConstants::T_TEXT) . ', ' .
-            $this->il_db->quote($veda_sgmt->getType(), \ilDBConstants::T_TEXT) . ' ' .
+            $this->il_db->quote($veda_sgmt->getOID(), ilDBConstants::T_TEXT) . ', ' .
+            $this->il_db->quote($veda_sgmt->getType(), ilDBConstants::T_TEXT) . ' ' .
             ')';
         $this->veda_logger->debug($query);
         $this->il_db->manipulate($query);
@@ -34,7 +34,7 @@ class ilVedaSegmentRepository implements ilVedaSegmentRepositoryInterface
     {
         $this->veda_logger->debug('Deleting segment with oid: ' . $oid);
         $query = 'delete from ' . self::TABLE_NAME . ' ' .
-            'where oid = ' . $this->il_db->quote($oid, \ilDBConstants::T_TEXT);
+            'where oid = ' . $this->il_db->quote($oid, ilDBConstants::T_TEXT);
         $this->veda_logger->debug($query);
         $this->il_db->manipulate($query);
     }
@@ -43,14 +43,11 @@ class ilVedaSegmentRepository implements ilVedaSegmentRepositoryInterface
     {
         $this->veda_logger->debug('Looking up segment with oid: ' . $oid);
         $query = 'select type from ' . self::TABLE_NAME . ' ' .
-            'where oid = ' . $this->il_db->quote($oid, \ilDBConstants::T_TEXT);
+            'where oid = ' . $this->il_db->quote($oid, ilDBConstants::T_TEXT);
         $this->veda_logger->debug($query);
         $res = $this->il_db->query($query);
-        while ($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
-            return new ilVedaSegment(
-                $oid,
-                $row->type
-            );
+        while ($row = $res->fetchRow(ilDBConstants::FETCHMODE_OBJECT)) {
+            return new ilVedaSegment($oid, $row->type);
         }
         return null;
     }

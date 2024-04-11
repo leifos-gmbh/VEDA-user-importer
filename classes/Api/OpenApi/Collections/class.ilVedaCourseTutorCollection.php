@@ -19,6 +19,9 @@ class ilVedaCourseTutorCollection implements ilVedaCourseTutorsCollectionInterfa
         $this->index = 0;
     }
 
+    /**
+     * @throws ilDateTimeException
+     */
     public function containsTutorWithOID(string $oid) : bool
     {
         foreach ($this->crs_tutors as $tutor) {
@@ -35,7 +38,7 @@ class ilVedaCourseTutorCollection implements ilVedaCourseTutorsCollectionInterfa
 
     public function logContent(ilLogger $logger)
     {
-        $logger->dump($this->crs_tutors, \ilLogLevel::DEBUG);
+        $logger->dump($this->crs_tutors, ilLogLevel::DEBUG);
     }
 
     public function current() : Dozentenkurszuordnung

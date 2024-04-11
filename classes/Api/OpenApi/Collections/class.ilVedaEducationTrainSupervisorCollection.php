@@ -11,7 +11,7 @@ class ilVedaEducationTrainSupervisorCollection implements ilVedaEducationTrainSu
     protected int $index;
 
     /**
-     * @param AufsichtspersonKurszugriff $education_train_supervisor
+     * @param array<AufsichtspersonKurszugriff> $education_train_supervisor
      */
     public function __construct(array $education_train_supervisor)
     {

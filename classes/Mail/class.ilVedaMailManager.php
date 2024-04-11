@@ -16,6 +16,9 @@ class ilVedaMailManager
         $this->veda_settings = new ilVedaConnectorSettings();
     }
 
+    /**
+     * @throws Exception
+     */
     public function sendStatus() : void
     {
         $this->veda_logger->debug('Sending Status Mail');
@@ -39,6 +42,9 @@ class ilVedaMailManager
         $this->clearMailData();
     }
 
+    /**
+     * @throws Exception
+     */
     public function sendSIFACourseCompleted()
     {
         $this->veda_logger->debug('Sending Mail');

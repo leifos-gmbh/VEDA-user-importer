@@ -16,6 +16,9 @@ class ilVedaCourseMemberCollection implements ilVedaCourseMemberCollectionInterf
         $this->index = 0;
     }
 
+    /**
+     * @throws ilDateTimeException
+     */
     public function containsMemberWithOID(string $oid) : bool
     {
         foreach ($this->crs_mmbrs as $member) {
@@ -32,7 +35,7 @@ class ilVedaCourseMemberCollection implements ilVedaCourseMemberCollectionInterf
 
     public function logContent(ilLogger $logger)
     {
-        $logger->dump($this->crs_mmbrs, \ilLogLevel::DEBUG);
+        $logger->dump($this->crs_mmbrs, ilLogLevel::DEBUG);
     }
 
     public function current() : Teilnehmerkurszuordnung

@@ -11,7 +11,7 @@ class ilVedaEducationTrainCompanionCollection implements ilVedaEducationTrainCom
     protected int $index;
 
     /**
-     * @param AusbildungszugLernbegleiter $education_train_companions
+     * @param array<AusbildungszugLernbegleiter> $education_train_companions
      */
     public function __construct(array $education_train_companions)
     {

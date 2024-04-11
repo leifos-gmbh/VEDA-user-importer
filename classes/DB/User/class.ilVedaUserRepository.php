@@ -46,6 +46,11 @@ class ilVedaUserRepository implements ilVedaUserRepositoryInterface
         $this->il_db->manipulate($query);
     }
 
+    public function createEmptyUser(string $oid): ilVedaUserInterface
+    {
+        return new ilVedaUser($oid);
+    }
+
     public function deleteUserByOID(string $oid) : void
     {
         $this->veda_logger->debug('Deleting user by oid: ' . $oid);
@@ -71,7 +76,7 @@ class ilVedaUserRepository implements ilVedaUserRepositoryInterface
             'where oid = ' . $this->il_db->quote($oid, 'text');
         $this->veda_logger->debug($query);
         $res = $this->il_db->query($query);
-        while ($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
+        while ($row = $res->fetchRow(ilDBConstants::FETCHMODE_OBJECT)) {
             return new ilVedaUser(
                 $row->oid,
                 $row->login,
@@ -100,7 +105,7 @@ class ilVedaUserRepository implements ilVedaUserRepositoryInterface
         $this->veda_logger->debug($query);
         $res = $this->il_db->query($query);
         $all_users = [];
-        while ($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
+        while ($row = $res->fetchRow(ilDBConstants::FETCHMODE_OBJECT)) {
             $all_users[] = new ilVedaUser(
                 $row->oid,
                 $row->login,

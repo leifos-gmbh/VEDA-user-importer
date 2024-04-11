@@ -7,11 +7,14 @@
  * @author Stefan Meyer <smeyer.ilias@gmx.de>
  *
  */
-class ilVedaCourseImportResultTableGUI extends \ilTable2GUI
+class ilVedaCourseImportResultTableGUI extends ilTable2GUI
 {
     protected ilVedaConnectorPlugin $plugin;
     protected ilTree $repository_tree;
-    
+
+    /**
+     * @throws ilException
+     */
     public function __construct($class, string $method)
     {
         global $DIC;
@@ -58,7 +61,6 @@ class ilVedaCourseImportResultTableGUI extends \ilTable2GUI
 
     /**
      * Parse imported user data
-     * @throws \ilDatabaseException
      */
     public function parse()
     {
@@ -67,7 +69,7 @@ class ilVedaCourseImportResultTableGUI extends \ilTable2GUI
         foreach ($courses as $course) {
             $rows[] = [
                 'obj_id' => $course->getObjId(),
-                'title' => \ilObject::_lookupTitle($course->getObjId()),
+                'title' => ilObject::_lookupTitle($course->getObjId()),
                 'type' => $course->getType(),
                 'oid' => $course->getOid(),
                 'created' => $course->getCreationStatus(),
@@ -78,19 +80,22 @@ class ilVedaCourseImportResultTableGUI extends \ilTable2GUI
         $this->setData($rows);
     }
 
-    protected function fillRow($a_set)
+    /**
+     * @throws ilTemplateException
+     */
+    protected function fillRow(array $a_set): void
     {
         $obj_id = $a_set['obj_id'];
-        $refs = \ilObject::_getAllReferences($obj_id);
+        $refs = ilObject::_getAllReferences($obj_id);
         $ref = end($refs);
         if (!$ref || $this->repository_tree->isDeleted($ref)) {
             $this->tpl->setCurrentBlock('is_deleted');
             $this->tpl->setVariable('TXT_DELETED', $this->lng->txt('deleted'));
         } else {
-            $link = \ilLink::_getLink($ref);
+            $link = ilLink::_getLink($ref);
             $this->tpl->setCurrentBlock('with_title');
             $this->tpl->setVariable('TITLE_LINK', $link);
-            $this->tpl->setVariable('TXT_TITLE', \ilObject::_lookupTitle($obj_id));
+            $this->tpl->setVariable('TXT_TITLE', ilObject::_lookupTitle($obj_id));
         }
         $this->tpl->parseCurrentBlock();
         $this->tpl->setVariable(
@@ -107,12 +112,12 @@ class ilVedaCourseImportResultTableGUI extends \ilTable2GUI
                 ilUtil::getImagePath('icon_not_ok.svg')
         );
 
-        if (\ilObject::_exists($a_set['tswitch'])) {
+        if (ilObject::_exists($a_set['tswitch'])) {
             $this->tpl->setVariable('TXT_TAVAILABLE', $this->plugin->txt('role_available'));
         } else {
             $this->tpl->setVariable('TXT_TAVAILABLE', $this->plugin->txt('role_unavailable'));
         }
-        if (\ilObject::_exists($a_set['pswitch'])) {
+        if (ilObject::_exists($a_set['pswitch'])) {
             $this->tpl->setVariable('TXT_PAVAILABLE', $this->plugin->txt('role_available'));
         } else {
             $this->tpl->setVariable('TXT_PAVAILABLE', $this->plugin->txt('role_unavailable'));

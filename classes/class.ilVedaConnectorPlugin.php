@@ -7,7 +7,7 @@ use Monolog\Handler\StreamHandler;
  *
  * @author Stefan Meyer <smeyer.ilias@gmx.de>
  */
-class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventListener
+class ilVedaConnectorPlugin extends ilCronHookPlugin implements ilAppEventListener
 {
     protected const COURSE_SERVICE = 'Modules/Course';
     protected const USER_SERVICE = 'Services/User';
@@ -22,57 +22,41 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
     protected const EVENT_PASSED_COURSE = 'participantHasPassedCourse';
     protected const EVENT_ADD_PARTICIPANT = 'addParticipant';
     protected const EVENT_ASSIGN_USER = 'assignUser';
-
-    private ?ilAdvancedMDClaimingPlugin $claiming = null;
-    private ?ilVedaUDFClaimingPlugin $udfclaiming = null;
-    private static ?ilVedaConnectorPlugin $instance = null;
-    private ?ilLogger $logger = null;
-    private ilPluginAdmin $plugin_admin;
-
     public const PNAME = 'VedaConnector';
-    private const CTYPE = 'Services';
-    private const CNAME = 'Cron';
-    private const SLOT_ID = 'crnhk';
 
-    /**
-     * Claiming plugin
-     */
-    private const CLAIMING_CTYPE = 'Services';
-    private const CLAIMING_CNAME = 'AdvancedMetaData';
-    private const CLAIMING_SLOT_ID = 'amdc';
-    private const CLAIMING_NAME = 'VedaMDClaiming';
+    public const PLUGIN_ID = 'vedaimp';
+    public const PLUGIN_ID_VEDA_MD_CLAIMING = "vedaclaiming";
+    public const PLUGIN_ID_VEDA_UDF_CLAIMING = "vedaudfclaiming";
 
-    /**
-     * Claiming plugin
-     */
-    private const CLAIMING_UDF_CTYPE = 'Services';
-    private const CLAIMING_UDF_CNAME = 'User';
-    private const CLAIMING_UDF_SLOT_ID = 'udfc';
-    private const CLAIMING_UDF_NAME = 'VedaUDFClaiming';
+    protected ?ilAdvancedMDClaimingPlugin $claiming = null;
+    protected ?ilVedaUDFClaimingPlugin $udfclaiming = null;
+    protected static ?ilVedaConnectorPlugin $instance = null;
+    protected ?ilLogger $logger = null;
+    protected ilComponentFactory $component_factory;
 
-    public function __construct()
-    {
+
+    public function __construct(
+        ilDBInterface $db,
+        ilComponentRepositoryWrite $component_repository,
+        string $id
+    ) {
         global $DIC;
-        $this->plugin_admin = $DIC['ilPluginAdmin'];
+        $this->component_factory = $DIC['component.factory'];
         $this->logger = $DIC->logger()->vedaimp();
-        parent::__construct();
+        parent::__construct($db, $component_repository, $id);
     }
 
-    public static function getInstance() : ?ilVedaConnectorPlugin
+    public static function getInstance(): ilVedaConnectorPlugin
     {
-        if (!is_null(self::$instance)) {
+        global $DIC;
+        if (isset(self::$instance)) {
             return self::$instance;
         }
-        $plugin = ilPluginAdmin::getPluginObject(
-            self::CTYPE,
-            self::CNAME,
-            self::SLOT_ID,
-            self::PNAME
-        );
-        if ($plugin instanceof ilVedaConnectorPlugin) {
-            return self::$instance = $plugin;
-        }
-        return null;
+        /** @var ilComponentFactory $component_factory */
+        $component_factory = $DIC["component.factory"];
+        /** @var ilVedaConnectorPlugin $plugin */
+        $plugin = $component_factory->getPlugin(self::PLUGIN_ID);
+        return $plugin;
     }
 
     public function getPluginName() : string
@@ -90,12 +74,12 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
         ];
     }
 
-    public function getCronJobInstance($a_job_id) : ilVedaConnectorCronJob
+    public function getCronJobInstance(string $jobId) : ilVedaConnectorCronJob
     {
         return new ilVedaConnectorCronJob();
     }
 
-    public function getLogger() : \ilLogger
+    public function getLogger() : ilLogger
     {
         return $this->logger;
     }
@@ -107,12 +91,12 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
          * @var string[] $paths
          */
         $lib_path = __DIR__ . '/../' . 'lib';
-        $files = array_diff(scandir($lib_path), ['.', '..']);
-        $this->logger->info('start loading api classes');
-        if (!is_array($files)) {
+        if (!scandir($lib_path)) {
             $this->logger->info('lib folder does not exist');
             return;
         }
+        $files = array_diff(scandir($lib_path), ['.', '..']);
+        $this->logger->info('start loading api classes');
         $paths = array_fill(0, count($files), $lib_path);
         while (count($files) > 0) {
             $current_file = array_shift($files);
@@ -131,16 +115,28 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
         }
     }
 
+    protected function initVedaUdfClaimingPluginInstance(): void
+    {
+        /** @var ilVedaUDFClaimingPlugin $plugin */
+        $plugin = $this->component_factory->getPlugin(self::PLUGIN_ID_VEDA_UDF_CLAIMING);
+        $this->udfclaiming = $plugin;
+    }
+
+    protected function initVedaMDClaimingPluginInstance(): void
+    {
+        /** @var ilVedaMDClaimingPlugin $plugin */
+        $plugin = $this->component_factory->getPlugin(self::PLUGIN_ID_VEDA_MD_CLAIMING);
+        $this->claiming = $plugin;
+    }
+
     protected function init() : void
     {
-        //require($this->getDirectory() . '/vendor/autoload.php');
         $this->loadApiClasses();
-
         $settings = ilVedaConnectorSettings::getInstance();
         $this->logger->debug('Set log level to: ' . $settings->getLogLevel());
 
         if (
-            $settings->getLogLevel() != \ilLogLevel::OFF &&
+            $settings->getLogLevel() != ilLogLevel::OFF &&
             $settings->getLogFile() != ''
         ) {
             $stream_handler = new StreamHandler(
@@ -148,7 +144,8 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
                 $settings->getLogLevel(),
                 true
             );
-            $line_formatter = new ilLineFormatter(\ilLoggerFactory::DEFAULT_FORMAT, 'Y-m-d H:i:s.u', true, true);
+            $default_format = "[%suid%] [%datetime%] %channel%.%level_name%: %message% %context% %extra%\n";
+            $line_formatter = new ilLineFormatter($default_format, 'Y-m-d H:i:s.u', true, true);
             $stream_handler->setFormatter($line_formatter);
             $this->logger->getLogger()->pushHandler($stream_handler);
         }
@@ -158,46 +155,8 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
             $handler->setLevel($settings->getLogLevel());
         }
 
-        // init claiming plugin
-        foreach ($this->plugin_admin->getActivePluginsForSlot(
-            self::CLAIMING_CTYPE,
-            self::CLAIMING_CNAME,
-            self::CLAIMING_SLOT_ID
-        ) as $plugin_name) {
-            if ($plugin_name != self::CLAIMING_NAME) {
-                continue;
-            }
-            $plugin = \ilPluginAdmin::getPluginObject(
-                self::CLAIMING_CTYPE,
-                self::CLAIMING_CNAME,
-                self::CLAIMING_SLOT_ID,
-                self::CLAIMING_NAME
-            );
-            if ($plugin instanceof ilAdvancedMDClaimingPlugin) {
-                $this->claiming = $plugin;
-            }
-        }
-
-        // init udf claiming plugin
-        foreach ($this->plugin_admin->getActivePluginsForSlot(
-            self::CLAIMING_UDF_CTYPE,
-            self::CLAIMING_UDF_CNAME,
-            self::CLAIMING_UDF_SLOT_ID
-        ) as $plugin_name) {
-            if ($plugin_name != self::CLAIMING_UDF_NAME) {
-                continue;
-            }
-            $plugin = \ilPluginAdmin::getPluginObject(
-                self::CLAIMING_UDF_CTYPE,
-                self::CLAIMING_UDF_CNAME,
-                self::CLAIMING_UDF_SLOT_ID,
-                self::CLAIMING_UDF_NAME
-            );
-            $plugin = new ilVedaUDFClaimingPlugin();
-            if ($plugin instanceof ilVedaUDFClaimingPlugin) {
-                $this->udfclaiming = $plugin;
-            }
-        }
+        $this->initVedaUdfClaimingPluginInstance();
+        $this->initVedaMDClaimingPluginInstance();
     }
 
     public function getClaimingPlugin() : ?ilAdvancedMDClaimingPlugin
@@ -212,22 +171,15 @@ class ilVedaConnectorPlugin extends \ilCronHookPlugin implements \ilAppEventList
 
     public function isClaimingPluginAvailable() : bool
     {
-        return $this->claiming instanceof \ilVedaMDClaimingPlugin;
+        return $this->claiming instanceof ilVedaMDClaimingPlugin;
     }
 
     public function isUDFClaimingPluginAvailable() : bool
     {
-        return $this->udfclaiming instanceof \ilVedaUDFClaimingPlugin;
+        return $this->udfclaiming instanceof ilVedaUDFClaimingPlugin;
     }
 
-    /**
-     * Handle an event in a listener.
-     *
-     * @param    string $a_component component, e.g. "Modules/Forum" or "Services/User"
-     * @param    string $a_event event e.g. "createUser", "updateUser", "deleteUser", ...
-     * @param    array $a_parameter parameter array (assoc), array("name" => ..., "phone_office" => ...)
-     */
-    public static function handleEvent($a_component, $a_event, $a_parameter)
+    public static function handleEvent(string $a_component, string $a_event, array $a_parameter): void
     {
         $plugin = self::getInstance();
         $logger = $plugin->getLogger();

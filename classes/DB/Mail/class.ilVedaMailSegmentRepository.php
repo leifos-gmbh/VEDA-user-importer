@@ -14,6 +14,9 @@ class ilVedaMailSegmentRepository implements ilVedaMailSegmentRepositoryInterfac
         $this->veda_logger = $veda_logger;
     }
 
+    /**
+     * @throws Exception
+     */
     public function lookupMailSegments() : ilVedaMailSegmentCollection
     {
         $this->veda_logger->debug('Looking up mail segments.');
@@ -32,6 +35,9 @@ class ilVedaMailSegmentRepository implements ilVedaMailSegmentRepositoryInterfac
         return new ilVedaMailSegmentCollection($mail_segments);
     }
 
+    /**
+     * @throws Exception
+     */
     public function addMailSegment(ilVedaMailSegmentInterface $mail_segment) : void
     {
         $id = $this->il_db->nextId(self::TABLE_NAME);

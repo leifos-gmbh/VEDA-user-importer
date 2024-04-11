@@ -101,7 +101,7 @@ class ilVedaCourseRepository implements ilVedaCourseRepositoryInterface
         $this->veda_logger->debug($query);
         $res = $this->il_db->query($query);
         $courses = [];
-        while ($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
+        while ($row = $res->fetchRow(ilDBConstants::FETCHMODE_OBJECT)) {
             $courses[] = new ilVedaCourse(
                 $row->oid,
                 (int) $row->obj_id,
@@ -126,7 +126,7 @@ class ilVedaCourseRepository implements ilVedaCourseRepositoryInterface
         $this->veda_logger->debug($query);
         $res = $this->il_db->query($query);
         $courses = [];
-        while ($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT)) {
+        while ($row = $res->fetchRow(ilDBConstants::FETCHMODE_OBJECT)) {
             $courses[] = new ilVedaCourse(
                 $row->oid,
                 (int) $row->obj_id,

@@ -7,16 +7,14 @@
  * @author Stefan Meyer <smeyer.ilias@gmx.de>
  *
  */
-class ilVedaUserImportResultTableGUI extends \ilTable2GUI
+class ilVedaUserImportResultTableGUI extends ilTable2GUI
 {
     private ?ilVedaConnectorPlugin $plugin = null;
 
     /**
-     * ilVedaUserImportResultTableGUI constructor.
-     * @param object $class
-     * @param string $method
+     * @throws ilException
      */
-    public function __construct($class, string $method)
+    public function __construct(object $class, string $method)
     {
         $this->plugin = ilVedaConnectorPlugin::getInstance();
         $this->setId('vedaimp_res_usr');
@@ -49,15 +47,11 @@ class ilVedaUserImportResultTableGUI extends \ilTable2GUI
             $this->plugin->txt('tbl_usr_result_import_failure'),
             'failure'
         );
-        $this->addColumn(
-            $this->lng->txt('actions'),
-            ''
-        );
+        $this->addColumn($this->lng->txt('actions'));
     }
 
     /**
      * Parse imported user data
-     * @throws \ilDatabaseException
      */
     public function parse() : void
     {
@@ -75,7 +69,11 @@ class ilVedaUserImportResultTableGUI extends \ilTable2GUI
         $this->setData($rows);
     }
 
-    protected function fillRow($a_set)
+    /**
+     * @throws ilCtrlException
+     * @throws JsonException
+     */
+    protected function fillRow(array $a_set): void
     {
         $this->tpl->setVariable('TXT_LOGIN', $a_set['login']);
         $this->tpl->setVariable('OID', $a_set['oid']);

@@ -68,6 +68,7 @@ class ilVedaImporter
     /**
      * Import selected types
      * @throws ilVedaImporterLockedException
+     * @throws ilVedaClaimingMissingException
      */
     public function import(int $import_type, bool $all, array $types = []) : void
     {
@@ -106,6 +107,9 @@ class ilVedaImporter
         $this->settings->enableLock(false);
     }
 
+    /**
+     * @throws ilVedaClaimingMissingException
+     */
     protected function importSifa(array $modes) : void
     {
         $this->ensureClaimingPluginConfigured();

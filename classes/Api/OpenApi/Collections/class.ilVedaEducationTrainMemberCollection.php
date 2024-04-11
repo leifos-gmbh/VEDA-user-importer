@@ -11,7 +11,7 @@ class ilVedaEducationTrainMemberCollection implements ilVedaEducationTrainMember
     protected int $index;
 
     /**
-     * @param AusbildungszugTeilnehmer $education_train_participants
+     * @param array<AusbildungszugTeilnehmer> $education_train_participants
      */
     public function __construct(array $education_train_participants)
     {

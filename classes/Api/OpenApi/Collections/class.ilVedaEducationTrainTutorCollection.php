@@ -11,7 +11,7 @@ class ilVedaEducationTrainTutorCollection implements ilVedaEducationTrainTutorCo
     protected int $index;
 
     /**
-     * @param AusbildungszugDozent $education_train_tutors
+     * @param array<AusbildungszugDozent> $education_train_tutors
      */
     public function __construct(array $education_train_tutors)
     {

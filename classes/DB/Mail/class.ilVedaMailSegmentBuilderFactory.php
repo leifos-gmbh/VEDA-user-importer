@@ -11,6 +11,9 @@ class ilVedaMailSegmentBuilderFactory implements ilVedaMailSegmentBuilderFactory
         $this->veda_logger = $veda_logger;
     }
 
+    /**
+     * @throws Exception
+     */
     public function buildSegment() : ilVedaMailSegmentBuilderInterface
     {
         return new ilVedaMailSegmentBuilder($this->mail_segment_repo, $this->veda_logger);
