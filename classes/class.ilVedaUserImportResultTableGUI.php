@@ -33,21 +33,21 @@ class ilVedaUserImportResultTableGUI extends ilTable2GUI
 
         $this->addColumn(
             $this->lng->txt('username'),
-            'login'
+            'login', '40%'
         );
         $this->addColumn(
             $this->plugin->txt('tbl_usr_result_created'),
-            'created'
+            'created', "7%"
         );
         $this->addColumn(
             $this->plugin->txt('tbl_usr_result_pwd_changed'),
-            'pwd'
+            'pwd', "7%"
         );
         $this->addColumn(
             $this->plugin->txt('tbl_usr_result_import_failure'),
-            'failure'
+            'failure', "36%"
         );
-        $this->addColumn($this->lng->txt('actions'));
+        $this->addColumn($this->lng->txt('actions'), "", '10%');
     }
 
     /**

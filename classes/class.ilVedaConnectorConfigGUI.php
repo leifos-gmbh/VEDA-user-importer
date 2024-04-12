@@ -196,16 +196,18 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
         $roles->setRequired(true);
         $sifa_active->addSubItem($roles);
 
-        $import_dir = new ilRepositorySelector2InputGUI(
+        $import_dir = new ilVedaCategoryRefIdNumberInput(
+            $this->getPluginObject(),
             $this->getPluginObject()->txt('tbl_settings_course_import'),
-            'sifa_crs_import',
-            true
+            'sifa_crs_import'
         );
         $import_dir->setRequired(true);
         $import_dir->setInfo($this->getPluginObject()->txt('tbl_settings_course_import_info'));
-        $white_list[] = 'cat';
-        $import_dir->getExplorerGUI()->setTypeWhiteList($white_list);
         $import_dir->setValue($settings->getSifaImportDirectory());
+        $import_dir->addSubItem($this->buildImportDirectoryInfoElement(
+            $settings->getSifaImportDirectory(),
+            'sifa_import_cat_info'
+        ));
         $sifa_active->addSubItem($import_dir);
 
         $switch = new ilNumberInputGUI(
@@ -253,19 +255,44 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
         $roles->setRequired(true);
         $standard_active->addSubItem($roles);
 
-        $import_dir = new ilRepositorySelector2InputGUI(
-            $this->getPluginObject()->txt('tbl_settings_course_import'),
+        $import_dir = new ilVedaCategoryRefIdNumberInput(
+            $this->getPluginObject(),
+             $this->getPluginObject()->txt('tbl_settings_course_import'),
             'standard_crs_import',
-            true
         );
         $import_dir->setRequired(true);
         $import_dir->setInfo($this->getPluginObject()->txt('tbl_settings_course_import_info'));
-        $white_list[] = 'cat';
-        $import_dir->getExplorerGUI()->setTypeWhiteList($white_list);
         $import_dir->setValue($settings->getStandardImportDirectory());
         $standard_active->addSubItem($import_dir);
-
+        $import_dir->addSubItem($this->buildImportDirectoryInfoElement(
+            $settings->getStandardImportDirectory(),
+            'standard_import_cat_info'
+        ));
         return $form;
+    }
+
+    protected function buildImportDirectoryInfoElement(int $ref_id, string $post_var): ilTextInputGUI
+    {
+        $import_dir_name = $this->getImportDirectoryName($ref_id);
+        $info_text = new ilTextInputGUI(
+            $this->getPluginObject()->txt('tbl_settings_course_import_category_title'),
+            $post_var
+        );
+        $info_text->setValue($import_dir_name ?? '');
+        $info_text->setDisabled(true);
+        $info_text->setInfo($this->getPluginObject()->txt('tbl_settings_course_import_category_info'));
+        return $info_text;
+    }
+
+    protected function getImportDirectoryName(int $ref_id): ?string
+    {
+        $obj_id = ilObject::_lookupObjectId($ref_id);
+        return $this->isCategoryObject($ref_id) ? ilObject::_lookupTitle($obj_id) : null;
+    }
+
+    protected function isCategoryObject(int $ref_id): bool
+    {
+        return ilObject::_lookupType($ref_id, true) === 'cat';
     }
 
     /**
@@ -277,7 +304,9 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
         $settings = ilVedaConnectorSettings::getInstance();
 
         try {
-            if ($form->checkInput()) {
+            if (
+                $form->checkInput()
+            ) {
                 $settings->setActive($form->getInput('active'));
                 $settings->setLogLevel($form->getInput('log_level'));
                 $settings->setLogFile($form->getInput('log_file'));
@@ -285,10 +314,8 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
                 $settings->setStandardParticipantRole($form->getInput('standard_participant_role'));
                 $settings->enableLock($form->getInput('lock'));
 
-                $category_ref_ids = $form->getInput('sifa_crs_import');
-                $settings->setSifaImportDirectory((int) end($category_ref_ids));
-                $category_ref_ids = $form->getInput('standard_crs_import');
-                $settings->setStandardImportDirectory((int) end($category_ref_ids));
+                $settings->setSifaImportDirectory((int) $form->getInput('sifa_crs_import'));
+                $settings->setStandardImportDirectory((int) $form->getInput('standard_crs_import'));
                 $settings->setPermanentSwitchRole((int) $form->getInput('switch_permanent'));
                 $settings->setTemporarySwitchRole((int) $form->getInput('switch_temp'));
 

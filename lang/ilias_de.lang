@@ -46,7 +46,10 @@ err_import_usr_duplicate#:#Duplikat: ein ILIAS-Benutzerkonto mit dem selben Benu
 err_claiming_missing#:#Der Import kann nicht durchgeführt werden, da das "VedaMDClaiming-Plugin" nicht vorhanden oder nicht aktiviert ist.
 err_udf_claiming_missing#:#Der Import kann nicht durchgeführt werden, da das "VedaUDFClaiming-Plugin" nicht vorhanden oder nicht aktiviert ist.
 tbl_settings_course_import#:#Importverzeichnis
-tbl_settings_course_import_info#:#Bitte wählen Sie die Kategorie aus, in der neue Ausbildungszüge erstellt werden sollen.
+tbl_settings_course_import_info#:#Bitte geben Sie die ref_id der Kategorie an, in der neue Ausbildungszüge erstellt werden sollen.
+tbl_settings_course_import_category_title#:#Ausgewähltes Importverzeichnis:
+tbl_settings_course_import_category_info#:#Hier wird der Titel der Kategorie mit der zuletzt angegebenen validen ref_id angezeigt.
+tbl_settings_course_import_category_error#:#Es gibt keine Kategorie mit der angegebene ref_id.
 training_course#:#Ausbildungsgang ID
 training_course_info#:#ID des Ausbildungsgang
 success_validation#:#Die Validierung des Kurses ist erfolgreich abgeschlossen worden. Das Mapping ist somit vollständig und verwendet nur Ausbildungsgangabschnitt-IDs, welche Bestandteil des hinterlegten Ausbildungsgangs sind.

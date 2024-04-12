@@ -218,9 +218,9 @@ class ilVedaMemberStandardImportAdapter
         }
     }
 
-    protected function getUserIdForImportId(?string $oid) : int
+    protected function getUserIdForImportId(?string $oid) : ?int
     {
-        return ilObject::_lookupObjIdByImportId($oid);
+        return is_null($oid) ? null : ilObject::_lookupObjIdByImportId($oid);
     }
 
     /**
