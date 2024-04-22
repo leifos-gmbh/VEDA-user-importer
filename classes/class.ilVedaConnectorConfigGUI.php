@@ -689,6 +689,10 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
     {
         $oid = $this->http->wrapper()->query()->retrieve('oid', $this->refinery->kindlyTo()->string()) ?? '';
         $login = urldecode($this->http->wrapper()->query()->retrieve('login', $this->refinery->kindlyTo()->string()) ?? '');
+        $this->logger->debug("Migrating user with oid and login:" .
+            "\noid: " . $oid .
+            "\nlogin: " . $login
+        );
         if ($oid === '' || $login === '') {
             $this->tpl->setOnScreenMessage(
                 ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE,
