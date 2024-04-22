@@ -97,12 +97,12 @@ class ilVedaUserImportResultTableGUI extends ilTable2GUI
             $list->setListTitle($this->lng->txt('actions'));
 
             $this->ctrl->setParameterByClass(
-                $this->getParentObject(),
+                'ilVedaConnectorConfigGUI',
                 'oid',
                 $a_set['oid'] ?? ''
             );
             $this->ctrl->setParameterByClass(
-                $this->getParentObject(),
+                'ilVedaConnectorConfigGUI',
                 'login',
                 urlencode($a_set['login'])
             );
@@ -114,8 +114,8 @@ class ilVedaUserImportResultTableGUI extends ilTable2GUI
                     'migrateUser'
                 )
             );
-            $this->ctrl->clearParameterByClass($this->getParentObject(), 'oid');
-            $this->ctrl->clearParameterByClass($this->getParentObject(), 'login');
+            $this->ctrl->clearParameterByClass('ilVedaConnectorConfigGUI', 'oid');
+            $this->ctrl->clearParameterByClass('ilVedaConnectorConfigGUI', 'login');
             $this->tpl->setVariable('SELECTION', $list->getHTML());
         }
     }
