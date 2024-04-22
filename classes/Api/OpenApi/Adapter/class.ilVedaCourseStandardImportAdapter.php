@@ -346,7 +346,7 @@ class ilVedaCourseStandardImportAdapter
             $target->setOfflineStatus(true);
             $target->setImportId($oid);
             $target->setTitle($elearning_course->getBezeichnung());
-            $target->setDescription($elearning_course->getBeschreibung());
+            $target->setDescription($elearning_course->getBeschreibung() ?? '');
             $target = $this->updateCourseAvailability($target, $elearning_course);
             $target = $this->updateCourseEventPeriod($target, $elearning_course);
             $target->update();
