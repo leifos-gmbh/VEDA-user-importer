@@ -687,7 +687,7 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
      */
     protected function migrateUser()
     {
-        $oid = $this->http->wrapper()->post()->retrieve('oid', $this->refinery->kindlyTo()->string()) ?? '';
+        $oid = $this->http->wrapper()->query()->retrieve('oid', $this->refinery->kindlyTo()->string()) ?? '';
         $login = urldecode($this->http->wrapper()->query()->retrieve('login', $this->refinery->kindlyTo()->string()) ?? '');
         if ($oid === '' || $login === '') {
             $this->tpl->setOnScreenMessage(
