@@ -2,7 +2,7 @@
 
 use OpenAPI\Client\Model\Lernbegleiterkurszuordnung;
 
-class ilVedaCourseSupervisorCollection implements ilVedaCourseSupervisorCollectionInterface
+class ilVedaCourseCompanionCollection implements ilVedaCourseCompanionCollectionInterface
 {
     /**
      * @var Lernbegleiterkurszuordnung[]
@@ -22,7 +22,7 @@ class ilVedaCourseSupervisorCollection implements ilVedaCourseSupervisorCollecti
     /**
      * @throws ilDateTimeException
      */
-    public function containsSupervisorWithOID(string $oid) : bool
+    public function containsCompanionWithOID(string $oid) : bool
     {
         foreach ($this->crs_supervisors as $supervisor) {
             if (

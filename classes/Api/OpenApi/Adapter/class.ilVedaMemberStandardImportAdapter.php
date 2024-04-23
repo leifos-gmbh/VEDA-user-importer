@@ -65,11 +65,11 @@ class ilVedaMemberStandardImportAdapter
     protected function synchronizeParticipants(string $oid, int $obj_id) : void
     {
         $tutors = $this->elearning_api->requestCourseTutors($oid);
-        $supervisors = $this->elearning_api->requestCourseSupervisors($oid);
+        $companions = $this->elearning_api->requestCourseCompanions($oid);
         $members = $this->elearning_api->requestCourseMembers($oid);
         if (
             is_null($tutors) ||
-            is_null($supervisors) ||
+            is_null($companions) ||
             is_null($members)
         ) {
             $this->logger->warning('Api connection failed');
@@ -79,9 +79,9 @@ class ilVedaMemberStandardImportAdapter
         $course = $this->initCourse($obj_id);
         $this->removeDeprecatedMembers($participants, $course, $members);
         $this->addNewMembers($participants, $course, $members);
-        $this->handleRemoveDeprecatedTutorsAndSupervisors($course, $participants, $tutors, $supervisors);
+        $this->handleRemoveDeprecatedTutorsAndCompanions($course, $participants, $tutors, $companions);
         $this->handleTutorAssignments($course, $participants, $tutors);
-        $this->handleSupervisorAssignments($course, $participants, $supervisors);
+        $this->handleCompanionAssignments($course, $participants, $companions);
     }
 
     protected function removeDeprecatedMembers(
@@ -228,11 +228,11 @@ class ilVedaMemberStandardImportAdapter
      * @throws ilDatabaseException
      * @throws ilDateTimeException
      */
-    protected function handleRemoveDeprecatedTutorsAndSupervisors(
+    protected function handleRemoveDeprecatedTutorsAndCompanions(
         ilObjCourse $course,
         ilCourseParticipants $participants,
         ilVedaCourseTutorsCollectionInterface $remote_tutors,
-        ilVedaCourseSupervisorCollectionInterface $remote_supervisors
+        ilVedaCourseCompanionCollectionInterface $remote_companions
     ) : void
     {
         $udffields = $this->udf_claiming_plugin->getFields();
@@ -276,13 +276,13 @@ class ilVedaMemberStandardImportAdapter
                     break;
                 }
             }
-            foreach ($remote_supervisors as $remote_supervisor) {
-                if (!$this->isValidDate($remote_supervisor->getKursZugriffAb(), $remote_supervisor->getKursZugriffBis())) {
-                    $this->logger->debug('Ignoring supervisor outside time frame: ' . $remote_supervisor->getLernbegleiterId());
+            foreach ($remote_companions as $remote_companion) {
+                if (!$this->isValidDate($remote_companion->getKursZugriffAb(), $remote_companion->getKursZugriffBis())) {
+                    $this->logger->debug('Ignoring companion outside time frame: ' . $remote_companion->getLernbegleiterId());
                     continue;
                 }
                 // fix mixed companion and supervisor
-                if (ilVedaUtils::compareOidsEqual($remote_supervisor->getLernbegleiterId(), $companion_oid)) {
+                if (ilVedaUtils::compareOidsEqual($remote_companion->getLernbegleiterId(), $companion_oid)) {
                     $found = true;
                     break;
                 }
@@ -316,7 +316,7 @@ class ilVedaMemberStandardImportAdapter
             $this->logger->debug("Number of tutors: " . $remote_tutors->count());
             if (
                 !$remote_tutors->containsTutorWithOID($import_id) &&
-                !$remote_supervisors->containsSupervisorWithOID($import_id)
+                !$remote_companions->containsCompanionWithOID($import_id)
             ) {
                 $message = 'Deassigning tutor: ' . $user_id . ' with oid ' . $import_id . ' from course: ' . $course->getTitle();
                 $this->logger->info($message);
@@ -388,23 +388,23 @@ class ilVedaMemberStandardImportAdapter
     /**
      * @throws ilDateTimeException
      */
-    protected function handleSupervisorAssignments(
+    protected function handleCompanionAssignments(
         ilObjCourse $course,
         ilCourseParticipants $participants,
-        ilVedaCourseSupervisorCollectionInterface $remote_supervisors
+        ilVedaCourseCompanionCollectionInterface $remote_companions
     ) : void {
-        $this->logger->info("Assigning supervisors to course " . $course->getTitle() . "by elearningbenutzeraccountid.");
-        foreach ($remote_supervisors as $supervisor) {
-            $user_id = $this->getUserIdForImportId($supervisor->getElearningbenutzeraccountId());
+        $this->logger->info("Assigning companions to course " . $course->getTitle() . "by elearningbenutzeraccountid.");
+        foreach ($remote_companions as $companion) {
+            $user_id = $this->getUserIdForImportId($companion->getElearningbenutzeraccountId());
             if (!$user_id) {
-                $this->logger->warning('Cannot find user id for import_id: ' . $supervisor->getElearningbenutzeraccountId());
+                $this->logger->warning('Cannot find user id for import_id: ' . $companion->getElearningbenutzeraccountId());
                 continue;
             }
             if ($participants->isMember($user_id)) {
                 $this->logger->debug('User with id: ' . $user_id . ' is already assigned to course: ' . $course->getTitle());
                 continue;
             }
-            if (ilVedaUtils::isValidDate($supervisor->getKursZugriffAb(), $supervisor->getKursZugriffBis())) {
+            if (ilVedaUtils::isValidDate($companion->getKursZugriffAb(), $companion->getKursZugriffBis())) {
                 $this->assignUserToRole(
                     $course->getDefaultTutorRole(),
                     $user_id,
@@ -413,20 +413,19 @@ class ilVedaMemberStandardImportAdapter
                 );
             }
         }
-        $this->logger->info("Assigning supervisors to course " . $course->getTitle() . " by supervisor id in udf field.");
-        foreach ($remote_supervisors as $remote_supervisor) {
-            $supervisor_id = $remote_supervisor->getLernbegleiterId();
-            $this->logger->debug('Remote supervisor oid is: ' . $supervisor_id);
-            #$this->logger->dump($this->udf_claiming_plugin->getUsersForSupervisorId($supervisor_id));
-            $this->logger->dump($this->udf_claiming_plugin->getUsersForCompanionId($supervisor_id));
-            if (!$this->isValidDate($remote_supervisor->getKursZugriffAb(), $remote_supervisor->getKursZugriffBis())) {
-                $this->logger->info('Outside time frame: Ignoring supervisor with id: ' . $supervisor_id);
+        $this->logger->info("Assigning companions to course " . $course->getTitle() . " by companion id in udf field.");
+        foreach ($remote_companions as $remote_companion) {
+            $companion_oid = $remote_companion->getLernbegleiterId();
+            $this->logger->debug('Remote companion oid is: ' . $companion_oid);
+            $this->logger->dump($this->udf_claiming_plugin->getUsersForCompanionId($companion_oid));
+            if (!$this->isValidDate($remote_companion->getKursZugriffAb(), $remote_companion->getKursZugriffBis())) {
+                $this->logger->info('Outside time frame: Ignoring companion with id: ' . $companion_oid);
                 continue;
             }
             // fix mixed companion / supervisor id
-            foreach ($this->udf_claiming_plugin->getUsersForCompanionId($supervisor_id) as $uid) {
+            foreach ($this->udf_claiming_plugin->getUsersForCompanionId($companion_oid) as $uid) {
                 if (!in_array($uid, $participants->getTutors())) {
-                    $message = 'Assigning new course supervisor with id: ' . $supervisor_id . ' ILIAS id: ' . $uid;
+                    $message = 'Assigning new course companion with id: ' . $companion_oid . ' ILIAS id: ' . $uid;
                     $this->logger->info($message);
                     $this->rbac_admin->assignUser($course->getDefaultTutorRole(), $uid);
                     $participants->updateContact($uid, true);

@@ -2,11 +2,11 @@
 
 use OpenAPI\Client\Model\Lernbegleiterkurszuordnung;
 
-interface ilVedaCourseSupervisorCollectionInterface extends Iterator, Countable
+interface ilVedaCourseCompanionCollectionInterface extends Iterator, Countable
 {
     public function logContent(ilLogger $logger);
 
-    public function containsSupervisorWithOID(string $oid) : bool;
+    public function containsCompanionWithOID(string $oid) : bool;
 
     public function current() : Lernbegleiterkurszuordnung;
 

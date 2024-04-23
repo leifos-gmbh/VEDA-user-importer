@@ -56,16 +56,16 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
         }
     }
 
-    public function requestCourseSupervisors(string $crs_oid) : ?ilVedaCourseSupervisorCollectionInterface
+    public function requestCourseCompanions(string $crs_oid) : ?ilVedaCourseCompanionCollectionInterface
     {
         try {
             $result = $this->api_elearning->getVonLernbegleiternDieAktivenKurszuordnungenUsingGET(
                 $this->plattform_id,
                 $crs_oid
             );
-            $this->veda_logger->debug('Received course supervisors of course with oid: ' . $crs_oid);
+            $this->veda_logger->debug('Received course companions of course with oid: ' . $crs_oid);
             $this->veda_logger->dump($result);
-            return new ilVedaCourseSupervisorCollection($result);
+            return new ilVedaCourseCompanionCollection($result);
         } catch (Exception $e) {
             $this->handleException('getVonLernbegleiternDieAktivenKurszuordnungenUsingGET', $e);
             return null;

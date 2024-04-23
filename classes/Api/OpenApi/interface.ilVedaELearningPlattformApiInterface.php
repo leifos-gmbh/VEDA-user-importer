@@ -4,7 +4,7 @@ interface ilVedaELearningPlattformApiInterface
 {
     public function requestCourseMembers(string $crs_oid) : ?ilVedaCourseMemberCollectionInterface;
 
-    public function requestCourseSupervisors(string $crs_oid) : ?ilVedaCourseSupervisorCollectionInterface;
+    public function requestCourseCompanions(string $crs_oid) : ?ilVedaCourseCompanionCollectionInterface;
 
     public function requestCourseTutors(string $crs_oid) : ?ilVedaCourseTutorsCollectionInterface;
 
