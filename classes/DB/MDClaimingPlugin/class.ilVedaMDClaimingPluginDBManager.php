@@ -166,7 +166,7 @@ class ilVedaMDClaimingPluginDBManager implements ilVedaMDClaimingPluginDBManager
             ) . ' ' .
             'and obj_id = ' . $this->il_db->quote($obj_id, ilDBConstants::T_INTEGER);
         $res = $this->il_db->query($query);
-        $this->logger->dump($query);
+        $this->logger->dump($query, ilLogLevel::INFO);
         while ($row = $res->fetchRow(ilDBConstants::FETCHMODE_OBJECT)) {
             if ($row->value) {
                 return $row->value;

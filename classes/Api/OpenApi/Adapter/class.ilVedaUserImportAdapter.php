@@ -268,7 +268,7 @@ class ilVedaUserImportAdapter
 
         $message = 'Finished update users, with protocol message.';
         $this->logger->info($message);
-        $this->logger->dump($debug);
+        $this->logger->dump($debug, ilLogLevel::DEBUG);
         $this->logger->debug($this->writer->xmlDumpMem());
     }
 
@@ -460,7 +460,7 @@ class ilVedaUserImportAdapter
 
     protected function writeOrganisationInfo(Organisation $org) : void
     {
-        $this->logger->dump($org);
+        $this->logger->dump($org, ilLogLevel::DEBUG);
 
         $org_parts = [];
         if (strlen(trim($org->getOrganisationsname1()))) {

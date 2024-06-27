@@ -316,7 +316,7 @@ class ilVedaMemberImportAdapter
         foreach ($remote_tutors as $remote_tutor) {
             $tutor_oid = $remote_tutor->getDozentId();
             $this->logger->debug('Remote tutor oid is: ' . $tutor_oid);
-            $this->logger->dump($this->udf_claiming_plugin->getUsersForTutorId($tutor_oid));
+            $this->logger->dump($this->udf_claiming_plugin->getUsersForTutorId($tutor_oid), ilLogLevel::DEBUG);
 
             foreach ($this->udf_claiming_plugin->getUsersForTutorId($tutor_oid) as $uid) {
                 if (!in_array($uid, $participants->getTutors())) {
@@ -333,7 +333,7 @@ class ilVedaMemberImportAdapter
         foreach ($remote_companions as $remote_companion) {
             $companion_id = $remote_companion->getLernbegleiterId();
             $this->logger->debug('Remote companion oid is: ' . $companion_id);
-            $this->logger->dump($this->udf_claiming_plugin->getUsersForCompanionId($companion_id));
+            $this->logger->dump($this->udf_claiming_plugin->getUsersForCompanionId($companion_id), ilLogLevel::DEBUG);
 
             if (!$this->isValidDate($remote_companion->getZustaendigAb(), $remote_companion->getZustaendigBis())) {
                 $this->logger->info('Outside time frame: Ignoring companion with id: ' . $companion_id);
@@ -355,7 +355,7 @@ class ilVedaMemberImportAdapter
         foreach ($remote_supervisors as $remote_supervisor) {
             $supervisor_id = $remote_supervisor->getAufsichtspersonId();
             $this->logger->debug('Remote supervisor oid is: ' . $supervisor_id);
-            $this->logger->dump($this->udf_claiming_plugin->getUsersForSupervisorId($supervisor_id));
+            $this->logger->dump($this->udf_claiming_plugin->getUsersForSupervisorId($supervisor_id), ilLogLevel::DEBUG);
 
             if (!$this->isValidDate($remote_supervisor->getKursZugriffAb(), $remote_supervisor->getKursZugriffBis())) {
                 $this->logger->info('Outside time frame: Ignoring supervisor with id: ' . $supervisor_id);

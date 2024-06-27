@@ -364,7 +364,7 @@ class ilVedaMemberStandardImportAdapter
         foreach ($remote_tutors as $remote_tutor) {
             $tutor_oid = $remote_tutor->getDozentId();
             $this->logger->debug('Remote tutor oid is: ' . $tutor_oid);
-            $this->logger->dump($this->udf_claiming_plugin->getUsersForTutorId($tutor_oid));
+            $this->logger->dump($this->udf_claiming_plugin->getUsersForTutorId($tutor_oid), ilLogLevel::DEBUG);
             if (!$this->isValidDate($remote_tutor->getKursZugriffAb(), $remote_tutor->getKursZugriffBis())) {
                 $this->logger->info('Outside time frame: Ignoring tutor with id: ' . $tutor_oid);
                 continue;
@@ -417,7 +417,7 @@ class ilVedaMemberStandardImportAdapter
         foreach ($remote_companions as $remote_companion) {
             $companion_oid = $remote_companion->getLernbegleiterId();
             $this->logger->debug('Remote companion oid is: ' . $companion_oid);
-            $this->logger->dump($this->udf_claiming_plugin->getUsersForCompanionId($companion_oid));
+            $this->logger->dump($this->udf_claiming_plugin->getUsersForCompanionId($companion_oid), ilLogLevel::DEBUG);
             if (!$this->isValidDate($remote_companion->getKursZugriffAb(), $remote_companion->getKursZugriffBis())) {
                 $this->logger->info('Outside time frame: Ignoring companion with id: ' . $companion_oid);
                 continue;

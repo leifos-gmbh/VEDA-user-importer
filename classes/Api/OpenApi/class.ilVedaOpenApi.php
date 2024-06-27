@@ -408,7 +408,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
     {
         $training_course = $this->veda_connector->getTrainingCourseApi()->getCourse($course_oid);
         if (!is_null($training_course)) {
-            $this->veda_logger->dump($training_course);
+            $this->veda_logger->dump($training_course, ilLogLevel::DEBUG);
         }
         return !is_null($training_course);
     }

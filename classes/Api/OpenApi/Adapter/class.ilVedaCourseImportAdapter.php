@@ -327,7 +327,7 @@ class ilVedaCourseImportAdapter
             return;
         }
 
-        $this->logger->dump($tc);
+        $this->logger->dump($tc, ilLogLevel::DEBUG);
 
         $train = $this->readTrainingCourseTrainFromCopyInfo($tc);
         if (!$train instanceof Ausbildungszug) {

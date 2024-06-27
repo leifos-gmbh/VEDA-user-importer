@@ -48,7 +48,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
                 $crs_oid
             );
             $this->veda_logger->debug('Received course members of course with oid: ' . $crs_oid);
-            $this->veda_logger->dump($result);
+            $this->veda_logger->dump($result, ilLogLevel::DEBUG);
             return new ilVedaCourseMemberCollection($result);
         } catch (Exception $e) {
             $this->handleException('getVonTeilnehmernDieAktivenKurszuordnungenUsingGET', $e);
@@ -64,7 +64,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
                 $crs_oid
             );
             $this->veda_logger->debug('Received course companions of course with oid: ' . $crs_oid);
-            $this->veda_logger->dump($result);
+            $this->veda_logger->dump($result, ilLogLevel::DEBUG);
             return new ilVedaCourseCompanionCollection($result);
         } catch (Exception $e) {
             $this->handleException('getVonLernbegleiternDieAktivenKurszuordnungenUsingGET', $e);
@@ -80,7 +80,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
                 $crs_oid
             );
             $this->veda_logger->debug('Received course tutors of course with oid: ' . $crs_oid);
-            $this->veda_logger->dump($result);
+            $this->veda_logger->dump($result, ilLogLevel::DEBUG);
             return new ilVedaCourseTutorCollection($result);
         } catch (Exception $e) {
             $this->handleException('getVonDozentenDieAktivenKurszuordnungenUsingGET', $e);
@@ -95,7 +95,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
                 $this->plattform_id
             );
             $this->veda_logger->debug('Received e-learning courses.');
-            $this->veda_logger->dump($result);
+            $this->veda_logger->dump($result, ilLogLevel::DEBUG);
             return new ilVedaELearningCourseCollection($result);
         } catch (Exception $e) {
             $this->handleException('getAktiveELearningKurseUsingGET', $e);
@@ -111,7 +111,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
                 $training_course_id
             );
             $this->veda_logger->debug('Received education trains with training course id: ' . $training_course_id);
-            $this->veda_logger->dump($result);
+            $this->veda_logger->dump($result, ilLogLevel::DEBUG);
             return new ilVedaEducationTrainCourseCollection($result);
         } catch (Exception $e) {
             $this->handleException('getFreigegebeneAusbildungszuegeFuerPlattformUndAusbildungsgangUsingGET', $e);
@@ -124,7 +124,7 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
         try {
             $result = $this->api_elearning->getTeilnehmerELearningPlattformUsingGET($this->plattform_id);
             $this->veda_logger->debug('Received all participants.');
-            $this->veda_logger->dump($result);
+            $this->veda_logger->dump($result, ilLogLevel::DEBUG);
             return new ilVedaELearningParticipantsCollection($result);
         } catch (Exception $e) {
             $this->handleException('getTeilnehmerELearningPlattformUsingGET', $e);

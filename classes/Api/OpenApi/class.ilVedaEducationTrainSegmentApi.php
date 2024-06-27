@@ -53,7 +53,7 @@ class ilVedaEducationTrainSegmentApi implements ilVedaEducationTrainSegmentApiIn
             } else {
                 $info->setPraktikumsberichtKorrigiert(false);
             }
-            $this->veda_logger->dump($info);
+            $this->veda_logger->dump($info, ilLogLevel::DEBUG);
             $this->api_training_course_train_segment->meldePraktikumsberichtKorrigiertUsingPUT(
                 $segment_oid,
                 $participant_oid,
@@ -79,7 +79,7 @@ class ilVedaEducationTrainSegmentApi implements ilVedaEducationTrainSegmentApiIn
             } else {
                 $info->setPraktikumsberichtEingegangen(false);
             }
-            $this->veda_logger->dump($info);
+            $this->veda_logger->dump($info, ilLogLevel::DEBUG);
             $this->api_training_course_train_segment->meldePraktikumsberichtEingegangenUsingPUT(
                 $segment_oid,
                 $participant_oid,
@@ -101,7 +101,7 @@ class ilVedaEducationTrainSegmentApi implements ilVedaEducationTrainSegmentApiIn
             $info = new MeldeLernerfolgApiDto();
             $info->setLernerfolg(true);
             $info->setLernerfolgGemeldetAm($dt);
-            $this->veda_logger->dump($info);
+            $this->veda_logger->dump($info, ilLogLevel::DEBUG);
             $this->api_training_course_train_segment->meldeLernerfolgUsingPUT(
                 $segment_oid,
                 $participant_oid,

@@ -48,7 +48,7 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
         try {
             $result = $this->api_training_course_train->getBeteiligteDozentenVonAusbildungszugUsingGET($oid);
             $this->veda_logger->debug('Reveived tutors of education train with id: ' . $oid);
-            $this->veda_logger->dump($result);
+            $this->veda_logger->dump($result, ilLogLevel::DEBUG);
             return new ilVedaEducationTrainTutorCollection($result);
         } catch (Exception $e) {
             $this->handleException('getBeteiligteDozentenVonAusbildungszugUsingGET', $e);
@@ -61,7 +61,7 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
         try {
             $result = $this->api_training_course_train->getLernbegleiterVonAusbildungszugUsingGET($oid);
             $this->veda_logger->debug('Received companions of education train with id: ' . $oid);
-            $this->veda_logger->dump($result);
+            $this->veda_logger->dump($result, ilLogLevel::DEBUG);
             return new ilVedaEducationTrainCompanionCollection($result);
         } catch (Exception $e) {
             $this->handleException('getLernbegleiterVonAusbildungszugUsingGET', $e);
@@ -74,7 +74,7 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
         try {
             $result = $this->api_training_course_train->getAufsichtspersonenVonAusbildungszugUsingGET($oid);
             $this->veda_logger->debug('Received supervisors of education train with id: ' . $oid);
-            $this->veda_logger->dump($result);
+            $this->veda_logger->dump($result, ilLogLevel::DEBUG);
             return new ilVedaEducationTrainSupervisorCollection($result);
         } catch (Exception $e) {
             $this->handleException('getAufsichtspersonenVonAusbildungszugUsingGET', $e);
@@ -87,7 +87,7 @@ class ilVedaEducationTrainApi implements ilVedaEducationTrainApiInterface
         try {
             $result = $this->api_training_course_train->getTeilnehmerVonAusbildungszugUsingGET($oid);
             $this->veda_logger->debug('Received members of education train with id: ' . $oid);
-            $this->veda_logger->dump($result);
+            $this->veda_logger->dump($result, ilLogLevel::DEBUG);
             return new ilVedaEducationTrainMemberCollection($result);
         } catch (Exception $e) {
             $this->handleException('getTeilnehmerVonAusbildungszugUsingGET', $e);

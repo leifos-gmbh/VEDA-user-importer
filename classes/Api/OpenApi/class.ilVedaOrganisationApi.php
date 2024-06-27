@@ -41,7 +41,7 @@ class ilVedaOrganisationApi implements ilVedaOrganisationApiInterface
     {
         try {
             $response = $this->api_organisation->getOrganisationUsingGET($orgr_oid);
-            $this->veda_logger->dump($response);
+            $this->veda_logger->dump($response, ilLogLevel::DEBUG);
             return $response;
         } catch (Exception $e) {
             $this->handleException('getOrganisationUsingGET', $e);

@@ -327,7 +327,7 @@ class ilVedaCourseStandardImportAdapter
             return;
         }
         $oid = $tc[self::CP_INFO_ELEARNING_COURSE];
-        $this->logger->dump($tc);
+        $this->logger->dump($tc, ilLogLevel::DEBUG);
         $source = ilObjectFactory::getInstanceByRefId($a_source_id, false);
         $target = ilObjectFactory::getInstanceByRefId($a_target_id, false);
         $standard_courses = $this->veda_connector->getElearningPlattformApi()->requestCourses();
