@@ -57,6 +57,21 @@ class ilVedaUserImportAdapter
         ilVedaELearningParticipantsCollectionInterface $participants,
         int $import_mode
     ) : void {
+        // this is a hack to send maximum 50 participants via soap
+        $num = 0;
+        $sequenced_participants = [];
+        foreach ($participants as $idx => $participant) {
+            if (++$num >= 50) {
+                $participant_collection = new ilVedaELearningParticipantsCollection($sequenced_participants);
+                $this->transformParticipantsToXml($participant_collection, $import_mode);
+                $this->importXml($import_mode);
+                $this->updateCreationFeedback();
+                $num = 0;
+                $sequenced_participants = [];
+            }
+            $sequenced_participants[] = $participant;
+        }
+        $participant_collection = new ilVedaELearningParticipantsCollection($sequenced_participants);
         $this->transformParticipantsToXml($participants, $import_mode);
         $this->importXml($import_mode);
         $this->updateCreationFeedback();
@@ -73,6 +88,7 @@ class ilVedaUserImportAdapter
         ilVedaELearningParticipantsCollectionInterface $participants,
         int $import_mode
     ) : void {
+        $this->writer = new ilXmlWriter();
         $this->writer->xmlStartTag('Users');
 
         $this->logger->info('Starting update of ' . count($participants) . ' participants. ');
