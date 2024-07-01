@@ -292,13 +292,13 @@ class ilVedaOpenApi implements ilVedaApiInterface
     public function deleteDeprecatedILIASUsers() : void
     {
         $elearning_api = $this->veda_connector->getElearningPlattformApi();
+        $participants = $elearning_api->requestParticipants();
         foreach ($this->user_repo->lookupAllUsers() as $user) {
             $found_remote = false;
-            $participants = $elearning_api->requestParticipants();
             if (is_null($participants)) {
                 continue;
             }
-            foreach ($elearning_api->requestParticipants() as $participant) {
+            foreach ($participants as $participant) {
                 if (ilVedaUtils::compareOidsEqual($user->getOid(), $participant->getTeilnehmer()->getOid())) {
                     $found_remote = true;
                 }
