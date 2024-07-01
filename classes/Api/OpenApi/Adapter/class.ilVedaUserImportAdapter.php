@@ -490,7 +490,7 @@ class ilVedaUserImportAdapter
         }
 
         if (count($org_parts)) {
-            $this->writer->xmlElement('Institution', [], implode(' ', $org_parts));
+            $this->writer->xmlElement('Institution', [], ilStr::shortenText(implode(' ', $org_parts), 0, 70));
         }
 
         if ($org->getAdresse() instanceof Adresse) {
