@@ -576,11 +576,13 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
             }
         } catch (Exception $e) {
             $this->logger->logStack(ilLogLevel::WARNING);
+            $this->logger->warning('Import failed with message: ' . $e->getMessage());
             $this->tpl->setOnScreenMessage(
                 ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE,
                 'Import failed with message: ' . $e->getMessage()
             );
             $this->import($form);
+            return;
         }
         $this->tpl->setOnScreenMessage(
             ilGlobalTemplateInterface::MESSAGE_TYPE_SUCCESS,
