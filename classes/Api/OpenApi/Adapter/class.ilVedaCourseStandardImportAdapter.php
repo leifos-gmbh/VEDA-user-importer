@@ -88,7 +88,7 @@ class ilVedaCourseStandardImportAdapter
         try {
             $ilCourse = ilObjectFactory::getInstanceByRefId($ref_id, false);
             if (!$ilCourse instanceof ilObjCourse) {
-                throw new ilVedaCourseImporterException('Invalid master course id given');
+                throw new ilVedaCourseImporterException('Invalid master course id given: ' . $ref_id);
             }
         } catch (Exception $e) {
             $this->logger->debug('Exception occurred: ' . $e->getMessage());
