@@ -84,6 +84,13 @@ class ilVedaCourseStandardImportAdapter
      */
     protected function handleCourseUpdate(Elearningkurs $course) : void
     {
+        // check if course is created before masterkurs validation, since a valid masterkurs is not required in this case.
+        $obj_id = ilObject::_getIdForImportId($course->getOid());
+        if ($obj_id) {
+            $this->logger->info('Ignoring oid ' . $course->getOid() . ' => ELearningkurs already imported.');
+            return;
+        }
+
         $ref_id = (int) $course->getMasterkurs();
         try {
             $ilCourse = ilObjectFactory::getInstanceByRefId($ref_id, false);
@@ -103,11 +110,6 @@ class ilVedaCourseStandardImportAdapter
                 ->withModified(time())
                 ->store();
             throw $e;
-        }
-        $obj_id = ilObject::_getIdForImportId($course->getOid());
-        if ($obj_id) {
-            $this->logger->info('Ignoring oid ' . $course->getOid() . ' => ELearningkurs already imported.');
-            return;
         }
         $message = 'Creating new "ELearningkurs" with oid: ' . $course->getOid();
         $this->logger->info($message);
