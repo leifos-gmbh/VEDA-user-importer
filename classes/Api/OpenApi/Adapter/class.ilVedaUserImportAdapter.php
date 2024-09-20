@@ -383,7 +383,7 @@ class ilVedaUserImportAdapter
         }
 
         $login = $participant->getBenutzername();
-        if (strcmp($login, $user->getLogin()) === 0) {
+        if (strcasecmp($login, $user->getLogin()) === 0) {
             $this->logger->debug('User login name unchanged.');
             $new_login = $login;
             return true;
