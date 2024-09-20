@@ -63,7 +63,7 @@ class Teilnehmerkurszuordnung implements ModelInterface, ArrayAccess, \JsonSeria
         'kurs_id' => 'string',
         'kurs_zugriff_ab' => '\DateTime',
         'kurs_zugriff_bis' => '\DateTime',
-        'links' => '\OpenAPI\Client\Model\Link[]',
+        'links' => '\OpenAPI\Client\Model\Links',
         'teilnehmer_id' => 'string',
         'teilnehmerbuchung_id' => 'string'
     ];
@@ -459,7 +459,7 @@ class Teilnehmerkurszuordnung implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -469,7 +469,7 @@ class Teilnehmerkurszuordnung implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

@@ -62,7 +62,7 @@ class Zielgruppe implements ModelInterface, ArrayAccess, \JsonSerializable
         'oid' => 'string',
         'bezeichnung' => 'string',
         'kurzbezeichnung' => 'string',
-        'links' => '\OpenAPI\Client\Model\Link[]',
+        'links' => '\OpenAPI\Client\Model\Links',
         'webveroeffentlichung' => 'bool'
     ];
 
@@ -406,7 +406,7 @@ class Zielgruppe implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -416,7 +416,7 @@ class Zielgruppe implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

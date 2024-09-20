@@ -60,7 +60,7 @@ class PLZBereichVeranstaltungstyp implements ModelInterface, ArrayAccess, \JsonS
       */
     protected static $openAPITypes = [
         'oid' => 'string',
-        'links' => '\OpenAPI\Client\Model\Link[]',
+        'links' => '\OpenAPI\Client\Model\Links',
         'plz_bis' => 'string',
         'plz_von' => 'string',
         'veranstaltungsort' => '\OpenAPI\Client\Model\Veranstaltungsort',
@@ -368,7 +368,7 @@ class PLZBereichVeranstaltungstyp implements ModelInterface, ArrayAccess, \JsonS
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -378,7 +378,7 @@ class PLZBereichVeranstaltungstyp implements ModelInterface, ArrayAccess, \JsonS
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

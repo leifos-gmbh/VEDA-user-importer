@@ -61,7 +61,7 @@ class Veranstaltungsform implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static $openAPITypes = [
         'bezeichnung' => 'string',
         'kuerzel' => 'string',
-        'links' => '\OpenAPI\Client\Model\Link[]',
+        'links' => '\OpenAPI\Client\Model\Links',
         'oid' => 'string'
     ];
 
@@ -369,7 +369,7 @@ class Veranstaltungsform implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -379,7 +379,7 @@ class Veranstaltungsform implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

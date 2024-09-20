@@ -66,7 +66,7 @@ class Elearningkurs implements ModelInterface, ArrayAccess, \JsonSerializable
         'ende' => '\DateTime',
         'kapazitaet' => 'int',
         'kursabschluss_als_erfolg_dokumentieren' => 'bool',
-        'links' => '\OpenAPI\Client\Model\Link[]',
+        'links' => '\OpenAPI\Client\Model\Links',
         'masterkurs' => 'string',
         'termine' => '\OpenAPI\Client\Model\ElearningkursZugeordneterTerminReihe[]',
         'terminreihen' => '\OpenAPI\Client\Model\ElearningkursZugeordneterTerminReihe[]'
@@ -568,7 +568,7 @@ class Elearningkurs implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -578,7 +578,7 @@ class Elearningkurs implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

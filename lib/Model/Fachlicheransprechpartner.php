@@ -62,7 +62,7 @@ class Fachlicheransprechpartner implements ModelInterface, ArrayAccess, \JsonSer
         'oid' => 'string',
         'freitext_titel' => 'string',
         'geschaeftliche_e_mail_adresse' => 'string',
-        'links' => '\OpenAPI\Client\Model\Link[]',
+        'links' => '\OpenAPI\Client\Model\Links',
         'nachname' => 'string',
         'telefon_geschaeftlich' => 'string',
         'titel' => 'string',
@@ -427,7 +427,7 @@ class Fachlicheransprechpartner implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -437,7 +437,7 @@ class Fachlicheransprechpartner implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

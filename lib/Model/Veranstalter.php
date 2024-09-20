@@ -63,7 +63,7 @@ class Veranstalter implements ModelInterface, ArrayAccess, \JsonSerializable
         'email_adresse' => 'string',
         'hausnummer' => 'string',
         'homepage' => 'string',
-        'links' => '\OpenAPI\Client\Model\Link[]',
+        'links' => '\OpenAPI\Client\Model\Links',
         'name1' => 'string',
         'name2' => 'string',
         'name3' => 'string',
@@ -482,7 +482,7 @@ class Veranstalter implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -492,7 +492,7 @@ class Veranstalter implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

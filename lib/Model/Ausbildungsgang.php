@@ -63,7 +63,7 @@ class Ausbildungsgang implements ModelInterface, ArrayAccess, \JsonSerializable
         'ausbildungsgangabschnitte' => '\OpenAPI\Client\Model\Ausbildungsgangabschnitt[]',
         'bezeichnung' => 'string',
         'kurzbezeichnung' => 'string',
-        'links' => '\OpenAPI\Client\Model\Link[]'
+        'links' => '\OpenAPI\Client\Model\Links'
     ];
 
     /**
@@ -442,7 +442,7 @@ class Ausbildungsgang implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -452,7 +452,7 @@ class Ausbildungsgang implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

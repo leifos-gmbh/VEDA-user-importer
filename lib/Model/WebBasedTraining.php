@@ -69,7 +69,7 @@ class WebBasedTraining implements ModelInterface, ArrayAccess, \JsonSerializable
         'hinweise' => 'string',
         'inhalt' => 'string',
         'kurzbezeichnung' => 'string',
-        'links' => '\OpenAPI\Client\Model\Link[]',
+        'links' => '\OpenAPI\Client\Model\Links',
         'methodik' => 'string',
         'thema' => 'string',
         'thema2' => 'string',
@@ -713,7 +713,7 @@ class WebBasedTraining implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -723,7 +723,7 @@ class WebBasedTraining implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

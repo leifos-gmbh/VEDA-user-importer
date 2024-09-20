@@ -60,6 +60,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess, \JsonSerializabl
       */
     protected static $openAPITypes = [
         'oid' => 'string',
+        'alternative_veranstaltungstypen' => 'string[]',
         'anzahl_teilnehmertage' => 'float',
         'anzahl_ue' => 'float',
         'beschreibung' => 'string',
@@ -73,8 +74,9 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess, \JsonSerializabl
         'kategorien' => '\OpenAPI\Client\Model\KategorieUndUnterkategorieApiDto[]',
         'kundenzitat' => 'string',
         'kurzbezeichnung' => 'string',
-        'links' => '\OpenAPI\Client\Model\Link[]',
+        'links' => '\OpenAPI\Client\Model\Links',
         'methodik' => 'string',
+        'plz_einschraenkung' => 'bool',
         'preise_je_teilnehmergruppe' => '\OpenAPI\Client\Model\TeilnehmergruppePreis[]',
         'publizierung_aktiv' => 'bool',
         'regulaere_uhrzeit_bis' => 'string',
@@ -110,6 +112,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess, \JsonSerializabl
       */
     protected static $openAPIFormats = [
         'oid' => null,
+        'alternative_veranstaltungstypen' => null,
         'anzahl_teilnehmertage' => null,
         'anzahl_ue' => null,
         'beschreibung' => null,
@@ -125,6 +128,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess, \JsonSerializabl
         'kurzbezeichnung' => null,
         'links' => null,
         'methodik' => null,
+        'plz_einschraenkung' => null,
         'preise_je_teilnehmergruppe' => null,
         'publizierung_aktiv' => null,
         'regulaere_uhrzeit_bis' => null,
@@ -158,6 +162,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess, \JsonSerializabl
       */
     protected static array $openAPINullables = [
         'oid' => false,
+		'alternative_veranstaltungstypen' => false,
 		'anzahl_teilnehmertage' => false,
 		'anzahl_ue' => false,
 		'beschreibung' => false,
@@ -173,6 +178,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess, \JsonSerializabl
 		'kurzbezeichnung' => false,
 		'links' => false,
 		'methodik' => false,
+		'plz_einschraenkung' => false,
 		'preise_je_teilnehmergruppe' => false,
 		'publizierung_aktiv' => false,
 		'regulaere_uhrzeit_bis' => false,
@@ -286,6 +292,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess, \JsonSerializabl
      */
     protected static $attributeMap = [
         'oid' => 'oid',
+        'alternative_veranstaltungstypen' => 'alternativeVeranstaltungstypen',
         'anzahl_teilnehmertage' => 'anzahlTeilnehmertage',
         'anzahl_ue' => 'anzahlUE',
         'beschreibung' => 'beschreibung',
@@ -301,6 +308,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess, \JsonSerializabl
         'kurzbezeichnung' => 'kurzbezeichnung',
         'links' => 'links',
         'methodik' => 'methodik',
+        'plz_einschraenkung' => 'plzEinschraenkung',
         'preise_je_teilnehmergruppe' => 'preiseJeTeilnehmergruppe',
         'publizierung_aktiv' => 'publizierungAktiv',
         'regulaere_uhrzeit_bis' => 'regulaereUhrzeitBis',
@@ -334,6 +342,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess, \JsonSerializabl
      */
     protected static $setters = [
         'oid' => 'setOid',
+        'alternative_veranstaltungstypen' => 'setAlternativeVeranstaltungstypen',
         'anzahl_teilnehmertage' => 'setAnzahlTeilnehmertage',
         'anzahl_ue' => 'setAnzahlUe',
         'beschreibung' => 'setBeschreibung',
@@ -349,6 +358,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess, \JsonSerializabl
         'kurzbezeichnung' => 'setKurzbezeichnung',
         'links' => 'setLinks',
         'methodik' => 'setMethodik',
+        'plz_einschraenkung' => 'setPlzEinschraenkung',
         'preise_je_teilnehmergruppe' => 'setPreiseJeTeilnehmergruppe',
         'publizierung_aktiv' => 'setPublizierungAktiv',
         'regulaere_uhrzeit_bis' => 'setRegulaereUhrzeitBis',
@@ -382,6 +392,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess, \JsonSerializabl
      */
     protected static $getters = [
         'oid' => 'getOid',
+        'alternative_veranstaltungstypen' => 'getAlternativeVeranstaltungstypen',
         'anzahl_teilnehmertage' => 'getAnzahlTeilnehmertage',
         'anzahl_ue' => 'getAnzahlUe',
         'beschreibung' => 'getBeschreibung',
@@ -397,6 +408,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess, \JsonSerializabl
         'kurzbezeichnung' => 'getKurzbezeichnung',
         'links' => 'getLinks',
         'methodik' => 'getMethodik',
+        'plz_einschraenkung' => 'getPlzEinschraenkung',
         'preise_je_teilnehmergruppe' => 'getPreiseJeTeilnehmergruppe',
         'publizierung_aktiv' => 'getPublizierungAktiv',
         'regulaere_uhrzeit_bis' => 'getRegulaereUhrzeitBis',
@@ -481,6 +493,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess, \JsonSerializabl
     public function __construct(array $data = null)
     {
         $this->setIfExists('oid', $data ?? [], null);
+        $this->setIfExists('alternative_veranstaltungstypen', $data ?? [], null);
         $this->setIfExists('anzahl_teilnehmertage', $data ?? [], null);
         $this->setIfExists('anzahl_ue', $data ?? [], null);
         $this->setIfExists('beschreibung', $data ?? [], null);
@@ -496,6 +509,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess, \JsonSerializabl
         $this->setIfExists('kurzbezeichnung', $data ?? [], null);
         $this->setIfExists('links', $data ?? [], null);
         $this->setIfExists('methodik', $data ?? [], null);
+        $this->setIfExists('plz_einschraenkung', $data ?? [], null);
         $this->setIfExists('preise_je_teilnehmergruppe', $data ?? [], null);
         $this->setIfExists('publizierung_aktiv', $data ?? [], null);
         $this->setIfExists('regulaere_uhrzeit_bis', $data ?? [], null);
@@ -596,6 +610,33 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess, \JsonSerializabl
             throw new \InvalidArgumentException('non-nullable oid cannot be null');
         }
         $this->container['oid'] = $oid;
+
+        return $this;
+    }
+
+    /**
+     * Gets alternative_veranstaltungstypen
+     *
+     * @return string[]|null
+     */
+    public function getAlternativeVeranstaltungstypen()
+    {
+        return $this->container['alternative_veranstaltungstypen'];
+    }
+
+    /**
+     * Sets alternative_veranstaltungstypen
+     *
+     * @param string[]|null $alternative_veranstaltungstypen Die Liste der der alternativen Veranstaltungstypen
+     *
+     * @return self
+     */
+    public function setAlternativeVeranstaltungstypen($alternative_veranstaltungstypen)
+    {
+        if (is_null($alternative_veranstaltungstypen)) {
+            throw new \InvalidArgumentException('non-nullable alternative_veranstaltungstypen cannot be null');
+        }
+        $this->container['alternative_veranstaltungstypen'] = $alternative_veranstaltungstypen;
 
         return $this;
     }
@@ -954,7 +995,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -964,7 +1005,7 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */
@@ -1001,6 +1042,33 @@ class Veranstaltungstyp implements ModelInterface, ArrayAccess, \JsonSerializabl
             throw new \InvalidArgumentException('non-nullable methodik cannot be null');
         }
         $this->container['methodik'] = $methodik;
+
+        return $this;
+    }
+
+    /**
+     * Gets plz_einschraenkung
+     *
+     * @return bool|null
+     */
+    public function getPlzEinschraenkung()
+    {
+        return $this->container['plz_einschraenkung'];
+    }
+
+    /**
+     * Sets plz_einschraenkung
+     *
+     * @param bool|null $plz_einschraenkung Gibt an, ob die PLZ-Einschränkung aktiv ist.
+     *
+     * @return self
+     */
+    public function setPlzEinschraenkung($plz_einschraenkung)
+    {
+        if (is_null($plz_einschraenkung)) {
+            throw new \InvalidArgumentException('non-nullable plz_einschraenkung cannot be null');
+        }
+        $this->container['plz_einschraenkung'] = $plz_einschraenkung;
 
         return $this;
     }

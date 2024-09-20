@@ -60,7 +60,7 @@ class AusbildungszugLernbegleiter implements ModelInterface, ArrayAccess, \JsonS
       */
     protected static $openAPITypes = [
         'lernbegleiter_id' => 'string',
-        'links' => '\OpenAPI\Client\Model\Link[]',
+        'links' => '\OpenAPI\Client\Model\Links',
         'zustaendig_ab' => '\DateTime',
         'zustaendig_bis' => '\DateTime'
     ];
@@ -345,7 +345,7 @@ class AusbildungszugLernbegleiter implements ModelInterface, ArrayAccess, \JsonS
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -355,7 +355,7 @@ class AusbildungszugLernbegleiter implements ModelInterface, ArrayAccess, \JsonS
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

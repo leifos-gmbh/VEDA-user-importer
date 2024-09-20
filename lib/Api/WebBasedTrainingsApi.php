@@ -1283,15 +1283,16 @@ class WebBasedTrainingsApi
      *
      * @param  \DateTime $modifiziert_ab Änderungs- bzw. Einfügezeitpunkt, ab dem die Web Based Trainings geliefert werden sollen. Das Format muss wie folgt sein: yyyy-MM-ddTHH:mm:ss.sss (optional)
      * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle publiziertenVeranstaltungen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $veranstaltungstyp_id Optionaler Parameter, mit dem die abgerufenen Web-Based Trainings / Fernlehrgänge auf den angegebenen Veranstaltungstypen eingeschränkt werden können. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebBasedTrainingsUsingGET'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \OpenAPI\Client\Model\WebBasedTraining[]
      */
-    public function getWebBasedTrainingsUsingGET($modifiziert_ab = null, $teilnehmergruppekuerzel = null, string $contentType = self::contentTypes['getWebBasedTrainingsUsingGET'][0])
+    public function getWebBasedTrainingsUsingGET($modifiziert_ab = null, $teilnehmergruppekuerzel = null, $veranstaltungstyp_id = null, string $contentType = self::contentTypes['getWebBasedTrainingsUsingGET'][0])
     {
-        list($response) = $this->getWebBasedTrainingsUsingGETWithHttpInfo($modifiziert_ab, $teilnehmergruppekuerzel, $contentType);
+        list($response) = $this->getWebBasedTrainingsUsingGETWithHttpInfo($modifiziert_ab, $teilnehmergruppekuerzel, $veranstaltungstyp_id, $contentType);
         return $response;
     }
 
@@ -1302,15 +1303,16 @@ class WebBasedTrainingsApi
      *
      * @param  \DateTime $modifiziert_ab Änderungs- bzw. Einfügezeitpunkt, ab dem die Web Based Trainings geliefert werden sollen. Das Format muss wie folgt sein: yyyy-MM-ddTHH:mm:ss.sss (optional)
      * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle publiziertenVeranstaltungen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $veranstaltungstyp_id Optionaler Parameter, mit dem die abgerufenen Web-Based Trainings / Fernlehrgänge auf den angegebenen Veranstaltungstypen eingeschränkt werden können. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebBasedTrainingsUsingGET'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \OpenAPI\Client\Model\WebBasedTraining[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getWebBasedTrainingsUsingGETWithHttpInfo($modifiziert_ab = null, $teilnehmergruppekuerzel = null, string $contentType = self::contentTypes['getWebBasedTrainingsUsingGET'][0])
+    public function getWebBasedTrainingsUsingGETWithHttpInfo($modifiziert_ab = null, $teilnehmergruppekuerzel = null, $veranstaltungstyp_id = null, string $contentType = self::contentTypes['getWebBasedTrainingsUsingGET'][0])
     {
-        $request = $this->getWebBasedTrainingsUsingGETRequest($modifiziert_ab, $teilnehmergruppekuerzel, $contentType);
+        $request = $this->getWebBasedTrainingsUsingGETRequest($modifiziert_ab, $teilnehmergruppekuerzel, $veranstaltungstyp_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1403,14 +1405,15 @@ class WebBasedTrainingsApi
      *
      * @param  \DateTime $modifiziert_ab Änderungs- bzw. Einfügezeitpunkt, ab dem die Web Based Trainings geliefert werden sollen. Das Format muss wie folgt sein: yyyy-MM-ddTHH:mm:ss.sss (optional)
      * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle publiziertenVeranstaltungen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $veranstaltungstyp_id Optionaler Parameter, mit dem die abgerufenen Web-Based Trainings / Fernlehrgänge auf den angegebenen Veranstaltungstypen eingeschränkt werden können. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebBasedTrainingsUsingGET'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getWebBasedTrainingsUsingGETAsync($modifiziert_ab = null, $teilnehmergruppekuerzel = null, string $contentType = self::contentTypes['getWebBasedTrainingsUsingGET'][0])
+    public function getWebBasedTrainingsUsingGETAsync($modifiziert_ab = null, $teilnehmergruppekuerzel = null, $veranstaltungstyp_id = null, string $contentType = self::contentTypes['getWebBasedTrainingsUsingGET'][0])
     {
-        return $this->getWebBasedTrainingsUsingGETAsyncWithHttpInfo($modifiziert_ab, $teilnehmergruppekuerzel, $contentType)
+        return $this->getWebBasedTrainingsUsingGETAsyncWithHttpInfo($modifiziert_ab, $teilnehmergruppekuerzel, $veranstaltungstyp_id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1425,15 +1428,16 @@ class WebBasedTrainingsApi
      *
      * @param  \DateTime $modifiziert_ab Änderungs- bzw. Einfügezeitpunkt, ab dem die Web Based Trainings geliefert werden sollen. Das Format muss wie folgt sein: yyyy-MM-ddTHH:mm:ss.sss (optional)
      * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle publiziertenVeranstaltungen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $veranstaltungstyp_id Optionaler Parameter, mit dem die abgerufenen Web-Based Trainings / Fernlehrgänge auf den angegebenen Veranstaltungstypen eingeschränkt werden können. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebBasedTrainingsUsingGET'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getWebBasedTrainingsUsingGETAsyncWithHttpInfo($modifiziert_ab = null, $teilnehmergruppekuerzel = null, string $contentType = self::contentTypes['getWebBasedTrainingsUsingGET'][0])
+    public function getWebBasedTrainingsUsingGETAsyncWithHttpInfo($modifiziert_ab = null, $teilnehmergruppekuerzel = null, $veranstaltungstyp_id = null, string $contentType = self::contentTypes['getWebBasedTrainingsUsingGET'][0])
     {
         $returnType = '\OpenAPI\Client\Model\WebBasedTraining[]';
-        $request = $this->getWebBasedTrainingsUsingGETRequest($modifiziert_ab, $teilnehmergruppekuerzel, $contentType);
+        $request = $this->getWebBasedTrainingsUsingGETRequest($modifiziert_ab, $teilnehmergruppekuerzel, $veranstaltungstyp_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1476,13 +1480,15 @@ class WebBasedTrainingsApi
      *
      * @param  \DateTime $modifiziert_ab Änderungs- bzw. Einfügezeitpunkt, ab dem die Web Based Trainings geliefert werden sollen. Das Format muss wie folgt sein: yyyy-MM-ddTHH:mm:ss.sss (optional)
      * @param  string $teilnehmergruppekuerzel Optionaler Parameter, um zu steuern, für welche Teilnehmergruppe die Veranstaltungen abgerufen werden sollen. Ist eine Teilnehmergruppe angegeben, so werden alle publiziertenVeranstaltungen für diese Teilnehmergruppe zurückgegeben. (optional)
+     * @param  string $veranstaltungstyp_id Optionaler Parameter, mit dem die abgerufenen Web-Based Trainings / Fernlehrgänge auf den angegebenen Veranstaltungstypen eingeschränkt werden können. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebBasedTrainingsUsingGET'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getWebBasedTrainingsUsingGETRequest($modifiziert_ab = null, $teilnehmergruppekuerzel = null, string $contentType = self::contentTypes['getWebBasedTrainingsUsingGET'][0])
+    public function getWebBasedTrainingsUsingGETRequest($modifiziert_ab = null, $teilnehmergruppekuerzel = null, $veranstaltungstyp_id = null, string $contentType = self::contentTypes['getWebBasedTrainingsUsingGET'][0])
     {
+
 
 
 
@@ -1507,6 +1513,15 @@ class WebBasedTrainingsApi
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $teilnehmergruppekuerzel,
             'teilnehmergruppekuerzel', // param base name
+            'string', // openApiType
+            '', // style
+            false, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $veranstaltungstyp_id,
+            'veranstaltungstypId', // param base name
             'string', // openApiType
             '', // style
             false, // explode

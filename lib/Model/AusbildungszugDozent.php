@@ -62,7 +62,7 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess, \JsonSerializ
         'dozent_id' => 'string',
         'kurs_zugriff_ab' => '\DateTime',
         'kurs_zugriff_bis' => '\DateTime',
-        'links' => '\OpenAPI\Client\Model\Link[]'
+        'links' => '\OpenAPI\Client\Model\Links'
     ];
 
     /**
@@ -399,7 +399,7 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -409,7 +409,7 @@ class AusbildungszugDozent implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

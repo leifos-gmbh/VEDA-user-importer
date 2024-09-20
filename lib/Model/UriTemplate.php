@@ -1,6 +1,6 @@
 <?php
 /**
- * Schlagwort
+ * UriTemplate
  *
  * PHP version 7.4
  *
@@ -33,16 +33,15 @@ use \ArrayAccess;
 use \OpenAPI\Client\ObjectSerializer;
 
 /**
- * Schlagwort Class Doc Comment
+ * UriTemplate Class Doc Comment
  *
  * @category Class
- * @description Die Informationen eines Schlagwortes.
  * @package  OpenAPI\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
+class UriTemplate implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +50,7 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'Schlagwort';
+    protected static $openAPIModelName = 'UriTemplate';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -59,11 +58,8 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'oid' => 'string',
-        'bemerkung' => 'string',
-        'bezeichnung' => 'string',
-        'kuerzel' => 'string',
-        'links' => '\OpenAPI\Client\Model\Links'
+        'variable_names' => 'string[]',
+        'variables' => 'object'
     ];
 
     /**
@@ -74,11 +70,8 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'oid' => null,
-        'bemerkung' => null,
-        'bezeichnung' => null,
-        'kuerzel' => null,
-        'links' => null
+        'variable_names' => null,
+        'variables' => null
     ];
 
     /**
@@ -87,11 +80,8 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'oid' => false,
-		'bemerkung' => false,
-		'bezeichnung' => false,
-		'kuerzel' => false,
-		'links' => false
+        'variable_names' => false,
+		'variables' => false
     ];
 
     /**
@@ -180,11 +170,8 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'oid' => 'oid',
-        'bemerkung' => 'bemerkung',
-        'bezeichnung' => 'bezeichnung',
-        'kuerzel' => 'kuerzel',
-        'links' => 'links'
+        'variable_names' => 'variableNames',
+        'variables' => 'variables'
     ];
 
     /**
@@ -193,11 +180,8 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'oid' => 'setOid',
-        'bemerkung' => 'setBemerkung',
-        'bezeichnung' => 'setBezeichnung',
-        'kuerzel' => 'setKuerzel',
-        'links' => 'setLinks'
+        'variable_names' => 'setVariableNames',
+        'variables' => 'setVariables'
     ];
 
     /**
@@ -206,11 +190,8 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'oid' => 'getOid',
-        'bemerkung' => 'getBemerkung',
-        'bezeichnung' => 'getBezeichnung',
-        'kuerzel' => 'getKuerzel',
-        'links' => 'getLinks'
+        'variable_names' => 'getVariableNames',
+        'variables' => 'getVariables'
     ];
 
     /**
@@ -270,11 +251,8 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('oid', $data ?? [], null);
-        $this->setIfExists('bemerkung', $data ?? [], null);
-        $this->setIfExists('bezeichnung', $data ?? [], null);
-        $this->setIfExists('kuerzel', $data ?? [], null);
-        $this->setIfExists('links', $data ?? [], null);
+        $this->setIfExists('variable_names', $data ?? [], null);
+        $this->setIfExists('variables', $data ?? [], null);
     }
 
     /**
@@ -304,9 +282,6 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['oid'] === null) {
-            $invalidProperties[] = "'oid' can't be null";
-        }
         return $invalidProperties;
     }
 
@@ -323,136 +298,55 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets oid
+     * Gets variable_names
      *
-     * @return string
+     * @return string[]|null
      */
-    public function getOid()
+    public function getVariableNames()
     {
-        return $this->container['oid'];
+        return $this->container['variable_names'];
     }
 
     /**
-     * Sets oid
+     * Sets variable_names
      *
-     * @param string $oid UUID des Datensatzes
+     * @param string[]|null $variable_names variable_names
      *
      * @return self
      */
-    public function setOid($oid)
+    public function setVariableNames($variable_names)
     {
-        if (is_null($oid)) {
-            throw new \InvalidArgumentException('non-nullable oid cannot be null');
+        if (is_null($variable_names)) {
+            throw new \InvalidArgumentException('non-nullable variable_names cannot be null');
         }
-        $this->container['oid'] = $oid;
+        $this->container['variable_names'] = $variable_names;
 
         return $this;
     }
 
     /**
-     * Gets bemerkung
+     * Gets variables
      *
-     * @return string|null
+     * @return object|null
      */
-    public function getBemerkung()
+    public function getVariables()
     {
-        return $this->container['bemerkung'];
+        return $this->container['variables'];
     }
 
     /**
-     * Sets bemerkung
+     * Sets variables
      *
-     * @param string|null $bemerkung Bemerkung des Schlagwortes
+     * @param object|null $variables variables
      *
      * @return self
      */
-    public function setBemerkung($bemerkung)
+    public function setVariables($variables)
     {
-        if (is_null($bemerkung)) {
-            throw new \InvalidArgumentException('non-nullable bemerkung cannot be null');
+        if (is_null($variables)) {
+            throw new \InvalidArgumentException('non-nullable variables cannot be null');
         }
-        $this->container['bemerkung'] = $bemerkung;
-
-        return $this;
-    }
-
-    /**
-     * Gets bezeichnung
-     *
-     * @return string|null
-     */
-    public function getBezeichnung()
-    {
-        return $this->container['bezeichnung'];
-    }
-
-    /**
-     * Sets bezeichnung
-     *
-     * @param string|null $bezeichnung Bezeichnung des Schlagwortes
-     *
-     * @return self
-     */
-    public function setBezeichnung($bezeichnung)
-    {
-        if (is_null($bezeichnung)) {
-            throw new \InvalidArgumentException('non-nullable bezeichnung cannot be null');
-        }
-        $this->container['bezeichnung'] = $bezeichnung;
-
-        return $this;
-    }
-
-    /**
-     * Gets kuerzel
-     *
-     * @return string|null
-     */
-    public function getKuerzel()
-    {
-        return $this->container['kuerzel'];
-    }
-
-    /**
-     * Sets kuerzel
-     *
-     * @param string|null $kuerzel Kürzel des Schlagwortes
-     *
-     * @return self
-     */
-    public function setKuerzel($kuerzel)
-    {
-        if (is_null($kuerzel)) {
-            throw new \InvalidArgumentException('non-nullable kuerzel cannot be null');
-        }
-        $this->container['kuerzel'] = $kuerzel;
-
-        return $this;
-    }
-
-    /**
-     * Gets links
-     *
-     * @return \OpenAPI\Client\Model\Links|null
-     */
-    public function getLinks()
-    {
-        return $this->container['links'];
-    }
-
-    /**
-     * Sets links
-     *
-     * @param \OpenAPI\Client\Model\Links|null $links links
-     *
-     * @return self
-     */
-    public function setLinks($links)
-    {
-        if (is_null($links)) {
-            throw new \InvalidArgumentException('non-nullable links cannot be null');
-        }
-        $this->container['links'] = $links;
+        $this->container['variables'] = $variables;
 
         return $this;
     }

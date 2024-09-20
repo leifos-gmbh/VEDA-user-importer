@@ -63,7 +63,7 @@ class Organisation implements ModelInterface, ArrayAccess, \JsonSerializable
         'adresse' => '\OpenAPI\Client\Model\Adresse',
         'aufsichtsperson_e_mail' => 'string',
         'aufsichtsperson_name' => 'string',
-        'links' => '\OpenAPI\Client\Model\Link[]',
+        'links' => '\OpenAPI\Client\Model\Links',
         'mitgliedsnummer' => 'string',
         'organisationsart_kurzbezeichnung' => 'string',
         'organisationsname1' => 'string',
@@ -475,7 +475,7 @@ class Organisation implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -485,7 +485,7 @@ class Organisation implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

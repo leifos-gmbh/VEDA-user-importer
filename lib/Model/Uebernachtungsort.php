@@ -62,7 +62,7 @@ class Uebernachtungsort implements ModelInterface, ArrayAccess, \JsonSerializabl
         'oid' => 'string',
         'hausnr' => 'string',
         'homepage' => 'string',
-        'links' => '\OpenAPI\Client\Model\Link[]',
+        'links' => '\OpenAPI\Client\Model\Links',
         'name1' => 'string',
         'name2' => 'string',
         'name3' => 'string',
@@ -448,7 +448,7 @@ class Uebernachtungsort implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -458,7 +458,7 @@ class Uebernachtungsort implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

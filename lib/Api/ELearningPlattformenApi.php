@@ -1068,15 +1068,16 @@ class ELearningPlattformenApi
      * Ruft alle Teilnehmer einer E-Learning-Plattform ab
      *
      * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  bool $nicht_extern_angelegte_teilnehmer Filtert auf nicht extern angelegte Teilnehmer. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTeilnehmerELearningPlattformUsingGET'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \OpenAPI\Client\Model\TeilnehmerELearningPlattform[]
      */
-    public function getTeilnehmerELearningPlattformUsingGET($plattform_id, string $contentType = self::contentTypes['getTeilnehmerELearningPlattformUsingGET'][0])
+    public function getTeilnehmerELearningPlattformUsingGET($plattform_id, $nicht_extern_angelegte_teilnehmer = null, string $contentType = self::contentTypes['getTeilnehmerELearningPlattformUsingGET'][0])
     {
-        list($response) = $this->getTeilnehmerELearningPlattformUsingGETWithHttpInfo($plattform_id, $contentType);
+        list($response) = $this->getTeilnehmerELearningPlattformUsingGETWithHttpInfo($plattform_id, $nicht_extern_angelegte_teilnehmer, $contentType);
         return $response;
     }
 
@@ -1086,15 +1087,16 @@ class ELearningPlattformenApi
      * Ruft alle Teilnehmer einer E-Learning-Plattform ab
      *
      * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  bool $nicht_extern_angelegte_teilnehmer Filtert auf nicht extern angelegte Teilnehmer. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTeilnehmerELearningPlattformUsingGET'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \OpenAPI\Client\Model\TeilnehmerELearningPlattform[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getTeilnehmerELearningPlattformUsingGETWithHttpInfo($plattform_id, string $contentType = self::contentTypes['getTeilnehmerELearningPlattformUsingGET'][0])
+    public function getTeilnehmerELearningPlattformUsingGETWithHttpInfo($plattform_id, $nicht_extern_angelegte_teilnehmer = null, string $contentType = self::contentTypes['getTeilnehmerELearningPlattformUsingGET'][0])
     {
-        $request = $this->getTeilnehmerELearningPlattformUsingGETRequest($plattform_id, $contentType);
+        $request = $this->getTeilnehmerELearningPlattformUsingGETRequest($plattform_id, $nicht_extern_angelegte_teilnehmer, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1186,14 +1188,15 @@ class ELearningPlattformenApi
      * Ruft alle Teilnehmer einer E-Learning-Plattform ab
      *
      * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  bool $nicht_extern_angelegte_teilnehmer Filtert auf nicht extern angelegte Teilnehmer. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTeilnehmerELearningPlattformUsingGET'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getTeilnehmerELearningPlattformUsingGETAsync($plattform_id, string $contentType = self::contentTypes['getTeilnehmerELearningPlattformUsingGET'][0])
+    public function getTeilnehmerELearningPlattformUsingGETAsync($plattform_id, $nicht_extern_angelegte_teilnehmer = null, string $contentType = self::contentTypes['getTeilnehmerELearningPlattformUsingGET'][0])
     {
-        return $this->getTeilnehmerELearningPlattformUsingGETAsyncWithHttpInfo($plattform_id, $contentType)
+        return $this->getTeilnehmerELearningPlattformUsingGETAsyncWithHttpInfo($plattform_id, $nicht_extern_angelegte_teilnehmer, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1207,15 +1210,16 @@ class ELearningPlattformenApi
      * Ruft alle Teilnehmer einer E-Learning-Plattform ab
      *
      * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  bool $nicht_extern_angelegte_teilnehmer Filtert auf nicht extern angelegte Teilnehmer. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTeilnehmerELearningPlattformUsingGET'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getTeilnehmerELearningPlattformUsingGETAsyncWithHttpInfo($plattform_id, string $contentType = self::contentTypes['getTeilnehmerELearningPlattformUsingGET'][0])
+    public function getTeilnehmerELearningPlattformUsingGETAsyncWithHttpInfo($plattform_id, $nicht_extern_angelegte_teilnehmer = null, string $contentType = self::contentTypes['getTeilnehmerELearningPlattformUsingGET'][0])
     {
         $returnType = '\OpenAPI\Client\Model\TeilnehmerELearningPlattform[]';
-        $request = $this->getTeilnehmerELearningPlattformUsingGETRequest($plattform_id, $contentType);
+        $request = $this->getTeilnehmerELearningPlattformUsingGETRequest($plattform_id, $nicht_extern_angelegte_teilnehmer, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1257,12 +1261,13 @@ class ELearningPlattformenApi
      * Create request for operation 'getTeilnehmerELearningPlattformUsingGET'
      *
      * @param  string $plattform_id ID der E-Learning-Plattform (required)
+     * @param  bool $nicht_extern_angelegte_teilnehmer Filtert auf nicht extern angelegte Teilnehmer. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTeilnehmerELearningPlattformUsingGET'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getTeilnehmerELearningPlattformUsingGETRequest($plattform_id, string $contentType = self::contentTypes['getTeilnehmerELearningPlattformUsingGET'][0])
+    public function getTeilnehmerELearningPlattformUsingGETRequest($plattform_id, $nicht_extern_angelegte_teilnehmer = null, string $contentType = self::contentTypes['getTeilnehmerELearningPlattformUsingGET'][0])
     {
 
         // verify the required parameter 'plattform_id' is set
@@ -1273,6 +1278,7 @@ class ELearningPlattformenApi
         }
 
 
+
         $resourcePath = '/v2/elearningplattformen/{plattformId}/teilnehmer';
         $formParams = [];
         $queryParams = [];
@@ -1280,6 +1286,15 @@ class ELearningPlattformenApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $nicht_extern_angelegte_teilnehmer,
+            'nichtExternAngelegteTeilnehmer', // param base name
+            'boolean', // openApiType
+            '', // style
+            false, // explode
+            false // required
+        ) ?? []);
 
 
         // path params
@@ -3499,15 +3514,16 @@ class ELearningPlattformenApi
      *
      * @param  string $plattform_id ID der E-Learning-Plattform (required)
      * @param  string $teilnehmer_id ID des Teilnehmers (required)
+     * @param  \OpenAPI\Client\Model\ElearningaccountExterneReferenzNrApiDto $elearningaccount_externe_referenz_nr_api_dto Optionale externe Refernznummer (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['meldeElearningaccountAlsExternExistierendUsingPOST'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function meldeElearningaccountAlsExternExistierendUsingPOST($plattform_id, $teilnehmer_id, string $contentType = self::contentTypes['meldeElearningaccountAlsExternExistierendUsingPOST'][0])
+    public function meldeElearningaccountAlsExternExistierendUsingPOST($plattform_id, $teilnehmer_id, $elearningaccount_externe_referenz_nr_api_dto = null, string $contentType = self::contentTypes['meldeElearningaccountAlsExternExistierendUsingPOST'][0])
     {
-        $this->meldeElearningaccountAlsExternExistierendUsingPOSTWithHttpInfo($plattform_id, $teilnehmer_id, $contentType);
+        $this->meldeElearningaccountAlsExternExistierendUsingPOSTWithHttpInfo($plattform_id, $teilnehmer_id, $elearningaccount_externe_referenz_nr_api_dto, $contentType);
     }
 
     /**
@@ -3517,15 +3533,16 @@ class ELearningPlattformenApi
      *
      * @param  string $plattform_id ID der E-Learning-Plattform (required)
      * @param  string $teilnehmer_id ID des Teilnehmers (required)
+     * @param  \OpenAPI\Client\Model\ElearningaccountExterneReferenzNrApiDto $elearningaccount_externe_referenz_nr_api_dto Optionale externe Refernznummer (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['meldeElearningaccountAlsExternExistierendUsingPOST'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function meldeElearningaccountAlsExternExistierendUsingPOSTWithHttpInfo($plattform_id, $teilnehmer_id, string $contentType = self::contentTypes['meldeElearningaccountAlsExternExistierendUsingPOST'][0])
+    public function meldeElearningaccountAlsExternExistierendUsingPOSTWithHttpInfo($plattform_id, $teilnehmer_id, $elearningaccount_externe_referenz_nr_api_dto = null, string $contentType = self::contentTypes['meldeElearningaccountAlsExternExistierendUsingPOST'][0])
     {
-        $request = $this->meldeElearningaccountAlsExternExistierendUsingPOSTRequest($plattform_id, $teilnehmer_id, $contentType);
+        $request = $this->meldeElearningaccountAlsExternExistierendUsingPOSTRequest($plattform_id, $teilnehmer_id, $elearningaccount_externe_referenz_nr_api_dto, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -3578,14 +3595,15 @@ class ELearningPlattformenApi
      *
      * @param  string $plattform_id ID der E-Learning-Plattform (required)
      * @param  string $teilnehmer_id ID des Teilnehmers (required)
+     * @param  \OpenAPI\Client\Model\ElearningaccountExterneReferenzNrApiDto $elearningaccount_externe_referenz_nr_api_dto Optionale externe Refernznummer (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['meldeElearningaccountAlsExternExistierendUsingPOST'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function meldeElearningaccountAlsExternExistierendUsingPOSTAsync($plattform_id, $teilnehmer_id, string $contentType = self::contentTypes['meldeElearningaccountAlsExternExistierendUsingPOST'][0])
+    public function meldeElearningaccountAlsExternExistierendUsingPOSTAsync($plattform_id, $teilnehmer_id, $elearningaccount_externe_referenz_nr_api_dto = null, string $contentType = self::contentTypes['meldeElearningaccountAlsExternExistierendUsingPOST'][0])
     {
-        return $this->meldeElearningaccountAlsExternExistierendUsingPOSTAsyncWithHttpInfo($plattform_id, $teilnehmer_id, $contentType)
+        return $this->meldeElearningaccountAlsExternExistierendUsingPOSTAsyncWithHttpInfo($plattform_id, $teilnehmer_id, $elearningaccount_externe_referenz_nr_api_dto, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -3600,15 +3618,16 @@ class ELearningPlattformenApi
      *
      * @param  string $plattform_id ID der E-Learning-Plattform (required)
      * @param  string $teilnehmer_id ID des Teilnehmers (required)
+     * @param  \OpenAPI\Client\Model\ElearningaccountExterneReferenzNrApiDto $elearningaccount_externe_referenz_nr_api_dto Optionale externe Refernznummer (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['meldeElearningaccountAlsExternExistierendUsingPOST'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function meldeElearningaccountAlsExternExistierendUsingPOSTAsyncWithHttpInfo($plattform_id, $teilnehmer_id, string $contentType = self::contentTypes['meldeElearningaccountAlsExternExistierendUsingPOST'][0])
+    public function meldeElearningaccountAlsExternExistierendUsingPOSTAsyncWithHttpInfo($plattform_id, $teilnehmer_id, $elearningaccount_externe_referenz_nr_api_dto = null, string $contentType = self::contentTypes['meldeElearningaccountAlsExternExistierendUsingPOST'][0])
     {
         $returnType = '';
-        $request = $this->meldeElearningaccountAlsExternExistierendUsingPOSTRequest($plattform_id, $teilnehmer_id, $contentType);
+        $request = $this->meldeElearningaccountAlsExternExistierendUsingPOSTRequest($plattform_id, $teilnehmer_id, $elearningaccount_externe_referenz_nr_api_dto, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -3638,12 +3657,13 @@ class ELearningPlattformenApi
      *
      * @param  string $plattform_id ID der E-Learning-Plattform (required)
      * @param  string $teilnehmer_id ID des Teilnehmers (required)
+     * @param  \OpenAPI\Client\Model\ElearningaccountExterneReferenzNrApiDto $elearningaccount_externe_referenz_nr_api_dto Optionale externe Refernznummer (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['meldeElearningaccountAlsExternExistierendUsingPOST'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function meldeElearningaccountAlsExternExistierendUsingPOSTRequest($plattform_id, $teilnehmer_id, string $contentType = self::contentTypes['meldeElearningaccountAlsExternExistierendUsingPOST'][0])
+    public function meldeElearningaccountAlsExternExistierendUsingPOSTRequest($plattform_id, $teilnehmer_id, $elearningaccount_externe_referenz_nr_api_dto = null, string $contentType = self::contentTypes['meldeElearningaccountAlsExternExistierendUsingPOST'][0])
     {
 
         // verify the required parameter 'plattform_id' is set
@@ -3659,6 +3679,7 @@ class ELearningPlattformenApi
                 'Missing the required parameter $teilnehmer_id when calling meldeElearningaccountAlsExternExistierendUsingPOST'
             );
         }
+
 
 
         $resourcePath = '/v2/elearningplattformen/{plattformId}/teilnehmer/{teilnehmerId}/meldeexternexistierend';
@@ -3695,7 +3716,14 @@ class ELearningPlattformenApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if (isset($elearningaccount_externe_referenz_nr_api_dto)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($elearningaccount_externe_referenz_nr_api_dto));
+            } else {
+                $httpBody = $elearningaccount_externe_referenz_nr_api_dto;
+            }
+        } elseif (count($formParams) > 0) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {

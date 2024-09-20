@@ -65,7 +65,7 @@ class Lernbegleiterkurszuordnung implements ModelInterface, ArrayAccess, \JsonSe
         'kurs_zugriff_bis' => '\DateTime',
         'lernbegleiter_id' => 'string',
         'lernbegleiterbuchung_id' => 'string',
-        'links' => '\OpenAPI\Client\Model\Link[]'
+        'links' => '\OpenAPI\Client\Model\Links'
     ];
 
     /**
@@ -513,7 +513,7 @@ class Lernbegleiterkurszuordnung implements ModelInterface, ArrayAccess, \JsonSe
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -523,7 +523,7 @@ class Lernbegleiterkurszuordnung implements ModelInterface, ArrayAccess, \JsonSe
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

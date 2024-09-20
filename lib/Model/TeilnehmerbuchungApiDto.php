@@ -59,7 +59,7 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess, \JsonSeria
       */
     protected static $openAPITypes = [
         'oid' => 'string',
-        'links' => '\OpenAPI\Client\Model\Link[]'
+        'links' => '\OpenAPI\Client\Model\Links'
     ];
 
     /**
@@ -330,7 +330,7 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -340,7 +340,7 @@ class TeilnehmerbuchungApiDto implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

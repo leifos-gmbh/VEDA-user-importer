@@ -60,7 +60,7 @@ class TeilnehmerbuchungAbrufenApiDto implements ModelInterface, ArrayAccess, \Js
     protected static $openAPITypes = [
         'oid' => 'string',
         'buchungsstatus' => 'string',
-        'links' => '\OpenAPI\Client\Model\Link[]',
+        'links' => '\OpenAPI\Client\Model\Links',
         'teilnehmer_id' => 'string',
         'termin_id' => 'string',
         'terminreihe_id' => 'string',
@@ -395,7 +395,7 @@ class TeilnehmerbuchungAbrufenApiDto implements ModelInterface, ArrayAccess, \Js
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -405,7 +405,7 @@ class TeilnehmerbuchungAbrufenApiDto implements ModelInterface, ArrayAccess, \Js
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

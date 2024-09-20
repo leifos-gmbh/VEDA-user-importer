@@ -59,7 +59,7 @@ class VeranstaltungsterminDerReiheApiDto implements ModelInterface, ArrayAccess,
       */
     protected static $openAPITypes = [
         'oid' => 'string',
-        'links' => '\OpenAPI\Client\Model\Link[]',
+        'links' => '\OpenAPI\Client\Model\Links',
         'termin_bis' => '\DateTime',
         'termin_von' => '\DateTime',
         'thema' => 'string',
@@ -384,7 +384,7 @@ class VeranstaltungsterminDerReiheApiDto implements ModelInterface, ArrayAccess,
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -394,7 +394,7 @@ class VeranstaltungsterminDerReiheApiDto implements ModelInterface, ArrayAccess,
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

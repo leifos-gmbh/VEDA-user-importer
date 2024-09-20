@@ -1,6 +1,6 @@
 <?php
 /**
- * Schlagwort
+ * ElearningaccountExterneReferenzNrApiDto
  *
  * PHP version 7.4
  *
@@ -33,16 +33,16 @@ use \ArrayAccess;
 use \OpenAPI\Client\ObjectSerializer;
 
 /**
- * Schlagwort Class Doc Comment
+ * ElearningaccountExterneReferenzNrApiDto Class Doc Comment
  *
  * @category Class
- * @description Die Informationen eines Schlagwortes.
+ * @description Die externe Referenznummer für E-Learning-Account.
  * @package  OpenAPI\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
+class ElearningaccountExterneReferenzNrApiDto implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'Schlagwort';
+    protected static $openAPIModelName = 'ElearningaccountExterneReferenzNrApiDto';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -59,11 +59,8 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'oid' => 'string',
-        'bemerkung' => 'string',
-        'bezeichnung' => 'string',
-        'kuerzel' => 'string',
-        'links' => '\OpenAPI\Client\Model\Links'
+        'externe_referenz_nr' => 'string',
+        'links' => '\OpenAPI\Client\Model\Link[]'
     ];
 
     /**
@@ -74,10 +71,7 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'oid' => null,
-        'bemerkung' => null,
-        'bezeichnung' => null,
-        'kuerzel' => null,
+        'externe_referenz_nr' => null,
         'links' => null
     ];
 
@@ -87,10 +81,7 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'oid' => false,
-		'bemerkung' => false,
-		'bezeichnung' => false,
-		'kuerzel' => false,
+        'externe_referenz_nr' => false,
 		'links' => false
     ];
 
@@ -180,10 +171,7 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'oid' => 'oid',
-        'bemerkung' => 'bemerkung',
-        'bezeichnung' => 'bezeichnung',
-        'kuerzel' => 'kuerzel',
+        'externe_referenz_nr' => 'externeReferenzNr',
         'links' => 'links'
     ];
 
@@ -193,10 +181,7 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'oid' => 'setOid',
-        'bemerkung' => 'setBemerkung',
-        'bezeichnung' => 'setBezeichnung',
-        'kuerzel' => 'setKuerzel',
+        'externe_referenz_nr' => 'setExterneReferenzNr',
         'links' => 'setLinks'
     ];
 
@@ -206,10 +191,7 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'oid' => 'getOid',
-        'bemerkung' => 'getBemerkung',
-        'bezeichnung' => 'getBezeichnung',
-        'kuerzel' => 'getKuerzel',
+        'externe_referenz_nr' => 'getExterneReferenzNr',
         'links' => 'getLinks'
     ];
 
@@ -270,10 +252,7 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('oid', $data ?? [], null);
-        $this->setIfExists('bemerkung', $data ?? [], null);
-        $this->setIfExists('bezeichnung', $data ?? [], null);
-        $this->setIfExists('kuerzel', $data ?? [], null);
+        $this->setIfExists('externe_referenz_nr', $data ?? [], null);
         $this->setIfExists('links', $data ?? [], null);
     }
 
@@ -304,9 +283,6 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['oid'] === null) {
-            $invalidProperties[] = "'oid' can't be null";
-        }
         return $invalidProperties;
     }
 
@@ -323,109 +299,28 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets oid
-     *
-     * @return string
-     */
-    public function getOid()
-    {
-        return $this->container['oid'];
-    }
-
-    /**
-     * Sets oid
-     *
-     * @param string $oid UUID des Datensatzes
-     *
-     * @return self
-     */
-    public function setOid($oid)
-    {
-        if (is_null($oid)) {
-            throw new \InvalidArgumentException('non-nullable oid cannot be null');
-        }
-        $this->container['oid'] = $oid;
-
-        return $this;
-    }
-
-    /**
-     * Gets bemerkung
+     * Gets externe_referenz_nr
      *
      * @return string|null
      */
-    public function getBemerkung()
+    public function getExterneReferenzNr()
     {
-        return $this->container['bemerkung'];
+        return $this->container['externe_referenz_nr'];
     }
 
     /**
-     * Sets bemerkung
+     * Sets externe_referenz_nr
      *
-     * @param string|null $bemerkung Bemerkung des Schlagwortes
+     * @param string|null $externe_referenz_nr Die Nummer aus dem externen Partnersystem
      *
      * @return self
      */
-    public function setBemerkung($bemerkung)
+    public function setExterneReferenzNr($externe_referenz_nr)
     {
-        if (is_null($bemerkung)) {
-            throw new \InvalidArgumentException('non-nullable bemerkung cannot be null');
+        if (is_null($externe_referenz_nr)) {
+            throw new \InvalidArgumentException('non-nullable externe_referenz_nr cannot be null');
         }
-        $this->container['bemerkung'] = $bemerkung;
-
-        return $this;
-    }
-
-    /**
-     * Gets bezeichnung
-     *
-     * @return string|null
-     */
-    public function getBezeichnung()
-    {
-        return $this->container['bezeichnung'];
-    }
-
-    /**
-     * Sets bezeichnung
-     *
-     * @param string|null $bezeichnung Bezeichnung des Schlagwortes
-     *
-     * @return self
-     */
-    public function setBezeichnung($bezeichnung)
-    {
-        if (is_null($bezeichnung)) {
-            throw new \InvalidArgumentException('non-nullable bezeichnung cannot be null');
-        }
-        $this->container['bezeichnung'] = $bezeichnung;
-
-        return $this;
-    }
-
-    /**
-     * Gets kuerzel
-     *
-     * @return string|null
-     */
-    public function getKuerzel()
-    {
-        return $this->container['kuerzel'];
-    }
-
-    /**
-     * Sets kuerzel
-     *
-     * @param string|null $kuerzel Kürzel des Schlagwortes
-     *
-     * @return self
-     */
-    public function setKuerzel($kuerzel)
-    {
-        if (is_null($kuerzel)) {
-            throw new \InvalidArgumentException('non-nullable kuerzel cannot be null');
-        }
-        $this->container['kuerzel'] = $kuerzel;
+        $this->container['externe_referenz_nr'] = $externe_referenz_nr;
 
         return $this;
     }
@@ -433,7 +328,7 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Links|null
+     * @return \OpenAPI\Client\Model\Link[]|null
      */
     public function getLinks()
     {
@@ -443,7 +338,7 @@ class Schlagwort implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Links|null $links links
+     * @param \OpenAPI\Client\Model\Link[]|null $links links
      *
      * @return self
      */

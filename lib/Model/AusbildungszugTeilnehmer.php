@@ -63,7 +63,7 @@ class AusbildungszugTeilnehmer implements ModelInterface, ArrayAccess, \JsonSeri
         'ende' => '\DateTime',
         'kurs_zugriff_ab' => '\DateTime',
         'kurs_zugriff_bis' => '\DateTime',
-        'links' => '\OpenAPI\Client\Model\Link[]',
+        'links' => '\OpenAPI\Client\Model\Links',
         'mitgliedschaftsart' => 'string',
         'obsolet' => 'bool',
         'teilnehmer_id' => 'string',
@@ -491,7 +491,7 @@ class AusbildungszugTeilnehmer implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -501,7 +501,7 @@ class AusbildungszugTeilnehmer implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

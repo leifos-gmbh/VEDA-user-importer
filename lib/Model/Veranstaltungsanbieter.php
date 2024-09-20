@@ -63,7 +63,7 @@ class Veranstaltungsanbieter implements ModelInterface, ArrayAccess, \JsonSerial
         'admin_e_mail' => 'string',
         'agb_api_dto' => '\OpenAPI\Client\Model\AGB',
         'bezeichnung' => 'string',
-        'links' => '\OpenAPI\Client\Model\Link[]',
+        'links' => '\OpenAPI\Client\Model\Links',
         'name1' => 'string',
         'name2' => 'string',
         'name3' => 'string',
@@ -461,7 +461,7 @@ class Veranstaltungsanbieter implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -471,7 +471,7 @@ class Veranstaltungsanbieter implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */

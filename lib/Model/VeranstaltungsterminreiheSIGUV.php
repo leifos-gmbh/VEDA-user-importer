@@ -65,13 +65,15 @@ class VeranstaltungsterminreiheSIGUV implements ModelInterface, ArrayAccess, \Js
         'anzahl_teilnehmerbuchungen' => 'int',
         'anzahl_wartelistenbuchungen' => 'int',
         'auslastungsstatus' => 'string',
+        'beginn_des_anmeldezeitraums' => '\DateTime',
         'beschreibung' => 'string',
+        'ende_des_anmeldezeitraums' => '\DateTime',
         'fachlicher_ansprechpartner' => '\OpenAPI\Client\Model\Fachlicheransprechpartner',
         'geschlossen' => 'bool',
         'hinweise' => 'string',
         'inhalt' => 'string',
         'kategorien' => '\OpenAPI\Client\Model\KategorieUndUnterkategorieApiDto[]',
-        'links' => '\OpenAPI\Client\Model\Link[]',
+        'links' => '\OpenAPI\Client\Model\Links',
         'methodik' => 'string',
         'mitzubringen_durch_teilnehmer' => 'string',
         'preis' => 'float',
@@ -119,7 +121,9 @@ class VeranstaltungsterminreiheSIGUV implements ModelInterface, ArrayAccess, \Js
         'anzahl_teilnehmerbuchungen' => null,
         'anzahl_wartelistenbuchungen' => null,
         'auslastungsstatus' => null,
+        'beginn_des_anmeldezeitraums' => 'date-time',
         'beschreibung' => null,
+        'ende_des_anmeldezeitraums' => 'date-time',
         'fachlicher_ansprechpartner' => null,
         'geschlossen' => null,
         'hinweise' => null,
@@ -171,7 +175,9 @@ class VeranstaltungsterminreiheSIGUV implements ModelInterface, ArrayAccess, \Js
 		'anzahl_teilnehmerbuchungen' => false,
 		'anzahl_wartelistenbuchungen' => false,
 		'auslastungsstatus' => false,
+		'beginn_des_anmeldezeitraums' => false,
 		'beschreibung' => false,
+		'ende_des_anmeldezeitraums' => false,
 		'fachlicher_ansprechpartner' => false,
 		'geschlossen' => false,
 		'hinweise' => false,
@@ -303,7 +309,9 @@ class VeranstaltungsterminreiheSIGUV implements ModelInterface, ArrayAccess, \Js
         'anzahl_teilnehmerbuchungen' => 'anzahlTeilnehmerbuchungen',
         'anzahl_wartelistenbuchungen' => 'anzahlWartelistenbuchungen',
         'auslastungsstatus' => 'auslastungsstatus',
+        'beginn_des_anmeldezeitraums' => 'beginnDesAnmeldezeitraums',
         'beschreibung' => 'beschreibung',
+        'ende_des_anmeldezeitraums' => 'endeDesAnmeldezeitraums',
         'fachlicher_ansprechpartner' => 'fachlicherAnsprechpartner',
         'geschlossen' => 'geschlossen',
         'hinweise' => 'hinweise',
@@ -355,7 +363,9 @@ class VeranstaltungsterminreiheSIGUV implements ModelInterface, ArrayAccess, \Js
         'anzahl_teilnehmerbuchungen' => 'setAnzahlTeilnehmerbuchungen',
         'anzahl_wartelistenbuchungen' => 'setAnzahlWartelistenbuchungen',
         'auslastungsstatus' => 'setAuslastungsstatus',
+        'beginn_des_anmeldezeitraums' => 'setBeginnDesAnmeldezeitraums',
         'beschreibung' => 'setBeschreibung',
+        'ende_des_anmeldezeitraums' => 'setEndeDesAnmeldezeitraums',
         'fachlicher_ansprechpartner' => 'setFachlicherAnsprechpartner',
         'geschlossen' => 'setGeschlossen',
         'hinweise' => 'setHinweise',
@@ -407,7 +417,9 @@ class VeranstaltungsterminreiheSIGUV implements ModelInterface, ArrayAccess, \Js
         'anzahl_teilnehmerbuchungen' => 'getAnzahlTeilnehmerbuchungen',
         'anzahl_wartelistenbuchungen' => 'getAnzahlWartelistenbuchungen',
         'auslastungsstatus' => 'getAuslastungsstatus',
+        'beginn_des_anmeldezeitraums' => 'getBeginnDesAnmeldezeitraums',
         'beschreibung' => 'getBeschreibung',
+        'ende_des_anmeldezeitraums' => 'getEndeDesAnmeldezeitraums',
         'fachlicher_ansprechpartner' => 'getFachlicherAnsprechpartner',
         'geschlossen' => 'getGeschlossen',
         'hinweise' => 'getHinweise',
@@ -510,7 +522,9 @@ class VeranstaltungsterminreiheSIGUV implements ModelInterface, ArrayAccess, \Js
         $this->setIfExists('anzahl_teilnehmerbuchungen', $data ?? [], null);
         $this->setIfExists('anzahl_wartelistenbuchungen', $data ?? [], null);
         $this->setIfExists('auslastungsstatus', $data ?? [], null);
+        $this->setIfExists('beginn_des_anmeldezeitraums', $data ?? [], null);
         $this->setIfExists('beschreibung', $data ?? [], null);
+        $this->setIfExists('ende_des_anmeldezeitraums', $data ?? [], null);
         $this->setIfExists('fachlicher_ansprechpartner', $data ?? [], null);
         $this->setIfExists('geschlossen', $data ?? [], null);
         $this->setIfExists('hinweise', $data ?? [], null);
@@ -758,6 +772,33 @@ class VeranstaltungsterminreiheSIGUV implements ModelInterface, ArrayAccess, \Js
     }
 
     /**
+     * Gets beginn_des_anmeldezeitraums
+     *
+     * @return \DateTime|null
+     */
+    public function getBeginnDesAnmeldezeitraums()
+    {
+        return $this->container['beginn_des_anmeldezeitraums'];
+    }
+
+    /**
+     * Sets beginn_des_anmeldezeitraums
+     *
+     * @param \DateTime|null $beginn_des_anmeldezeitraums Das Datum, an dem der Anmeldezeitraum beginnt.
+     *
+     * @return self
+     */
+    public function setBeginnDesAnmeldezeitraums($beginn_des_anmeldezeitraums)
+    {
+        if (is_null($beginn_des_anmeldezeitraums)) {
+            throw new \InvalidArgumentException('non-nullable beginn_des_anmeldezeitraums cannot be null');
+        }
+        $this->container['beginn_des_anmeldezeitraums'] = $beginn_des_anmeldezeitraums;
+
+        return $this;
+    }
+
+    /**
      * Gets beschreibung
      *
      * @return string|null
@@ -780,6 +821,33 @@ class VeranstaltungsterminreiheSIGUV implements ModelInterface, ArrayAccess, \Js
             throw new \InvalidArgumentException('non-nullable beschreibung cannot be null');
         }
         $this->container['beschreibung'] = $beschreibung;
+
+        return $this;
+    }
+
+    /**
+     * Gets ende_des_anmeldezeitraums
+     *
+     * @return \DateTime|null
+     */
+    public function getEndeDesAnmeldezeitraums()
+    {
+        return $this->container['ende_des_anmeldezeitraums'];
+    }
+
+    /**
+     * Sets ende_des_anmeldezeitraums
+     *
+     * @param \DateTime|null $ende_des_anmeldezeitraums Das Datum, an dem der Anmeldezeitraum endet.
+     *
+     * @return self
+     */
+    public function setEndeDesAnmeldezeitraums($ende_des_anmeldezeitraums)
+    {
+        if (is_null($ende_des_anmeldezeitraums)) {
+            throw new \InvalidArgumentException('non-nullable ende_des_anmeldezeitraums cannot be null');
+        }
+        $this->container['ende_des_anmeldezeitraums'] = $ende_des_anmeldezeitraums;
 
         return $this;
     }
@@ -922,7 +990,7 @@ class VeranstaltungsterminreiheSIGUV implements ModelInterface, ArrayAccess, \Js
     /**
      * Gets links
      *
-     * @return \OpenAPI\Client\Model\Link[]|null
+     * @return \OpenAPI\Client\Model\Links|null
      */
     public function getLinks()
     {
@@ -932,7 +1000,7 @@ class VeranstaltungsterminreiheSIGUV implements ModelInterface, ArrayAccess, \Js
     /**
      * Sets links
      *
-     * @param \OpenAPI\Client\Model\Link[]|null $links links
+     * @param \OpenAPI\Client\Model\Links|null $links links
      *
      * @return self
      */
