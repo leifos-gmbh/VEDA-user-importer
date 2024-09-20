@@ -5,8 +5,9 @@
  * VEDA user importer plugin cron job class
  * @author Stefan Meyer <smeyer.ilias@gmx.de>
  */
-class ilVedaConnectorCronJob extends ilCronJob
+class ilVedaConnectorFastCronJob extends ilCronJob
 {
+    private const CRONJOB_ID_POSTFIX = '_fast';
     private ?ilVedaConnectorSettings $settings;
     private ?ilLogger $logger;
 
@@ -21,7 +22,7 @@ class ilVedaConnectorCronJob extends ilCronJob
 
     public function getId() : string
     {
-        return ilVedaConnectorPlugin::getInstance()->getId();
+        return ilVedaConnectorPlugin::getInstance()->getId()  . self::CRONJOB_ID_POSTFIX;
     }
 
     public function getTitle() : string
@@ -31,12 +32,12 @@ class ilVedaConnectorCronJob extends ilCronJob
 
     public function getDescription() : string
     {
-        return ilVedaConnectorPlugin::getInstance()->txt('cron_job_info');
+        return ilVedaConnectorPlugin::getInstance()->txt('cron_job_fast_info');
     }
 
     public function getDefaultScheduleType() : int
     {
-        return self::SCHEDULE_TYPE_IN_HOURS;
+        return self::SCHEDULE_TYPE_IN_MINUTES;
     }
 
     public function getDefaultScheduleValue() : int
@@ -69,8 +70,7 @@ class ilVedaConnectorCronJob extends ilCronJob
                 ilVedaImporter::IMPORT_TYPE_UNDEFINED,
                 false,
                 [
-                    ilVedaImporter::IMPORT_USR_ALL,
-                    ilVedaImporter::IMPORT_CRS,
+                    ilVedaImporter::IMPORT_USR_INCREMENTAL,
                     ilVedaImporter::IMPORT_MEM
                 ]
             );
@@ -78,12 +78,16 @@ class ilVedaConnectorCronJob extends ilCronJob
             $mail_manager = new ilVedaMailManager();
             $mail_manager->sendStatus();
             $result->setStatus(ilCronJobResult::STATUS_OK);
+        } catch (ilVedaImporterLockedException $e) {
+            // Ignore this lock exception, since the main cron job might be running.
+            $result->setStatus(ilCronJobResult::STATUS_NO_ACTION);
+            $result->setMessage('Cronjob locked');
+            return $result;
         } catch (Exception $e) {
             $result->setStatus(ilCronJobResult::STATUS_CRASHED);
             $result->setMessage($e->getMessage());
             $this->logger->warning('Cron update failed with message: ' . $e->getMessage());
         }
-
         return $result;
     }
 }

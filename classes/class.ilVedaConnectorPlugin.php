@@ -70,13 +70,18 @@ class ilVedaConnectorPlugin extends ilCronHookPlugin implements ilAppEventListen
     public function getCronJobInstances() : array
     {
         return [
+            new ilVedaConnectorFastCronJob(),
             new ilVedaConnectorCronJob()
         ];
     }
 
-    public function getCronJobInstance(string $jobId) : ilVedaConnectorCronJob
+    public function getCronJobInstance(string $jobId) : ilCronJob
     {
-        return new ilVedaConnectorCronJob();
+        if (strcmp($jobId, ilVedaConnectorPlugin::getInstance()->getId()) == 0) {
+            return new ilVedaConnectorCronJob();
+        } else {
+            return new ilVedaConnectorFastCronJob();
+        }
     }
 
     public function getLogger() : ilLogger

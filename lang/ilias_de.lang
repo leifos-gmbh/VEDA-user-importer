@@ -1,7 +1,7 @@
 tab_settings#:#Einstellungen
 tab_credentials#:#Verbindungsdaten
 tbl_settings#:#Allgemeine Einstellungen
-cron_job_info#:#veda Connector: Benutzer-, und Kurssynchronisierung
+cron_job_info#:#veda Connector: Benutzer-, Mitgliedschaften- und Kurssynchronisierung. Sollte nur in großen Zeitintervallen z.B. täglich ausgeführt werden.
 credentials_url#:#Webservice URL:
 platform_id#:#Plattform ID
 platform_id_info#:#ID der E-Learning-Plattform
@@ -80,3 +80,4 @@ tbl_mail_targets#:# Mail-Addressen
 tbl_mail_targets_info#:#Mail-Addressen durch Komma getrennt angeben.
 import_type_all#:#Benutzerkonten (alle)
 import_type_incremental#:#Benutzerkonten (nur neue)
+cron_job_fast_info#:#Aktualisiert Benutzer - nur neue, für die noch kein ILIAS-Konto erstellt worden ist - und Mitgliedschaften von SiFA- und Standardkursen. Kann in kleinen Zeitintervallen z.B. viertelstündlich ausgeführt werden.
