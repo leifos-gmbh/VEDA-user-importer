@@ -35,3 +35,5 @@ tbl_settings_section_mail#:#Mail Settings
 tbl_settings_mail_active#:#Mail enabled
 tbl_mail_targets#:#Recipients
 tbl_mail_targets_info#:#Please enter Mail-Addresses separated by ','.
+import_type_all#:#User Accounts (all)
+import_type_incremental#:#User Account (only new)

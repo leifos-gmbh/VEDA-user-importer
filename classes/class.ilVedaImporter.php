@@ -14,10 +14,10 @@ class ilVedaImporter
      * @var int
      */
     public const IMPORT_TYPE_STANDARD = 2;
-    /**
-     * @var string
-     */
-    public const IMPORT_USR = 'usr';
+
+    public const IMPORT_USR_ALL = 'usr_all';
+
+    public const IMPORT_USR_INCREMENTAL = 'usr_incremental';
     /**
      * @var string
      */
@@ -98,7 +98,7 @@ class ilVedaImporter
                 $this->settings->isStandardActive()
             )
         ) {
-            $this->logger->debug('Standard import startet.');
+            $this->logger->debug('Standard import started.');
             $this->importStandard($modes);
         }
 
@@ -113,10 +113,14 @@ class ilVedaImporter
     protected function importSifa(array $modes) : void
     {
         $this->ensureClaimingPluginConfigured();
-        if ($this->isImportModeEnabled(self::IMPORT_USR, $modes)) {
-            $this->logger->debug('Importing users');
+        if ($this->isImportModeEnabled(self::IMPORT_USR_ALL, $modes)) {
+            $this->logger->info('Importing all users');
             $this->my_api->deleteDeprecatedILIASUsers();
-            $this->my_api->importILIASUsersSIFA();
+            $this->my_api->importILIASUsersSIFA(false);
+        }
+        if ($this->isImportModeEnabled(self::IMPORT_USR_INCREMENTAL, $modes)) {
+            $this->logger->info('Importing new users');
+            $this->my_api->importILIASUsersSIFA(true);
         }
         if ($this->isImportModeEnabled(self::IMPORT_CRS, $modes)) {
             $this->logger->debug('Importing courses');
@@ -130,10 +134,15 @@ class ilVedaImporter
 
     protected function importStandard(array $modes) : void
     {
-        if ($this->isImportModeEnabled(self::IMPORT_USR, $modes)) {
-            $this->logger->debug('Importing users');
+        $this->logger->dump($modes, ilLogLevel::DEBUG);
+        if ($this->isImportModeEnabled(self::IMPORT_USR_ALL, $modes)) {
+            $this->logger->info('Importing all users');
             $this->my_api->deleteDeprecatedILIASUsers();
-            $this->my_api->importILIASUsersStandard();
+            $this->my_api->importILIASUsersStandard(false);
+        }
+        if ($this->isImportModeEnabled(self::IMPORT_USR_INCREMENTAL, $modes)) {
+            $this->logger->info('Importing new users');
+            $this->my_api->importILIASUsersStandard(true);
         }
         if ($this->isImportModeEnabled(self::IMPORT_CRS, $modes)) {
             $this->logger->debug('Importing courses');
@@ -149,7 +158,7 @@ class ilVedaImporter
     {
         return $all ?
             [
-                self::IMPORT_USR,
+                self::IMPORT_USR_INCREMENTAL,
                 self::IMPORT_CRS,
                 self::IMPORT_MEM,
             ]

@@ -78,3 +78,5 @@ tbl_settings_section_mail#:#Einstellungen zur Mail
 tbl_settings_mail_active#:# Mail Benachrichtigungen aktivieren
 tbl_mail_targets#:# Mail-Addressen
 tbl_mail_targets_info#:#Mail-Addressen durch Komma getrennt angeben.
+import_type_all#:#Benutzerkonten (alle)
+import_type_incremental#:#Benutzerkonten (nur neue)

@@ -12,7 +12,7 @@ interface ilVedaELearningPlattformApiInterface
 
     public function requestTrainingCourseTrains(string $training_course_id) : ?ilVedaEducationTrainCourseCollectionInterface;
 
-    public function requestParticipants() : ?ilVedaELearningParticipantsCollectionInterface;
+    public function requestParticipants(bool $a_incremental = false) : ?ilVedaELearningParticipantsCollectionInterface;
 
     public function sendCourseCopyStarted(string $crs_oid) : bool;
 

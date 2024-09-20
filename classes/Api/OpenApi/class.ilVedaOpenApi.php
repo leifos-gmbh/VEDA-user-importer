@@ -292,7 +292,7 @@ class ilVedaOpenApi implements ilVedaApiInterface
     public function deleteDeprecatedILIASUsers() : void
     {
         $elearning_api = $this->veda_connector->getElearningPlattformApi();
-        $participants = $elearning_api->requestParticipants();
+        $participants = $elearning_api->requestParticipants(false);
         foreach ($this->user_repo->lookupAllUsers() as $user) {
             $found_remote = false;
             if (is_null($participants)) {
@@ -353,9 +353,9 @@ class ilVedaOpenApi implements ilVedaApiInterface
      * @throws ilSaxParserException
      * @throws ilVedaUserImporterException
      */
-    public function importILIASUsersStandard() : void
+    public function importILIASUsersStandard(bool $a_incremental = false) : void
     {
-        $participants = $this->veda_connector->getElearningPlattformApi()->requestParticipants();
+        $participants = $this->veda_connector->getElearningPlattformApi()->requestParticipants($a_incremental);
         if (is_null($participants)) {
             return;
         }
@@ -369,9 +369,9 @@ class ilVedaOpenApi implements ilVedaApiInterface
      * @throws ilSaxParserException
      * @throws ilVedaUserImporterException
      */
-    public function importILIASUsersSIFA() : void
+    public function importILIASUsersSIFA(bool $a_incremental = false) : void
     {
-        $participants = $this->veda_connector->getElearningPlattformApi()->requestParticipants();
+        $participants = $this->veda_connector->getElearningPlattformApi()->requestParticipants($a_incremental);
         if (is_null($participants)) {
             return;
         }

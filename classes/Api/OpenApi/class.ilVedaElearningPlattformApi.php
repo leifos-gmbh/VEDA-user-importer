@@ -119,11 +119,19 @@ class ilVedaElearningPlattformApi implements ilVedaELearningPlattformApiInterfac
         }
     }
 
-    public function requestParticipants() : ?ilVedaELearningParticipantsCollectionInterface
+    /**
+     * @param bool $a_incremental
+     * @return ilVedaELearningParticipantsCollectionInterface|null
+     */
+    public function requestParticipants(bool $a_incremental = false) : ?ilVedaELearningParticipantsCollectionInterface
     {
         try {
-            $result = $this->api_elearning->getTeilnehmerELearningPlattformUsingGET($this->plattform_id);
-            $this->veda_logger->debug('Received all participants.');
+            $result = $this->api_elearning->getTeilnehmerELearningPlattformUsingGET($this->plattform_id, $a_incremental);
+            if ($a_incremental) {
+                $this->veda_logger->info('Received new participants.');
+            } else {
+                $this->veda_logger->debug('Received all participants.');
+            }
             $this->veda_logger->dump($result, ilLogLevel::DEBUG);
             return new ilVedaELearningParticipantsCollection($result);
         } catch (Exception $e) {

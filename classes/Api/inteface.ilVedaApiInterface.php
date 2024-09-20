@@ -18,9 +18,9 @@ interface ilVedaApiInterface
 
     public function deleteDeprecatedILIASUsers() : void;
 
-    public function importILIASUsersStandard() : void;
+    public function importILIASUsersStandard(bool $a_incremental = false) : void;
 
-    public function importILIASUsersSIFA() : void;
+    public function importILIASUsersSIFA(bool $a_incremental = false) : void;
 
     public function importStandardCourses() : void;
 

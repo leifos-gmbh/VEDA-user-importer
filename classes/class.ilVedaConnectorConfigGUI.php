@@ -489,10 +489,19 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
         $sel = new ilRadioOption($this->getPluginObject()->txt('import_selection_selected'), ilVedaImporter::IMPORT_SELECTED);
         $imp_type->addOption($sel);
 
-        $usr = new ilCheckboxInputGUI($this->lng->txt('obj_usr'), 'usr_' . ilVedaImporter::IMPORT_TYPE_SIFA);
-        $usr->setValue(ilVedaImporter::IMPORT_USR);
-        $sel->addSubItem($usr);
+        $usr_all = new ilCheckboxInputGUI(
+            $this->getPluginObject()->txt('import_type_all'),
+            ilVedaImporter::IMPORT_USR_ALL . '_' . ilVedaImporter::IMPORT_TYPE_SIFA
+        );
+        $usr_all->setValue(ilVedaImporter::IMPORT_USR_ALL);
+        $sel->addSubItem($usr_all);
 
+        $usr_incremental = new ilCheckboxInputGUI(
+            $this->getPluginObject()->txt('import_type_incremental'),
+            ilVedaImporter::IMPORT_USR_INCREMENTAL . '_' . ilVedaImporter::IMPORT_TYPE_SIFA
+        );
+        $usr_incremental->setValue(ilVedaImporter::IMPORT_USR_INCREMENTAL);
+        $sel->addSubItem($usr_incremental);
 
         $crs = new ilCheckboxInputGUI($this->lng->txt('objs_crs'), 'crs_' . ilVedaImporter::IMPORT_TYPE_SIFA);
         $crs->setValue(ilVedaImporter::IMPORT_CRS);
@@ -520,10 +529,19 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
         $sel = new ilRadioOption($this->getPluginObject()->txt('import_selection_selected'), ilVedaImporter::IMPORT_SELECTED);
         $imp_type->addOption($sel);
 
-        $usr = new ilCheckboxInputGUI($this->lng->txt('obj_usr'), 'usr_' . ilVedaImporter::IMPORT_TYPE_STANDARD);
-        $usr->setValue(ilVedaImporter::IMPORT_USR);
-        $sel->addSubItem($usr);
+        $usr_all = new ilCheckboxInputGUI(
+            $this->getPluginObject()->txt('import_type_all'),
+            ilVedaImporter::IMPORT_USR_ALL . '_' . ilVedaImporter::IMPORT_TYPE_STANDARD
+        );
+        $usr_all->setValue(ilVedaImporter::IMPORT_USR_ALL);
+        $sel->addSubItem($usr_all);
 
+        $usr_incremental = new ilCheckboxInputGUI(
+            $this->getPluginObject()->txt('import_type_incremental'),
+            ilVedaImporter::IMPORT_USR_INCREMENTAL . '_' . ilVedaImporter::IMPORT_TYPE_STANDARD,
+        );
+        $usr_incremental->setValue(ilVedaImporter::IMPORT_USR_INCREMENTAL);
+        $sel->addSubItem($usr_incremental);
 
         $crs = new ilCheckboxInputGUI($this->lng->txt('objs_crs'), 'crs_' . ilVedaImporter::IMPORT_TYPE_STANDARD);
         $crs->setValue(ilVedaImporter::IMPORT_CRS);
@@ -557,13 +575,15 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
                 }
                 $modes = [];
                 foreach ([
-                    ilVedaImporter::IMPORT_USR,
+                    ilVedaImporter::IMPORT_USR_ALL,
+                    ilVedaImporter::IMPORT_USR_INCREMENTAL,
                     ilVedaImporter::IMPORT_CRS,
                     ilVedaImporter::IMPORT_MEM] as $mode) {
                     if ($form->getInput($mode . '_' . ((string) $import_type))) {
                         $modes[] = $mode;
                     }
                 }
+                $this->logger->dump($modes);
                 $importer = ilVedaImporter::getInstance();
                 $this->logger->dump($import_type, ilLogLevel::NOTICE);
                 $this->logger->dump($import_type_selection, ilLogLevel::NOTICE);
