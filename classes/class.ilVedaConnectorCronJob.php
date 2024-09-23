@@ -65,7 +65,7 @@ class ilVedaConnectorCronJob extends ilCronJob
         try {
             // for 15 minutes try to import until no LockException is thrown
             $utime = time();
-            while ($utime < (time() + (60 * 30))) {
+            while (($utime + (60 * 30)) > time()) {
                 try {
                     $importer = new ilVedaImporter();
                     $importer->import(
