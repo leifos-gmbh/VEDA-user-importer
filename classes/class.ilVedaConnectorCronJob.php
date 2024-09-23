@@ -62,18 +62,29 @@ class ilVedaConnectorCronJob extends ilCronJob
     public function run() : ilCronJobResult
     {
         $result = new ilCronJobResult();
-
         try {
-            $importer = new ilVedaImporter();
-            $importer->import(
-                ilVedaImporter::IMPORT_TYPE_UNDEFINED,
-                false,
-                [
-                    ilVedaImporter::IMPORT_USR_ALL,
-                    ilVedaImporter::IMPORT_CRS,
-                    ilVedaImporter::IMPORT_MEM
-                ]
-            );
+            // for 15 minutes try to import until no LockException is thrown
+            $utime = time();
+            while ($utime < (time() + (60 * 30))) {
+                try {
+                    $importer = new ilVedaImporter();
+                    $importer->import(
+                        ilVedaImporter::IMPORT_TYPE_UNDEFINED,
+                        false,
+                        [
+                            ilVedaImporter::IMPORT_USR_ALL,
+                            ilVedaImporter::IMPORT_CRS,
+                            ilVedaImporter::IMPORT_MEM
+                        ]
+                    );
+                    $this->logger->info("Import performed successfully");
+                    break;
+                } catch (ilVedaImporterLockedException $e) {
+                    $this->logger->info('Import cronjob in execution.');
+                    sleep(60);
+                    $this->logger->info('Slept 60 seconds. Retrying...');
+                }
+            }
             $this->settings->updateLastCronExecution();
             $mail_manager = new ilVedaMailManager();
             $mail_manager->sendStatus();
@@ -83,7 +94,6 @@ class ilVedaConnectorCronJob extends ilCronJob
             $result->setMessage($e->getMessage());
             $this->logger->warning('Cron update failed with message: ' . $e->getMessage());
         }
-
         return $result;
     }
 }
