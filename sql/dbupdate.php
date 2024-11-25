@@ -238,3 +238,16 @@ if (
     $ilDB->createSequence('cron_crnhk_vedaimp_ml');
 }
 ?>
+<#12>
+<?php
+if ($ilDB->tableColumnExists('cron_crnhk_vedaimp_ml', 'msg')) {
+    $ilDB->modifyTableColumn(
+        'cron_crnhk_vedaimp_ml',
+        'msg',
+        [
+                'type' => ilDBConstants::T_TEXT,
+                'length' => 1000
+        ]
+    );
+}
+?>
