@@ -179,7 +179,6 @@ class ilVedaCourseStandardImportAdapter
 
         $source_object = ilObjectFactory::getInstanceByRefId($ref_id);
         if ($source_object instanceof ilObjCourse) {
-            $session_id = $GLOBALS['DIC']['ilAuthSession']->getId();
             $client_id = CLIENT_ID;
 
             // Save wizard options
@@ -205,7 +204,11 @@ class ilVedaCourseStandardImportAdapter
             $wizard_options->read();
             $wizard_options->storeTree($ref_id);
 
-            $new_session_id = ilSession::_duplicate($session_id);
+            // init session
+            ilSession::_writeData(session_id(), ilSession::dumpToString());
+            $new_session_id = ilSession::_duplicate(session_id());
+            $this->logger->info('soap session: ' . $new_session_id . ' (' . ilSession::get('_authsession_user_id') . ')');
+
             $soap_client = new ilSoapClient();
             $soap_client->setResponseTimeout(600);
             $soap_client->enableWSDL(true);
