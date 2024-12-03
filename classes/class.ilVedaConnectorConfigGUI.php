@@ -351,8 +351,13 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
 
         if (ilVedaConnectorSettings::getInstance()->hasSettingsForConnectionTest()) {
             $button = ilLinkButton::getInstance();
-            $button->setCaption($this->getPluginObject()->txt('connection_test'), false);
+            $button->setCaption($this->getPluginObject()->txt('connection_test_rest'), false);
             $button->setUrl($this->ctrl->getLinkTarget($this, 'testConnection'));
+            $this->toolbar->addButtonInstance($button);
+
+            $button = ilLinkButton::getInstance();
+            $button->setCaption($this->getPluginObject()->txt('connection_test_soap'), false);
+            $button->setUrl($this->ctrl->getLinkTarget($this, 'testConnectionSoap'));
             $this->toolbar->addButtonInstance($button);
         }
 
@@ -408,8 +413,31 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
         $add_header_value->setValue($settings->getAddHeaderValue());
 
         $add_header_auth->addSubItem($add_header_value);
-
         $form->addItem($add_header_auth);
+
+        $section_soap = new ilFormSectionHeaderGUI();
+        $section_soap->setTitle($this->getPluginObject()->txt('credential_section_soap'));
+        $form->addItem($section_soap);
+
+        $soap_user = new ilTextInputGUI(
+            $this->getPluginObject()->txt('credentials_soap_user'),
+            'soap_user'
+        );
+        $soap_user->setInfo(
+            $this->getPluginObject()->txt('credentials_soap_user_info')
+        );
+        $soap_user->setRequired(true);
+        $soap_user->setValue((string) $settings->getSoapUser());
+        $form->addItem($soap_user);
+
+        $soap_pass = new ilPasswordInputGUI(
+            $this->getPluginObject()->txt('credentials_soap_pass'),
+            'soap_pass'
+        );
+        $soap_pass->setRetype(false);
+        $soap_pass->setRequired(true);
+        $soap_pass->setValue((string) $settings->getSoapPassword());
+        $form->addItem($soap_pass);
 
         return $form;
     }
@@ -424,6 +452,8 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
                 $settings->setRestUrl($form->getInput('resturl'));
                 $settings->setRestUser($form->getInput('restuser'));
                 $settings->setRestPassword($form->getInput('restpassword'));
+                $settings->setSoapUser($form->getInput('soap_user'));
+                $settings->setSoapPassword($form->getInput('soap_pass'));
                 $settings->setAuthenticationToken($form->getInput('authentication_id'));
                 $settings->setPlatformId($form->getInput('platform_id'));
                 $settings->setAddHeaderAuth((bool) $form->getInput('add_header_auth'));
@@ -675,6 +705,42 @@ class ilVedaConnectorConfigGUI extends ilPluginConfigGUI
             $this->tpl->setOnScreenMessage(
                 ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE,
                 'API Connection Failed'
+            );
+        }
+        $this->credentials();
+    }
+
+    protected function testConnectionSoap(): void
+    {
+        $settings = ilVedaConnectorSettings::getInstance();
+        $client = new ilSoapClient();
+        $client->enableWSDL(true);
+        if ($client->init()) {
+            $session_token = $client->call(
+                'login',
+                [
+                    CLIENT_ID,
+                    $settings->getSoapUser(),
+                    $settings->getSoapPassword()
+                ]
+            );
+            if (stristr($session_token, '::') === false) {
+                $this->tpl->setOnScreenMessage(
+                    ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE,
+                    $this->getPluginObject()->txt('connection_failure_soap')
+                );
+                $this->credentials();
+                return;
+            }
+
+            $this->tpl->setOnScreenMessage(
+                ilGlobalTemplateInterface::MESSAGE_TYPE_SUCCESS,
+                $this->getPluginObject()->txt('connection_success_soap') . ' session_token: ' . $session_token
+            );
+        } else {
+            $this->tpl->setOnScreenMessage(
+                ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE,
+                $this->getPluginObject()->txt('connection_failure_soap')
             );
         }
         $this->credentials();

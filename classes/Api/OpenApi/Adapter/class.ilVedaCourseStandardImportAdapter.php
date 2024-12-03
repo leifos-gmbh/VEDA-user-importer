@@ -205,10 +205,6 @@ class ilVedaCourseStandardImportAdapter
             $wizard_options->storeTree($ref_id);
 
             // init session
-            ilSession::_writeData(session_id(), ilSession::dumpToString());
-            $new_session_id = ilSession::_duplicate(session_id());
-            $this->logger->info('soap session: ' . $new_session_id . ' (' . ilSession::get('_authsession_user_id') . ')');
-
             $soap_client = new ilSoapClient();
             $soap_client->setResponseTimeout(600);
             $soap_client->enableWSDL(true);
@@ -230,7 +226,19 @@ class ilVedaCourseStandardImportAdapter
             if ($soap_client->init()) {
                 $this->logger->debug('Soap clone method called');
                 ilLoggerFactory::getLogger('obj')->info('Calling soap clone method');
-                $soap_client->call('ilClone', array($new_session_id . '::' . $client_id, $copy_id));
+                $settings = ilVedaConnectorSettings::getInstance();
+                $session_token = $soap_client->call(
+                    'login',
+                    [
+                        CLIENT_ID,
+                        $settings->getSoapUser(),
+                        $settings->getSoapPassword()
+                    ]
+                );
+                if (stristr($session_token, '::') === false) {
+                    throw new ilVedaConnectionException('soap connection failed', ilVedaConnectionException::ERR_SOAP_CONNECTION);
+                }
+                $soap_client->call('ilClone', array($session_token, $copy_id));
             } else {
                 $message = 'Standard course copying failed: soap init failed';
                 $this->logger->error($message);

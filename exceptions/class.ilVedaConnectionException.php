@@ -14,9 +14,12 @@ class ilVedaConnectionException extends ilException
 	public const ERR_LOGIN_FAILED = 1;
 	public const ERR_API = 2;
 
+    public const ERR_SOAP_CONNECTION = 3;
+
 	private static $code_messages = [
 		self::ERR_LOGIN_FAILED => 'exception_login_failed',
-		self::ERR_API => 'exception_api_call'
+		self::ERR_API => 'exception_api_call',
+        self::ERR_SOAP_CONNECTION => 'exception_soap_connection'
 	];
 
 

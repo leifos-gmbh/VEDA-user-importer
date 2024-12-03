@@ -1,39 +1,88 @@
 tab_settings#:#Settings
-tab_credentials#:#Webservice Credentials
-tab_programs#:#Program ID Assignment
-tbl_settings#:#Cronjob Settings
-err_import_locked#:#Import is locked. Aborting.
-cron_interval#:#Refresh Interval in Hours.
-cron_job_info#:#veda Connector: user, course, member synchronisation
-tbl_settting_lock#:#Lock Cronjob
-cron#:#Refresh per Cron-job
-no_object_assigned#:#Object not assigned
-btn_save_source_selection#:#Save
-credentials_url#:#Web Service Resource URL:
-credentials_user#:#Web Service User:
-credentials_password#:#Web Service User Password:
-credentials_password_info#:#Password not displayed for security reasons.
-name_conflicts_check_log#:#Some users are not migrated because of name conflicts. Please check the log file.
+tab_credentials#:#Connection Data
+tbl_settings#:#General Settings
+cron_job_info#:#veda Connector: User, Membership, and Course Synchronization. Should only be run at large intervals, e.g., daily.
+credentials_url#:#Webservice URL:
 platform_id#:#Platform ID
-platform_id_info#:#Unique id provided to ILIAS.
-additional_header_authentication#:#Additional Header-Authentication
-additional_header_name#:#Header-Name
-additional_header_value#:#Header-Value
-err_claiming_missing#:#Der Import kann nicht durchgeführt werden, da das "VedaMDClaiming-Plugin" nicht vorhanden oder nicht aktiviert ist.
-success_validation#:#Die Validierung des Kurses ist erfolgreich abgeschlossen worden. Das Mapping ist somit vollständig und verwendet nur Ausbildungsgangabschnitt-IDs, welche Bestandteil des hinterlegten Ausbildungsgangs sind.
-err_val_no_tc_id#:#Im Masterkurs in ILIAS ist keine Ausbildunsgang-ID hinterlegt worden. Eine Validierung war daher nicht möglich. Bitte hinterlegen Sie die Ausbildungsgang-ID im Masterkurs in ILIAS.
-err_val_wrong_tc#:#Für die im Masterkurs in ILIAS hinterlegte Ausbildungsgang-ID konnte kein Ausbildungsgang im VEDA Bildungsmanager gefunden werden. Bitte überprüfen Sie die im Masterkurs hinterlegte "Ausbildungsgang-ID".
-err_val_sess_remote_info#:#Für die folgenden ILIAS-Sitzungen konnten im Ausbildungsgang im VEDA Bildungsmanager keine Ausbildungsgangabschnitte für die in den ILIAS-Sitzungen hinterlegten Ausbildungsgangabschnitt-IDs gefunden werden. Bitte überprüfen Sie, ob diese den Ausbildungsgangabschnitt-IDs in der Ausbildungsgangdefinition im VEDA Bildungsmanager entsprechen und dort zur Abbildung in ILIAS vorgesehen sind.
-err_val_sess_local_info#:#Die folgenden Ausbildungsgangabschnitte sind laut Ausbildungsgangdefinition im VEDA Bildungsmanager zur Abbildung als Sitzung in ILIAS vorgesehen. Es konnten jedoch keine zugeordneten ILIAS-Sitzungen gefunden werden. Bitte ergänzen Sie die Ausbildungsgangabschnitt-IDs in den zugehörigen ILIAS-Sitzungen im Masterkurs.
-err_val_exc_remote_info#:#Für die folgenden ILIAS-Übungen konnten im Ausbildungsgang im VEDA Bildungsmanager keine Ausbildungsgangabschnitte für die hinterlegten Ausbildungsgangabschnitt-IDs gefunden werden, die zur Abbildung in ILIAS vorgesehen sind. Bitte überprüfen Sie, ob diese den Ausbildungsgangabschnitt-IDs in der Ausbildungsgangdefinition im VEDA Bildungsmanager entsprechen und dort zur Abbildung in ILIAS vorgesehen sind.
-err_val_exc_local_info#:#Die folgenden Ausbildungsgangabschnitte sind laut Ausbildungsgangdefinition zur Abbildung als Übung in ILIAS vorgesehen. Es konnten jedoch keine zugeordneten ILIAS-Übungen gefunden werden. Bitte ergänzen Sie die Ausbildungsgangabschnitt-IDs in den zugehörigen ILIAS-Übungen im Masterkurs.
-tbl_settings_section_sifa_sync#:#"SiFa Synchronisation" Settings
-tbl_settings_section_standard_sync#:#"Standard Synchronisation" Settings
+platform_id_info#:#ID of the e-learning platform
+authentication_id#:#Authentication ID
+authentication_id_info#:#Token for authenticating with the webservice
+additional_header_authentication#:#Additional Header Authentication
+additional_header_name#:#Header Name
+additional_header_value#:#Header Value
+success_api_connect#:#The connection to the webservice was successfully established.
+connection_test_rest#:#Connection Test (veda)
+connection_test_soap#:#Connection Test (Soap)
+tbl_veda_settings_active#:#Activated
+tbl_veda_settings_loglevel#:#Log Level
+tbl_veda_settings_logfile#:#Log File
+tbl_veda_settings_logfile_info#:#An additional log file where only VEDA-specific log messages will be written.
+tbl_settings_section_sifa_sync#:#"SiFa Synchronization" Settings
+tbl_settings_section_standard_sync#:#"Standard Synchronization" Settings
+tbl_settings_sifa_active#:#Enable "SiFa Synchronization"
+tbl_settings_standard_active#:#Enable "Standard Synchronization"
+tbl_settings_participant_role#:#Participant Role
+tbl_settings_participant_role_info#:#Global role assigned to all new participants.
+tbl_import#:#Import Settings
+tab_import#:#Import
+btn_import#:#Start Import
+import_selection#:#Import Selection
+import_selection_all#:#Import All
+import_selection_none#:#Do Not Import
+import_selection_selected#:#Import Only Selected Items
+type_membership#:#Memberships
+success_import#:#The selected items were imported.
+error_import_locked#:#Import could not be performed because another import process is running or could not be completed successfully.
+tbl_veda_settings_lock#:#Import Lock
+tbl_veda_settings_lock_info#:#If enabled, an import process is currently running or an import process could not be completed without errors. Disable the lock only if you are sure that no import process is running.
+subtab_import#:#Import
+subtab_import_usr#:#User Import
+subtab_import_crs#:#Course Import
+tbl_import_result_usr#:#User Import Status
+tbl_import_result_crs#:#Course Import Status
+tbl_usr_result_created#:#ILIAS User Account Created
+tbl_usr_result_pwd_changed#:#Password Changed
+tbl_usr_result_import_failure#:#Error Messages
+err_import_usr_duplicate#:#Duplicate: An ILIAS user account with the same username already exists.
+err_claiming_missing#:#The import cannot be performed because the "VedaMDClaiming Plugin" is missing or not activated.
+err_udf_claiming_missing#:#The import cannot be performed because the "VedaUDFClaiming Plugin" is missing or not activated.
+tbl_settings_course_import#:#Import Directory
+tbl_settings_course_import_info#:#Please specify the ref_id of the category where new training courses should be created.
+tbl_settings_course_import_category_title#:#Selected Import Directory:
+tbl_settings_course_import_category_info#:#This will display the title of the category with the most recently specified valid ref_id.
+tbl_settings_course_import_category_error#:#There is no category with the specified ref_id.
+training_course#:#Training Course ID
+training_course_info#:#ID of the training course
+success_validation#:#The course validation was completed successfully. The mapping is thus complete and only uses training course section IDs that are part of the stored training course.
+err_val_no_tc_id#:#No training course ID was stored in the master course in ILIAS. Therefore, validation was not possible. Please provide the training course ID in the master course in ILIAS.
+err_val_wrong_tc#:#No training course was found in the VEDA Learning Manager for the training course ID stored in the master course in ILIAS. Please check the "Training Course ID" stored in the master course.
+err_val_sess_remote_info#:#For the following ILIAS sessions, no corresponding training course sections could be found in the VEDA Learning Manager for the training course section IDs stored in the ILIAS sessions. Please verify whether these match the training course section IDs in the VEDA Learning Manager training course definition and are intended for mapping in ILIAS.
+err_val_sess_local_info#:#The following training course sections are specified in the training course definition in the VEDA Learning Manager for mapping as sessions in ILIAS. However, no associated ILIAS sessions could be found. Please add the training course section IDs in the corresponding ILIAS sessions in the master course.
+err_val_exc_remote_info#:#For the following ILIAS exercises, no corresponding training course sections could be found in the VEDA Learning Manager for the stored training course section IDs intended for mapping in ILIAS. Please verify whether these match the training course section IDs in the VEDA Learning Manager training course definition.
+err_val_exc_local_info#:#The following training course sections are specified in the training course definition for mapping as exercises in ILIAS. However, no corresponding ILIAS exercises could be found. Please add the training course section IDs in the corresponding ILIAS exercises in the master course.
+tbl_settings_switch_permanent_role#:#Permanent Role Template "Switcher"
+tbl_settings_switch_permanent_role_info#:#Please provide the ID of a role template for participants with "Switcher" status.
+tbl_settings_switch_temp_role#:#Temporary Role Template "Temporary Switcher"
+tbl_settings_switch_temp_role_info#:#Please provide the ID of a role template for participants with "Temporary Switcher" status.
+tbl_crs_result_created#:#Created
+tbl_crs_result_pswitch#:#"Switcher Role"
+tbl_crs_result_tswitch#:#"Temporary Switcher Role"
+role_available#:#Available
+role_unavailable#:#Not Available
+section_import_sifa#:#"SiFa Import"
+section_import_standard#:#"Standard Import"
+type_sifa#:#"SiFa Course"
+type_standard#:#"Standard Course"
 migrate_user#:#Migrate existing user account
-migrated_account#:#The account has been migrated. The user data will be refreshed after the next import.
+migrated_account#:#The user account has been migrated and will be updated during the next import.
 tbl_settings_section_mail#:#Mail Settings
-tbl_settings_mail_active#:#Mail enabled
-tbl_mail_targets#:#Recipients
-tbl_mail_targets_info#:#Please enter Mail-Addresses separated by ','.
-import_type_all#:#User Accounts (all)
-import_type_incremental#:#User Account (only new)
+tbl_settings_mail_active#:#Enable Mail Notifications
+tbl_mail_targets#:#Mail Addresses
+tbl_mail_targets_info#:#Specify mail addresses separated by commas.
+import_type_all#:#User Accounts (All)
+import_type_incremental#:#User Accounts (Only New)
+cron_job_fast_info#:#Updates users - only new ones for whom no ILIAS account has been created - and memberships of SiFA and Standard courses. Can be run at short intervals, e.g., every 15 minutes.
+credential_section_soap#:#ILIAS Connection Data - Soap
+credentials_soap_user#:#Soap User
+credentials_soap_user_info#:#Please enter the username of an ILIAS account that should be used to establish the connection to the ILIAS web service. The account should be assigned to the global administrator role.
+credentials_soap_pass#:#Soap Password

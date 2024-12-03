@@ -19,6 +19,10 @@ class ilVedaConnectorSettings
     private const SETTING_CRON_LAST_EXECUTION = 'cron_last_execution';
     private const SETTING_REST_USER = 'restuser';
     private const SETTING_REST_URL = 'resturl';
+
+    private const SETTING_SOAP_USER = 'soap_user';
+
+    private const SETTING_SOAP_PASS = 'soap_pass';
     private const SETTING_REST_PASSWORD = 'restpassword';
     private const SETTING_REST_TOKEN = 'resttoken';
     private const SETTING_PLATTFORM_ID = 'platform_id';
@@ -164,6 +168,7 @@ class ilVedaConnectorSettings
         return $this->storage->get(self::SETTING_REST_URL);
     }
 
+
     public function setRestPassword(?string $a_pass) : void
     {
         $this->storage->set(self::SETTING_REST_PASSWORD, $a_pass);
@@ -172,6 +177,25 @@ class ilVedaConnectorSettings
     public function getRestPassword() : ?string
     {
         return $this->storage->get(self::SETTING_REST_PASSWORD);
+    }
+
+    public function setSoapUser(?string $a_user) : void
+    {
+        $this->storage->set(self::SETTING_SOAP_USER, $a_user);
+    }
+
+    public function getSoapUser() : ?string
+    {
+        return $this->storage->get(self::SETTING_SOAP_USER);
+    }
+    public function setSoapPassword(?string $a_pass) : void
+    {
+        $this->storage->set(self::SETTING_SOAP_PASS, $a_pass);
+    }
+
+    public function getSoapPassword() : ?string
+    {
+        return $this->storage->get(self::SETTING_SOAP_PASS);
     }
 
     public function setAuthenticationToken(?string $token) : void

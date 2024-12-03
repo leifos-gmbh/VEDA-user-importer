@@ -57,6 +57,7 @@ class ilVedaCourseImportAdapter
      * @throws ilObjectNotFoundException
      * @throws ilDatabaseException
      * @throws ilSaxParserException
+     * @throws ilVedaConnectionException
      */
     protected function importTrainingCourse(int $ref_id) : void
     {
@@ -75,6 +76,7 @@ class ilVedaCourseImportAdapter
      * @throws ilObjectNotFoundException
      * @throws ilDatabaseException
      * @throws ilSaxParserException
+     * @throws ilVedaConnectionException
      */
     protected function handleTrainingCourseTrainUpdate(int $source_id, Ausbildungszug $train) : void
     {
@@ -98,6 +100,7 @@ class ilVedaCourseImportAdapter
      * @throws ilDatabaseException
      * @throws ilObjectNotFoundException
      * @throws ilSaxParserException
+     * @throws ilVedaConnectionException
      */
     protected function copyTrainingCourse(int $ref_id, Ausbildungszug $train) : int
     {
@@ -178,9 +181,6 @@ class ilVedaCourseImportAdapter
             $wizard_options->storeTree($ref_id);
 
             // init session
-            ilSession::_writeData(session_id(), ilSession::dumpToString());
-            $new_session_id = ilSession::_duplicate(session_id());
-            $this->logger->info('soap session: ' . $new_session_id . ' (' . ilSession::get('_authsession_user_id') . ')');
             $soap_client = new ilSoapClient();
             $soap_client->setResponseTimeout(600);
             $soap_client->enableWSDL(true);
@@ -200,7 +200,19 @@ class ilVedaCourseImportAdapter
 
             if ($soap_client->init()) {
                 ilLoggerFactory::getLogger('obj')->info('Calling soap clone method');
-                $soap_client->call('ilClone', array($new_session_id . '::' . $client_id, $copy_id));
+                $settings = ilVedaConnectorSettings::getInstance();
+                $session_token = $soap_client->call(
+                    'login',
+                    [
+                        CLIENT_ID,
+                        $settings->getSoapUser(),
+                        $settings->getSoapPassword()
+                    ]
+                );
+                if (stristr($session_token, '::') === false) {
+                    throw new ilVedaConnectionException('soap connection failed', ilVedaConnectionException::ERR_SOAP_CONNECTION);
+                }
+                $soap_client->call('ilClone', array($session_token, $copy_id));
             } else {
                 $this->logger->error('Copying failed: soap init failed');
             }

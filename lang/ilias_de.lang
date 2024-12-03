@@ -11,7 +11,8 @@ additional_header_authentication#:#Zusätzliche Header-Authentifizierung
 additional_header_name#:#Header-Name
 additional_header_value#:#Header-Wert
 success_api_connect#:#Die Verbindung zum Webservice konnte erfolgreich hergestellt werden.
-connection_test#:#Verbindungstest
+connection_test_rest#:#Verbindungstest (veda)
+connection_test_soap#:#Verbindungstest (Soap)
 tbl_veda_settings_active#:#Aktiviert
 tbl_veda_settings_loglevel#:#Loglevel
 tbl_veda_settings_logfile#:#Logdatei
@@ -81,3 +82,9 @@ tbl_mail_targets_info#:#Mail-Addressen durch Komma getrennt angeben.
 import_type_all#:#Benutzerkonten (alle)
 import_type_incremental#:#Benutzerkonten (nur neue)
 cron_job_fast_info#:#Aktualisiert Benutzer - nur neue, für die noch kein ILIAS-Konto erstellt worden ist - und Mitgliedschaften von SiFA- und Standardkursen. Kann in kleinen Zeitintervallen z.B. viertelstündlich ausgeführt werden.
+credential_section_soap#:#Verbindungsdaten ILIAS - Soap
+credentials_soap_user#:#Soap-Benutzer
+credentials_soap_user_info#:#Bitte geben Sie den Anmeldenamen eines ILIAS-Kontos ein, mit dem die Verbindung zum ILIAS-Webservice aufgebaut werden soll. Das Konto sollte der globalen Administratorrolle zugeordnet sein.
+credentials_soap_pass#:#Soap-Passwort
+connection_success_soap#:#Die Verbindung zum ILIAS Webservice konnten erfolgreich erstellt werden.
+connection_failure_soap#:#Fehler beim Verbinden zum ILIAS-Webservice. Bitte prüfen Die die Verbindungsdaten.
