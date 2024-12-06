@@ -186,11 +186,11 @@ class ilVedaCourseStandardImportAdapter
             $wizard_options = ilCopyWizardOptions::_getInstance($copy_id);
             $settings = ilVedaConnectorSettings::getInstance();
             $soap_user = $settings->getSoapUser();
-            $soap_user_ids = ilObjUser::_lookupId($soap_user);
-            if (!is_array($soap_user_ids)) {
+            $soap_user_id = ilObjUser::_lookupId($soap_user);
+            if ($soap_user_id === null) {
                 throw new ilVedaConnectionException('soap_connection_failed', ilVedaConnectionException::ERR_SOAP_CONNECTION);
             }
-            $wizard_options->saveOwner(end($soap_user_ids));
+            $wizard_options->saveOwner($soap_user_id);
             $wizard_options->saveRoot($ref_id);
 
             $copy_info = [
