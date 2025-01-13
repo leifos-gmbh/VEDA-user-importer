@@ -37,7 +37,7 @@ class ilVedaMailManager
             $subject = 'FEHLER ilVedaConnectorPlugin import';
         }
         $body = $this->addImportInfoToBody($body, $mail_segments);
-        $body .= "\n" . 'Diese Email wurde automatisch generiert.';
+        $body .= "\n" . 'Diese E-Mail wurde automatisch generiert.';
         $this->send($subject, $body);
         $this->clearMailData();
     }
@@ -63,7 +63,7 @@ class ilVedaMailManager
             $subject = 'FEHLER ilVedaConnectorPlugin SIFA Kurs import';
         }
         $body = $this->addImportInfoToBody($body, $mail_segments);
-        $body .= "\n" . 'Diese Email wurde automatisch generiert.';
+        $body .= "\n" . 'Diese E-Mail wurde automatisch generiert.';
         $this->send($subject, $body);
         $this->clearMailData();
     }
@@ -101,7 +101,7 @@ class ilVedaMailManager
         $body .= 'Anzahl neu importierter Kurse: ' . count($segments_courses_updated) . "\n";
 
         $segments_mmbrshp_updated = $mail_segments->getMailSegmentsWithType(ilVedaMailSegmentType::MEMBERSHIP_UPDATED);
-        $body .= 'Anzahl Aktualisierungen von Midgliedschaften: ' . count($segments_mmbrshp_updated) . "\n";
+        $body .= 'Anzahl Aktualisierungen von Mitgliedschaften: ' . count($segments_mmbrshp_updated) . "\n";
 
         return $body;
     }
